@@ -1,0 +1,22 @@
+- name: test
+  hosts: contabo
+  vars:
+    bit_user: 
+    bit_pass: 
+  tasks:
+    - name: pull from git
+      git:
+        repo: https://{{bit_user|urlencode()}}:{{bit_pass|urlencode()}}@bitbucket.org/initiative-admin-backend/initiative-admin-backend.git
+        dest: /root/iwater-test/initiative-admin-backend/
+        update: yes
+        version: testing
+    - name: deploy Docker Compose stack
+      docker_compose:
+        project_src: /root/iwater-test/
+        files:
+          - docker-compose.yml
+        build: yes
+        state: present
+        debug: yes
+        services:
+            - django

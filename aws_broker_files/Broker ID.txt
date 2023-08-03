@@ -1,0 +1,6 @@
+
+Broker ID : a2al4qktysi6gi-ats.iot.ap-southeast-1.amazonaws.com
+
+Thing Name : WebCrownTestBroker
+
+Policy Name : WebCrownTestPolicy
