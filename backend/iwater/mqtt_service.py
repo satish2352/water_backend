@@ -66,8 +66,8 @@ class Client:
 
     def __init__(self, ):
         # _data_mqtt = settings.settings_get_mqttSettings()
-        # _topic = "IW/V1/OTP"
-        _topic = "wc/v1/OTP"
+        _topic = "IW/V1/OTP"
+        # _topic = "wc/v1/OTP"
         # mqttc = mqtt.Client()
         # mqttc.subscribe('wc/#')
         # _username = _data_mqtt['_username']
@@ -88,7 +88,7 @@ class Client:
 
         # connect to HiveMQ Cloud on port
         # self.client.connect(_hostname, _port, 3600)
-        self.client.connect(aws_iot_endpoint, _port, 3600)
+        self.client.connect(aws_iot_endpoint, _port, 443)
         # mqttc.connect(aws_iot_endpoint, port=443)
 
         self.client.loop_start()

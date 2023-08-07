@@ -1,6 +1,7 @@
 import json
 import re
 import threading
+from connection.alpn_mqtt import *
 from datetime import datetime
 
 from django.http.response import JsonResponse
@@ -24,11 +25,13 @@ class MqttClient:
 
     def __init__(self, company_id):
         # _data_mqtt = settings.settings_get_mqttSettings()
-        _topic = "IW/V1/OTP"
+        # _topic = "IW/V1/OTP"
+        _topic = "wc/v1/OTP"
+
         # _username = _data_mqtt['_username']
         # _password = _data_mqtt['_password']
-        _hostname = "broker.mqttdashboard.com"
-        _port = 1883
+        # _hostname = "broker.mqttdashboard.com"
+        _port = 443
         self.company_id = company_id
 
         # logger.info("MQTT - Credentials: username: {}, hostname: {}, port: {}".format(_username, _hostname, _port))
@@ -41,7 +44,8 @@ class MqttClient:
         self.client.on_message = self.on_message
 
         # connect to HiveMQ Cloud on port
-        self.client.connect(_hostname, _port, OTP_VALID_FOR)
+        # self.client.connect(_hostname, _port, OTP_VALID_FOR)
+        self.client.connect(aws_iot_endpoint, _port, OTP_VALID_FOR)
 
         self.client.loop_start()
 
@@ -818,17 +822,17 @@ def send_otp(request):
         except Site.DoesNotExist:
             pass
 
-        try:
-            si = Site.objects.get(phone=site_mob, site_name=site_name, phone_verified=True, token_verified=True)
-            # ! checks if phone number is already in used 
-            # ? Should be disabled ?
-            response = {"Response": {
-                "Status": "error"},
-                "message": "The phone number is already used for site registration"
-            }
-            return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
-        except Site.DoesNotExist:
-            pass
+        # try:
+        #     si = Site.objects.get(phone=site_mob, site_name=site_name, phone_verified=True, token_verified=True)
+        #     # ! checks if phone number is already in used 
+        #     # ? Should be disabled ?
+        #     response = {"Response": {
+        #         "Status": "error"},
+        #         "message": "The phone number is already used for site registration"
+        #     }
+        #     return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
+        # except Site.DoesNotExist:
+        #     pass
 
         with transaction.atomic():
             try:
@@ -847,27 +851,27 @@ def send_otp(request):
                 else:
                     logger.info("site {} does not exists".format(site_name))
                     logger.info("so checking whether phone number is already used")
-                    try:
-                        Site.objects.get(phone=site_mob)
-                        response = {"Response": {
-                            "Status": "error"},
-                            "message": "The phone number is already used for site registration"
-                        }
-                        return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
+                    # try:
+                    #     Site.objects.get(phone=site_mob)
+                    #     response = {"Response": {
+                    #         "Status": "error"},
+                    #         "message": "The phone number is already used for site registration"
+                    #     }
+                    #     return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
                     
-                    except Site.DoesNotExist:
-                        pass
-                    logger.info("phone number is not used, hence adding site details")
-                    site_dat = Site()
-                    # ! initiates instance of the site
+                    # except Site.DoesNotExist:
+                    #     pass
+                    # logger.info("phone number is not used, hence adding site details")
+                site_dat = Site()
+                # ! initiates instance of the site
 
-                    site_dat.site_name = site_name
-                    site_dat.address = address
-                    site_dat.city = city
-                    site_dat.state = state
-                    site_dat.phone = site_mob
-                    site_dat.company = request.user.company
-                    site_dat.save()
+                site_dat.site_name = site_name
+                site_dat.address = address
+                site_dat.city = city
+                site_dat.state = state
+                site_dat.phone = site_mob
+                site_dat.company = request.user.company
+                site_dat.save()
                     # ! saves the site
             
             except Exception as err:

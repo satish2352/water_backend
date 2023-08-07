@@ -523,8 +523,8 @@ class Site(models.Model):
     address = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
     state = models.CharField(max_length=255)
-    phone = models.CharField(max_length=60, unique=True, null=True, blank=True)
-
+    phone = models.CharField(max_length=60, null=True, blank=True)
+    token = models.CharField(max_length=60, null=True, blank=True)
     phone_verified = models.BooleanField(default=0, verbose_name='phone_verified')
     token_verified = models.BooleanField(default=0, verbose_name='token_verified')
 
@@ -599,6 +599,7 @@ class Site(models.Model):
         code = SmsPinGenerator().make_pin(self)
         self.otp = code
         self.otp_created = datetime.today()
+        self.token=token  #store token in site
         self.save()
 
         # Send sms to user
@@ -621,7 +622,9 @@ class Site(models.Model):
             src="+919607007015",                #Number updated by Sourabh ref: call with Bharati Ma'am
             dst=self.phone,
             text="Your verification code for adding site in account" +
-                 str({"token": '{0:04}'.format(token), "otp": code}) + "for your Initiative product"
+                 str({"token": '{0:04}'.format(token), "otp": code}) + "for your Initiative product",
+            dlt_template_category='Service_Implicit',
+            dlt_template_id='1007493130372339254',    
         )
 
         # Your verification code for adding site in account{'token': '{#var#}', 'otp': '{#var#}'}
