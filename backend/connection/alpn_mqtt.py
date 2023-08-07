@@ -5,7 +5,10 @@ import time
 import datetime
 import logging, traceback
 import paho.mqtt.client as mqtt
-
+import os
+current_directory = os.getcwd()
+pathtofiles = current_directory + "\\aws_broker_files\\"
+print("*********:",current_directory)
 IoT_protocol_name = "x-amzn-mqtt-ca"
 # aws_iot_endpoint = "aiko32o7f20z-ats.iot.eu-north-1.amazonaws.com" # <random>.iot.<region>.amazonaws.com
 aws_iot_endpoint = "a2al4qktysi6gi-ats.iot.ap-southeast-1.amazonaws.com" # <random>.iot.<region>.amazonaws.com
@@ -13,13 +16,14 @@ url = "https://{}".format(aws_iot_endpoint)
 
 # ca = "C://Users/harsh/Downloads/AmazonRootCA1.pem" #testing
 # ca =  "C:/Users/My Pc/Desktop/6-7water/aws_django/aws_broker_files/RootCA1.pem"
-ca =  "C:/Users/My Pc/Desktop/crownWebDevServer_28-06-2023/crownWebDevServer_28-06-2023/crownWebP310/aws_broker_files/RootCA1.pem"
+ca =  pathtofiles +"RootCA1.pem"
 # cert = "C:/Users/harsh/Downloads/30f1d28338acfe6f98921e02f445954428b147a069400dec8327a8d0c3356924-certificate.pem.crt" #testing
 # cert = "C:/Users/My Pc/Desktop/6-7water/aws_django/aws_broker_files/Device-certificate.pem.crt"
-cert = "C:/Users/My Pc/Desktop/crownWebDevServer_28-06-2023/crownWebDevServer_28-06-2023/crownWebP310/aws_broker_files/Device-certificate.pem.crt"
+cert = pathtofiles + "Device-certificate.pem.crt"
 # private = "C:/Users/harsh/Downloads/30f1d28338acfe6f98921e02f445954428b147a069400dec8327a8d0c3356924-private.pem.key" #testing
 # private = "C:/Users/My Pc/Desktop/6-7water/aws_django/aws_broker_files/private.pem.key"
-private = "C:/Users/My Pc/Desktop/crownWebDevServer_28-06-2023/crownWebDevServer_28-06-2023/crownWebP310/aws_broker_files/private.pem.key"
+private = pathtofiles + "private.pem.key"
+print("private.pem.key: " + private)
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)

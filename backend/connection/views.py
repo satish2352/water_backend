@@ -35,7 +35,7 @@ from django.http import HttpResponse,Http404
 from channels.generic.websocket import WebsocketConsumer
 import json
 from rest_framework import generics
-
+import os
 from django.http import HttpResponse
 from datetime import datetime
 
@@ -44,6 +44,7 @@ from datetime import datetime
 
 from .serializers import *
 msgo="hello"
+
 from django.http import JsonResponse
 # from .mqttconn import client as mqttc
 from channels.consumer import SyncConsumer

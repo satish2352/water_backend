@@ -22,7 +22,7 @@ from .utilities.sms.message import SmsMessage
 # auth_token = "MGJhZWQ4MTdlZTBmN2IwMDQ0MzQzZDc1MmU1ZmJj"     #metric tree commented by bharti
 
 auth_id = "MAMDAWZWNMOTJKNJCZNJ"  # Ini id updated by Sourabh ref: mail from Bharati ma'am
-auth_token = "MDM3OGQ3OTFiNDQ5MmM2ZTYyNjU0MjU1MjMyNzk0" # Ini id updated by Sourabh ref: mail from Bharati ma'am
+auth_token = "YTAxZDM4ZDBlNzFkNmM3NDAzZjUwOWExMTNmOWIz" # Ini id updated by Sourabh ref: mail from Bharati ma'am
 
 #auth_id = "MAMDAWZWNMOTJKNJCZNJ"                           #initiative added by bharti
 #auth_token = "MDM3OGQ3OTFiNDQ5MmM2ZTYyNjU0MjU1MjMyNzk0"    #initiative added by bharti
@@ -621,15 +621,17 @@ class Site(models.Model):
            # src="+919645578992",                       #9645578992 changed to 9607007015 by bharti
             src="+919607007015",                #Number updated by Sourabh ref: call with Bharati Ma'am
             dst=self.phone,
-            text="Your verification code for adding site in account" +
-                 str({"token": '{0:04}'.format(token), "otp": code}) + "for your Initiative product",
-            dlt_template_category='Service_Implicit',
-            dlt_template_id='1007493130372339254',    
+            text="Your verification code for adding site in account"+str({+"token":'{0:04}'.format(token),"otp":code})+" for your Initiative Product",
+            # dlt_entity_id='1201159178492032504',
+            # dlt_template_category='service_implicit',
+            # dlt_template_id='1007493130372339254'  
+            # Your verification code for adding site in account{'token': '{#var#}', 'otp': '{#var#}'} for your Initiative Product 
+            # Your verification code for adding site in account{'token': '{#var#}', 'otp': '{#var#}'} for your Initiative Product 
         )
 
         # Your verification code for adding site in account{'token': '{#var#}', 'otp': '{#var#}'}
 
-        return {"otp": code, "status": True}
+        return {"otp":code, "status":True}
 
 
 class SiteCopy(models.Model):
