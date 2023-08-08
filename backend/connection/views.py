@@ -321,6 +321,67 @@ class all_flowsen4ListAPIView(generics.ListAPIView):
 	# specify serializer to be used
 	serializer_class = all_flowsen4Serializer
 import json
+class site_check(viewsets.ModelViewSet):
+    def dispatch(self, request, *args, **kwargs):
+        fields_to_exclude = ['model', 'pk']
+        print(request.body,"BODY")
+        data = json.loads(request.body)
+        print(data,type(data),"DATA")
+        companydata=mo.Company.objects.filter(company_name=data['company_name'])
+        print(companydata.company_id,type(companydata),"***")
+
+        # dinfo = device_info.objects.filter(**data)
+        # did=dinfo[0].Device_id
+        # print(dinfo,type(dinfo))
+        # qs_sta = treat_rwp.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
+        # # last_error=Errors.objects.filter(service='cnd_consen').order_by('-id')[:1:10]
+        # if not qs_sta:
+        #     data_sta = {}
+        # else:
+        #     data_sta = serialize("json", qs_sta)
+        #     data_sta = json.loads(data_sta)
+        #     print("data_sta is:",data_sta)
+        #     for item in data_sta:
+        #         item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+        #     data_sta = json.dumps(data_sta[0]["fields"])
+        #     data_sta = json.loads(data_sta)
+        
+        # qs_set = treat_rwp.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
+        # if not qs_set:
+        #     data_set = {}
+        # else:
+        #     data_set = serialize("json", qs_set)
+        #     data_set = json.loads(data_set)
+        #     print("data_set is:",data_set)
+        #     for item in data_set:
+        #         item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+
+        #     data_set = json.dumps(data_set[0]["fields"])
+        #     data_set = json.loads(data_set)
+
+        # # last_error=Errors.objects.filter(service='cnd_consen').order_by('-id')[:1:10]
+        # last_error=Errors.objects.filter(service='rwp')
+        # if not last_error:
+        #     last_error={}
+        # else:
+        #     last_error = serialize("json", last_error)
+        #     last_error = json.loads(last_error)
+        #     for item in last_error:
+        #         item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            
+        #     last_error = json.dumps(last_error[0]["fields"])
+        #     last_error = json.loads(last_error)
+
+        # data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
+        # response_data = {
+        #     #new code
+        # 'data': data_final,  # Include the 'data' field
+        # 'status': 200,  # Add the status field
+        # 'message': "Data get successful", # Add the message field
+        # # 'error':err,
+        # }
+        # response_data=[response_data]
+        # return JsonResponse(response_data, safe=False, content_type="application/json")
 
 class updated_treat_rwpViewset(viewsets.ModelViewSet):
 
@@ -5239,6 +5300,7 @@ def on_message(client, userdata, msg):
                         
                     #day   
                     yrdata=treat_cnd_sen.objects.filter(year=dd[0],month=dd[1],day=dd[2],device_id=device_id)
+                    # yrdata=cnd_repo_hourly.objects.filter(year=dd[0],month=dd[1],day=dd[2],device_id=device_id)
                     count=0
                     count_sum=0
                     count_cnd=0

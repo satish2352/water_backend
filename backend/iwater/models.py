@@ -621,7 +621,8 @@ class Site(models.Model):
            # src="+919645578992",                       #9645578992 changed to 9607007015 by bharti
             src="+919607007015",                #Number updated by Sourabh ref: call with Bharati Ma'am
             dst=self.phone,
-            text="Your verification code for adding site in account"+str({+"token":'{0:04}'.format(token),"otp":code})+" for your Initiative Product",
+            text="Your verification code for adding site in account" + str({"token": '{0:04}'.format(token), "otp": code}) + " for your Initiative Product",
+            # text="Your verification code for adding site in account"+str({"token": '{0:04}'.format(token),"otp": code})+" for your Initiative Product",
             # dlt_entity_id='1201159178492032504',
             # dlt_template_category='service_implicit',
             # dlt_template_id='1007493130372339254'  

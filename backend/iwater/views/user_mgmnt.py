@@ -242,9 +242,11 @@ def add_user(request):
             return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
         logger.debug("after role check")
         # if request.user.is_operator or (request.user.is_supervisor and (role == "administrator" or role == "supervisor")):
-        if ((request.user.is_super_admin and (role == "administrator")) or
+        if ((request.user.is_super_admin and (role == "administrator" or role =="supervisor" or role == "operator" )) or
                 (request.user.is_admin and (role == "administrator" or role == "supervisor" or role == "operator")
-                 or request.user.is_supervisor and (role == "operator"))):
+                 or request.user.is_supervisor and (role == "operator" or role == "supervisor"))):
+        # if ((role == "administrator" or role == "supervisor" or role == "operator")
+        #          or request.user.is_supervisor and (role == "operator")):
 
             logger.debug("user check")
             if username.startswith('__'):
@@ -379,7 +381,7 @@ def add_user(request):
                     logger.error("Error in saving user data; {}".format(e))
                     response = {"Response": {
                         "Status": "error"},
-                        "message": "Error in saving user data; {}".format(e)
+                        "message": "Error in saving user datas; {}".format(e)
                     }
                     return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
             # return JsonResponse(response, safe=False, status=status.HTTP_201_CREATED)
