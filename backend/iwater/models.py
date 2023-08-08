@@ -166,7 +166,7 @@ class User(AbstractUser, PermissionsMixin):
         text_content = render_to_string('set-password.txt', {
             'user': self,
             # 'domain': "{}/invitation/".format(site_domain),  
-            'domain': "{}/changepassword/".format(site_domain), 
+            'domain': "{}/changepass/".format(site_domain), 
             'uid': urlsafe_base64_encode(force_bytes(self.pk)),
             'token': token,
             'brand_name': brand_name,
