@@ -328,7 +328,13 @@ class site_check(viewsets.ModelViewSet):
         data = json.loads(request.body)
         print(data,type(data),"DATA")
         companydata=mo.Company.objects.filter(company_name=data['company_name'])
-        print(companydata.company_id,type(companydata),"***")
+        print(companydata,type(companydata),"***")
+        for i in companydata:
+            cid=i.id
+        number_of_sites=mo.Site.objects.filter(company_id=cid)
+        site_name=[]
+        for sit in number_of_sites:
+            site_name.append(sit.site_name)
 
         # dinfo = device_info.objects.filter(**data)
         # did=dinfo[0].Device_id
@@ -373,15 +379,15 @@ class site_check(viewsets.ModelViewSet):
         #     last_error = json.loads(last_error)
 
         # data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
-        # response_data = {
-        #     #new code
-        # 'data': data_final,  # Include the 'data' field
-        # 'status': 200,  # Add the status field
-        # 'message': "Data get successful", # Add the message field
-        # # 'error':err,
-        # }
-        # response_data=[response_data]
-        # return JsonResponse(response_data, safe=False, content_type="application/json")
+        response_data = {
+            #new code
+        'data': site_name,  # Include the 'data' field
+        'status': 200,  # Add the status field
+        'message': "Data get successful", # Add the message field
+        # 'error':err,
+        }
+        response_data=[response_data]
+        return JsonResponse(response_data, safe=False, content_type="application/json")
 
 class updated_treat_rwpViewset(viewsets.ModelViewSet):
 
