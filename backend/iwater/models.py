@@ -22,7 +22,8 @@ from .utilities.sms.message import SmsMessage
 # auth_token = "MGJhZWQ4MTdlZTBmN2IwMDQ0MzQzZDc1MmU1ZmJj"     #metric tree commented by bharti
 
 auth_id = "MAMDAWZWNMOTJKNJCZNJ"  # Ini id updated by Sourabh ref: mail from Bharati ma'am
-auth_token = "YTAxZDM4ZDBlNzFkNmM3NDAzZjUwOWExMTNmOWIz" # Ini id updated by Sourabh ref: mail from Bharati ma'am
+# auth_token = "YTAxZDM4ZDBlNzFkNmM3NDAzZjUwOWExMTNmOWIz" # Ini id updated by Sourabh ref: mail from Bharati ma'am
+auth_token = "NDIyNDk5NDJjMDNiYjkxY2E0MmQ0ZTJmZjlmMTgw" # Ini id updated by Sourabh ref: mail from Bharati ma'am
 
 #auth_id = "MAMDAWZWNMOTJKNJCZNJ"                           #initiative added by bharti
 #auth_token = "MDM3OGQ3OTFiNDQ5MmM2ZTYyNjU0MjU1MjMyNzk0"    #initiative added by bharti
@@ -166,7 +167,7 @@ class User(AbstractUser, PermissionsMixin):
         text_content = render_to_string('set-password.txt', {
             'user': self,
             # 'domain': "{}/invitation/".format(site_domain),  
-            'domain': "{}/changepassword/".format(site_domain), 
+            'domain': "{}/change_pass/".format(site_domain), 
             'uid': urlsafe_base64_encode(force_bytes(self.pk)),
             'token': token,
             'brand_name': brand_name,
@@ -247,7 +248,7 @@ class User(AbstractUser, PermissionsMixin):
             'user': self,
             # 'domain': "{}/invitation/".format(site_domain),  
             #'domain': "{}/changepassword/".format(site_domain),     #commented by bharti
-            'domain': "{}/changepassword/".format(site_domain.strip()),     #added by bharti 
+            'domain': "{}/change_pass/".format(site_domain.strip()),     #added by bharti 
             'uid': urlsafe_base64_encode(force_bytes(self.pk)),
             'token': token,
             'brand_name': brand_name,
@@ -292,7 +293,8 @@ class User(AbstractUser, PermissionsMixin):
         # TODO comment for trial testings
 
 
-        client = plivo.RestClient("MAMDAWZWNMOTJKNJCZNJ", "MDM3OGQ3OTFiNDQ5MmM2ZTYyNjU0MjU1MjMyNzk0")
+        # client = plivo.RestClient("MAMDAWZWNMOTJKNJCZNJ", "MDM3OGQ3OTFiNDQ5MmM2ZTYyNjU0MjU1MjMyNzk0")
+        client = plivo.RestClient("MAMDAWZWNMOTJKNJCZNJ", "ODBkZmM2OWU0NGM1ZjBmY2ExZDMyODFjZTY5N2Q5")
         message_created = client.messages.create(
             #src="+919645578992",                #9645578992 changed to 9607007015 by bharti
             src="+919607007015",                #Number updated by Sourabh ref: call with Bharati Ma'am
@@ -621,6 +623,7 @@ class Site(models.Model):
            # src="+919645578992",                       #9645578992 changed to 9607007015 by bharti
             src="+919607007015",                #Number updated by Sourabh ref: call with Bharati Ma'am
             dst=self.phone,
+            # text=str({"token":'{0:04}'.format(token),"otp": code +",app:wc, The Secret OTP for initiative Device"}),
             text="Your verification code for adding site in account" + str({"token": '{0:04}'.format(token), "otp": code}) + " for your Initiative Product",
             # text="Your verification code for adding site in account"+str({"token": '{0:04}'.format(token),"otp": code})+" for your Initiative Product",
             # dlt_entity_id='1201159178492032504',
