@@ -4,3 +4,4 @@
 /Scripts
 /pyvenv.cfg
 /.vscode
+/backend/init_water_app/.env
