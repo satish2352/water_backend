@@ -7,12 +7,16 @@ import logging, traceback
 import paho.mqtt.client as mqtt
 import os
 import requests
+from init_water_app import settings
+# import environ
+# env = environ.Env()
+# environ.Env.read_env()
 current_directory = os.getcwd()
 pathtofiles = current_directory + "\\aws_broker_files\\"
 IoT_protocol_name = "x-amzn-mqtt-ca"
 
 # aws_iot_endpoint = "a2al4qktysi6gi-ats.iot.ap-southeast-1.amazonaws.com"
-aws_iot_endpoint = "a2al4qktysi6gi-ats.iot.ap-south-1.amazonaws.com"
+aws_iot_endpoint = settings.AWS_IOT_ENDPOINT
 
 url = "https://{}".format(aws_iot_endpoint)
 
@@ -21,9 +25,9 @@ url = "https://{}".format(aws_iot_endpoint)
 # private = pathtofiles + "private.pem.key"
 
 
-ca = "https://webcrown.initiativewater.com/certificates/rootCA.pem"
-cert = "https://webcrown.initiativewater.com/certificates/Device_Certificate.crt"
-private = "https://webcrown.initiativewater.com/certificates/private_key.pem.key"
+ca = settings.CA
+cert = settings.CERT
+private = settings.PRIVATE
 
 # ca=requests.get(ca)
 # cert=requests.get(cert)

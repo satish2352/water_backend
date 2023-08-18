@@ -12553,8 +12553,7 @@ try:
     logger.info("connect success")
     
     mqttc.subscribe('wc/#')
-    client.message_callback_add("wc/v1/OTP", on_message_1)
-    mqttc.message_callback_add("wc/#", on_message)
+    
     mqttc.loop_start()
     # while True:
     #     now = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
@@ -12569,3 +12568,5 @@ except Exception as e:
     # logger.error("message:{}".format(e.message))
     traceback.print_exc(file=sys.stdout)
 mqttc.on_message = on_message
+# client.message_callback_add("wc/v1/OTP", on_message_1)
+# mqttc.message_callback_add("wc/#", on_message)
