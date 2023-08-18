@@ -4,6 +4,7 @@ import threading
 from connection.alpn_mqtt import *
 from datetime import datetime
 
+import random
 from django.http.response import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.decorators import api_view
@@ -23,7 +24,7 @@ from connection.models import device_info
 from connection.views import mqttc,MqttClient
 token_=0
 
-mqttc.subscribe('wc/v1/OTP',1)
+# mqttc.subscribe('wc/v1/OTP',1)
 # class MqttClient:
 #     def __init__(self, company_id):
 #         # _data_mqtt = settings.settings_get_mqttSettings()
@@ -930,7 +931,8 @@ def send_otp(request):
             threading.Thread(target=connect_mqtt_in_background, args=(request.user.company_id, )).start()
             # ! connects MQTT 
 
-            sent = site_obj.send_verification_sms(site_obj.id)
+            # sent = site_obj.send_verification_sms(site_obj.id)
+            sent = site_obj.send_verification_sms(random.randint(1000, 9999))
             # ! sends verification sms to the mobile
             
             logger.info("sent")
@@ -1100,6 +1102,7 @@ def verify_token(request):
                         "device_name3": dev_obj.serial_no3
                     }
                     site_obj.token_verified = True
+                    site_obj.token = False
                     site_obj.save()
                     len_authenticate_device = len(authenticate_device)
                     print(len_authenticate_device)
@@ -1249,7 +1252,8 @@ def re_auth_device(request):
 
             logger.info("Re-auth request for device added")
             threading.Thread(target=connect_mqtt_in_background, args=(request.user.company_id, )).start()
-            sent = site_obj.send_verification_sms(site_obj.id)
+            # sent = site_obj.send_verification_sms(site_obj.id)
+            sent = site_obj.send_verification_sms(random.randint(1000, 9999))
             logger.info(sent)
             if sent["status"]:
                 return JsonResponse({"Response": {"Status": "success"},

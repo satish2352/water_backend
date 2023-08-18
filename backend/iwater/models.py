@@ -15,6 +15,7 @@ import plivo
 from init_water_app.settings import BRAND_NAME, SUPPORT_EMAIL, SUPPORT_PHONE, OTP_VALID_FOR, AUTH_LINK_VALID_FOR
 from .utilities.tokens import account_verification_token, SmsPinGenerator
 from .utilities.sms.message import SmsMessage
+from init_water_app import settings
 
 # auth_id = "MAZJK4ZTC4ZWM3Y2U0ZW"  # TODO tony's
 # auth_token = "MjE5ZGRlNTY1Mzc4MzFkOGQ0MDkzOTE2MTUwYjll"
@@ -24,7 +25,7 @@ from .utilities.sms.message import SmsMessage
 auth_id = "MAMDAWZWNMOTJKNJCZNJ"  # Ini id updated by Sourabh ref: mail from Bharati ma'am
 # auth_token = "YTAxZDM4ZDBlNzFkNmM3NDAzZjUwOWExMTNmOWIz" # Ini id updated by Sourabh ref: mail from Bharati ma'am
 # auth_token = "NDIyNDk5NDJjMDNiYjkxY2E0MmQ0ZTJmZjlmMTgw" # Ini id updated by Sourabh ref: mail from Bharati ma'am
-auth_token = "Njg2NmExYWY0ZGY0ZmExNjg4M2JjYzMzMzc0N2Rl" # Ini id updated by Sourabh ref: mail from Bharati ma'am
+auth_token = settings.AUTH_TOKEN # Ini id updated by Sourabh ref: mail from Bharati ma'am
 
 #auth_id = "MAMDAWZWNMOTJKNJCZNJ"                           #initiative added by bharti
 #auth_token = "MDM3OGQ3OTFiNDQ5MmM2ZTYyNjU0MjU1MjMyNzk0"    #initiative added by bharti
@@ -578,6 +579,7 @@ class Site(models.Model):
         pin_matches = pin is not None and pin == cached_pin
         if pin_matches:
             self.otp = None
+            self.token = None
             self.phone_verified = True
             self.save()
             return {"status": True, "difference": difference}
