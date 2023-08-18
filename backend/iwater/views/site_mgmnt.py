@@ -20,433 +20,457 @@ from init_water_app import settings
 from init_water_app.settings import OTP_VALID_FOR
 from iwater.iw_logger import logger
 from connection.models import device_info
+from connection.views import mqttc,MqttClient
+token_=0
 
-class MqttClient:
+mqttc.subscribe('wc/v1/OTP',1)
+# class MqttClient:
+#     def __init__(self, company_id):
+#         # _data_mqtt = settings.settings_get_mqttSettings()
+#         # _topic = "IW/V1/OTP"
+#         _topic = "wc/v1/OTP"
+#         # _username = _data_mqtt['_username']
+#         # _password = _data_mqtt['_password']
+#         # _hostname = "broker.mqttdashboard.com"
+#         # _port = 443
+#         _port = 8883
+#         self.company_id = company_id
 
-    def __init__(self, company_id):
-        # _data_mqtt = settings.settings_get_mqttSettings()
-        # _topic = "IW/V1/OTP"
-        _topic = "wc/v1/OTP"
+#         # logger.info("MQTT - Credentials: username: {}, hostname: {}, port: {}".format(_username, _hostname, _port))
+#         # self.client = mqtt.Client()
+#         self.client = mqttc
+#         self.topic = _topic
+#         # if _clientID != "":
+#         # self.client = mqtt.Client(client_id="")
 
-        # _username = _data_mqtt['_username']
-        # _password = _data_mqtt['_password']
-        # _hostname = "broker.mqttdashboard.com"
-        _port = 443
-        self.company_id = company_id
+#         # self.client.on_connect = self.on_connect
+#         # self.client.on_message = self.on_message
+#         self.client.on_connect = self.on_connect
+#         self.client.on_message = self.on_message
 
-        # logger.info("MQTT - Credentials: username: {}, hostname: {}, port: {}".format(_username, _hostname, _port))
-        self.client = mqtt.Client()
-        self.topic = _topic
-        # if _clientID != "":
-        # self.client = mqtt.Client(client_id="")
+#         # connect to HiveMQ Cloud on port
+#         # self.client.connect(_hostname, _port, OTP_VALID_FOR)
+#         self.client.connect(aws_iot_endpoint, _port, OTP_VALID_FOR)
 
-        self.client.on_connect = self.on_connect
-        self.client.on_message = self.on_message
+#         self.client.loop_start()
 
-        # connect to HiveMQ Cloud on port
-        # self.client.connect(_hostname, _port, OTP_VALID_FOR)
-        self.client.connect(aws_iot_endpoint, _port, OTP_VALID_FOR)
+#     def on_message(self, client, userdata, message):
+#         global token_
+#         print("Data received1!!!",message.payload)
+#         jstr=message.payload
+#         if isinstance(jstr, bytes):
+#             data1 = jstr.decode("utf-8")
+#             # print("data:",data,type(data))
+#         # if data.startswith("{'") and data.endswith("'}"):
+#             # dict_str = jstring.decode("UTF-8")
+#         # data = json.loads(str(message.payload.decode('utf-8')))
+#         print("Data received!!!",data1)
 
-        self.client.loop_start()
+#         logger.info("MQTT data {}".format(data1))
 
-    def on_message(self, client, userdata, message):
+#         data=eval(data1)
+#         print("new data is:",data,type(data))
+#         site_id = data["token"]
 
-        data = json.loads(str(message.payload.decode('utf-8')))
-        logger.info("MQTT data {}".format(data))
-        site_id = data["token"]
-        # site_id = str(data["token"]).lstrip("0")
+#         # token_ = data["token"]
+#         # site_id= Site.objects.filter(token=token_).latest()
+#         # site_id = str(data["token"]).lstrip("0")
+#         # site_id = site_id['id']
+#         device_id = data["deviceid"]
+#         if "panelid" in data1:
+#             panelid = data["panelid"] if data["panelid"] else None
+#             logger.info("panelid {}".format(panelid))
 
-        device_id = data["deviceid"]
-        panelid = data["panelid"] if data["panelid"] else None
-        atmid = data["atmid"] if data["atmid"] else None
+#         if "atmid" in data1:
+#             atmid = data["atmid"] if data["atmid"] else None
+#             logger.info("atmid {}".format(atmid))
 
-        logger.info("site_id {}".format(site_id))
-        logger.info("company_id {}".format(self.company_id))
-        logger.info("device_id {}".format(device_id))
-        logger.info("panelid {}".format(panelid))
-        logger.info("atmid {}".format(atmid))
 
-        with transaction.atomic():
-            try:  # TODO
-                # # Device.objects.get(site_id=site_id, serial_no1=device_id)
-                try:
-                    device_data = Device.objects.get(site_id=site_id) # ! verfies device against site_id
-                    # print(device_data)
-                except Device.DoesNotExist:
-                    device_data = None
+#         logger.info("site_id {}".format(site_id))
+#         logger.info("company_id {}".format(self.company_id))
+#         logger.info("device_id {}".format(device_id))
 
-                if device_data is not None:
-                    logger.info("re-auth request came for device {}".format(device_id)) # ! re-auth request
+#         with transaction.atomic():
+#             try:  # TODO
+#                 # # Device.objects.get(site_id=site_id, serial_no1=device_id)
+#                 try:
+#                     device_data = Device.objects.get(site_id=site_id) # ! verfies device against site_id
+#                     # print(device_data)
+#                 except Device.DoesNotExist:
+#                     device_data = None
 
-                    # device_data = Device.objects.get(site_id=site_id, serial_no1=device_id)
-                    if device_data.serial_no2 is None:
-                        device_data.serial_no2 = panelid
-                        device_data.save()
-                        logger.info("Added device serial numbers")
+#                 if device_data is not None:
+#                     logger.info("re-auth request came for device {}".format(device_id)) # ! re-auth request
 
-                        site_data = Site.objects.get(id=site_id)
-                        site_data.is_treatment_unit = True
-                        site_data.save()
-                        logger.info("Updated site details for treatment unit")
+#                     # device_data = Device.objects.get(site_id=site_id, serial_no1=device_id)
+#                     if device_data.serial_no2 is None:
+#                         device_data.serial_no2 = panelid
+#                         device_data.save()
+#                         logger.info("Added device serial numbers")
 
-                        subscription_data = Subscription.objects.get(site_id=site_id)
-                        subscription_data.site_id = site_id
-                        subscription_data.is_treatment_unit = True
-                        subscription_data.company_id = self.company_id
-                        subscription_data.save()
-                        logger.info("Added subscription details for treatment unit")
-                    if device_data.serial_no3 is None:
-                        device_data.serial_no3 = atmid
-                        device_data.save()
-                        logger.info("Added device serial numbers")
+#                         site_data = Site.objects.get(id=site_id)
+#                         site_data.is_treatment_unit = True
+#                         site_data.save()
+#                         logger.info("Updated site details for treatment unit")
 
-                        site_data = Site.objects.get(id=site_id)
-                        site_data.is_dispensing_unit = True
-                        site_data.save()
-                        logger.info("Updated site details for dispensing unit")
+#                         subscription_data = Subscription.objects.get(site_id=site_id)
+#                         subscription_data.site_id = site_id
+#                         subscription_data.is_treatment_unit = True
+#                         subscription_data.company_id = self.company_id
+#                         subscription_data.save()
+#                         logger.info("Added subscription details for treatment unit")
+#                     if device_data.serial_no3 is None:
+#                         device_data.serial_no3 = atmid
+#                         device_data.save()
+#                         logger.info("Added device serial numbers")
 
-                        # subscription_data = Subscription.objects.get(site_id=site_id)
-                        # subscription_data.is_treatment_unit = True
-                        # subscription_data.save()
+#                         site_data = Site.objects.get(id=site_id)
+#                         site_data.is_dispensing_unit = True
+#                         site_data.save()
+#                         logger.info("Updated site details for dispensing unit")
 
-                        subscription_data = Subscription()
-                        subscription_data.site_id = site_id
-                        subscription_data.is_dispensing_unit = True
-                        subscription_data.company_id = self.company_id
-                        subscription_data.save()
-                        logger.info("Added subscription details for dispensing unit")
+#                         # subscription_data = Subscription.objects.get(site_id=site_id)
+#                         # subscription_data.is_treatment_unit = True
+#                         # subscription_data.save()
 
-                else:
-                    logger.info("Got new device add request ")
-                    if panelid and atmid:
-                        logger.info("Got both panel and atm id from device")
+#                         subscription_data = Subscription()
+#                         subscription_data.site_id = site_id
+#                         subscription_data.is_dispensing_unit = True
+#                         subscription_data.company_id = self.company_id
+#                         subscription_data.save()
+#                         logger.info("Added subscription details for dispensing unit")
 
-                        device_data = Device()
-                        device_data.serial_no1 = device_id
-                        device_data.serial_no2 = panelid
-                        device_data.serial_no3 = atmid
-                        device_data.site_id = site_id
-                        device_data.save()
-                        logger.info("Added device serial numbers")
+#                 else:
+#                     logger.info("Got new device add request ")
+#                     if panelid and atmid:
+#                         logger.info("Got both panel and atm id from device")
 
-                        site_data = Site.objects.get(id=site_id)
-                        site_data.is_treatment_unit = True
-                        site_data.save()
-                        logger.info("Updated site details for treatment unit")
+#                         device_data = Device()
+#                         device_data.serial_no1 = device_id
+#                         device_data.serial_no2 = panelid
+#                         device_data.serial_no3 = atmid
+#                         device_data.site_id = site_id
+#                         device_data.save()
+#                         logger.info("Added device serial numbers")
 
-                        subscription_data = Subscription()
-                        subscription_data.site_id = site_id
-                        subscription_data.is_treatment_unit = True
-                        subscription_data.company_id = self.company_id
-                        subscription_data.save()
-                        logger.info("Added subscription details for treatment unit")
+#                         site_data = Site.objects.get(id=site_id)
+#                         site_data.is_treatment_unit = True
+#                         site_data.save()
+#                         logger.info("Updated site details for treatment unit")
 
-                        site_data = Site.objects.get(id=site_id)
-                        site_data.is_dispensing_unit = True
-                        site_data.save()
-                        logger.info("Updated site details for dispensing unit")
+#                         subscription_data = Subscription()
+#                         subscription_data.site_id = site_id
+#                         subscription_data.is_treatment_unit = True
+#                         subscription_data.company_id = self.company_id
+#                         subscription_data.save()
+#                         logger.info("Added subscription details for treatment unit")
 
-                        # subscription_data = Subscription.objects.get(site_id=site_id)
-                        # subscription_data.is_treatment_unit = True
-                        # subscription_data.save()
+#                         site_data = Site.objects.get(id=site_id)
+#                         site_data.is_dispensing_unit = True
+#                         site_data.save()
+#                         logger.info("Updated site details for dispensing unit")
 
-                        subscription_data = Subscription()
-                        subscription_data.site_id = site_id
-                        subscription_data.is_dispensing_unit = True
-                        subscription_data.company_id = self.company_id
-                        subscription_data.save()
-                        logger.info("Added subscription details for dispensing unit")
+#                         # subscription_data = Subscription.objects.get(site_id=site_id)
+#                         # subscription_data.is_treatment_unit = True
+#                         # subscription_data.save()
 
-                    elif panelid:
-                        logger.info("Got only panel id from device")
+#                         subscription_data = Subscription()
+#                         subscription_data.site_id = site_id
+#                         subscription_data.is_dispensing_unit = True
+#                         subscription_data.company_id = self.company_id
+#                         subscription_data.save()
+#                         logger.info("Added subscription details for dispensing unit")
 
-                        device_data = Device()
-                        device_data.serial_no1 = device_id
-                        device_data.serial_no2 = panelid
-                        device_data.serial_no3 = atmid
-                        device_data.site_id = site_id
-                        device_data.save()
-                        logger.info("Added device serial numbers")
+#                     elif panelid:
+#                         logger.info("Got only panel id from device")
 
-                        site_data = Site.objects.get(id=site_id)
-                        site_data.is_treatment_unit = True
-                        site_data.save()
-                        logger.info("Updated site details for treatment unit")
+#                         device_data = Device()
+#                         device_data.serial_no1 = device_id
+#                         device_data.serial_no2 = panelid
+#                         device_data.serial_no3 = atmid
+#                         device_data.site_id = site_id
+#                         device_data.save()
+#                         logger.info("Added device serial numbers")
 
-                        subscription_data = Subscription()
-                        subscription_data.site_id = site_id
-                        subscription_data.is_treatment_unit = True
-                        subscription_data.company_id = self.company_id
-                        subscription_data.save()
-                        logger.info("Added subscription details for treatment unit")
+#                         site_data = Site.objects.get(id=site_id)
+#                         site_data.is_treatment_unit = True
+#                         site_data.save()
+#                         logger.info("Updated site details for treatment unit")
 
-                    elif atmid:
-                        logger.info("Got only atm id from device")
+#                         subscription_data = Subscription()
+#                         subscription_data.site_id = site_id
+#                         subscription_data.is_treatment_unit = True
+#                         subscription_data.company_id = self.company_id
+#                         subscription_data.save()
+#                         logger.info("Added subscription details for treatment unit")
 
-                        device_data = Device()
-                        device_data.serial_no1 = device_id
-                        device_data.serial_no2 = panelid
-                        device_data.serial_no3 = atmid
-                        device_data.site_id = site_id
-                        device_data.save()
+#                     elif atmid:
+#                         logger.info("Got only atm id from device")
 
-                        site_data = Site.objects.get(id=site_id)
-                        site_data.is_dispensing_unit = True
-                        site_data.save()
-                        logger.info("Updated site details for dispensing unit")
+#                         device_data = Device()
+#                         device_data.serial_no1 = device_id
+#                         device_data.serial_no2 = panelid
+#                         device_data.serial_no3 = atmid
+#                         device_data.site_id = site_id
+#                         device_data.save()
 
-                        subscription_data = Subscription()
-                        subscription_data.site_id = site_id
-                        subscription_data.is_dispensing_unit = True
-                        subscription_data.company_id = self.company_id
-                        subscription_data.save()
-                        logger.info("Added subscription details for dispensing unit")
-                site_data = Site.objects.get(id=site_id)
-                # company_names=Company.objects.get(company_id=self.company_id)
-                print("*1*1*")
-                print("email is:",user_login.email)
-                logged_user = User.objects.get(email=user_login.email)
+#                         site_data = Site.objects.get(id=site_id)
+#                         site_data.is_dispensing_unit = True
+#                         site_data.save()
+#                         logger.info("Updated site details for dispensing unit")
 
-                company_names = Company.objects.get(id=logged_user.company_id)
+#                         subscription_data = Subscription()
+#                         subscription_data.site_id = site_id
+#                         subscription_data.is_dispensing_unit = True
+#                         subscription_data.company_id = self.company_id
+#                         subscription_data.save()
+#                         logger.info("Added subscription details for dispensing unit")
+#                 site_data = Site.objects.get(id=site_id)
+#                 # company_names=Company.objects.get(company_id=self.company_id)
+#                 print("*1*1*")
+#                 print("email is:",user_login.email)
+#                 logged_user = User.objects.get(email=user_login.email)
 
-                print("company_names:",company_names.company_name)
-                records = [
-                {
-                "Device_id": device_id,
-                "Device_name": "wc",
-                "unit_type": "water_treatment",
-                "company_name": company_names.company_name,
-                "componant_name": "rwp",
-                "site_name": site_data.site_name
-                },
-                {
-                "Device_id": device_id,
-                "Device_name": "wc",
-                "unit_type": "water_treatment",
-                "company_name": company_names.company_name,
-                "componant_name": "rwp",
-                "site_name": site_data.site_name
-                },
-                {
-                "Device_id": device_id,
-                "Device_name": "wc",
-                "unit_type": "water_treatment",
-                "company_name": company_names.company_name,
-                "componant_name": "cnd_sen",
-                "site_name": site_data.site_name
-                },
-                {
-                "Device_id": device_id,
-                "Device_name": "wc",
-                "unit_type": "water_treatment",
-                "company_name": company_names.company_name,
-                "componant_name": "ampv1",
-                "site_name": site_data.site_name
-                },
-                {
-                "Device_id": device_id,
-                "Device_name": "wc",
-                "unit_type": "water_treatment",
-                "company_name": company_names.company_name,
-                "componant_name": "ampv2",
-                "site_name": site_data.site_name
-                },
-                {
-                "Device_id": device_id,
-                "Device_name": "wc",
-                "unit_type": "water_treatment",
-                "company_name": company_names.company_name,
-                "componant_name": "ampv3",
-                "site_name": site_data.site_name
-                },
-                {
-                "Device_id": device_id,
-                "Device_name": "wc",
-                "unit_type": "water_treatment",
-                "company_name": company_names.company_name,
-                "componant_name": "ampv4",
-                "site_name": site_data.site_name
-                },
-                {
-                "Device_id": device_id,
-                "Device_name": "wc",
-                "unit_type": "water_dispense",
-                "company_name": company_names.company_name,
-                "componant_name": "tap2",
-                "site_name": site_data.site_name
-                },
-                {
-                "Device_id": device_id,
-                "Device_name": "wc",
-                "unit_type": "water_dispense",
-                "company_name": company_names.company_name,
-                "componant_name": "tap3",
-                "site_name": site_data.site_name
-                },
-                {
-                "Device_id": device_id,
-                "Device_name": "wc",
-                "unit_type": "water_dispense",
-                "company_name": company_names.company_name,
-                "componant_name": "tap4",
-                "site_name": site_data.site_name
-                },
-                {
-                "Device_id": device_id,
-                "Device_name": "wc",
-                "unit_type": "water_treatment",
-                "company_name": company_names.company_name,
-                "componant_name": "hpp",
-                "site_name": site_data.site_name
-                },
-                {
-                "Device_id": device_id,
-                "Device_name": "wc",
-                "unit_type": "water_treatment",
-                "company_name": company_names.company_name,
-                "componant_name": "atm",
-                "site_name": site_data.site_name
-                },
-                {
-                "Device_id": device_id,
-                "Device_name": "wc",
-                "unit_type": "water_treatment",
-                "company_name": company_names.company_name,
-                "componant_name": "panel",
-                "site_name": site_data.site_name
-                },
-                {
+#                 company_names = Company.objects.get(id=logged_user.company_id)
 
-                "Device_id": device_id,
-                "Device_name": "wc",
-                "unit_type": "water_treatment",
-                "company_name": company_names.company_name,
-                "componant_name": "F_flowsen",
-                "site_name": site_data.site_name
-                },
-                {
-                "Device_id": device_id,
-                "Device_name": "wc",
-                "unit_type": "water_treatment",
-                "company_name": company_names.company_name,
-                "componant_name": "P_flowsen",
-                "site_name": site_data.site_name
-                },
-                {
-                "Device_id": device_id,
-                "Device_name": "wc",
-                "unit_type": "water_treatment",
-                "company_name": company_names.company_name,
-                "componant_name": "tds_sen",
-                "site_name": site_data.site_name
-                },
-                {
-                "Device_id": device_id,
-                "Device_name": "wc",
-                "unit_type": "water_dispense",
-                "company_name": company_names.company_name,
-                "componant_name": "cnd_consen",
-                "site_name": site_data.site_name
-                },
-                {
-                "Device_id": device_id,
-                "Device_name": "wc",
-                "unit_type": "water_dispense",
-                "company_name": company_names.company_name,
-                "componant_name": "tds_consen",
-                "site_name": site_data.site_name
-                },
-                {
-                "Device_id": device_id,
-                "Device_name": "wc",
-                "unit_type": "water_dispense",
-                "company_name": company_names.company_name,
-                "componant_name": "atm",
-                "site_name": site_data.site_name
-                },
-                {
-                "Device_id": device_id,
-                "Device_name": "wc",
-                "unit_type": "water_dispense",
-                "company_name": company_names.company_name,
-                "componant_name": "flowsen1",
-                "site_name": site_data.site_name
-                },
-                {
-                "Device_id": device_id,
-                "Device_name": "wc",
-                "unit_type": "water_dispense",
-                "company_name": company_names.company_name,
-                "componant_name": "flowsen2",
-                "site_name": site_data.site_name
-                },
-                {
-                "Device_id": device_id,
-                "Device_name": "wc",
-                "unit_type": "water_dispense",
-                "company_name": company_names.company_name,
-                "componant_name": "flowsen3",
-                "site_name": site_data.site_name
-                },
-                {
-                "Device_id": device_id,
-                "Device_name": "wc",
-                "unit_type": "water_dispense",
-                "company_name": company_names.company_name,
-                "componant_name": "flowsen4",
-                "site_name": site_data.site_name
-                },
-                {
-                "Device_id": device_id,
-                "Device_name": "wc",
-                "unit_type": "water_dispense",
-                "company_name": company_names.company_name,
-                "componant_name": "tap1",
-                "site_name": site_data.site_name
-                },
-                {
-                "Device_id": device_id,
-                "Device_name": "wc",
-                "unit_type": "water_dispense",
-                "company_name": company_names.company_name,
-                "componant_name": "tap1",
-                "site_name": site_data.site_name
-                }
-                                    # Add other records here
-                ]
-                print("*2*2*")
-                # Insert the records into the collection
-                # device_info.insert_many(records)
-                for record in records:
-                    print("*3*3*")
-                    info=device_info.objects.create(**record)
-                    print("*4*4*")
-                    info.save()
-                    print("*5*5*")
+#                 print("company_names:",company_names.company_name)
+#                 records = [
+#                 {
+#                 "Device_id": device_id,
+#                 "Device_name": "wc",
+#                 "unit_type": "water_treatment",
+#                 "company_name": company_names.company_name,
+#                 "componant_name": "rwp",
+#                 "site_name": site_data.site_name
+#                 },
+#                 {
+#                 "Device_id": device_id,
+#                 "Device_name": "wc",
+#                 "unit_type": "water_treatment",
+#                 "company_name": company_names.company_name,
+#                 "componant_name": "rwp",
+#                 "site_name": site_data.site_name
+#                 },
+#                 {
+#                 "Device_id": device_id,
+#                 "Device_name": "wc",
+#                 "unit_type": "water_treatment",
+#                 "company_name": company_names.company_name,
+#                 "componant_name": "cnd_sen",
+#                 "site_name": site_data.site_name
+#                 },
+#                 {
+#                 "Device_id": device_id,
+#                 "Device_name": "wc",
+#                 "unit_type": "water_treatment",
+#                 "company_name": company_names.company_name,
+#                 "componant_name": "ampv1",
+#                 "site_name": site_data.site_name
+#                 },
+#                 {
+#                 "Device_id": device_id,
+#                 "Device_name": "wc",
+#                 "unit_type": "water_treatment",
+#                 "company_name": company_names.company_name,
+#                 "componant_name": "ampv2",
+#                 "site_name": site_data.site_name
+#                 },
+#                 {
+#                 "Device_id": device_id,
+#                 "Device_name": "wc",
+#                 "unit_type": "water_treatment",
+#                 "company_name": company_names.company_name,
+#                 "componant_name": "ampv3",
+#                 "site_name": site_data.site_name
+#                 },
+#                 {
+#                 "Device_id": device_id,
+#                 "Device_name": "wc",
+#                 "unit_type": "water_treatment",
+#                 "company_name": company_names.company_name,
+#                 "componant_name": "ampv4",
+#                 "site_name": site_data.site_name
+#                 },
+#                 {
+#                 "Device_id": device_id,
+#                 "Device_name": "wc",
+#                 "unit_type": "water_dispense",
+#                 "company_name": company_names.company_name,
+#                 "componant_name": "tap2",
+#                 "site_name": site_data.site_name
+#                 },
+#                 {
+#                 "Device_id": device_id,
+#                 "Device_name": "wc",
+#                 "unit_type": "water_dispense",
+#                 "company_name": company_names.company_name,
+#                 "componant_name": "tap3",
+#                 "site_name": site_data.site_name
+#                 },
+#                 {
+#                 "Device_id": device_id,
+#                 "Device_name": "wc",
+#                 "unit_type": "water_dispense",
+#                 "company_name": company_names.company_name,
+#                 "componant_name": "tap4",
+#                 "site_name": site_data.site_name
+#                 },
+#                 {
+#                 "Device_id": device_id,
+#                 "Device_name": "wc",
+#                 "unit_type": "water_treatment",
+#                 "company_name": company_names.company_name,
+#                 "componant_name": "hpp",
+#                 "site_name": site_data.site_name
+#                 },
+#                 {
+#                 "Device_id": device_id,
+#                 "Device_name": "wc",
+#                 "unit_type": "water_treatment",
+#                 "company_name": company_names.company_name,
+#                 "componant_name": "atm",
+#                 "site_name": site_data.site_name
+#                 },
+#                 {
+#                 "Device_id": device_id,
+#                 "Device_name": "wc",
+#                 "unit_type": "water_treatment",
+#                 "company_name": company_names.company_name,
+#                 "componant_name": "panel",
+#                 "site_name": site_data.site_name
+#                 },
+#                 {
 
-                logger.info("Successfully added data to db over mqtt")
-                print("*6*6*")
-            except Exception as err:
-                print("*7*7*")
-                transaction.set_rollback(True)
-                logger.error("MQTT - {}".format(err))
+#                 "Device_id": device_id,
+#                 "Device_name": "wc",
+#                 "unit_type": "water_treatment",
+#                 "company_name": company_names.company_name,
+#                 "componant_name": "F_flowsen",
+#                 "site_name": site_data.site_name
+#                 },
+#                 {
+#                 "Device_id": device_id,
+#                 "Device_name": "wc",
+#                 "unit_type": "water_treatment",
+#                 "company_name": company_names.company_name,
+#                 "componant_name": "P_flowsen",
+#                 "site_name": site_data.site_name
+#                 },
+#                 {
+#                 "Device_id": device_id,
+#                 "Device_name": "wc",
+#                 "unit_type": "water_treatment",
+#                 "company_name": company_names.company_name,
+#                 "componant_name": "tds_sen",
+#                 "site_name": site_data.site_name
+#                 },
+#                 {
+#                 "Device_id": device_id,
+#                 "Device_name": "wc",
+#                 "unit_type": "water_dispense",
+#                 "company_name": company_names.company_name,
+#                 "componant_name": "cnd_consen",
+#                 "site_name": site_data.site_name
+#                 },
+#                 {
+#                 "Device_id": device_id,
+#                 "Device_name": "wc",
+#                 "unit_type": "water_dispense",
+#                 "company_name": company_names.company_name,
+#                 "componant_name": "tds_consen",
+#                 "site_name": site_data.site_name
+#                 },
+#                 {
+#                 "Device_id": device_id,
+#                 "Device_name": "wc",
+#                 "unit_type": "water_dispense",
+#                 "company_name": company_names.company_name,
+#                 "componant_name": "atm",
+#                 "site_name": site_data.site_name
+#                 },
+#                 {
+#                 "Device_id": device_id,
+#                 "Device_name": "wc",
+#                 "unit_type": "water_dispense",
+#                 "company_name": company_names.company_name,
+#                 "componant_name": "flowsen1",
+#                 "site_name": site_data.site_name
+#                 },
+#                 {
+#                 "Device_id": device_id,
+#                 "Device_name": "wc",
+#                 "unit_type": "water_dispense",
+#                 "company_name": company_names.company_name,
+#                 "componant_name": "flowsen2",
+#                 "site_name": site_data.site_name
+#                 },
+#                 {
+#                 "Device_id": device_id,
+#                 "Device_name": "wc",
+#                 "unit_type": "water_dispense",
+#                 "company_name": company_names.company_name,
+#                 "componant_name": "flowsen3",
+#                 "site_name": site_data.site_name
+#                 },
+#                 {
+#                 "Device_id": device_id,
+#                 "Device_name": "wc",
+#                 "unit_type": "water_dispense",
+#                 "company_name": company_names.company_name,
+#                 "componant_name": "flowsen4",
+#                 "site_name": site_data.site_name
+#                 },
+#                 {
+#                 "Device_id": device_id,
+#                 "Device_name": "wc",
+#                 "unit_type": "water_dispense",
+#                 "company_name": company_names.company_name,
+#                 "componant_name": "tap1",
+#                 "site_name": site_data.site_name
+#                 },
+#                 {
+#                 "Device_id": device_id,
+#                 "Device_name": "wc",
+#                 "unit_type": "water_dispense",
+#                 "company_name": company_names.company_name,
+#                 "componant_name": "tap1",
+#                 "site_name": site_data.site_name
+#                 }
+#                                     # Add other records here
+#                 ]
+#                 print("*2*2*")
+#                 # Insert the records into the collection
+#                 # device_info.insert_many(records)
+#                 for record in records:
+#                     print("*3*3*")
+#                     info=device_info.objects.create(**record)
+#                     print("*4*4*")
+#                     info.save()
+#                     print("*5*5*")
 
-    def on_connect(self, client, userdata, flags, rc):
-        logger.info("MQTT - connected")
-        self.subscribe(self.topic)
+#                 logger.info("Successfully added data to db over mqtt")
+#                 print("*6*6*")
+#             except Exception as err:
+#                 print("*7*7*")
+#                 transaction.set_rollback(True)
+#                 logger.error("MQTT - {}".format(err))
 
-    def subscribe(self, topic):
-        self.client.subscribe(topic)
-        logger.info("MQTT - Subscribed to topic '" + topic)
+#     def on_connect(self, client, userdata, flags, rc):
+#         logger.info("MQTT - connected")
+#         self.subscribe(self.topic)
 
-    def publish(self, topic, payload):
-        logger.info("MQTT - Published message '" + str(payload) + "' on topic '" + topic)
-        self.client.publish(topic, payload=payload)
-        # self.client.loop_stop()
+#     def subscribe(self, topic):
+#         self.client.subscribe(topic)
+#         logger.info("MQTT - Subscribed to topic '" + topic)
 
-    def stop(self):
-        logger.info("MQTT - Disconnecting from mqtt broker and cleaning up")
-        self.client.disconnect()
+#     def publish(self, topic, payload):
+#         logger.info("MQTT - Published message '" + str(payload) + "' on topic '" + topic)
+#         self.client.publish(topic, payload=payload)
+#         # self.client.loop_stop()
+
+#     def stop(self):
+#         logger.info("MQTT - Disconnecting from mqtt broker and cleaning up")
+#         self.client.disconnect()
 
 
 @api_view(['GET'])
@@ -675,7 +699,6 @@ def list_sites(request):
 
 @api_view(['GET'])
 def site(request, pk):
-
     if request.method == 'GET':
 
         site_dat = Site.objects.filter(id=pk)
@@ -822,21 +845,22 @@ def send_otp(request):
         except Site.DoesNotExist:
             pass
 
-        # try:
-        #     si = Site.objects.get(phone=site_mob, site_name=site_name, phone_verified=True, token_verified=True)
-        #     # ! checks if phone number is already in used 
-        #     # ? Should be disabled ?
-        #     response = {"Response": {
-        #         "Status": "error"},
-        #         "message": "The phone number is already used for site registration"
-        #     }
-        #     return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
-        # except Site.DoesNotExist:
-        #     pass
+        try:
+            si = Site.objects.get(phone=site_mob, site_name=site_name, phone_verified=True, token_verified=True)
+            # ! checks if phone number is already in used 
+            # ? Should be disabled ?
+            response = {"Response": {
+                "Status": "error"},
+                "message": "The phone number is already used for site registration"
+            }
+            return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
+        except Site.DoesNotExist:
+            pass
 
         with transaction.atomic():
             try:
                 site_obj = Site.objects.filter(company_id=request.user.company_id, site_name=site_name)
+                print("*****:",site_obj)
                 if site_obj:
                     logger.error("site {} already exists".format(site_name))
 
@@ -851,17 +875,17 @@ def send_otp(request):
                 else:
                     logger.info("site {} does not exists".format(site_name))
                     logger.info("so checking whether phone number is already used")
-                    # try:
-                    #     Site.objects.get(phone=site_mob)
-                    #     response = {"Response": {
-                    #         "Status": "error"},
-                    #         "message": "The phone number is already used for site registration"
-                    #     }
-                    #     return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
+                    try:
+                        Site.objects.get(phone=site_mob)
+                        response = {"Response": {
+                            "Status": "error"},
+                            "message": "The phone number is already used for site registration"
+                        }
+                        return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
                     
-                    # except Site.DoesNotExist:
-                    #     pass
-                    # logger.info("phone number is not used, hence adding site details")
+                    except Site.DoesNotExist:
+                        pass
+                    logger.info("phone number is not used, hence adding site details")
                 site_dat = Site()
                 # ! initiates instance of the site
 
@@ -928,13 +952,18 @@ def send_otp(request):
                                 safe=False, status=status.HTTP_200_OK)
 
 
+# client = MqttClient()
 def connect_mqtt_in_background(company_id):
 
     # connect to MQTT
+    # client = MqttClient(company_id)
     client = MqttClient(company_id)
     client.publish("my/test/topic", "connected from iw backend app")
+    # client.publish("wc/v1/OTP", "connected from iw backend app")
     # client.on_connect = client.on_connect
     # client.on_message = client.on_message
+    mqttc.on_connect = mqttc.on_connect
+    mqttc.on_message = mqttc.on_message
 
 
 
@@ -989,7 +1018,9 @@ def verify_token(request):
 
     if request.method == 'POST':
         site_name = request.data['site_name']
+        print("site_name: ", site_name)
         try:
+            print("Request data:",request.data)
             authenticate_device = request.data['authenticate_device']
         except Exception as err:
             authenticate_device = None
@@ -999,28 +1030,39 @@ def verify_token(request):
             logger.info("Verify token for newly added device")
             try:
                 site_obj = Site.objects.get(company_id=request.user.company_id, site_name=site_name, phone_verified=True)
+                print("site_obj:", site_obj)
             except Exception as err:
                 logger.error("Verify token error , {}".format(err))
                 return JsonResponse({"Response": {"Status": "error"},
                                      "message": "OTP is not verified"},
                                     safe=False, status=status.HTTP_200_OK)
             try:
+                print("111")
                 sub_count = Subscription.objects.filter(site_id=site_obj.id).count()
+                print("112")
                 logger.debug(sub_count)
+                print("113")
                 if sub_count > 0:
+                    print("114")
                     dev_obj = Device.objects.get(site_id=site_obj.id)
+                    print("115")
                     response = {
                         'device_name1': dev_obj.serial_no1,
                         "device_name2": dev_obj.serial_no2,
                         "device_name3": dev_obj.serial_no3
                     }
+                    print("116")
                     site_obj.token_verified = True
+                    print("117")
                     site_obj.save()
+                    print("118")
                     if dev_obj.serial_no2 and dev_obj.serial_no3:
+                        print("119")
                         return JsonResponse({"Response": {"Status": "success"},
                                              "message": "Both treatment and dispensing units verified successfully!"},
                                             safe=False, status=status.HTTP_200_OK)
                     elif dev_obj.serial_no2:
+                        print("120")
                         return JsonResponse({"Response": {"Status": "success"},
                                              "message": "Treatment unit verified successfully!"},
                                             safe=False, status=status.HTTP_200_OK)
@@ -1029,7 +1071,7 @@ def verify_token(request):
                                              "message": "Dispensing unit verified successfully!"},
                                             safe=False, status=status.HTTP_200_OK)
                 return JsonResponse({"Response": {"Status": "error"},
-                                     "message": "Token verification failed. Didn't get the token from device"},
+                                     "message": "1Token verification failed. Didn't get the token from device1"},
                                     safe=False, status=status.HTTP_200_OK)
             except Exception as err:
                 return JsonResponse({"Response": {"Status": "error"},
@@ -1076,7 +1118,7 @@ def verify_token(request):
                                              "message": "Dispensing unit verified successfully!"},
                                             safe=False, status=status.HTTP_200_OK)
                 return JsonResponse({"Response": {"Status": "error"},
-                                     "message": "Token verification failed. Didn't get the token from device"},
+                                     "message": "2Token verification failed. Didn't get the token from device2"},
                                     safe=False, status=status.HTTP_200_OK)
             except Exception as err:
                 return JsonResponse({"Response": {"Status": "error"},

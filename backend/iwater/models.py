@@ -23,7 +23,8 @@ from .utilities.sms.message import SmsMessage
 
 auth_id = "MAMDAWZWNMOTJKNJCZNJ"  # Ini id updated by Sourabh ref: mail from Bharati ma'am
 # auth_token = "YTAxZDM4ZDBlNzFkNmM3NDAzZjUwOWExMTNmOWIz" # Ini id updated by Sourabh ref: mail from Bharati ma'am
-auth_token = "NDIyNDk5NDJjMDNiYjkxY2E0MmQ0ZTJmZjlmMTgw" # Ini id updated by Sourabh ref: mail from Bharati ma'am
+# auth_token = "NDIyNDk5NDJjMDNiYjkxY2E0MmQ0ZTJmZjlmMTgw" # Ini id updated by Sourabh ref: mail from Bharati ma'am
+auth_token = "Njg2NmExYWY0ZGY0ZmExNjg4M2JjYzMzMzc0N2Rl" # Ini id updated by Sourabh ref: mail from Bharati ma'am
 
 #auth_id = "MAMDAWZWNMOTJKNJCZNJ"                           #initiative added by bharti
 #auth_token = "MDM3OGQ3OTFiNDQ5MmM2ZTYyNjU0MjU1MjMyNzk0"    #initiative added by bharti
@@ -529,7 +530,7 @@ class Site(models.Model):
     token = models.CharField(max_length=60, null=True, blank=True)
     phone_verified = models.BooleanField(default=0, verbose_name='phone_verified')
     token_verified = models.BooleanField(default=0, verbose_name='token_verified')
-
+    # mqtt_token_verified =models.BooleanField(default=0, verbose_name='mqtt_token_verified')
     status = models.BooleanField(default=True)
     alerts = models.SmallIntegerField(default=0)
     created = models.DateField(auto_now_add=True)
@@ -599,9 +600,10 @@ class Site(models.Model):
 
         # Generate verification code
         code = SmsPinGenerator().make_pin(self)
+        print("token is:",token)
         self.otp = code
         self.otp_created = datetime.today()
-        self.token=token  #store token in site
+        self.token='{0:04}'.format(token)  #store token in site
         self.save()
 
         # Send sms to user
@@ -619,12 +621,20 @@ class Site(models.Model):
         # import plivo
 
         client = plivo.RestClient(auth_id, auth_token)
+        input_string={'token':'{0:04}'.format(token),'otp': code +",app:wc, The Secret OTP for initiative Device"}
+        input_string=str(input_string)
+        print("before replace:",input_string)
+        output_string = input_string.replace("'", "").replace(": ", ":").replace(", ", ",").replace('"','').replace("wc,","wc, ")
+        # output_string=dict(output_string)
+        print("Output is: " + output_string)
         message_created = client.messages.create(
            # src="+919645578992",                       #9645578992 changed to 9607007015 by bharti
             src="+919607007015",                #Number updated by Sourabh ref: call with Bharati Ma'am
             dst=self.phone,
+            text=output_string,
+
             # text=str({"token":'{0:04}'.format(token),"otp": code +",app:wc, The Secret OTP for initiative Device"}),
-            text="Your verification code for adding site in account" + str({"token": '{0:04}'.format(token), "otp": code}) + " for your Initiative Product",
+            # text="Your verification code for adding site in account" + str({"token": '{0:04}'.format(token), "otp": code}) + " for your Initiative Product",
             # text="Your verification code for adding site in account"+str({"token": '{0:04}'.format(token),"otp": code})+" for your Initiative Product",
             # dlt_entity_id='1201159178492032504',
             # dlt_template_category='service_implicit',

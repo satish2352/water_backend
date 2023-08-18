@@ -21,7 +21,8 @@ from init_water_app.settings import OTP_VALID_FOR
 
 from django.shortcuts import redirect
 from django.urls import reverse
-# email='vikaswagh8007@gmail.com'
+email='vikaswagh8007@gmail.com'
+# email=''
 
 @api_view(['POST'])
 def user_login(request):
@@ -31,9 +32,10 @@ def user_login(request):
 
         login_type = request.data['login_type']
         if login_type == "email":
-            # global email
+            global email
             logger.info("Email based login")
             email = request.data['email']
+
             password = request.data['password']
             logger.info("Email: {},".format(email))
             user = authenticate(request, email=email, password=password)
