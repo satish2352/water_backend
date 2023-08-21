@@ -846,17 +846,17 @@ def send_otp(request):
         except Site.DoesNotExist:
             pass
 
-        try:
-            si = Site.objects.get(phone=site_mob, site_name=site_name, phone_verified=True, token_verified=True)
-            # ! checks if phone number is already in used 
-            # ? Should be disabled ?
-            response = {"Response": {
-                "Status": "error"},
-                "message": "The phone number is already used for site registration"
-            }
-            return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
-        except Site.DoesNotExist:
-            pass
+        # try:
+        #     si = Site.objects.get(phone=site_mob, site_name=site_name, phone_verified=True, token_verified=True)
+        #     # ! checks if phone number is already in used 
+        #     # ? Should be disabled ?
+        #     response = {"Response": {
+        #         "Status": "error"},
+        #         "message": "The phone number is already used for site registration"
+        #     }
+        #     return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
+        # except Site.DoesNotExist:
+        #     pass
 
         with transaction.atomic():
             try:
@@ -873,20 +873,20 @@ def send_otp(request):
                     # site_dat.phone = site_mob
                     # site_dat.company = request.user.company
                     # site_dat.save()
-                else:
-                    logger.info("site {} does not exists".format(site_name))
-                    logger.info("so checking whether phone number is already used")
-                    try:
-                        Site.objects.get(phone=site_mob)
-                        response = {"Response": {
-                            "Status": "error"},
-                            "message": "The phone number is already used for site registration"
-                        }
-                        return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
+                # else:
+                #     logger.info("site {} does not exists".format(site_name))
+                #     logger.info("so checking whether phone number is already used")
+                #     try:
+                #         Site.objects.get(phone=site_mob)
+                #         response = {"Response": {
+                #             "Status": "error"},
+                #             "message": "The phone number is already used for site registration"
+                #         }
+                #         return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
                     
-                    except Site.DoesNotExist:
-                        pass
-                    logger.info("phone number is not used, hence adding site details")
+                #     except Site.DoesNotExist:
+                #         pass
+                #     logger.info("phone number is not used, hence adding site details")
                 site_dat = Site()
                 # ! initiates instance of the site
 

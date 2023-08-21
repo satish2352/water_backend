@@ -120,7 +120,9 @@ PORT = env("DATABASE_PORT")
 DATABASES = {
     'default_mongo': {
         'ENGINE': 'djongo',
-        'NAME': 'waterinnDB', 
+        'NAME': 'waterinnDB',
+        'USER': USER, 
+        'PASSWORD': PASSWORD,
     },
     'default': {
         'ENGINE': 'django.db.backends.mysql',

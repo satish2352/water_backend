@@ -9,7 +9,8 @@ urlpatterns = [
     path('signup/', views.user_registration, name='create_user'),
     path('update_signup/<int:pk>', views.update_user_registration, name='edit_user'),
     path('forgot_password/', views.forgot_password, name='forgot_password'),
-    path('change_password/<uidb64>/<token>/', views.change_password, name='change_password'),
+    # path('change_password/<uidb64>/<token>/', views.change_password, name='change_password'),
+    path('change_pass/<uidb64>/<token>/', views.change_password, name='change_pass'),
     path('get_user_to_verify/<uidb64>/<token>/', views.get_user_to_verify, name='get_user_to_verify'),
     path('user_invite/<uidb64>/<token>/', views.user_invite, name='user_invite'),
     
