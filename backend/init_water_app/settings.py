@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'rest_framework.authtoken',
+    'djongo'
     #'django_crontab',
 ]
 
@@ -122,16 +123,16 @@ DATABASES = {
         'ENGINE': 'djongo',
         'NAME': 'waterinnDB',
     },
-    'default_mongo': {
-        # 'USER': USER, 
-        # 'PASSWORD': PASSWORD,
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': DB_NAME,
-        'USER': USER,
-        'PASSWORD': PASSWORD,
-        'HOST': HOST,
-        'PORT': PORT,
-    }
+    # 'default_mongo': {
+    #     # 'USER': USER, 
+    #     # 'PASSWORD': PASSWORD,
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': DB_NAME,
+    #     'USER': USER,
+    #     'PASSWORD': PASSWORD,
+    #     'HOST': HOST,
+    #     'PORT': PORT,
+    # }
     
 }
 
