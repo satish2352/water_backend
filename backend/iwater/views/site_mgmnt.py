@@ -21,9 +21,9 @@ from init_water_app import settings
 from init_water_app.settings import OTP_VALID_FOR
 from iwater.iw_logger import logger
 from connection.models import device_info
-from connection.views import mqttc,MqttClient
+from connection.views import MqttClient
 token_=0
-
+mqttc = mqtt.Client()
 # mqttc.subscribe('wc/v1/OTP',1)
 # class MqttClient:
 #     def __init__(self, company_id):
