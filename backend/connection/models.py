@@ -53,6 +53,8 @@ class treat_cnd_sen(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
         # collection = 'treat_cnd_sen'
 
 class treat_tds_sen(models.Model):
@@ -75,6 +77,8 @@ class treat_tds_sen(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class tds_repo_hourly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -95,6 +99,8 @@ class tds_repo_hourly(models.Model):
         return self.device_id,self.service,self.cnd,self.spn,self.tsp,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class tds_repo_daily(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -116,6 +122,8 @@ class tds_repo_daily(models.Model):
         return self.device_id,self.service,self.tds,self.spn,self.tsp,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class tds_repo_monthly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -137,6 +145,8 @@ class tds_repo_monthly(models.Model):
     
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class tds_repo_yearly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -157,6 +167,8 @@ class tds_repo_yearly(models.Model):
         return self.device_id,self.service,self.tds,self.spn,self.tsp,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class treat_tds(models.Model):
     device_id=models.CharField(max_length=100)
@@ -177,6 +189,8 @@ class treat_tds(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class topics(models.Model):
     Topic_name=models.CharField(max_length=100)    
@@ -186,6 +200,8 @@ class topics(models.Model):
         return self.Topic_name
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class disp_atm(models.Model):
     device_id=models.CharField(max_length=100)
@@ -219,6 +235,8 @@ class disp_atm(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class disp_tap1(models.Model):
     device_id=models.CharField(max_length=100)
     message_type=models.CharField(max_length=50)
@@ -237,6 +255,8 @@ class disp_tap1(models.Model):
     second=models.CharField(max_length=50)
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class disp_tap2(models.Model):
     device_id=models.CharField(max_length=100)
     message_type=models.CharField(max_length=50)
@@ -255,6 +275,8 @@ class disp_tap2(models.Model):
     second=models.CharField(max_length=50)
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class disp_tap3(models.Model):
     device_id=models.CharField(max_length=100)
     message_type=models.CharField(max_length=50)
@@ -273,6 +295,8 @@ class disp_tap3(models.Model):
     second=models.CharField(max_length=50)
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class disp_tap4(models.Model):
     device_id=models.CharField(max_length=100)
     message_type=models.CharField(max_length=50)
@@ -291,6 +315,8 @@ class disp_tap4(models.Model):
     second=models.CharField(max_length=50)
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class disp_cnd_consen(models.Model):
     device_id=models.CharField(max_length=100)
@@ -310,6 +336,8 @@ class disp_cnd_consen(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class disp_tds_consen(models.Model):
     device_id=models.CharField(max_length=100)
@@ -329,6 +357,8 @@ class disp_tds_consen(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class cnd_consen_repo_hourly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -346,6 +376,8 @@ class cnd_consen_repo_hourly(models.Model):
         return self.device_id,self.service,self.cnd,self.spn,self.asp,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class tds_consen_repo_hourly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -363,6 +395,8 @@ class tds_consen_repo_hourly(models.Model):
         return self.device_id,self.service,self.tds,self.spn,self.asp,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class cnd_consen_repo_daily(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -381,6 +415,8 @@ class cnd_consen_repo_daily(models.Model):
         return self.device_id,self.service,self.cnd,self.spn,self.asp,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 # class tds_consen_repo_daily(models.Model):
 #     id = models.BigAutoField(primary_key=True)
 #     device_id=models.CharField(max_length=100)
@@ -430,6 +466,8 @@ class treat_ampv1(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class treat_ampv2(models.Model):
     device_id=models.CharField(max_length=100)
     message_type=models.CharField(max_length=50)
@@ -460,6 +498,8 @@ class treat_ampv2(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class treat_ampv3(models.Model):
     device_id=models.CharField(max_length=100)
     message_type=models.CharField(max_length=50)
@@ -490,6 +530,8 @@ class treat_ampv3(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class treat_ampv4(models.Model):
     device_id=models.CharField(max_length=100)
     message_type=models.CharField(max_length=50)
@@ -520,6 +562,8 @@ class treat_ampv4(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class treat_ampv5(models.Model):
     device_id=models.CharField(max_length=100)
     message_type=models.CharField(max_length=50)
@@ -547,9 +591,10 @@ class treat_ampv5(models.Model):
     is_active=models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    # class Meta:
+    #     app_label = 'devices'
     class Meta:
-
-        app_label = 'devices'
+        app_label = 'connection'
 class treat_rwp(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -571,6 +616,8 @@ class treat_rwp(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class treat_hpp(models.Model):
     device_id=models.CharField(max_length=100)
     message_type=models.CharField(max_length=50)
@@ -591,6 +638,8 @@ class treat_hpp(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class treat_panel(models.Model):
     device_id=models.CharField(max_length=100)
     message_type=models.CharField(max_length=50)
@@ -623,6 +672,8 @@ class treat_panel(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class treat_P_flowsen(models.Model):
     device_id=models.CharField(max_length=100)
@@ -642,6 +693,8 @@ class treat_P_flowsen(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class repo_latestdata(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -682,6 +735,8 @@ class repo_latestdata(models.Model):
     
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class repo_history(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -690,6 +745,8 @@ class repo_history(models.Model):
     msg_json=models.JSONField(null=True,blank=True)
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 # class cnd_tds_repo_hourly(models.Model):
 #     device_id=models.CharField(max_length=100)
 #     service=models.CharField(max_length=100,null=True,blank=True)
@@ -714,6 +771,8 @@ class repo_history(models.Model):
 #         return self.device_id,self.service,self.sum_cnd,self.count,self.avg_cnd,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class cnd_repo_hourly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -734,6 +793,8 @@ class cnd_repo_hourly(models.Model):
         return self.device_id,self.service,self.cnd,self.spn,self.tsp,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class rwp_repo_hourly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -754,6 +815,8 @@ class rwp_repo_hourly(models.Model):
         return self.device_id,self.service,self.crt,self.spn,self.olc,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class rwp_repo_daily(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -774,6 +837,8 @@ class rwp_repo_daily(models.Model):
         return self.device_id,self.service,self.crt,self.spn,self.olc,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class rwp_repo_monthly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -795,6 +860,8 @@ class rwp_repo_monthly(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class rwp_repo_yearly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -817,6 +884,8 @@ class rwp_repo_yearly(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class hpp_repo_hourly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -837,6 +906,8 @@ class hpp_repo_hourly(models.Model):
         return self.device_id,self.service,self.crt,self.spn,self.olc,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class hpp_repo_daily(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -858,6 +929,8 @@ class hpp_repo_daily(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class hpp_repo_monthly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -879,6 +952,8 @@ class hpp_repo_monthly(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class hpp_repo_yearly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -899,6 +974,8 @@ class hpp_repo_yearly(models.Model):
         return self.device_id,self.service,self.crt,self.spn,self.olc,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class ampv1_repo_hourly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -921,6 +998,8 @@ class ampv1_repo_hourly(models.Model):
         return self.device_id,self.service,self.rmt,self.cct,self.srt,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class ampv1_repo_daily(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -943,6 +1022,8 @@ class ampv1_repo_daily(models.Model):
         return self.device_id,self.service,self.rmt,self.cct,self.srt,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class ampv1_repo_monthly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -965,6 +1046,8 @@ class ampv1_repo_monthly(models.Model):
         return self.device_id,self.service,self.rmt,self.cct,self.srt,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class ampv1_repo_yearly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -987,6 +1070,8 @@ class ampv1_repo_yearly(models.Model):
         return self.device_id,self.service,self.rmt,self.cct,self.srt,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class ampv2_repo_hourly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1009,6 +1094,8 @@ class ampv2_repo_hourly(models.Model):
         return self.device_id,self.service,self.rmt,self.cct,self.srt,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class ampv2_repo_daily(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1031,6 +1118,8 @@ class ampv2_repo_daily(models.Model):
         return self.device_id,self.service,self.rmt,self.cct,self.srt,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class ampv2_repo_monthly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1053,6 +1142,8 @@ class ampv2_repo_monthly(models.Model):
         return self.device_id,self.service,self.rmt,self.cct,self.srt,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class ampv2_repo_yearly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1075,6 +1166,8 @@ class ampv2_repo_yearly(models.Model):
         return self.device_id,self.service,self.rmt,self.cct,self.srt,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class ampv3_repo_hourly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1097,6 +1190,8 @@ class ampv3_repo_hourly(models.Model):
         return self.device_id,self.service,self.rmt,self.cct,self.srt,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class ampv3_repo_daily(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1119,6 +1214,8 @@ class ampv3_repo_daily(models.Model):
         return self.device_id,self.service,self.rmt,self.cct,self.srt,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class ampv3_repo_monthly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1141,6 +1238,8 @@ class ampv3_repo_monthly(models.Model):
         return self.device_id,self.service,self.rmt,self.cct,self.srt,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class ampv3_repo_yearly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1163,6 +1262,8 @@ class ampv3_repo_yearly(models.Model):
         return self.device_id,self.service,self.rmt,self.cct,self.srt,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class ampv4_repo_hourly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1185,6 +1286,8 @@ class ampv4_repo_hourly(models.Model):
         return self.device_id,self.service,self.rmt,self.cct,self.srt,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class ampv4_repo_daily(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1207,6 +1310,8 @@ class ampv4_repo_daily(models.Model):
         return self.device_id,self.service,self.rmt,self.cct,self.srt,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class ampv4_repo_monthly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1229,6 +1334,8 @@ class ampv4_repo_monthly(models.Model):
         return self.device_id,self.service,self.rmt,self.cct,self.srt,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class ampv4_repo_yearly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1251,6 +1358,8 @@ class ampv4_repo_yearly(models.Model):
         return self.device_id,self.service,self.rmt,self.cct,self.srt,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class ampv5_repo_hourly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1273,6 +1382,8 @@ class ampv5_repo_hourly(models.Model):
         return self.device_id,self.service,self.rmt,self.cct,self.srt,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class ampv5_repo_daily(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1295,6 +1406,8 @@ class ampv5_repo_daily(models.Model):
         return self.device_id,self.service,self.rmt,self.cct,self.srt,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class ampv5_repo_monthly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1317,6 +1430,8 @@ class ampv5_repo_monthly(models.Model):
         return self.device_id,self.service,self.rmt,self.cct,self.srt,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class ampv5_repo_yearly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1339,6 +1454,8 @@ class ampv5_repo_yearly(models.Model):
         return self.device_id,self.service,self.rmt,self.cct,self.srt,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class F_flowsen_repo_hourly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1356,6 +1473,8 @@ class F_flowsen_repo_hourly(models.Model):
         return self.device_id,self.service,self.fr1,self.ff1,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class P_flowsen_repo_hourly(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -1374,6 +1493,8 @@ class P_flowsen_repo_hourly(models.Model):
         return self.device_id,self.service,self.fr2,self.ff2,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class F_flowsen_repo_daily(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -1392,6 +1513,8 @@ class F_flowsen_repo_daily(models.Model):
         return self.device_id,self.service,self.fr1,self.ff1,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class P_flowsen_repo_daily(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -1410,6 +1533,8 @@ class P_flowsen_repo_daily(models.Model):
         return self.device_id,self.service,self.fr2,self.ff2,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class F_flowsen_repo_monthly(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -1428,6 +1553,8 @@ class F_flowsen_repo_monthly(models.Model):
         return self.device_id,self.service,self.fr1,self.ff1,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class P_flowsen_repo_monthly(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -1446,6 +1573,8 @@ class P_flowsen_repo_monthly(models.Model):
         return self.device_id,self.service,self.fr2,self.ff2,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class F_flowsen_repo_yearly(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -1464,6 +1593,8 @@ class F_flowsen_repo_yearly(models.Model):
         return self.device_id,self.service,self.fr1,self.ff1,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class P_flowsen_repo_yearly(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -1482,6 +1613,8 @@ class P_flowsen_repo_yearly(models.Model):
         return self.device_id,self.service,self.fr2,self.ff2,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 
 class panel_repo_hourly(models.Model):
@@ -1508,6 +1641,8 @@ class panel_repo_hourly(models.Model):
         return self.device_id,self.service,self.ipv,self.spn,self.unv,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class panel_repo_daily(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1532,6 +1667,8 @@ class panel_repo_daily(models.Model):
         return self.device_id,self.service,self.ipv,self.spn,self.unv,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class panel_repo_monthly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1556,6 +1693,8 @@ class panel_repo_monthly(models.Model):
         return self.device_id,self.service,self.ipv,self.spn,self.unv,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class panel_repo_yearly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1580,6 +1719,8 @@ class panel_repo_yearly(models.Model):
         return self.device_id,self.service,self.ipv,self.spn,self.unv,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class cnd_repo_daily(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1600,6 +1741,8 @@ class cnd_repo_daily(models.Model):
         return self.device_id,self.service,self.cnd,self.spn,self.tsp,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class cnd_repo_monthly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1621,6 +1764,8 @@ class cnd_repo_monthly(models.Model):
     
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class cnd_repo_yearly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1655,6 +1800,8 @@ class cnd_repo_yearly(models.Model):
 #         return self.device_id,self.service,self.sum,self.count,self.avg,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class atm_repo_hourly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1686,6 +1833,8 @@ class atm_repo_hourly(models.Model):
         return self.device_id,self.service,self.ndv,self.ntp,self.nta,self.created_at,self.updated_at   
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class atm_repo_daily(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1717,6 +1866,8 @@ class atm_repo_daily(models.Model):
         return self.device_id,self.service,self.ndv,self.ntp,self.nta,self.created_at,self.updated_at   
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class atm_repo_monthly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1748,6 +1899,8 @@ class atm_repo_monthly(models.Model):
         return self.device_id,self.service,self.ndv,self.ntp,self.nta,self.created_at,self.updated_at   
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class atm_repo_yearly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1779,6 +1932,8 @@ class atm_repo_yearly(models.Model):
         return self.device_id,self.service,self.ndv,self.ntp,self.nta,self.created_at,self.updated_at   
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 # class tap1_repo_daily(models.Model):
 #     id = models.BigAutoField(primary_key=True)
 #     device_id=models.CharField(max_length=100)
@@ -1818,6 +1973,8 @@ class tap1_repo_hourly(models.Model):
         return self.device_id,self.service,self.p1,self.p2,self.p4,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class tap1_repo_daily(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1837,6 +1994,8 @@ class tap1_repo_daily(models.Model):
         return self.device_id,self.service,self.p1,self.p2,self.p4,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class tap1_repo_monthly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1856,6 +2015,8 @@ class tap1_repo_monthly(models.Model):
         return self.device_id,self.service,self.p1,self.p2,self.p4,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class tap1_repo_yearly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1876,6 +2037,8 @@ class tap1_repo_yearly(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class tap2_repo_hourly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1895,6 +2058,8 @@ class tap2_repo_hourly(models.Model):
         return self.device_id,self.service,self.p1,self.p2,self.p4,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class tap2_repo_daily(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1914,6 +2079,8 @@ class tap2_repo_daily(models.Model):
         return self.device_id,self.service,self.p1,self.p2,self.p4,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class tap2_repo_monthly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1933,6 +2100,8 @@ class tap2_repo_monthly(models.Model):
         return self.device_id,self.service,self.p1,self.p2,self.p4,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class tap2_repo_yearly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1953,6 +2122,8 @@ class tap2_repo_yearly(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class tap3_repo_hourly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1972,6 +2143,8 @@ class tap3_repo_hourly(models.Model):
         return self.device_id,self.service,self.p1,self.p2,self.p4,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class tap3_repo_daily(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -1991,6 +2164,8 @@ class tap3_repo_daily(models.Model):
         return self.device_id,self.service,self.p1,self.p2,self.p4,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class tap3_repo_monthly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -2010,6 +2185,8 @@ class tap3_repo_monthly(models.Model):
         return self.device_id,self.service,self.p1,self.p2,self.p4,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class tap3_repo_yearly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -2030,6 +2207,8 @@ class tap3_repo_yearly(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class tap4_repo_hourly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -2049,6 +2228,8 @@ class tap4_repo_hourly(models.Model):
         return self.device_id,self.service,self.p1,self.p2,self.p4,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class tap4_repo_daily(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -2068,6 +2249,8 @@ class tap4_repo_daily(models.Model):
         return self.device_id,self.service,self.p1,self.p2,self.p4,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class tap4_repo_monthly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -2087,6 +2270,8 @@ class tap4_repo_monthly(models.Model):
         return self.device_id,self.service,self.p1,self.p2,self.p4,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class tap4_repo_yearly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -2106,6 +2291,8 @@ class tap4_repo_yearly(models.Model):
         return self.device_id,self.service,self.p1,self.p2,self.p4,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 # class consen_repo_hourly(models.Model):
 #     id = models.BigAutoField(primary_key=True)
 #     device_id=models.CharField(max_length=100)
@@ -2194,6 +2381,8 @@ class tds_consen_repo_daily(models.Model):
         return self.device_id,self.service,self.cnd,self.spn,self.asp,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class cnd_consen_repo_monthly(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -2212,6 +2401,8 @@ class cnd_consen_repo_monthly(models.Model):
         return self.device_id,self.service,self.cnd,self.spn,self.asp,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class tds_consen_repo_monthly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -2229,6 +2420,8 @@ class tds_consen_repo_monthly(models.Model):
         return self.device_id,self.service,self.tds,self.spn,self.asp,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 
 class cnd_consen_repo_yearly(models.Model):
@@ -2248,6 +2441,8 @@ class cnd_consen_repo_yearly(models.Model):
         return self.device_id,self.service,self.cnd,self.spn,self.asp,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class tds_consen_repo_yearly(models.Model):
     id = models.BigAutoField(primary_key=True)
     device_id=models.CharField(max_length=100)
@@ -2265,6 +2460,8 @@ class tds_consen_repo_yearly(models.Model):
         return self.device_id,self.service,self.tds,self.spn,self.asp,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class device_info(models.Model):
     Device_id=models.CharField(max_length=100)
     Device_name=models.CharField(max_length=100)    
@@ -2280,6 +2477,8 @@ class device_info(models.Model):
     
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class key_info(models.Model):
     key_name=models.CharField(max_length=100)
     key_value=models.CharField(max_length=100)    
@@ -2291,6 +2490,8 @@ class key_info(models.Model):
     
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class graph_info(models.Model):
     service_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)    
@@ -2302,6 +2503,8 @@ class graph_info(models.Model):
     
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class rwp_setting(models.Model):
     olc=models.CharField(max_length=100)
     drc=models.CharField(max_length=100)
@@ -2316,6 +2519,8 @@ class rwp_setting(models.Model):
         return self.olc,self.drc,self.spn,self.unit_type,self.company_name,self.componant_name   
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class hpp_setting(models.Model):
     olc=models.CharField(max_length=100)
@@ -2330,6 +2535,8 @@ class hpp_setting(models.Model):
         return self.olc
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class cnd_setting(models.Model):
     spn=models.CharField(max_length=100)
@@ -2343,6 +2550,8 @@ class cnd_setting(models.Model):
         return self.spn 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class tds_setting(models.Model):
     spn=models.CharField(max_length=100)
     tsp=models.CharField(max_length=100)
@@ -2357,6 +2566,8 @@ class tds_setting(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 # 
 class panel_setting(models.Model):
     mod=models.CharField(max_length=100)
@@ -2377,6 +2588,8 @@ class panel_setting(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class atm_setting(models.Model):
     ntp=models.CharField(max_length=100)
     nov=models.CharField(max_length=100)
@@ -2398,6 +2611,8 @@ class atm_setting(models.Model):
     
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class cnd_consen_setting(models.Model):
     spn=models.CharField(max_length=100)
     asp=models.CharField(max_length=100)
@@ -2410,6 +2625,8 @@ class cnd_consen_setting(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class tds_consen_setting(models.Model):
     spn=models.CharField(max_length=100)
     asp=models.CharField(max_length=100)
@@ -2422,6 +2639,8 @@ class tds_consen_setting(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class tap1_setting(models.Model):
     p1=models.CharField(max_length=100)
     p2=models.CharField(max_length=100)
@@ -2435,6 +2654,8 @@ class tap1_setting(models.Model):
         return self.p1
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class tap2_setting(models.Model):
     p1=models.CharField(max_length=100)
     p2=models.CharField(max_length=100)
@@ -2448,6 +2669,8 @@ class tap2_setting(models.Model):
         return self.p1
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class tap3_setting(models.Model):
     p1=models.CharField(max_length=100)
     p2=models.CharField(max_length=100)
@@ -2461,6 +2684,8 @@ class tap3_setting(models.Model):
         return self.p1
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class tap4_setting(models.Model):
     p1=models.CharField(max_length=100)
     p2=models.CharField(max_length=100)
@@ -2474,6 +2699,8 @@ class tap4_setting(models.Model):
         return self.p1
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 
 class Rwp_state(models.Model):
@@ -2487,6 +2714,8 @@ class Rwp_state(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class hpp_state(models.Model):
     sts=models.CharField(max_length=100)
@@ -2498,6 +2727,8 @@ class hpp_state(models.Model):
         return self.sts
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 
 class F_flowsen_setting(models.Model):
@@ -2511,6 +2742,8 @@ class F_flowsen_setting(models.Model):
     
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class P_flowsen_setting(models.Model):
     ff2=models.CharField(max_length=100)
     unit_type=models.CharField(max_length=100)
@@ -2521,6 +2754,8 @@ class P_flowsen_setting(models.Model):
         return self.ff
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class ampv1_setting(models.Model):
     srt=models.CharField(max_length=100)
@@ -2544,6 +2779,8 @@ class ampv1_setting(models.Model):
         return self.srt
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class ampv2_setting(models.Model):
     srt=models.CharField(max_length=100)
     # srt2=models.CharField(max_length=100)
@@ -2567,6 +2804,8 @@ class ampv2_setting(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class ampv1_state(models.Model):
     pos=models.CharField(max_length=100)
     unit_type=models.CharField(max_length=100)
@@ -2577,6 +2816,8 @@ class ampv1_state(models.Model):
         return self.pos
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class ampv2_state(models.Model):
     pos=models.CharField(max_length=100)
     unit_type=models.CharField(max_length=100)
@@ -2587,6 +2828,8 @@ class ampv2_state(models.Model):
         return self.pos
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class treat_F_flowsen(models.Model):
     device_id=models.CharField(max_length=100)
@@ -2606,6 +2849,8 @@ class treat_F_flowsen(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 
 # class F_flowsen_repo_hourly(models.Model):
@@ -2769,6 +3014,8 @@ class disp_flowsen1(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class disp_flowsen2(models.Model):
     device_id=models.CharField(max_length=100)
@@ -2787,6 +3034,8 @@ class disp_flowsen2(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class disp_flowsen3(models.Model):
     device_id=models.CharField(max_length=100)
     message_type=models.CharField(max_length=50)
@@ -2804,6 +3053,8 @@ class disp_flowsen3(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 class disp_flowsen4(models.Model):
     device_id=models.CharField(max_length=100)
     message_type=models.CharField(max_length=50)
@@ -2821,6 +3072,8 @@ class disp_flowsen4(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 
 
@@ -2840,6 +3093,8 @@ class flowsen1_repo_yearly(models.Model):
         return self.device_id,self.service,self.fr,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class flowsen1_repo_monthly(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -2857,6 +3112,8 @@ class flowsen1_repo_monthly(models.Model):
         return self.device_id,self.service,self.fr,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class flowsen1_repo_daily(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -2874,6 +3131,8 @@ class flowsen1_repo_daily(models.Model):
         return self.device_id,self.service,self.fr,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class flowsen1_repo_hourly(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -2891,6 +3150,8 @@ class flowsen1_repo_hourly(models.Model):
         return self.device_id,self.service,self.fr,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class flowsen2_repo_yearly(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -2908,6 +3169,8 @@ class flowsen2_repo_yearly(models.Model):
         return self.device_id,self.service,self.fr,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class flowsen2_repo_monthly(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -2925,6 +3188,8 @@ class flowsen2_repo_monthly(models.Model):
         return self.device_id,self.service,self.fr,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class flowsen2_repo_daily(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -2942,6 +3207,8 @@ class flowsen2_repo_daily(models.Model):
         return self.device_id,self.service,self.fr,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class flowsen2_repo_hourly(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -2959,6 +3226,8 @@ class flowsen2_repo_hourly(models.Model):
         return self.device_id,self.service,self.fr,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class flowsen3_repo_yearly(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -2976,6 +3245,8 @@ class flowsen3_repo_yearly(models.Model):
         return self.device_id,self.service,self.fr,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class flowsen3_repo_monthly(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -2993,6 +3264,8 @@ class flowsen3_repo_monthly(models.Model):
         return self.device_id,self.service,self.fr,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class flowsen3_repo_daily(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -3010,6 +3283,8 @@ class flowsen3_repo_daily(models.Model):
         return self.device_id,self.service,self.fr,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class flowsen3_repo_hourly(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -3027,6 +3302,8 @@ class flowsen3_repo_hourly(models.Model):
         return self.device_id,self.service,self.fr,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class flowsen4_repo_yearly(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -3044,6 +3321,8 @@ class flowsen4_repo_yearly(models.Model):
         return self.device_id,self.service,self.fr,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class flowsen4_repo_monthly(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -3061,6 +3340,8 @@ class flowsen4_repo_monthly(models.Model):
         return self.device_id,self.service,self.fr,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class flowsen4_repo_daily(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -3078,6 +3359,8 @@ class flowsen4_repo_daily(models.Model):
         return self.device_id,self.service,self.fr,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class flowsen4_repo_hourly(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -3095,6 +3378,8 @@ class flowsen4_repo_hourly(models.Model):
         return self.device_id,self.service,self.fr,self.created_at,self.updated_at
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
 
 class Errors(models.Model):
     device_id=models.CharField(max_length=100)
@@ -3115,3 +3400,5 @@ class Errors(models.Model):
 
     # class Meta:
     #     app_label = 'devices'
+    class Meta:
+        app_label = 'connection'
