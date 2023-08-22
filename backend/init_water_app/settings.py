@@ -118,7 +118,7 @@ HOST = env("DATABASE_HOST")
 PORT = env("DATABASE_PORT")
 
 DATABASES = {
-    'default': {
+    'default_mongo': {
         'ENGINE': 'djongo',
         'NAME': 'waterinnDB',
         # 'USER': USER, 
