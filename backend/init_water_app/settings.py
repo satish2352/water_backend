@@ -118,20 +118,20 @@ HOST = env("DATABASE_HOST")
 PORT = env("DATABASE_PORT")
 
 DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': DB_NAME,
+        'USER': USER,
+        'PASSWORD': PASSWORD,
+        'HOST': HOST,
+        'PORT': PORT,
+    },
     'default_mongo': {
         'ENGINE': 'djongo',
         'NAME': 'waterinnDB',
         # 'USER': USER, 
         # 'PASSWORD': PASSWORD,
     }
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': DB_NAME,
-    #     'USER': USER,
-    #     'PASSWORD': PASSWORD,
-    #     'HOST': HOST,
-    #     'PORT': PORT,
-    # }
     
 }
 
