@@ -131,7 +131,7 @@ DATABASES = {
     # },
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'waterinnDB_1',     
+        'NAME': 'waterinnDB',     
     }
     
 }
