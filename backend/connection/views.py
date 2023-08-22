@@ -98,7 +98,7 @@ from django.db.models import Q
 from django.contrib.sites.shortcuts import get_current_site
 import paho.mqtt.client as mqtt
 
-from iwater.views.signup_mgmnt import user_login,email
+# from iwater.views.signup_mgmnt import user_login,email
 from iwater.models import Site, User, SitePermission, Device, Subscription, ArchiveSite, ArchiveDevice, ArchiveSitePermission,Company
 from init_water_app import settings
 from init_water_app.settings import OTP_VALID_FOR
