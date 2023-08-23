@@ -555,31 +555,28 @@ class MqttClient:
                 print("*2*2*")
                 # Insert the records into the collection
                 # device_info.insert_many(records)
-                if panelid:
+                if "panelid" in data1:
                     for record in records:
-                        print("*3*3*")
                         info=device_info.objects.create(**record)
-                        print("*4*4*")
                         info.save()
-                        print("*5*5*")
-                if atmid:        
+                        logger.info("panel records Added")
+                if "atmid" in data1:        
                     for record in record_atm:
-                        print("*3*3*")
                         info=device_info.objects.create(**record)
-                        print("*4*4*")
                         info.save()
-                if atmid and panelid:
-                    for record in records:
-                        print("*3*3*")
-                        info=device_info.objects.create(**record)
-                        print("*4*4*")
-                        info.save()
-                        print("*5*5*")
-                    for record in record_atm:
-                        print("*3*3*")
-                        info=device_info.objects.create(**record)
-                        print("*4*4*")
-                        info.save()
+                        logger.info("atm records Added")
+                # if atmid and panelid:
+                #     for record in records:
+                #         print("*3*3*")
+                #         info=device_info.objects.create(**record)
+                #  
+                #         info.save()
+                #         print("*5*5*")
+                #     for record in record_atm:
+                #         print("*3*3*")
+                #         info=device_info.objects.create(**record)
+                #  
+                #         info.save()
 
                 logger.info("Successfully added data to db over mqtt")
                 print("*6*6*")
@@ -7310,7 +7307,7 @@ def on_message(client, userdata, msg):
         #             for record in records:
         #                 print("*3*3*")
         #                 info=device_info.objects.create(**record)
-        #                 print("*4*4*")
+        #          
         #                 info.save()
         #                 print("*5*5*")
 
