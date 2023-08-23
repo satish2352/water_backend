@@ -77,15 +77,31 @@ with tempfile.NamedTemporaryFile(delete=False) as ca_tempfile, \
 
 # ... (rest of the code)
 
+
+
+# def ssl_alpn():
+#     try:
+#         logger.info("open ssl version:{}".format(ssl.OPENSSL_VERSION))
+#         ssl_context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+
+#         # Load CA certificate from temporary file
+#         ssl_context.load_verify_locations(cafile=ca_path)
+
+#         # Load client certificate and private key
+#         ssl_context.load_cert_chain(certfile=cert_path, keyfile=private_key_path)
+
+#         return ssl_context
+#     except Exception as e:
+#         print("exception ssl_alpn()")
+#         raise e
+
+
 def ssl_alpn():
     try:
         logger.info("open ssl version:{}".format(ssl.OPENSSL_VERSION))
-        ssl_context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
-
-        # Load CA certificate from temporary file
+        ssl_context = ssl.create_default_context()
+        ssl_context.set_alpn_protocols([IoT_protocol_name])
         ssl_context.load_verify_locations(cafile=ca_path)
-
-        # Load client certificate and private key
         ssl_context.load_cert_chain(certfile=cert_path, keyfile=private_key_path)
 
         return ssl_context
