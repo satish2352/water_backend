@@ -348,7 +348,7 @@ class MqttClient:
                 print("company_names:",company_names.company_name)
                 records = [
                 {
-                "Device_id": device_id,
+                "Device_id": panelid,
                 "Device_name": "wc",
                 "unit_type": "water_treatment",
                 "company_name": company_names.company_name,
@@ -356,7 +356,7 @@ class MqttClient:
                 "site_name": site_data.site_name
                 },
                 {
-                "Device_id": device_id,
+                "Device_id": panelid,
                 "Device_name": "wc",
                 "unit_type": "water_treatment",
                 "company_name": company_names.company_name,
@@ -364,7 +364,7 @@ class MqttClient:
                 "site_name": site_data.site_name
                 },
                 {
-                "Device_id": device_id,
+                "Device_id": panelid,
                 "Device_name": "wc",
                 "unit_type": "water_treatment",
                 "company_name": company_names.company_name,
@@ -372,7 +372,7 @@ class MqttClient:
                 "site_name": site_data.site_name
                 },
                 {
-                "Device_id": device_id,
+                "Device_id": panelid,
                 "Device_name": "wc",
                 "unit_type": "water_treatment",
                 "company_name": company_names.company_name,
@@ -380,7 +380,7 @@ class MqttClient:
                 "site_name": site_data.site_name
                 },
                 {
-                "Device_id": device_id,
+                "Device_id": panelid,
                 "Device_name": "wc",
                 "unit_type": "water_treatment",
                 "company_name": company_names.company_name,
@@ -388,7 +388,7 @@ class MqttClient:
                 "site_name": site_data.site_name
                 },
                 {
-                "Device_id": device_id,
+                "Device_id": panelid,
                 "Device_name": "wc",
                 "unit_type": "water_treatment",
                 "company_name": company_names.company_name,
@@ -396,7 +396,7 @@ class MqttClient:
                 "site_name": site_data.site_name
                 },
                 {
-                "Device_id": device_id,
+                "Device_id": panelid,
                 "Device_name": "wc",
                 "unit_type": "water_treatment",
                 "company_name": company_names.company_name,
@@ -404,7 +404,7 @@ class MqttClient:
                 "site_name": site_data.site_name
                 },
                 {
-                "Device_id": device_id,
+                "Device_id": panelid,
                 "Device_name": "wc",
                 "unit_type": "water_dispense",
                 "company_name": company_names.company_name,
@@ -412,7 +412,7 @@ class MqttClient:
                 "site_name": site_data.site_name
                 },
                 {
-                "Device_id": device_id,
+                "Device_id": panelid,
                 "Device_name": "wc",
                 "unit_type": "water_dispense",
                 "company_name": company_names.company_name,
@@ -420,7 +420,7 @@ class MqttClient:
                 "site_name": site_data.site_name
                 },
                 {
-                "Device_id": device_id,
+                "Device_id": panelid,
                 "Device_name": "wc",
                 "unit_type": "water_dispense",
                 "company_name": company_names.company_name,
@@ -428,7 +428,7 @@ class MqttClient:
                 "site_name": site_data.site_name
                 },
                 {
-                "Device_id": device_id,
+                "Device_id": panelid,
                 "Device_name": "wc",
                 "unit_type": "water_treatment",
                 "company_name": company_names.company_name,
@@ -436,7 +436,7 @@ class MqttClient:
                 "site_name": site_data.site_name
                 },
                 {
-                "Device_id": device_id,
+                "Device_id": panelid,
                 "Device_name": "wc",
                 "unit_type": "water_treatment",
                 "company_name": company_names.company_name,
@@ -444,7 +444,7 @@ class MqttClient:
                 "site_name": site_data.site_name
                 },
                 {
-                "Device_id": device_id,
+                "Device_id": panelid,
                 "Device_name": "wc",
                 "unit_type": "water_treatment",
                 "company_name": company_names.company_name,
@@ -453,7 +453,7 @@ class MqttClient:
                 },
                 {
 
-                "Device_id": device_id,
+                "Device_id": panelid,
                 "Device_name": "wc",
                 "unit_type": "water_treatment",
                 "company_name": company_names.company_name,
@@ -461,7 +461,7 @@ class MqttClient:
                 "site_name": site_data.site_name
                 },
                 {
-                "Device_id": device_id,
+                "Device_id": panelid,
                 "Device_name": "wc",
                 "unit_type": "water_treatment",
                 "company_name": company_names.company_name,
@@ -469,15 +469,17 @@ class MqttClient:
                 "site_name": site_data.site_name
                 },
                 {
-                "Device_id": device_id,
+                "Device_id": panelid,
                 "Device_name": "wc",
                 "unit_type": "water_treatment",
                 "company_name": company_names.company_name,
                 "componant_name": "tds_sen",
                 "site_name": site_data.site_name
-                },
+                }]
+            
+                record_atm=[
                 {
-                "Device_id": device_id,
+                "Device_id": atmid,
                 "Device_name": "wc",
                 "unit_type": "water_dispense",
                 "company_name": company_names.company_name,
@@ -485,7 +487,7 @@ class MqttClient:
                 "site_name": site_data.site_name
                 },
                 {
-                "Device_id": device_id,
+                "Device_id": atmid,
                 "Device_name": "wc",
                 "unit_type": "water_dispense",
                 "company_name": company_names.company_name,
@@ -493,7 +495,7 @@ class MqttClient:
                 "site_name": site_data.site_name
                 },
                 {
-                "Device_id": device_id,
+                "Device_id": atmid,
                 "Device_name": "wc",
                 "unit_type": "water_dispense",
                 "company_name": company_names.company_name,
@@ -501,7 +503,7 @@ class MqttClient:
                 "site_name": site_data.site_name
                 },
                 {
-                "Device_id": device_id,
+                "Device_id": atmid,
                 "Device_name": "wc",
                 "unit_type": "water_dispense",
                 "company_name": company_names.company_name,
@@ -509,7 +511,7 @@ class MqttClient:
                 "site_name": site_data.site_name
                 },
                 {
-                "Device_id": device_id,
+                "Device_id": atmid,
                 "Device_name": "wc",
                 "unit_type": "water_dispense",
                 "company_name": company_names.company_name,
@@ -517,7 +519,7 @@ class MqttClient:
                 "site_name": site_data.site_name
                 },
                 {
-                "Device_id": device_id,
+                "Device_id": atmid,
                 "Device_name": "wc",
                 "unit_type": "water_dispense",
                 "company_name": company_names.company_name,
@@ -525,7 +527,7 @@ class MqttClient:
                 "site_name": site_data.site_name
                 },
                 {
-                "Device_id": device_id,
+                "Device_id": atmid,
                 "Device_name": "wc",
                 "unit_type": "water_dispense",
                 "company_name": company_names.company_name,
@@ -533,7 +535,7 @@ class MqttClient:
                 "site_name": site_data.site_name
                 },
                 {
-                "Device_id": device_id,
+                "Device_id": atmid,
                 "Device_name": "wc",
                 "unit_type": "water_dispense",
                 "company_name": company_names.company_name,
@@ -541,7 +543,7 @@ class MqttClient:
                 "site_name": site_data.site_name
                 },
                 {
-                "Device_id": device_id,
+                "Device_id": atmid,
                 "Device_name": "wc",
                 "unit_type": "water_dispense",
                 "company_name": company_names.company_name,
@@ -553,12 +555,31 @@ class MqttClient:
                 print("*2*2*")
                 # Insert the records into the collection
                 # device_info.insert_many(records)
-                for record in records:
-                    print("*3*3*")
-                    info=device_info.objects.create(**record)
-                    print("*4*4*")
-                    info.save()
-                    print("*5*5*")
+                if panelid:
+                    for record in records:
+                        print("*3*3*")
+                        info=device_info.objects.create(**record)
+                        print("*4*4*")
+                        info.save()
+                        print("*5*5*")
+                if atmid:        
+                    for record in record_atm:
+                        print("*3*3*")
+                        info=device_info.objects.create(**record)
+                        print("*4*4*")
+                        info.save()
+                if atmid and panelid:
+                    for record in records:
+                        print("*3*3*")
+                        info=device_info.objects.create(**record)
+                        print("*4*4*")
+                        info.save()
+                        print("*5*5*")
+                    for record in record_atm:
+                        print("*3*3*")
+                        info=device_info.objects.create(**record)
+                        print("*4*4*")
+                        info.save()
 
                 logger.info("Successfully added data to db over mqtt")
                 print("*6*6*")
