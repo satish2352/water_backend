@@ -120,7 +120,7 @@ PORT = env("DATABASE_PORT")
 
 MONGO_DATABASE_USER=env("MONGO_DATABASE_USER")
 MONGO_DATABASE_PASS=env("MONGO_DATABASE_PASS")
-HOST=env("MONGO_HOST")
+MONGO_HOST=env("MONGO_HOST")
 
 DATABASES = {
     'default': {
@@ -135,8 +135,8 @@ DATABASES = {
     },
     'default_mongo': {
         'ENGINE': 'djongo',
-        'NAME': 'waterinnDB',  
-        'HOST':HOST,  # Typically 'localhost' or the MongoDB server IP
+        'NAME': 'waterinnDB_5',  
+        'HOST':MONGO_HOST,  # Typically 'localhost' or the MongoDB server IP
         'PORT': '27017',  # Default is 27017
         'USER': MONGO_DATABASE_USER,   # If using authentication
         'PASSWORD': MONGO_DATABASE_PASS,  # If using authentication   
