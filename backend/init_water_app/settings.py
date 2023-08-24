@@ -118,9 +118,11 @@ PASSWORD = env("DATABASE_PASS")
 HOST = env("DATABASE_HOST")
 PORT = env("DATABASE_PORT")
 
-# MONGO_DATABASE_USER=env("MONGO_DATABASE_USER")
-# MONGO_DATABASE_PASS=env("MONGO_DATABASE_PASS")
-# MONGO_HOST=env("MONGO_HOST")
+MONGO_DATABASE_USER=env("MONGO_DATABASE_USER")
+MONGO_DATABASE_PASS=env("MONGO_DATABASE_PASS")
+MONGO_HOST=env("MONGO_HOST")
+
+
 
 DATABASES = {
     'default': {
@@ -137,10 +139,10 @@ DATABASES = {
         'ENGINE': 'djongo',
         'NAME': 'waterinnDB', 
         'CLIENT': {
-            'host': '127.0.0.1',   # MongoDB host
+            'host': MONGO_HOST,   # MongoDB host
             'port': 27017,              # MongoDB port
-            'username': 'admin123',  # MongoDB username
-            'password': 'Jzfq2n6b4n15',  # MongoDB password
+            'username': MONGO_DATABASE_USER,  # MongoDB username
+            'password': MONGO_DATABASE_PASS,  # MongoDB password
             'authSource': 'waterinnDB',      # Authentication source
             'authMechanism': 'SCRAM-SHA-1',  # Authentication mechanism
         } 
