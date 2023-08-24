@@ -119,6 +119,8 @@ try:
         print("first record:",zzz.test)
 except:
     print("data not found in device_info")
+logging.info("****************************************************************vikas")
+print("****************************************************************vikas")
 # client.message_callback_add("wc/v1/OTP", on_message)
 # client.message_callback_add("wc/#", on_message)
 class MqttClient:
