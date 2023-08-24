@@ -112,8 +112,13 @@ mqttc = mqtt.Client()
 client = mqtt.Client()
 client.subscribe('wc1/v1/OTP',1)
 mqttc.subscribe('wc1/#',1)
-info_data=device_info.objects.all()
-print("device_info is:",info_data)
+try:
+    info_data=device_info.objects.all()
+    print("device_info is:",info_data)
+    for zzz in info_data:
+        print("first record:",zzz.test)
+except:
+    print("data not found in device_info")
 # client.message_callback_add("wc/v1/OTP", on_message)
 # client.message_callback_add("wc/#", on_message)
 class MqttClient:
