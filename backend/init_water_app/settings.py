@@ -52,12 +52,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'connection',
     'iwater',
     'rest_framework',
     'corsheaders',
     'rest_framework.authtoken',
     'djongo',
+    'connection',
     #'django_crontab',
 ]
 
