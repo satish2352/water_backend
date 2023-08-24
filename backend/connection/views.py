@@ -116,9 +116,9 @@ try:
     info_data=device_info.objects.all()
     print("device_info is:",info_data)
     for zzz in info_data:
-        print("first record:",zzz.test)
+        print("first record:",zzz.Device_name)
 except Exception as e:
-    print("data not found in device_info",e)
+    print("data not found in device_info",e.args)
 logging.info("****************************************************************vikas")
 print("****************************************************************vikas")
 # client.message_callback_add("wc/v1/OTP", on_message)
