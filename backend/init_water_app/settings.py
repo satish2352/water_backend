@@ -135,7 +135,7 @@ DATABASES = {
     },
     'default_mongo': {
         'ENGINE': 'djongo',
-        'NAME': 'waterinnDB_5',  
+        'NAME': 'waterinnDB',  
         'HOST':MONGO_HOST,  # Typically 'localhost' or the MongoDB server IP
         'PORT': '27017',  # Default is 27017
         'USER': MONGO_DATABASE_USER,   # If using authentication
