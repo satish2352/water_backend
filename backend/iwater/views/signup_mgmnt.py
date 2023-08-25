@@ -398,8 +398,10 @@ def user_registration(request):
 
                 # Send welcome and verification email  # TODO get from env file
                 brand_name = "Initiative Water"
-                support_email = "support@initiative.com"
-                support_phone = "+919569690292"
+                # support_email = "support@initiative.com"
+                support_email = "dotnet_dev@initiativewater.com"
+                # support_phone = "+919569690292"
+                support_phone = "+919607007015"
 
                 if email is not None:
                     logger.info("sending mail to the registered email")
