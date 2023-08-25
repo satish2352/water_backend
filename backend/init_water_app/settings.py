@@ -138,17 +138,17 @@ DATABASES = {
     'default_mongo': {
         'ENGINE': 'djongo',
         'NAME': 'waterinnDB', 
-        'CLIENT': {
-            'host': MONGO_HOST,   # MongoDB host
-            'port': 27017,              # MongoDB port
-            'username': MONGO_DATABASE_USER,  # MongoDB username
-            'password': MONGO_DATABASE_PASS,  # MongoDB password
-            'authSource': 'waterinnDB',      # Authentication source
-            'authMechanism': 'SCRAM-SHA-1',  # Authentication mechanism
-        } 
+        # 'CLIENT': {
+        #     'host': MONGO_HOST,   # MongoDB host
+        #     'port': 27017,              # MongoDB port
+        #     'username': MONGO_DATABASE_USER,  # MongoDB username
+        #     'password': MONGO_DATABASE_PASS,  # MongoDB password
+        #     'authSource': 'waterinnDB',      # Authentication source
+        #     'authMechanism': 'SCRAM-SHA-1',  # Authentication mechanism
+        # } 
         # 'HOST':"127.0.0.1",  # Typically 'localhost' or the MongoDB server IP
         # 'PORT': '27017',  # Default is 27017
-        # 'USER': "admin1234",   # If using authentication
+        # 'USER': "admin123",   # If using authentication
         # 'PASSWORD': 'Jzfq2n6b4n15',  # If using authentication   
     }
     
