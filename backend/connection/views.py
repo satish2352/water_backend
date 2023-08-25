@@ -212,8 +212,10 @@ class MqttClient:
         doublicate_atm_id=None
         if panelid is not None:
             doublicate_panel_id=Device.objects.filter(serial_no2 =panelid).filter(~Q(site_id = site_ids))
+            print("doublicate_panel_id: ",doublicate_panel_id)
         if atmid is not None:
             doublicate_atm_id=Device.objects.filter(serial_no3 =atmid).filter(~Q(site_id = site_ids))
+            print("doublicate_atm_id:",doublicate_atm_id)
         if doublicate_panel_id is not None or doublicate_atm_id is not None:
           logger.info("Doublicate device found")
         
