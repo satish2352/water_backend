@@ -208,6 +208,8 @@ class MqttClient:
         # device_data=Device.objects.create()
         
         # doublicate_device_id=Device.objects.filter(Q(serial_no2 =panelid) | Q(serial_no3=atmid)).filter(~Q(site_id = site_ids))
+        doublicate_panel_id=None
+        doublicate_atm_id=None
         if panelid is not None:
             doublicate_panel_id=Device.objects.filter(serial_no2 =panelid).filter(~Q(site_id = site_ids))
         if atmid is not None:
