@@ -208,16 +208,17 @@ class MqttClient:
         # device_data=Device.objects.create()
         
         # doublicate_device_id=Device.objects.filter(Q(serial_no2 =panelid) | Q(serial_no3=atmid)).filter(~Q(site_id = site_ids))
-        doublicate_panel_id=None
-        doublicate_atm_id=None
+        doublicate_panel_id=0
+        doublicate_atm_id=0
         if panelid is not None:
-            doublicate_panel_id=Device.objects.filter(serial_no2 =panelid).filter(~Q(site_id = site_ids))
+            doublicate_panel_id=Device.objects.filter(serial_no2 =panelid).filter(~Q(site_id = site_ids)).count()
             print("doublicate_panel_id: ",doublicate_panel_id)
         if atmid is not None:
-            doublicate_atm_id=Device.objects.filter(serial_no3 =atmid).filter(~Q(site_id = site_ids))
-            for aaa in doublicate_atm_id:
-                print("doublicate_atm_id:",aaa.serial_no3)
-        if doublicate_panel_id is not None or doublicate_atm_id is not None:
+            doublicate_atm_id=Device.objects.filter(serial_no3 =atmid).filter(~Q(site_id = site_ids)).count()
+            # for aaa in doublicate_atm_id:
+            #     print("doublicate_atm_id:",aaa.serial_no3)
+            print("doublicate_atm_id:",doublicate_atm_id)
+        if doublicate_panel_id >0 or doublicate_atm_id >0:
           logger.info("Doublicate device found")
         
         
