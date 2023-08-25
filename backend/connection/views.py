@@ -634,7 +634,7 @@ class MqttClient:
         self.subscribe(self.topic)
 
     def subscribe(self, topic):
-        self.client.subscribe(topic)
+        self.client.subscribe(topic,1)
         logger.info("MQTT - Subscribed to topic '" + topic)
 
     def publish(self, topic, payload):
@@ -12621,7 +12621,7 @@ try:
     mqttc.connect(aws_iot_endpoint, port=8883)
     logger.info("connect success")
     
-    mqttc.subscribe('wc1/#')
+    mqttc.subscribe('wc1/#',1)
     client.subscribe('wc1/v1/OTP',1)
     mqttc.loop_start()
     # while True:
