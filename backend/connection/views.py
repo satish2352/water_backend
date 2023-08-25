@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.db.models.expressions import RawSQL
+from django.db import transaction, DatabaseError
 # Create your views here.
 from django.db import connection
 from django.shortcuts import render
@@ -349,14 +350,17 @@ class MqttClient:
 
                         elif atmid:
                             logger.info("Got only atm id from device")
+                            try:
+                                device_data = Device()
+                                device_data.serial_no1 = device_id
+                                device_data.serial_no2 = panelid
+                                device_data.serial_no3 = atmid
+                                device_data.site_id = site_ids
+                                device_data.save()
+                            except DatabaseError as e:
+                                print("25-8-23",e)
 
-                            device_data = Device()
-                            device_data.serial_no1 = device_id
-                            device_data.serial_no2 = panelid
-                            device_data.serial_no3 = atmid
-                            device_data.site_id = site_ids
-                            device_data.save()
-
+                            logger.info("data created successfully in device")
                             site_data = Site.objects.get(id=site_ids)
                             site_data.is_dispensing_unit = True
                             site_data.token_verified = True
@@ -381,225 +385,230 @@ class MqttClient:
                     company_names = Company.objects.get(id=company_ids)
 
                     print("company_names:",company_names.company_name)
-                    records = [
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_treatment",
-                    "company_name": company_names.company_name,
-                    "componant_name": "rwp",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_treatment",
-                    "company_name": company_names.company_name,
-                    "componant_name": "rwp",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_treatment",
-                    "company_name": company_names.company_name,
-                    "componant_name": "cnd_sen",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_treatment",
-                    "company_name": company_names.company_name,
-                    "componant_name": "ampv1",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_treatment",
-                    "company_name": company_names.company_name,
-                    "componant_name": "ampv2",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_treatment",
-                    "company_name": company_names.company_name,
-                    "componant_name": "ampv3",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_treatment",
-                    "company_name": company_names.company_name,
-                    "componant_name": "ampv4",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_dispense",
-                    "company_name": company_names.company_name,
-                    "componant_name": "tap2",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_dispense",
-                    "company_name": company_names.company_name,
-                    "componant_name": "tap3",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_dispense",
-                    "company_name": company_names.company_name,
-                    "componant_name": "tap4",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_treatment",
-                    "company_name": company_names.company_name,
-                    "componant_name": "hpp",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_treatment",
-                    "company_name": company_names.company_name,
-                    "componant_name": "atm",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_treatment",
-                    "company_name": company_names.company_name,
-                    "componant_name": "panel",
-                    "site_name": site_data.site_name
-                    },
-                    {
+                    # records = [
+                    # {
+                    # "Device_id": panelid,
+                    # "Device_name": "wc",
+                    # "unit_type": "water_treatment",
+                    # "company_name": company_names.company_name,
+                    # "componant_name": "rwp",
+                    # "site_name": site_data.site_name
+                    # },
+                    # {
+                    # "Device_id": panelid,
+                    # "Device_name": "wc",
+                    # "unit_type": "water_treatment",
+                    # "company_name": company_names.company_name,
+                    # "componant_name": "rwp",
+                    # "site_name": site_data.site_name
+                    # },
+                    # {
+                    # "Device_id": panelid,
+                    # "Device_name": "wc",
+                    # "unit_type": "water_treatment",
+                    # "company_name": company_names.company_name,
+                    # "componant_name": "cnd_sen",
+                    # "site_name": site_data.site_name
+                    # },
+                    # {
+                    # "Device_id": panelid,
+                    # "Device_name": "wc",
+                    # "unit_type": "water_treatment",
+                    # "company_name": company_names.company_name,
+                    # "componant_name": "ampv1",
+                    # "site_name": site_data.site_name
+                    # },
+                    # {
+                    # "Device_id": panelid,
+                    # "Device_name": "wc",
+                    # "unit_type": "water_treatment",
+                    # "company_name": company_names.company_name,
+                    # "componant_name": "ampv2",
+                    # "site_name": site_data.site_name
+                    # },
+                    # {
+                    # "Device_id": panelid,
+                    # "Device_name": "wc",
+                    # "unit_type": "water_treatment",
+                    # "company_name": company_names.company_name,
+                    # "componant_name": "ampv3",
+                    # "site_name": site_data.site_name
+                    # },
+                    # {
+                    # "Device_id": panelid,
+                    # "Device_name": "wc",
+                    # "unit_type": "water_treatment",
+                    # "company_name": company_names.company_name,
+                    # "componant_name": "ampv4",
+                    # "site_name": site_data.site_name
+                    # },
+                    # {
+                    # "Device_id": panelid,
+                    # "Device_name": "wc",
+                    # "unit_type": "water_dispense",
+                    # "company_name": company_names.company_name,
+                    # "componant_name": "tap2",
+                    # "site_name": site_data.site_name
+                    # },
+                    # {
+                    # "Device_id": panelid,
+                    # "Device_name": "wc",
+                    # "unit_type": "water_dispense",
+                    # "company_name": company_names.company_name,
+                    # "componant_name": "tap3",
+                    # "site_name": site_data.site_name
+                    # },
+                    # {
+                    # "Device_id": panelid,
+                    # "Device_name": "wc",
+                    # "unit_type": "water_dispense",
+                    # "company_name": company_names.company_name,
+                    # "componant_name": "tap4",
+                    # "site_name": site_data.site_name
+                    # },
+                    # {
+                    # "Device_id": panelid,
+                    # "Device_name": "wc",
+                    # "unit_type": "water_treatment",
+                    # "company_name": company_names.company_name,
+                    # "componant_name": "hpp",
+                    # "site_name": site_data.site_name
+                    # },
+                    # {
+                    # "Device_id": panelid,
+                    # "Device_name": "wc",
+                    # "unit_type": "water_treatment",
+                    # "company_name": company_names.company_name,
+                    # "componant_name": "atm",
+                    # "site_name": site_data.site_name
+                    # },
+                    # {
+                    # "Device_id": panelid,
+                    # "Device_name": "wc",
+                    # "unit_type": "water_treatment",
+                    # "company_name": company_names.company_name,
+                    # "componant_name": "panel",
+                    # "site_name": site_data.site_name
+                    # },
+                    # {
 
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_treatment",
-                    "company_name": company_names.company_name,
-                    "componant_name": "F_flowsen",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_treatment",
-                    "company_name": company_names.company_name,
-                    "componant_name": "P_flowsen",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_treatment",
-                    "company_name": company_names.company_name,
-                    "componant_name": "tds_sen",
-                    "site_name": site_data.site_name
-                    }]
+                    # "Device_id": panelid,
+                    # "Device_name": "wc",
+                    # "unit_type": "water_treatment",
+                    # "company_name": company_names.company_name,
+                    # "componant_name": "F_flowsen",
+                    # "site_name": site_data.site_name
+                    # },
+                    # {
+                    # "Device_id": panelid,
+                    # "Device_name": "wc",
+                    # "unit_type": "water_treatment",
+                    # "company_name": company_names.company_name,
+                    # "componant_name": "P_flowsen",
+                    # "site_name": site_data.site_name
+                    # },
+                    # {
+                    # "Device_id": panelid,
+                    # "Device_name": "wc",
+                    # "unit_type": "water_treatment",
+                    # "company_name": company_names.company_name,
+                    # "componant_name": "tds_sen",
+                    # "site_name": site_data.site_name
+                    # }]
                 
-                    record_atm=[
-                    {
-                    "Device_id": atmid,
-                    "Device_name": "wc",
-                    "unit_type": "water_dispense",
-                    "company_name": company_names.company_name,
-                    "componant_name": "cnd_consen",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": atmid,
-                    "Device_name": "wc",
-                    "unit_type": "water_dispense",
-                    "company_name": company_names.company_name,
-                    "componant_name": "tds_consen",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": atmid,
-                    "Device_name": "wc",
-                    "unit_type": "water_dispense",
-                    "company_name": company_names.company_name,
-                    "componant_name": "atm",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": atmid,
-                    "Device_name": "wc",
-                    "unit_type": "water_dispense",
-                    "company_name": company_names.company_name,
-                    "componant_name": "flowsen1",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": atmid,
-                    "Device_name": "wc",
-                    "unit_type": "water_dispense",
-                    "company_name": company_names.company_name,
-                    "componant_name": "flowsen2",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": atmid,
-                    "Device_name": "wc",
-                    "unit_type": "water_dispense",
-                    "company_name": company_names.company_name,
-                    "componant_name": "flowsen3",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": atmid,
-                    "Device_name": "wc",
-                    "unit_type": "water_dispense",
-                    "company_name": company_names.company_name,
-                    "componant_name": "flowsen4",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": atmid,
-                    "Device_name": "wc",
-                    "unit_type": "water_dispense",
-                    "company_name": company_names.company_name,
-                    "componant_name": "tap1",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": atmid,
-                    "Device_name": "wc",
-                    "unit_type": "water_dispense",
-                    "company_name": company_names.company_name,
-                    "componant_name": "tap1",
-                    "site_name": site_data.site_name
-                    }
-                                        # Add other records here
-                    ]
-                    print("*2*2*")
-                    # Insert the records into the collection
-                    # device_info.insert_many(records)
-                    if "panelid" in data1:
-                        for record in records:
-                            info=device_info.objects.create(**record)
-                            info.save()
-                            logger.info("panel records Added")
-                    if "atmid" in data1:        
-                        for record in record_atm:
-                            info=device_info.objects.create(**record)
-                            info.save()
-                            logger.info("atm records Added")
+                    # record_atm=[
+                    # {
+                    # "Device_id": atmid,
+                    # "Device_name": "wc",
+                    # "unit_type": "water_dispense",
+                    # "company_name": company_names.company_name,
+                    # "componant_name": "cnd_consen",
+                    # "site_name": site_data.site_name
+                    # },
+                    # {
+                    # "Device_id": atmid,
+                    # "Device_name": "wc",
+                    # "unit_type": "water_dispense",
+                    # "company_name": company_names.company_name,
+                    # "componant_name": "tds_consen",
+                    # "site_name": site_data.site_name
+                    # },
+                    # {
+                    # "Device_id": atmid,
+                    # "Device_name": "wc",
+                    # "unit_type": "water_dispense",
+                    # "company_name": company_names.company_name,
+                    # "componant_name": "atm",
+                    # "site_name": site_data.site_name
+                    # },
+                    # {
+                    # "Device_id": atmid,
+                    # "Device_name": "wc",
+                    # "unit_type": "water_dispense",
+                    # "company_name": company_names.company_name,
+                    # "componant_name": "flowsen1",
+                    # "site_name": site_data.site_name
+                    # },
+                    # {
+                    # "Device_id": atmid,
+                    # "Device_name": "wc",
+                    # "unit_type": "water_dispense",
+                    # "company_name": company_names.company_name,
+                    # "componant_name": "flowsen2",
+                    # "site_name": site_data.site_name
+                    # },
+                    # {
+                    # "Device_id": atmid,
+                    # "Device_name": "wc",
+                    # "unit_type": "water_dispense",
+                    # "company_name": company_names.company_name,
+                    # "componant_name": "flowsen3",
+                    # "site_name": site_data.site_name
+                    # },
+                    # {
+                    # "Device_id": atmid,
+                    # "Device_name": "wc",
+                    # "unit_type": "water_dispense",
+                    # "company_name": company_names.company_name,
+                    # "componant_name": "flowsen4",
+                    # "site_name": site_data.site_name
+                    # },
+                    # {
+                    # "Device_id": atmid,
+                    # "Device_name": "wc",
+                    # "unit_type": "water_dispense",
+                    # "company_name": company_names.company_name,
+                    # "componant_name": "tap1",
+                    # "site_name": site_data.site_name
+                    # },
+                    # {
+                    # "Device_id": atmid,
+                    # "Device_name": "wc",
+                    # "unit_type": "water_dispense",
+                    # "company_name": company_names.company_name,
+                    # "componant_name": "tap1",
+                    # "site_name": site_data.site_name
+                    # }
+                    #                     # Add other records here
+                    # ]
+                    # print("*2*2*")
+                    # # Insert the records into the collection
+                    # # device_info.insert_many(records)
+                    # if "panelid" in data1:
+                    #     for record in records:
+                    #         info=device_info.objects.create(**record)
+                    #         info.save()
+                    #         logger.info("panel records Added")
+                    
+                    # if "atmid" in data1:        
+                    #     for record in record_atm:
+                    #         info=device_info.objects.create(**record)
+                    #         info.save()
+                    #         logger.info("atm records Added")
+
+
+
+
                     # if atmid and panelid:
                     #     for record in records:
                     #         print("*3*3*")
