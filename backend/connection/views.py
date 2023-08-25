@@ -109,10 +109,10 @@ site_ids=0
 panelid=None
 atmid=None
 company_ids=0
-mqttc = mqtt.Client()
-client = mqtt.Client()
-client.subscribe('wc1/v1/OTP',1)
-mqttc.subscribe('wc1/#',1)
+# mqttc = mqtt.Client()
+# client = mqtt.Client()
+# client.subscribe('wc1/v1/OTP',1)
+# mqttc.subscribe('wc1/#',1)
 # try:
 #     info_data=device_info.objects.all()
 #     print("device_info is:",info_data)
@@ -137,8 +137,8 @@ class MqttClient:
         self.company_id = company_id
 
         # logger.info("MQTT - Credentials: username: {}, hostname: {}, port: {}".format(_username, _hostname, _port))
-        # self.client = mqtt.Client()
-        self.client = mqttc
+        self.client = mqtt.Client()
+        self.client = self.client 
         self.topic = _topic
         # if _clientID != "":
         # self.client = mqtt.Client(client_id="")
@@ -150,7 +150,10 @@ class MqttClient:
 
         # connect to HiveMQ Cloud on port
         # self.client.connect(_hostname, _port, OTP_VALID_FOR)
+        ssl_context= ssl_alpn()
+        self.client.tls_set_context(context=ssl_context)
         self.client.connect(aws_iot_endpoint, _port, OTP_VALID_FOR)
+        
 
         self.client.loop_start()
 
@@ -12622,8 +12625,11 @@ try:
     logger.info("connect success")
     
     mqttc.subscribe('wc1/#',1)
-    client.subscribe('wc1/v1/OTP',1)
+    # client.subscribe('wc1/v1/OTP',1)
+
     mqttc.loop_start()
+    # client.loop_start()
+
     # while True:
     #     now = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
     #     logger.info("try to publish:{}".format(now))
