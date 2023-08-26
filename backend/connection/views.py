@@ -2230,19 +2230,19 @@ class LastRecordsView(viewsets.ModelViewSet):
         fields_to_exclude = ['model', 'pk']
         print(request.body,"BODY")
         data = json.loads(request.body)
-        print(data,type(data),"last data:")
+        # print(data,type(data),"last data:")
         dinfo = device_info.objects.filter(**data)
         did=dinfo[0].Device_id
-        print(did,"DID***")
+        # print(did,"DID***")
         last_error = Errors.objects.filter(device_id=did).order_by('-id')[:10]
-        print("qsss:",last_error)
+        # print("qsss:",last_error)
         
         # if not qs_sta:
         #     data_sta = {}
         # else:
         #     data_sta = serialize("json", qs_sta)
         #     data_sta = json.loads(data_sta)
-        #     print("data_sta is:",data_sta)
+            # print("data_sta is:",data_sta)
         #     for item in data_sta:
         #         item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
         #     data_sta = json.dumps(data_sta)
@@ -2429,7 +2429,7 @@ class site_check(viewsets.ModelViewSet):
         data = json.loads(request.body)
         print(data,type(data),"DATA")
         companydata=mo.Company.objects.filter(company_name=data['company_name'])
-        print(companydata,type(companydata),"***")
+        # print(companydata,type(companydata),"***")
         for i in companydata:
             global cid
             cid=i.id
@@ -2449,7 +2449,7 @@ class site_check(viewsets.ModelViewSet):
         # else:
         #     data_sta = serialize("json", qs_sta)
         #     data_sta = json.loads(data_sta)
-        #     print("data_sta is:",data_sta)
+            # print("data_sta is:",data_sta)
         #     for item in data_sta:
         #         item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
         #     data_sta = json.dumps(data_sta[0]["fields"])
@@ -2461,7 +2461,7 @@ class site_check(viewsets.ModelViewSet):
         # else:
         #     data_set = serialize("json", qs_set)
         #     data_set = json.loads(data_set)
-        #     print("data_set is:",data_set)
+            # print("data_set is:",data_set)
         #     for item in data_set:
         #         item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -2496,12 +2496,12 @@ class updated_treat_rwpViewset(viewsets.ModelViewSet):
 
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
-        print(request.body,"BODY")
+        # print(request.body,"BODY")
         data = json.loads(request.body)
-        print(data,type(data),"DATA")
+        # print(data,type(data),"DATA")
         dinfo = device_info.objects.filter(**data)
         did=dinfo[0].Device_id
-        print(dinfo,type(dinfo))
+        # print(dinfo,type(dinfo))
         qs_sta = treat_rwp.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
         # last_error=Errors.objects.filter(service='cnd_consen').order_by('-id')[:1:10]
         if not qs_sta:
@@ -2509,7 +2509,7 @@ class updated_treat_rwpViewset(viewsets.ModelViewSet):
         else:
             data_sta = serialize("json", qs_sta)
             data_sta = json.loads(data_sta)
-            print("data_sta is:",data_sta)
+            # print("data_sta is:",data_sta)
             for item in data_sta:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
             data_sta = json.dumps(data_sta[0]["fields"])
@@ -2521,7 +2521,7 @@ class updated_treat_rwpViewset(viewsets.ModelViewSet):
         else:
             data_set = serialize("json", qs_set)
             data_set = json.loads(data_set)
-            print("data_set is:",data_set)
+            # print("data_set is:",data_set)
             for item in data_set:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -2567,13 +2567,13 @@ class updated_treat_rwpViewset(viewsets.ModelViewSet):
             
     #         data_sta = serialize("json", qs_sta)
     #         data_sta = json.loads(data_sta)
-    #         print("Data_sta is:",data_sta)
+            # print("Data_sta is:",data_sta)
     #         for item in data_sta:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
     #         #new code
     #         data_set = serialize("json", qs_set)
     #         data_set = json.loads(data_set)
-    #         print("data_set is:",data_set)
+            # print("data_set is:",data_set)
     #         for item in data_set:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -2619,13 +2619,13 @@ class updated_treat_cnd_senViewset(viewsets.ModelViewSet):
 	# define queryset
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
-        print(request.body,"BODY")
+        # print(request.body,"BODY")
         data = json.loads(request.body)
         print(data,type(data),"DATA**********")
         dinfo = device_info.objects.filter(**data)
         print(dinfo,type(dinfo),"device_info*****")
         did=dinfo[0].Device_id
-        # print(dinfo,type(dinfo))
+        print(dinfo,type(dinfo))
         print("**!!!***1:",did)
         # did=dinfo[0].Device_id
         # print("**!!!***0:",did)
@@ -2635,7 +2635,7 @@ class updated_treat_cnd_senViewset(viewsets.ModelViewSet):
         else:
             data_sta = serialize("json", qs_sta)
             data_sta = json.loads(data_sta)
-            print("data_sta is:",data_sta)
+            # print("data_sta is:",data_sta)
             for item in data_sta:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
             data_sta = json.dumps(data_sta[0]["fields"])
@@ -2647,7 +2647,7 @@ class updated_treat_cnd_senViewset(viewsets.ModelViewSet):
         else:
             data_set = serialize("json", qs_set)
             data_set = json.loads(data_set)
-            print("data_set is:",data_set)
+            # print("data_set is:",data_set)
             for item in data_set:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -2695,13 +2695,13 @@ class updated_treat_cnd_senViewset(viewsets.ModelViewSet):
             
     #         data_sta = serialize("json", qs_sta)
     #         data_sta = json.loads(data_sta)
-    #         print("Data_sta is:",data_sta)
+            # print("Data_sta is:",data_sta)
     #         for item in data_sta:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
     #         #new code
     #         data_set = serialize("json", qs_set)
     #         data_set = json.loads(data_set)
-    #         print("data_set is:",data_set)
+            # print("data_set is:",data_set)
     #         for item in data_set:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -2744,9 +2744,9 @@ class updated_treat_tds_senViewset(viewsets.ModelViewSet):
 	# define queryset
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
-        print(request.body,"BODY")
+        # print(request.body,"BODY")
         data = json.loads(request.body)
-        print(data,type(data),"DATA")
+        # print(data,type(data),"DATA")
         dinfo = device_info.objects.filter(**data)
         did=dinfo[0].Device_id
         
@@ -2756,7 +2756,7 @@ class updated_treat_tds_senViewset(viewsets.ModelViewSet):
         else:
             data_sta = serialize("json", qs_sta)
             data_sta = json.loads(data_sta)
-            print("data_sta is:",data_sta)
+            # print("data_sta is:",data_sta)
             for item in data_sta:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
             data_sta = json.dumps(data_sta[0]["fields"])
@@ -2768,7 +2768,7 @@ class updated_treat_tds_senViewset(viewsets.ModelViewSet):
         else:
             data_set = serialize("json", qs_set)
             data_set = json.loads(data_set)
-            print("data_set is:",data_set)
+            # print("data_set is:",data_set)
             for item in data_set:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -2814,13 +2814,13 @@ class updated_treat_tds_senViewset(viewsets.ModelViewSet):
             
     #         data_sta = serialize("json", qs_sta)
     #         data_sta = json.loads(data_sta)
-    #         print("Data_sta is:",data_sta)
+            # print("Data_sta is:",data_sta)
     #         for item in data_sta:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
     #         #new code
     #         data_set = serialize("json", qs_set)
     #         data_set = json.loads(data_set)
-    #         print("data_set is:",data_set)
+            # print("data_set is:",data_set)
     #         for item in data_set:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -2864,19 +2864,19 @@ class updated_treat_hppViewset(viewsets.ModelViewSet):
 	# define queryset
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
-        print(request.body,"BODY")
+        # print(request.body,"BODY")
         data = json.loads(request.body)
-        print(data,type(data),"DATA")
+        # print(data,type(data),"DATA")
         dinfo = device_info.objects.filter(**data)
         did=dinfo[0].Device_id
-        print(dinfo,type(dinfo))
+        # print(dinfo,type(dinfo))
         qs_sta = treat_hpp.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
         if not qs_sta:
             data_sta = {}
         else:
             data_sta = serialize("json", qs_sta)
             data_sta = json.loads(data_sta)
-            print("data_sta is:",data_sta)
+            # print("data_sta is:",data_sta)
             for item in data_sta:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
             data_sta = json.dumps(data_sta[0]["fields"])
@@ -2888,7 +2888,7 @@ class updated_treat_hppViewset(viewsets.ModelViewSet):
         else:
             data_set = serialize("json", qs_set)
             data_set = json.loads(data_set)
-            print("data_set is:",data_set)
+            # print("data_set is:",data_set)
             for item in data_set:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -2936,13 +2936,13 @@ class updated_treat_hppViewset(viewsets.ModelViewSet):
             
     #         data_sta = serialize("json", qs_sta)
     #         data_sta = json.loads(data_sta)
-    #         print("Data_sta is:",data_sta)
+            # print("Data_sta is:",data_sta)
     #         for item in data_sta:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
     #         #new code
     #         data_set = serialize("json", qs_set)
     #         data_set = json.loads(data_set)
-    #         print("data_set is:",data_set)
+            # print("data_set is:",data_set)
     #         for item in data_set:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -2989,13 +2989,13 @@ class updated_treat_ampv1Viewset(viewsets.ModelViewSet):
     def dispatch(self, request, *args, **kwargs):
         try:
             fields_to_exclude = ['model', 'pk']
-            print(request.body,"BODY")
+            # print(request.body,"BODY")
             data = json.loads(request.body)
-            print(data,type(data),"DATA")
+            # print(data,type(data),"DATA")
             dinfo = device_info.objects.filter(**data)
             did=dinfo[0].Device_id
         
-            print(dinfo,type(dinfo))
+            # print(dinfo,type(dinfo))
             qs_sta = treat_ampv1.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
             # last_error=Errors.objects.filter(service='cnd_consen').order_by('-id')[:1:10]
             if not qs_sta:
@@ -3003,7 +3003,7 @@ class updated_treat_ampv1Viewset(viewsets.ModelViewSet):
             else:
                 data_sta = serialize("json", qs_sta)
                 data_sta = json.loads(data_sta)
-                print("data_sta is:",data_sta)
+                # print("data_sta is:",data_sta)
                 for item in data_sta:
                     item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
                 data_sta = json.dumps(data_sta[0]["fields"])
@@ -3015,7 +3015,7 @@ class updated_treat_ampv1Viewset(viewsets.ModelViewSet):
             else:
                 data_set = serialize("json", qs_set)
                 data_set = json.loads(data_set)
-                print("data_set is:",data_set)
+                # print("data_set is:",data_set)
                 for item in data_set:
                     item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -3064,13 +3064,13 @@ class updated_treat_ampv1Viewset(viewsets.ModelViewSet):
             
     #         data_sta = serialize("json", qs_sta)
     #         data_sta = json.loads(data_sta)
-    #         print("Data_sta is:",data_sta)
+            # print("Data_sta is:",data_sta)
     #         for item in data_sta:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
     #         #new code
     #         data_set = serialize("json", qs_set)
     #         data_set = json.loads(data_set)
-    #         print("data_set is:",data_set)
+            # print("data_set is:",data_set)
     #         for item in data_set:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -3113,12 +3113,12 @@ class updated_treat_ampv2Viewset(viewsets.ModelViewSet):
 	# define queryset
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
-        print(request.body,"BODY")
+        # print(request.body,"BODY")
         data = json.loads(request.body)
-        print(data,type(data),"DATA")
+        # print(data,type(data),"DATA")
         dinfo = device_info.objects.filter(**data)
         did=dinfo[0].Device_id
-        print(dinfo,type(dinfo))
+        # print(dinfo,type(dinfo))
         qs_sta = treat_ampv2.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
         # last_error=Errors.objects.filter(service='cnd_consen').order_by('-id')[:1:10]
         if not qs_sta:
@@ -3126,7 +3126,7 @@ class updated_treat_ampv2Viewset(viewsets.ModelViewSet):
         else:
             data_sta = serialize("json", qs_sta)
             data_sta = json.loads(data_sta)
-            print("data_sta is:",data_sta)
+            # print("data_sta is:",data_sta)
             for item in data_sta:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
             data_sta = json.dumps(data_sta[0]["fields"])
@@ -3138,7 +3138,7 @@ class updated_treat_ampv2Viewset(viewsets.ModelViewSet):
         else:
             data_set = serialize("json", qs_set)
             data_set = json.loads(data_set)
-            print("data_set is:",data_set)
+            # print("data_set is:",data_set)
             for item in data_set:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -3186,13 +3186,13 @@ class updated_treat_ampv2Viewset(viewsets.ModelViewSet):
             
     #         data_sta = serialize("json", qs_sta)
     #         data_sta = json.loads(data_sta)
-    #         print("Data_sta is:",data_sta)
+            # print("Data_sta is:",data_sta)
     #         for item in data_sta:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
     #         #new code
     #         data_set = serialize("json", qs_set)
     #         data_set = json.loads(data_set)
-    #         print("data_set is:",data_set)
+            # print("data_set is:",data_set)
     #         for item in data_set:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -3237,12 +3237,12 @@ class updated_treat_panelViewset(viewsets.ModelViewSet):
 	# define queryset
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
-        print(request.body,"BODY")
+        # print(request.body,"BODY")
         data = json.loads(request.body)
-        print(data,type(data),"DATA")
+        # print(data,type(data),"DATA")
         dinfo = device_info.objects.filter(**data)
         did=dinfo[0].Device_id
-        print(dinfo,type(dinfo))
+        # print(dinfo,type(dinfo))
         qs_sta = treat_panel.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
         # last_error=Errors.objects.filter(service='cnd_consen').order_by('-id')[:1:10]
         if not qs_sta:
@@ -3250,7 +3250,7 @@ class updated_treat_panelViewset(viewsets.ModelViewSet):
         else:
             data_sta = serialize("json", qs_sta)
             data_sta = json.loads(data_sta)
-            print("data_sta is:",data_sta)
+            # print("data_sta is:",data_sta)
             for item in data_sta:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
             data_sta = json.dumps(data_sta[0]["fields"])
@@ -3262,7 +3262,7 @@ class updated_treat_panelViewset(viewsets.ModelViewSet):
         else:
             data_set = serialize("json", qs_set)
             data_set = json.loads(data_set)
-            print("data_set is:",data_set)
+            # print("data_set is:",data_set)
             for item in data_set:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -3310,13 +3310,13 @@ class updated_treat_panelViewset(viewsets.ModelViewSet):
             
     #         data_sta = serialize("json", qs_sta)
     #         data_sta = json.loads(data_sta)
-    #         print("Data_sta is:",data_sta)
+            # print("Data_sta is:",data_sta)
     #         for item in data_sta:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
     #         #new code
     #         data_set = serialize("json", qs_set)
     #         data_set = json.loads(data_set)
-    #         print("data_set is:",data_set)
+            # print("data_set is:",data_set)
     #         for item in data_set:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -3360,12 +3360,12 @@ class updated_disp_atmViewset(viewsets.ModelViewSet):
 	# define queryset
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
-        print(request.body,"BODY")
+        # print(request.body,"BODY")
         data = json.loads(request.body)
-        print(data,type(data),"DATA")
+        # print(data,type(data),"DATA")
         dinfo = device_info.objects.filter(**data)
         did=dinfo[0].Device_id
-        print(dinfo,type(dinfo))
+        # print(dinfo,type(dinfo))
         qs_sta = disp_atm.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
         # last_error=Errors.objects.filter(service='cnd_consen').order_by('-id')[:1:10]
         last_error=Errors.objects.filter(service='atm')
@@ -3374,7 +3374,7 @@ class updated_disp_atmViewset(viewsets.ModelViewSet):
         else:
             data_sta = serialize("json", qs_sta)
             data_sta = json.loads(data_sta)
-            print("data_sta is:",data_sta)
+            # print("data_sta is:",data_sta)
             for item in data_sta:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
             data_sta = json.dumps(data_sta[0]["fields"])
@@ -3386,7 +3386,7 @@ class updated_disp_atmViewset(viewsets.ModelViewSet):
         else:
             data_set = serialize("json", qs_set)
             data_set = json.loads(data_set)
-            print("data_set is:",data_set)
+            # print("data_set is:",data_set)
             for item in data_set:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -3435,13 +3435,13 @@ class updated_disp_atmViewset(viewsets.ModelViewSet):
             
     #         data_sta = serialize("json", qs_sta)
     #         data_sta = json.loads(data_sta)
-    #         print("Data_sta is:",data_sta)
+            # print("Data_sta is:",data_sta)
     #         for item in data_sta:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
     #         #new code
     #         data_set = serialize("json", qs_set)
     #         data_set = json.loads(data_set)
-    #         print("data_set is:",data_set)
+            # print("data_set is:",data_set)
     #         for item in data_set:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -3532,12 +3532,12 @@ class updated_disp_tap1Viewset(viewsets.ModelViewSet):
 	# define queryset
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
-        print(request.body,"BODY")
+        # print(request.body,"BODY")
         data = json.loads(request.body)
-        print(data,type(data),"DATA")
+        # print(data,type(data),"DATA")
         dinfo = device_info.objects.filter(**data)
         did=dinfo[0].Device_id
-        print(dinfo,type(dinfo))
+        # print(dinfo,type(dinfo))
         qs_sta = disp_tap1.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
         # last_error=Errors.objects.filter(service='cnd_consen').order_by('-id')[:1:10]
         if not qs_sta:
@@ -3545,7 +3545,7 @@ class updated_disp_tap1Viewset(viewsets.ModelViewSet):
         else:
             data_sta = serialize("json", qs_sta)
             data_sta = json.loads(data_sta)
-            print("data_sta is:",data_sta)
+            # print("data_sta is:",data_sta)
             for item in data_sta:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
             data_sta = json.dumps(data_sta[0]["fields"])
@@ -3557,7 +3557,7 @@ class updated_disp_tap1Viewset(viewsets.ModelViewSet):
         else:
             data_set = serialize("json", qs_set)
             data_set = json.loads(data_set)
-            print("data_set is:",data_set)
+            # print("data_set is:",data_set)
             for item in data_set:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -3604,13 +3604,13 @@ class updated_disp_tap1Viewset(viewsets.ModelViewSet):
             
     #         data_sta = serialize("json", qs_sta)
     #         data_sta = json.loads(data_sta)
-    #         print("Data_sta is:",data_sta)
+            # print("Data_sta is:",data_sta)
     #         for item in data_sta:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
     #         #new code
     #         data_set = serialize("json", qs_set)
     #         data_set = json.loads(data_set)
-    #         print("data_set is:",data_set)
+            # print("data_set is:",data_set)
     #         for item in data_set:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -3654,12 +3654,12 @@ class updated_disp_tap2Viewset(viewsets.ModelViewSet):
 	# define queryset
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
-        print(request.body,"BODY")
+        # print(request.body,"BODY")
         data = json.loads(request.body)
-        print(data,type(data),"DATA")
+        # print(data,type(data),"DATA")
         dinfo = device_info.objects.filter(**data)
         did=dinfo[0].Device_id
-        print(dinfo,type(dinfo))
+        # print(dinfo,type(dinfo))
         qs_sta = disp_tap2.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
         # last_error=Errors.objects.filter(service='cnd_consen').order_by('-id')[:1:10]
         if not qs_sta:
@@ -3667,7 +3667,7 @@ class updated_disp_tap2Viewset(viewsets.ModelViewSet):
         else:
             data_sta = serialize("json", qs_sta)
             data_sta = json.loads(data_sta)
-            print("data_sta is:",data_sta)
+            # print("data_sta is:",data_sta)
             for item in data_sta:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
             data_sta = json.dumps(data_sta[0]["fields"])
@@ -3679,7 +3679,7 @@ class updated_disp_tap2Viewset(viewsets.ModelViewSet):
         else:
             data_set = serialize("json", qs_set)
             data_set = json.loads(data_set)
-            print("data_set is:",data_set)
+            # print("data_set is:",data_set)
             for item in data_set:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -3727,13 +3727,13 @@ class updated_disp_tap2Viewset(viewsets.ModelViewSet):
             
     #         data_sta = serialize("json", qs_sta)
     #         data_sta = json.loads(data_sta)
-    #         print("Data_sta is:",data_sta)
+            # print("Data_sta is:",data_sta)
     #         for item in data_sta:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
     #         #new code
     #         data_set = serialize("json", qs_set)
     #         data_set = json.loads(data_set)
-    #         print("data_set is:",data_set)
+            # print("data_set is:",data_set)
     #         for item in data_set:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -3778,12 +3778,12 @@ class updated_disp_tap3Viewset(viewsets.ModelViewSet):
 	# define queryset
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
-        print(request.body,"BODY")
+        # print(request.body,"BODY")
         data = json.loads(request.body)
-        print(data,type(data),"DATA")
+        # print(data,type(data),"DATA")
         dinfo = device_info.objects.filter(**data)
         did=dinfo[0].Device_id
-        print(dinfo,type(dinfo))
+        # print(dinfo,type(dinfo))
         qs_sta = disp_tap3.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
         # last_error=Errors.objects.filter(service='cnd_consen').order_by('-id')[:1:10]
         if not qs_sta:
@@ -3791,7 +3791,7 @@ class updated_disp_tap3Viewset(viewsets.ModelViewSet):
         else:
             data_sta = serialize("json", qs_sta)
             data_sta = json.loads(data_sta)
-            print("data_sta is:",data_sta)
+            # print("data_sta is:",data_sta)
             for item in data_sta:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
             data_sta = json.dumps(data_sta[0]["fields"])
@@ -3803,7 +3803,7 @@ class updated_disp_tap3Viewset(viewsets.ModelViewSet):
         else:
             data_set = serialize("json", qs_set)
             data_set = json.loads(data_set)
-            print("data_set is:",data_set)
+            # print("data_set is:",data_set)
             for item in data_set:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -3851,13 +3851,13 @@ class updated_disp_tap3Viewset(viewsets.ModelViewSet):
             
     #         data_sta = serialize("json", qs_sta)
     #         data_sta = json.loads(data_sta)
-    #         print("Data_sta is:",data_sta)
+            # print("Data_sta is:",data_sta)
     #         for item in data_sta:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
     #         #new code
     #         data_set = serialize("json", qs_set)
     #         data_set = json.loads(data_set)
-    #         print("data_set is:",data_set)
+            # print("data_set is:",data_set)
     #         for item in data_set:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -3901,12 +3901,12 @@ class updated_disp_tap4Viewset(viewsets.ModelViewSet):
 	# define queryset
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
-        print(request.body,"BODY")
+        # print(request.body,"BODY")
         data = json.loads(request.body)
-        print(data,type(data),"DATA")
+        # print(data,type(data),"DATA")
         dinfo = device_info.objects.filter(**data)
         did=dinfo[0].Device_id
-        print(dinfo,type(dinfo))
+        # print(dinfo,type(dinfo))
         qs_sta = disp_tap4.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
         # last_error=Errors.objects.filter(service='cnd_consen').order_by('-id')[:1:10]
         if not qs_sta:
@@ -3914,7 +3914,7 @@ class updated_disp_tap4Viewset(viewsets.ModelViewSet):
         else:
             data_sta = serialize("json", qs_sta)
             data_sta = json.loads(data_sta)
-            print("data_sta is:",data_sta)
+            # print("data_sta is:",data_sta)
             for item in data_sta:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
             data_sta = json.dumps(data_sta[0]["fields"])
@@ -3926,7 +3926,7 @@ class updated_disp_tap4Viewset(viewsets.ModelViewSet):
         else:
             data_set = serialize("json", qs_set)
             data_set = json.loads(data_set)
-            print("data_set is:",data_set)
+            # print("data_set is:",data_set)
             for item in data_set:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -3975,13 +3975,13 @@ class updated_disp_tap4Viewset(viewsets.ModelViewSet):
             
     #         data_sta = serialize("json", qs_sta)
     #         data_sta = json.loads(data_sta)
-    #         print("Data_sta is:",data_sta)
+            # print("Data_sta is:",data_sta)
     #         for item in data_sta:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
     #         #new code
     #         data_set = serialize("json", qs_set)
     #         data_set = json.loads(data_set)
-    #         print("data_set is:",data_set)
+            # print("data_set is:",data_set)
     #         for item in data_set:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -4026,12 +4026,12 @@ class updated_disp_cnd_consenViewset(viewsets.ModelViewSet):
 	# define queryset
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
-        print(request.body,"BODY")
+        # print(request.body,"BODY")
         data = json.loads(request.body)
-        print(data,type(data),"DATA")
+        # print(data,type(data),"DATA")
         dinfo = device_info.objects.filter(**data)
         did=dinfo[0].Device_id
-        print(dinfo,type(dinfo))
+        # print(dinfo,type(dinfo))
         qs_sta = disp_cnd_consen.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
         # last_error=Errors.objects.filter(service='cnd_consen').order_by('-id')[:1:10]
         if not qs_sta:
@@ -4039,7 +4039,7 @@ class updated_disp_cnd_consenViewset(viewsets.ModelViewSet):
         else:
             data_sta = serialize("json", qs_sta)
             data_sta = json.loads(data_sta)
-            print("data_sta is:",data_sta)
+            # print("data_sta is:",data_sta)
             for item in data_sta:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
             data_sta = json.dumps(data_sta[0]["fields"])
@@ -4051,7 +4051,7 @@ class updated_disp_cnd_consenViewset(viewsets.ModelViewSet):
         else:
             data_set = serialize("json", qs_set)
             data_set = json.loads(data_set)
-            print("data_set is:",data_set)
+            # print("data_set is:",data_set)
             for item in data_set:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -4101,13 +4101,13 @@ class updated_disp_cnd_consenViewset(viewsets.ModelViewSet):
             
     #         data_sta = serialize("json", qs_sta)
     #         data_sta = json.loads(data_sta)
-    #         print("Data_sta is:",data_sta)
+            # print("Data_sta is:",data_sta)
     #         for item in data_sta:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
     #         #new code
     #         data_set = serialize("json", qs_set)
     #         data_set = json.loads(data_set)
-    #         print("data_set is:",data_set)
+            # print("data_set is:",data_set)
     #         for item in data_set:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -4151,12 +4151,12 @@ class updated_disp_tds_consenViewset(viewsets.ModelViewSet):
     # define queryset
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
-        print(request.body,"BODY")
+        # print(request.body,"BODY")
         data = json.loads(request.body)
-        print(data,type(data),"DATA")
+        # print(data,type(data),"DATA")
         dinfo = device_info.objects.filter(**data)
         did=dinfo[0].Device_id
-        print(dinfo,type(dinfo))
+        # print(dinfo,type(dinfo))
         qs_sta = disp_tds_consen.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
         # last_error=Errors.objects.filter(service='cnd_consen').order_by('-id')[:1:10]
         if not qs_sta:
@@ -4164,7 +4164,7 @@ class updated_disp_tds_consenViewset(viewsets.ModelViewSet):
         else:
             data_sta = serialize("json", qs_sta)
             data_sta = json.loads(data_sta)
-            print("data_sta is:",data_sta)
+            # print("data_sta is:",data_sta)
             for item in data_sta:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
             data_sta = json.dumps(data_sta[0]["fields"])
@@ -4176,7 +4176,7 @@ class updated_disp_tds_consenViewset(viewsets.ModelViewSet):
         else:
             data_set = serialize("json", qs_set)
             data_set = json.loads(data_set)
-            print("data_set is:",data_set)
+            # print("data_set is:",data_set)
             for item in data_set:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -4224,13 +4224,13 @@ class updated_disp_tds_consenViewset(viewsets.ModelViewSet):
             
     #         data_sta = serialize("json", qs_sta)
     #         data_sta = json.loads(data_sta)
-    #         print("Data_sta is:",data_sta)
+            # print("Data_sta is:",data_sta)
     #         for item in data_sta:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
     #         #new code
     #         data_set = serialize("json", qs_set)
     #         data_set = json.loads(data_set)
-    #         print("data_set is:",data_set)
+            # print("data_set is:",data_set)
     #         for item in data_set:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -4275,12 +4275,12 @@ class updated_treat_F_flowsenViewset(viewsets.ModelViewSet):
 	# define queryset
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
-        print(request.body,"BODY")
+        # print(request.body,"BODY")
         data = json.loads(request.body)
-        print(data,type(data),"DATA")
+        # print(data,type(data),"DATA")
         dinfo = device_info.objects.filter(**data)
         did=dinfo[0].Device_id
-        print(dinfo,type(dinfo))
+        # print(dinfo,type(dinfo))
         qs_sta = treat_F_flowsen.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
         # last_error=Errors.objects.filter(service='cnd_consen').order_by('-id')[:1:10]
         if not qs_sta:
@@ -4288,7 +4288,7 @@ class updated_treat_F_flowsenViewset(viewsets.ModelViewSet):
         else:
             data_sta = serialize("json", qs_sta)
             data_sta = json.loads(data_sta)
-            print("data_sta is:",data_sta)
+            # print("data_sta is:",data_sta)
             for item in data_sta:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
             data_sta = json.dumps(data_sta[0]["fields"])
@@ -4300,7 +4300,7 @@ class updated_treat_F_flowsenViewset(viewsets.ModelViewSet):
         else:
             data_set = serialize("json", qs_set)
             data_set = json.loads(data_set)
-            print("data_set is:",data_set)
+            # print("data_set is:",data_set)
             for item in data_set:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -4348,13 +4348,13 @@ class updated_treat_F_flowsenViewset(viewsets.ModelViewSet):
             
     #         data_sta = serialize("json", qs_sta)
     #         data_sta = json.loads(data_sta)
-    #         print("Data_sta is:",data_sta)
+            # print("Data_sta is:",data_sta)
     #         for item in data_sta:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
     #         #new code
     #         data_set = serialize("json", qs_set)
     #         data_set = json.loads(data_set)
-    #         print("data_set is:",data_set)
+            # print("data_set is:",data_set)
     #         for item in data_set:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -4444,12 +4444,12 @@ class updated_treat_P_flowsenViewset(viewsets.ModelViewSet):
 	# define queryset
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
-        print(request.body,"BODY")
+        # print(request.body,"BODY")
         data = json.loads(request.body)
-        print(data,type(data),"DATA")
+        # print(data,type(data),"DATA")
         dinfo = device_info.objects.filter(**data)
         did=dinfo[0].Device_id
-        print(dinfo,type(dinfo))
+        # print(dinfo,type(dinfo))
         qs_sta = treat_P_flowsen.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
         # last_error=Errors.objects.filter(service='cnd_consen').order_by('-id')[:1:10]
         if not qs_sta:
@@ -4457,7 +4457,7 @@ class updated_treat_P_flowsenViewset(viewsets.ModelViewSet):
         else:
             data_sta = serialize("json", qs_sta)
             data_sta = json.loads(data_sta)
-            print("data_sta is:",data_sta)
+            # print("data_sta is:",data_sta)
             for item in data_sta:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
             data_sta = json.dumps(data_sta[0]["fields"])
@@ -4469,7 +4469,7 @@ class updated_treat_P_flowsenViewset(viewsets.ModelViewSet):
         else:
             data_set = serialize("json", qs_set)
             data_set = json.loads(data_set)
-            print("data_set is:",data_set)
+            # print("data_set is:",data_set)
             for item in data_set:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -4517,13 +4517,13 @@ class updated_treat_P_flowsenViewset(viewsets.ModelViewSet):
             
 #             data_sta = serialize("json", qs_sta)
 #             data_sta = json.loads(data_sta)
-#             print("Data_sta is:",data_sta)
+            # print("Data_sta is:",data_sta)
 #             for item in data_sta:
 #                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 #             #new code
 #             data_set = serialize("json", qs_set)
 #             data_set = json.loads(data_set)
-#             print("data_set is:",data_set)
+            # print("data_set is:",data_set)
 #             for item in data_set:
 #                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -4568,12 +4568,12 @@ class updated_disp_flowsen1Viewset(viewsets.ModelViewSet):
 
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
-        print(request.body,"BODY")
+        # print(request.body,"BODY")
         data = json.loads(request.body)
-        print(data,type(data),"DATA")
+        # print(data,type(data),"DATA")
         dinfo = device_info.objects.filter(**data)
         did=dinfo[0].Device_id
-        print(dinfo,type(dinfo))
+        # print(dinfo,type(dinfo))
         qs_sta = disp_flowsen1.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
         # last_error=Errors.objects.filter(service='cnd_consen').order_by('-id')[:1:10]
         if not qs_sta:
@@ -4581,7 +4581,7 @@ class updated_disp_flowsen1Viewset(viewsets.ModelViewSet):
         else:
             data_sta = serialize("json", qs_sta)
             data_sta = json.loads(data_sta)
-            print("data_sta is:",data_sta)
+            # print("data_sta is:",data_sta)
             for item in data_sta:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
             data_sta = json.dumps(data_sta[0]["fields"])
@@ -4593,7 +4593,7 @@ class updated_disp_flowsen1Viewset(viewsets.ModelViewSet):
         else:
             data_set = serialize("json", qs_set)
             data_set = json.loads(data_set)
-            print("data_set is:",data_set)
+            # print("data_set is:",data_set)
             for item in data_set:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -4641,13 +4641,13 @@ class updated_disp_flowsen1Viewset(viewsets.ModelViewSet):
             
     #         data_sta = serialize("json", qs_sta)
     #         data_sta = json.loads(data_sta)
-    #         print("Data_sta is:",data_sta)
+            # print("Data_sta is:",data_sta)
     #         for item in data_sta:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
     #         #new code
     #         data_set = serialize("json", qs_set)
     #         data_set = json.loads(data_set)
-    #         print("data_set is:",data_set)
+            # print("data_set is:",data_set)
     #         for item in data_set:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -4691,12 +4691,12 @@ class updated_disp_flowsen2Viewset(viewsets.ModelViewSet):
 	# define queryset
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
-        print(request.body,"BODY")
+        # print(request.body,"BODY")
         data = json.loads(request.body)
-        print(data,type(data),"DATA")
+        # print(data,type(data),"DATA")
         dinfo = device_info.objects.filter(**data)
         did=dinfo[0].Device_id
-        print(dinfo,type(dinfo))
+        # print(dinfo,type(dinfo))
         qs_sta = disp_flowsen2.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
         # last_error=Errors.objects.filter(service='cnd_consen').order_by('-id')[:1:10]
         if not qs_sta:
@@ -4704,7 +4704,7 @@ class updated_disp_flowsen2Viewset(viewsets.ModelViewSet):
         else:
             data_sta = serialize("json", qs_sta)
             data_sta = json.loads(data_sta)
-            print("data_sta is:",data_sta)
+            # print("data_sta is:",data_sta)
             for item in data_sta:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
             data_sta = json.dumps(data_sta[0]["fields"])
@@ -4716,7 +4716,7 @@ class updated_disp_flowsen2Viewset(viewsets.ModelViewSet):
         else:
             data_set = serialize("json", qs_set)
             data_set = json.loads(data_set)
-            print("data_set is:",data_set)
+            # print("data_set is:",data_set)
             for item in data_set:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -4765,13 +4765,13 @@ class updated_disp_flowsen2Viewset(viewsets.ModelViewSet):
             
     #         data_sta = serialize("json", qs_sta)
     #         data_sta = json.loads(data_sta)
-    #         print("Data_sta is:",data_sta)
+            # print("Data_sta is:",data_sta)
     #         for item in data_sta:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
     #         #new code
     #         data_set = serialize("json", qs_set)
     #         data_set = json.loads(data_set)
-    #         print("data_set is:",data_set)
+            # print("data_set is:",data_set)
     #         for item in data_set:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -4815,12 +4815,12 @@ class updated_disp_flowsen3Viewset(viewsets.ModelViewSet):
 	# define queryset
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
-        print(request.body,"BODY")
+        # print(request.body,"BODY")
         data = json.loads(request.body)
-        print(data,type(data),"DATA")
+        # print(data,type(data),"DATA")
         dinfo = device_info.objects.filter(**data)
         did=dinfo[0].Device_id
-        print(dinfo,type(dinfo))
+        # print(dinfo,type(dinfo))
         qs_sta = disp_flowsen3.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
         # last_error=Errors.objects.filter(service='cnd_consen').order_by('-id')[:1:10]
         if not qs_sta:
@@ -4828,7 +4828,7 @@ class updated_disp_flowsen3Viewset(viewsets.ModelViewSet):
         else:
             data_sta = serialize("json", qs_sta)
             data_sta = json.loads(data_sta)
-            print("data_sta is:",data_sta)
+            # print("data_sta is:",data_sta)
             for item in data_sta:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
             data_sta = json.dumps(data_sta[0]["fields"])
@@ -4840,7 +4840,7 @@ class updated_disp_flowsen3Viewset(viewsets.ModelViewSet):
         else:
             data_set = serialize("json", qs_set)
             data_set = json.loads(data_set)
-            print("data_set is:",data_set)
+            # print("data_set is:",data_set)
             for item in data_set:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -4889,13 +4889,13 @@ class updated_disp_flowsen3Viewset(viewsets.ModelViewSet):
             
     #         data_sta = serialize("json", qs_sta)
     #         data_sta = json.loads(data_sta)
-    #         print("Data_sta is:",data_sta)
+            # print("Data_sta is:",data_sta)
     #         for item in data_sta:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
     #         #new code
     #         data_set = serialize("json", qs_set)
     #         data_set = json.loads(data_set)
-    #         print("data_set is:",data_set)
+            # print("data_set is:",data_set)
     #         for item in data_set:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -4939,12 +4939,12 @@ class updated_disp_flowsen4Viewset(viewsets.ModelViewSet):
 	# define queryset
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
-        print(request.body,"BODY")
+        # print(request.body,"BODY")
         data = json.loads(request.body)
-        print(data,type(data),"DATA")
+        # print(data,type(data),"DATA")
         dinfo = device_info.objects.filter(**data)
         did=dinfo[0].Device_id
-        print(dinfo,type(dinfo))
+        # print(dinfo,type(dinfo))
         qs_sta = disp_flowsen4.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
         # last_error=Errors.objects.filter(service='cnd_consen').order_by('-id')[:1:10]
         if not qs_sta:
@@ -4952,7 +4952,7 @@ class updated_disp_flowsen4Viewset(viewsets.ModelViewSet):
         else:
             data_sta = serialize("json", qs_sta)
             data_sta = json.loads(data_sta)
-            print("data_sta is:",data_sta)
+            # print("data_sta is:",data_sta)
             for item in data_sta:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
             data_sta = json.dumps(data_sta[0]["fields"])
@@ -4964,7 +4964,7 @@ class updated_disp_flowsen4Viewset(viewsets.ModelViewSet):
         else:
             data_set = serialize("json", qs_set)
             data_set = json.loads(data_set)
-            print("data_set is:",data_set)
+            # print("data_set is:",data_set)
             for item in data_set:
                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -5012,13 +5012,13 @@ class updated_disp_flowsen4Viewset(viewsets.ModelViewSet):
             
     #         data_sta = serialize("json", qs_sta)
     #         data_sta = json.loads(data_sta)
-    #         print("Data_sta is:",data_sta)
+            # print("Data_sta is:",data_sta)
     #         for item in data_sta:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
     #         #new code
     #         data_set = serialize("json", qs_set)
     #         data_set = json.loads(data_set)
-    #         print("data_set is:",data_set)
+            # print("data_set is:",data_set)
     #         for item in data_set:
     #             item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
@@ -6034,7 +6034,7 @@ class device_infoViewset(viewsets.ModelViewSet):
         # define queryset
         def dispatch(self, request, *args, **kwargs):
             fields_to_exclude = ['model', 'pk']
-            print(request.body,"BODY")
+            # print(request.body,"BODY")
             data = json.loads(request.body)
             print(data,type(data),"DATA11:")
             u_id=data['user_id']
@@ -6042,7 +6042,7 @@ class device_infoViewset(viewsets.ModelViewSet):
             dinfo = device_info.objects.filter(company_name=data['company_name'])
             # did=dinfo[0].Device_id
             # site_name=dinfo[5].site_name
-            # print(dinfo,type(dinfo))
+            print(dinfo,type(dinfo))
             allsites=[]
             for si in dinfo:
                 allsites.append(si.site_name)
@@ -6092,7 +6092,7 @@ class device_infoViewset(viewsets.ModelViewSet):
             # else:
             #     data_sta = serialize("json", qs_sta)
             #     data_sta = json.loads(data_sta)
-            #     print("data_sta is:",data_sta)
+                # print("data_sta is:",data_sta)
             #     for item in data_sta:
             #         item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
             #     data_sta = json.dumps(data_sta[0]["fields"])
@@ -6104,7 +6104,7 @@ class device_infoViewset(viewsets.ModelViewSet):
             # else:
             #     data_set = serialize("json", qs_set)
             #     data_set = json.loads(data_set)
-            #     print("data_set is:",data_set)
+                # print("data_set is:",data_set)
             #     for item in data_set:
             #         item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
