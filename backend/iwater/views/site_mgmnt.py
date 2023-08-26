@@ -23,7 +23,7 @@ from iwater.iw_logger import logger
 from connection.models import device_info
 from connection.views import MqttClient
 token_=0
-mqttc = mqtt.Client()
+# mqttc = mqtt.Client()
 # mqttc.subscribe('wc/v1/OTP',1)
 # class MqttClient:
 #     def __init__(self, company_id):
@@ -964,8 +964,8 @@ def connect_mqtt_in_background(company_id):
     # client.publish("wc/v1/OTP", "connected from iw backend app")
     # client.on_connect = client.on_connect
     # client.on_message = client.on_message
-    mqttc.on_connect = mqttc.on_connect
-    mqttc.on_message = mqttc.on_message
+    # mqttc.on_connect = mqttc.on_connect
+    # mqttc.on_message = mqttc.on_message
 
 
 
