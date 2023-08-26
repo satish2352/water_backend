@@ -109,10 +109,10 @@ site_ids=0
 panelid=None
 atmid=None
 company_ids=0
-# mqttc = mqtt.Client()
+mqttc = mqtt.Client()
 # client = mqtt.Client()
 # client.subscribe('wc1/v1/OTP',1)
-# mqttc.subscribe('wc1/#',1)
+mqttc.subscribe('wc1/#',1)
 # try:
 #     info_data=device_info.objects.all()
 #     print("device_info is:",info_data)
@@ -12630,7 +12630,7 @@ try:
     mqttc = mqtt.Client()
     ssl_context= ssl_alpn()
     mqttc.tls_set_context(context=ssl_context)
-    logger.info("start connect")
+    logger.info("start connect mqttc")
     # mqttc.connect(aws_iot_endpoint, port=443)
     mqttc.connect(aws_iot_endpoint, port=8883)
     logger.info("connect success")
