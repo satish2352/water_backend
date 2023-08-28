@@ -7576,7 +7576,8 @@ def on_message(client, userdata, msg):
                 elif removed_col[0]=='nta':
                     nta=removed_col[1]
                 elif removed_col[0]=='tmp':
-                    tmp=removed_col[1]
+                    if removed_col[1].isdigit():
+                        tmp=removed_col[1]    
                 elif removed_col[0]=='ntp':
                     ntp=removed_col[1]
                 elif removed_col[0]=='nov':
