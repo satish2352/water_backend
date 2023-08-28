@@ -596,7 +596,8 @@ def list_sites(request):
                 # logger.info(devices)
             # logger.info("----------------------")
             response_data = {}
-            if users["supervisors"] or users["operators"]:
+            # if users["supervisors"] or users["operators"]:
+            if True:
                 response_data = {
                     'serial_no': site_info["id"],
                     'creation_date': site_info["created"],
