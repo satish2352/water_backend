@@ -7479,22 +7479,28 @@ def on_message(client, userdata, msg):
                     if removed_col[1].isdigit():
                         cnd=int(removed_col[1])
                 elif removed_col[0]=='spn':
-                    spn=int(removed_col[1])
+                    if removed_col[1].isdigit():
+                        spn=int(removed_col[1])
                 elif removed_col[0]=='tds':
                     if removed_col[1].isdigit():
                         tds=int(removed_col[1])
                 elif removed_col[0]=='tsp':
-                    tsp=int(removed_col[1])
+                    if removed_col[1].isdigit():
+                        tsp=int(removed_col[1])
                 elif removed_col[0]=='asp':
-                    asp=int(removed_col[1])
+                    if removed_col[1].isdigit():
+                        asp=int(removed_col[1])
                 elif removed_col[0]=='sts':
                     sts=removed_col[1]
                 elif removed_col[0]=='crt':
-                    crt=removed_col[1]
+                    if removed_col[1].isdigit():
+                        crt=removed_col[1]
                 elif removed_col[0]=='olc':
-                    olc=removed_col[1]
+                    if removed_col[1].isdigit():
+                        olc=removed_col[1]
                 elif removed_col[0]=='drc':
-                    drc=removed_col[1]
+                    if removed_col[1].isdigit():
+                        drc=removed_col[1]
                 elif removed_col[0]=='rtl':
                     rtl=removed_col[1]
                 elif removed_col[0]=='ttl':
@@ -7508,37 +7514,50 @@ def on_message(client, userdata, msg):
                 elif removed_col[0]=='mod':
                     mod=removed_col[1]
                 elif removed_col[0]=='ipv':
-                    ipv=removed_col[1]
+                    if removed_col[1].isdigit():
+                        ipv=removed_col[1]
                 elif removed_col[0]=='unv':
-                    unv=removed_col[1]
+                    if removed_col[1].isdigit():
+                        unv=removed_col[1]
                 elif removed_col[0]=='ovv':
-                    ovv=removed_col[1]
+                    if removed_col[1].isdigit():
+                        ovv=removed_col[1]
                 elif removed_col[0]=='nmv':
-                    nmv=removed_col[1]
+                    if removed_col[1].isdigit():
+                        nmv=removed_col[1]
                 elif removed_col[0]=='stp':
                     stp=removed_col[1]
                 elif removed_col[0]=='bkt':
-                    bkt=removed_col[1]
+                    if removed_col[1].isdigit():
+                        bkt=removed_col[1]
                 elif removed_col[0]=='rst':
-                    rst=removed_col[1]
+                    if removed_col[1].isdigit():
+                        rst=removed_col[1]
                 elif removed_col[0]=='err':
                     err=removed_col[1]
                 elif removed_col[0]=='fr1':
-                    fr1=removed_col[1]
+                    if removed_col[1].isdigit():
+                        fr1=removed_col[1]
                 elif removed_col[0]=='fr2':
-                    fr2=removed_col[1]
+                    if removed_col[1].isdigit():
+                        fr2=removed_col[1]
                 elif removed_col[0]=='ff1':
-                    ff1=removed_col[1]
+                    if removed_col[1].isdigit():
+                        ff1=removed_col[1]
                 elif removed_col[0]=='ff2':
-                    ff2=removed_col[1]
+                    if removed_col[1].isdigit():
+                        ff2=removed_col[1]
                 elif removed_col[0]=='pos':
                     pos=removed_col[1]
                 elif removed_col[0]=='rmt':
-                    rmt=removed_col[1]
+                    if removed_col[1].isdigit():
+                        rmt=removed_col[1]
                 elif removed_col[0]=='cct':
-                    cct=removed_col[1]
+                    if removed_col[1].isdigit():
+                        cct=removed_col[1]
                 elif removed_col[0]=='srt':
-                    srt=removed_col[1]
+                    if removed_col[1].isdigit():
+                        srt=removed_col[1]
                     # srt2=int(srt1)
                     # srt=srt2/60
                     # srt=str(srt)
@@ -7550,9 +7569,11 @@ def on_message(client, userdata, msg):
                     # srt2=removed_col[2]
                     # srt=srt1+':'+srt2
                 elif removed_col[0]=='bkt':
-                    bkt=removed_col[1]
+                    if removed_col[1].isdigit():
+                        bkt=removed_col[1]
                 elif removed_col[0]=='mot':
-                    mot=removed_col[1]
+                    if removed_col[1].isdigit():
+                        mot=removed_col[1]
                 elif removed_col[0]=='stp':
                     stp=removed_col[1]
                 elif removed_col[0]=='op1':
@@ -7570,46 +7591,64 @@ def on_message(client, userdata, msg):
                 elif removed_col[0]=='psi':
                     psi=removed_col[1]
                 elif removed_col[0]=='ndv':
-                    ndv=removed_col[1]
+                    if removed_col[1].isdigit():
+                        ndv=removed_col[1]
                 elif removed_col[0]=='ntt':
                     ntt=removed_col[1]
                 elif removed_col[0]=='nta':
-                    nta=removed_col[1]
+                    if removed_col[1].isdigit():
+                        nta=removed_col[1]
                 elif removed_col[0]=='tmp':
                     if removed_col[1].isdigit():
-                        tmp=removed_col[1]    
+                        tmp=removed_col[1]
+                    else:
+                        tmp=None
                 elif removed_col[0]=='ntp':
                     ntp=removed_col[1]
                 elif removed_col[0]=='nov':
                     nov=removed_col[1]
                 elif removed_col[0]=='vl1':
-                    vl1=removed_col[1]
+                    if removed_col[1].isdigit():
+                        vl1=removed_col[1]
                 elif removed_col[0]=='vl2':
-                    vl2=removed_col[1]
+                    if removed_col[1].isdigit():
+                        vl2=removed_col[1]
                 elif removed_col[0]=='vl3':
-                    vl3=removed_col[1]
+                    if removed_col[1].isdigit():
+                        vl3=removed_col[1]
                 elif removed_col[0]=='vl4':
-                    vl4=removed_col[1]
+                    if removed_col[1].isdigit():
+                        vl4=removed_col[1]
                 elif removed_col[0]=='re1':
-                    re1=removed_col[1]
+                    if removed_col[1].isdigit():
+                        re1=removed_col[1]
                 elif removed_col[0]=='re2':
-                    re2=removed_col[1]
+                    if removed_col[1].isdigit():
+                        re2=removed_col[1]
                 elif removed_col[0]=='re3':
-                    re3=removed_col[1]
+                    if removed_col[1].isdigit():
+                        re3=removed_col[1]
                 elif removed_col[0]=='re4':
-                    re4=removed_col[1]
+                    if removed_col[1].isdigit():
+                        re4=removed_col[1]
                 elif removed_col[0]=='p1':
-                    p1=removed_col[1]
+                    if removed_col[1].isdigit():
+                        p1=removed_col[1]
                 elif removed_col[0]=='p2':
-                    p2=removed_col[1]
+                    if removed_col[1].isdigit():
+                        p2=removed_col[1]
                 elif removed_col[0]=='p3':
-                    p3=removed_col[1]
+                    if removed_col[1].isdigit():
+                        p3=removed_col[1]
                 elif removed_col[0]=='p4':
-                    p4=removed_col[1]
+                    if removed_col[1].isdigit():
+                        p4=removed_col[1]
                 elif removed_col[0]=='fr':
-                    fr=removed_col[1]
+                    if removed_col[1].isdigit():
+                        fr=removed_col[1]
                 elif removed_col[0]=='whr':
-                    whr=removed_col[1]
+                    if removed_col[1].isdigit():
+                        whr=removed_col[1]
                 elif removed_col[0]=='custid':
                     custid=removed_col[1]
             

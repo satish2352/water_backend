@@ -597,7 +597,7 @@ def list_sites(request):
             # logger.info("----------------------")
             response_data = {}
             # if users["supervisors"] or users["operators"]:
-            if True:
+            if True: #change by bharti ma'am
                 response_data = {
                     'serial_no': site_info["id"],
                     'creation_date': site_info["created"],
