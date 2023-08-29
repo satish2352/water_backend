@@ -413,14 +413,6 @@ class MqttClient:
                     "Device_name": "wc",
                     "unit_type": "water_treatment",
                     "company_name": company_names.company_name,
-                    "componant_name": "rwp",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_treatment",
-                    "company_name": company_names.company_name,
                     "componant_name": "cnd_sen",
                     "site_name": site_data.site_name
                     },
@@ -459,41 +451,9 @@ class MqttClient:
                     {
                     "Device_id": panelid,
                     "Device_name": "wc",
-                    "unit_type": "water_dispense",
-                    "company_name": company_names.company_name,
-                    "componant_name": "tap2",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_dispense",
-                    "company_name": company_names.company_name,
-                    "componant_name": "tap3",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_dispense",
-                    "company_name": company_names.company_name,
-                    "componant_name": "tap4",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
                     "unit_type": "water_treatment",
                     "company_name": company_names.company_name,
                     "componant_name": "hpp",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_treatment",
-                    "company_name": company_names.company_name,
-                    "componant_name": "atm",
                     "site_name": site_data.site_name
                     },
                     {
@@ -600,9 +560,25 @@ class MqttClient:
                     "Device_name": "wc",
                     "unit_type": "water_dispense",
                     "company_name": company_names.company_name,
-                    "componant_name": "tap1",
+                    "componant_name": "tap2",
                     "site_name": site_data.site_name
-                    }
+                    },
+                    {
+                    "Device_id": atmid,
+                    "Device_name": "wc",
+                    "unit_type": "water_dispense",
+                    "company_name": company_names.company_name,
+                    "componant_name": "tap3",
+                    "site_name": site_data.site_name
+                    },
+                    {
+                    "Device_id": atmid,
+                    "Device_name": "wc",
+                    "unit_type": "water_dispense",
+                    "company_name": company_names.company_name,
+                    "componant_name": "tap4",
+                    "site_name": site_data.site_name
+                    },
                                         # Add other records here
                     ]
                     print("*2*2*")
