@@ -5904,7 +5904,7 @@ def on_message(client, userdata, msg):
             ndv=0
             ntt=''
             nta=0
-            tmp=0
+            tmp=None
             whr=''
             custid=''
             ntp=0
