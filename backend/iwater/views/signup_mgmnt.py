@@ -21,7 +21,7 @@ from init_water_app.settings import OTP_VALID_FOR
 
 from django.shortcuts import redirect
 from django.urls import reverse
-email='vikaswagh8007@gmail.com'
+email=''
 # email=''
 
 @api_view(['POST'])
@@ -416,8 +416,12 @@ def user_registration(request):
 #                                                             support_email,
 #                                                           support_phone)
  #below three lines added by bharti                   
-
-                    super_admin_user.send_invite_sms(get_current_site(request).domain, brand_name,support_email, support_phone)
+                    ##############This comment for stop registering by using sms.########################
+                    #####################################################################################
+                    # super_admin_user.send_invite_sms(get_current_site(request).domain, brand_name,support_email, support_phone)
+                    ####################################################################################
+                    
+                    
                     # super_admin_user.send_invite_sms(os.environ.get("SITE_DOMAIN"), brand_name,support_email, support_phone)
                     #super_admin_user.send_invite_sms()
 
