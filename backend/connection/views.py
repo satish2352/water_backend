@@ -195,17 +195,16 @@ class MqttClient:
 
         logger.info("site_id {}".format(token_))
         logger.info("company_id {}".format(self.company_id))
-        company_ids=self.company_id
+        site_obj = Site.objects.get(token=token_)
+        company_ids=site_obj.company_id
+        site_ids=site_obj.id
         logger.info("device_id {}".format(device_id))
-        get_siteid=Site.objects.filter(token=token_,company_id=self.company_id)
+        # get_siteid=Site.objects.filter(token=token_,company_id=self.company_id)
         
-        if get_siteid: 
-            for qq in get_siteid:
-                global site_ids
-                site_ids=qq.id
-                # company_ids=qq.company_id
-                print("qq:", qq.id)
-        # device_data=Device.objects.create()
+        # if get_siteid: 
+        #     for qq in get_siteid:
+        #         global site_ids
+        #         site_ids=qq.id
         
         # doublicate_device_id=Device.objects.filter(Q(serial_no2 =panelid) | Q(serial_no3=atmid)).filter(~Q(site_id = site_ids))
         doublicate_panel_id=0
@@ -405,90 +404,9 @@ class MqttClient:
                     "Device_name": "wc",
                     "unit_type": "water_treatment",
                     "company_name": company_names.company_name,
-                    "componant_name": "rwp",
                     "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_treatment",
-                    "company_name": company_names.company_name,
-                    "componant_name": "cnd_sen",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_treatment",
-                    "company_name": company_names.company_name,
-                    "componant_name": "ampv1",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_treatment",
-                    "company_name": company_names.company_name,
-                    "componant_name": "ampv2",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_treatment",
-                    "company_name": company_names.company_name,
-                    "componant_name": "ampv3",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_treatment",
-                    "company_name": company_names.company_name,
-                    "componant_name": "ampv4",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_treatment",
-                    "company_name": company_names.company_name,
-                    "componant_name": "hpp",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_treatment",
-                    "company_name": company_names.company_name,
-                    "componant_name": "panel",
-                    "site_name": site_data.site_name
-                    },
-                    {
-
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_treatment",
-                    "company_name": company_names.company_name,
-                    "componant_name": "F_flowsen",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_treatment",
-                    "company_name": company_names.company_name,
-                    "componant_name": "P_flowsen",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": panelid,
-                    "Device_name": "wc",
-                    "unit_type": "water_treatment",
-                    "company_name": company_names.company_name,
-                    "componant_name": "tds_sen",
-                    "site_name": site_data.site_name
-                    }]
+                    }
+                    ]
                 
                     record_atm=[
                     {
@@ -496,90 +414,8 @@ class MqttClient:
                     "Device_name": "wc",
                     "unit_type": "water_dispense",
                     "company_name": company_names.company_name,
-                    "componant_name": "cnd_consen",
                     "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": atmid,
-                    "Device_name": "wc",
-                    "unit_type": "water_dispense",
-                    "company_name": company_names.company_name,
-                    "componant_name": "tds_consen",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": atmid,
-                    "Device_name": "wc",
-                    "unit_type": "water_dispense",
-                    "company_name": company_names.company_name,
-                    "componant_name": "atm",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": atmid,
-                    "Device_name": "wc",
-                    "unit_type": "water_dispense",
-                    "company_name": company_names.company_name,
-                    "componant_name": "flowsen1",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": atmid,
-                    "Device_name": "wc",
-                    "unit_type": "water_dispense",
-                    "company_name": company_names.company_name,
-                    "componant_name": "flowsen2",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": atmid,
-                    "Device_name": "wc",
-                    "unit_type": "water_dispense",
-                    "company_name": company_names.company_name,
-                    "componant_name": "flowsen3",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": atmid,
-                    "Device_name": "wc",
-                    "unit_type": "water_dispense",
-                    "company_name": company_names.company_name,
-                    "componant_name": "flowsen4",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": atmid,
-                    "Device_name": "wc",
-                    "unit_type": "water_dispense",
-                    "company_name": company_names.company_name,
-                    "componant_name": "tap1",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": atmid,
-                    "Device_name": "wc",
-                    "unit_type": "water_dispense",
-                    "company_name": company_names.company_name,
-                    "componant_name": "tap2",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": atmid,
-                    "Device_name": "wc",
-                    "unit_type": "water_dispense",
-                    "company_name": company_names.company_name,
-                    "componant_name": "tap3",
-                    "site_name": site_data.site_name
-                    },
-                    {
-                    "Device_id": atmid,
-                    "Device_name": "wc",
-                    "unit_type": "water_dispense",
-                    "company_name": company_names.company_name,
-                    "componant_name": "tap4",
-                    "site_name": site_data.site_name
-                    },
-                                        # Add other records here
+                    }
                     ]
                     print("*2*2*")
                     # Insert the records into the collection
