@@ -941,7 +941,7 @@ def send_otp(request):
                 return JsonResponse({"Response": {"Status": "success"},
                                      "message": "OTP sent to the registered number",
                                      "valid_for": OTP_VALID_FOR,
-                                     "otp": {"token": "{0:04}".format(site_obj.id), "otp": sent["otp"]}  # TODO remove
+                                     "otp": {"token": site_obj.token, "otp": sent["otp"]}  # TODO remove
                                      },
                                     safe=False, status=status.HTTP_200_OK)
                 # return HttpResponse('', status=200)
