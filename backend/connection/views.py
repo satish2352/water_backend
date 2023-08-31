@@ -113,6 +113,7 @@ mqttc = mqtt.Client()
 # client = mqtt.Client()
 # client.subscribe('wc1/v1/OTP',1)
 mqttc.subscribe('wc1/#',1)
+mqttc.subscribe('wc1/v1/OTP',1)
 # try:
 #     info_data=device_info.objects.all()
 #     print("device_info is:",info_data)
@@ -127,7 +128,6 @@ mqttc.subscribe('wc1/#',1)
 class MqttClient:
     def __init__(self, company_id):
         # _data_mqtt = settings.settings_get_mqttSettings()
-        # _topic = "IW/V1/OTP"
         _topic = "wc1/v1/OTP"
         # _username = _data_mqtt['_username']
         # _password = _data_mqtt['_password']
