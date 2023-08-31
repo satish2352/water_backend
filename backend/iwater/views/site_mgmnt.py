@@ -1016,118 +1016,171 @@ def verify_otp(request):
                                 safe=False, status=status.HTTP_200_OK)
 
 
-# @api_view(['POST'])
-# def verify_token(request):
+@api_view(['POST'])
+def verify_token(request):
 
-#     if request.method == 'POST':
-#         site_name = request.data['site_name']
-#         print("site_name: ", site_name)
-#         try:
-#             print("Request data:",request.data)
-#             authenticate_device = request.data['authenticate_device']
-#         except Exception as err:
-#             authenticate_device = None
+    if request.method == 'POST':
+        site_name = request.data['site_name']
+        print("site_name: ", site_name)
+        try:
+            print("Request data:",request.data)
+            authenticate_device = request.data['authenticate_device']
+        except Exception as err:
+            authenticate_device = None
 
-#         if authenticate_device is None:
-#             print("token auth for new device")
-#             logger.info("Verify token for newly added device")
-#             try:
-#                 site_obj = Site.objects.get(company_id=request.user.company_id, site_name=site_name, phone_verified=True)
-#                 print("site_obj:", site_obj)
-#             except Exception as err:
-#                 logger.error("Verify token error , {}".format(err))
-#                 return JsonResponse({"Response": {"Status": "error"},
-#                                      "message": "OTP is not verified"},
-#                                     safe=False, status=status.HTTP_200_OK)
-#             try:
-#                 print("111")
-#                 sub_count = Subscription.objects.filter(site_id=site_obj.id).count()
-#                 print("112")
-#                 logger.debug(sub_count)
-#                 print("113")
-#                 if sub_count > 0:
-#                     print("114")
-#                     dev_obj = Device.objects.get(site_id=site_obj.id)
-#                     print("115")
-#                     response = {
-#                         'device_name1': dev_obj.serial_no1,
-#                         "device_name2": dev_obj.serial_no2,
-#                         "device_name3": dev_obj.serial_no3
-#                     }
-#                     print("116")
-#                     site_obj.token_verified = True
-#                     print("117")
-#                     site_obj.save()
-#                     print("118")
-#                     if dev_obj.serial_no2 and dev_obj.serial_no3:
-#                         print("119")
-#                         return JsonResponse({"Response": {"Status": "success"},
-#                                              "message": "Both treatment and dispensing units verified successfully!"},
-#                                             safe=False, status=status.HTTP_200_OK)
-#                     elif dev_obj.serial_no2:
-#                         print("120")
-#                         return JsonResponse({"Response": {"Status": "success"},
-#                                              "message": "Treatment unit verified successfully!"},
-#                                             safe=False, status=status.HTTP_200_OK)
-#                     elif dev_obj.serial_no3:
-#                         return JsonResponse({"Response": {"Status": "success"},
-#                                              "message": "Dispensing unit verified successfully!"},
-#                                             safe=False, status=status.HTTP_200_OK)
-#                 return JsonResponse({"Response": {"Status": "error"},
-#                                      "message": "1Token verification failed. Didn't get the token from device1"},
-#                                     safe=False, status=status.HTTP_200_OK)
-#             except Exception as err:
-#                 return JsonResponse({"Response": {"Status": "error"},
-#                                      "message": "Token verification failed, didn't get the device serial numbers over mqtt."
-#                                                 " {}".format(err)}, safe=False, status=status.HTTP_200_OK)
-#         else:
-#             print("token auth for already existing device")
-#             logger.info("Verify token for already added device")
-#             print(authenticate_device)
-#             try:
-#                 site_obj = Site.objects.get(company_id=request.user.company_id, site_name=site_name,
-#                                             phone_verified=True)
-#             except Exception as err:
-#                 logger.error("Verify token error , {}".format(err))
-#                 return JsonResponse({"Response": {"Status": "error"},
-#                                      "message": "OTP is not verified"},
-#                                     safe=False, status=status.HTTP_200_OK)
-#             try:
-#                 sub_count = Subscription.objects.filter(site_id=site_obj.id).count()
-#                 logger.debug(sub_count)
-#                 if sub_count > 0:
-#                     dev_obj = Device.objects.get(site_id=site_obj.id)
-#                     response = {
-#                         'device_name1': dev_obj.serial_no1,
-#                         "device_name2": dev_obj.serial_no2,
-#                         "device_name3": dev_obj.serial_no3
-#                     }
-#                     site_obj.token_verified = True
-#                     site_obj.token = False
-#                     site_obj.save()
-#                     len_authenticate_device = len(authenticate_device)
-#                     print(len_authenticate_device)
-#                     if (len_authenticate_device == 2) and (dev_obj.serial_no2 and dev_obj.serial_no3):
-#                     # if dev_obj.serial_no2 and dev_obj.serial_no3:
-#                         return JsonResponse({"Response": {"Status": "success"},
-#                                              "message": "Both treatment and dispensing units verified successfully!"},
-#                                             safe=False, status=status.HTTP_200_OK)
+        # if authenticate_device is None:
+    
+        print("token auth for new device")
+        logger.info("Verify token for newly added device")
+        try:
+            site_obj = Site.objects.get(company_id=request.user.company_id, site_name=site_name, phone_verified=True)
+            print("site_obj:", site_obj)
+        except Exception as err:
+            logger.error("Verify token error , {}".format(err))
+            return JsonResponse({"Response": {"Status": "error"},
+                                    "message": "OTP is not verified"},
+                                safe=False, status=status.HTTP_200_OK)
+        try:
+            print("111")
+            sub_count = Subscription.objects.filter(site_id=site_obj.id).count()
+            print("112")
+            logger.debug(sub_count)
+            print("113")
+            if sub_count > 0:
+                print("114")
+                dev_obj = Device.objects.get(site_id=site_obj.id)
+                print("115")
+                response = {
+                    'device_name1': dev_obj.serial_no1,
+                    "device_name2": dev_obj.serial_no2,
+                    "device_name3": dev_obj.serial_no3
+                }
+                print("116")
+                site_obj.token_verified = True
+                print("117")
+                site_obj.save()
+                print("118")
 
-#                     elif len_authenticate_device == 1 and authenticate_device[0] == "treatment_unit" and dev_obj.serial_no2:
-#                         return JsonResponse({"Response": {"Status": "success"},
-#                                              "message": "Treatment unit verified successfully!"},
-#                                             safe=False, status=status.HTTP_200_OK)
-#                     elif len_authenticate_device == 1 and authenticate_device[0] == "dispensing_unit" and dev_obj.serial_no3:
-#                         return JsonResponse({"Response": {"Status": "success"},
-#                                              "message": "Dispensing unit verified successfully!"},
-#                                             safe=False, status=status.HTTP_200_OK)
-#                 return JsonResponse({"Response": {"Status": "error"},
-#                                      "message": "2Token verification failed. Didn't get the token from device2"},
-#                                     safe=False, status=status.HTTP_200_OK)
-#             except Exception as err:
-#                 return JsonResponse({"Response": {"Status": "error"},
-#                                      "message": "Token verification failed, didn't get the device serial numbers over mqtt."
-#                                                 " {}".format(err)}, safe=False, status=status.HTTP_200_OK)
+                #mongodb device information
+                try:
+
+                    records = [
+                    {
+                    "Device_id": dev_obj.serial_no2,
+                    "Device_name": "wc",
+                    "unit_type": "water_treatment",
+                    "company_name": request.user.company_id,
+                    "site_name": site_name
+                    }
+                    ]
+                
+                    record_atm=[
+                    {
+                    "Device_id": dev_obj.serial_no3,
+                    "Device_name": "wc",
+                    "unit_type": "water_dispense",
+                    "company_name": request.user.company_id,
+                    "site_name": site_name
+                    }
+                    ]
+                
+                    if dev_obj.serial_no2 and dev_obj.serial_no3:
+                        for record in records:
+                                info=device_info.objects.create(**record)
+                                info.save()
+                                logger.info("panel records Added")
+                        for record in record_atm:
+                                info=device_info.objects.create(**record)
+                                info.save()
+                                logger.info("atm records Added")
+                        
+                    elif dev_obj.serial_no2:
+                        for record in records:
+                            info=device_info.objects.create(**record)
+                            info.save()
+                            logger.info("panel records Added")
+                       
+                    elif dev_obj.serial_no3:
+                          for record in record_atm:
+                                info=device_info.objects.create(**record)
+                                info.save()
+                                logger.info("atm records Added")
+
+                except Exception as err:
+                    return JsonResponse({"Response": {"Status": "error"},
+                                    "message": "Mongodb Device information write error"
+                                            " {}".format(err)}, safe=False, status=status.HTTP_200_OK)
+        
+                if dev_obj.serial_no2 and dev_obj.serial_no3:
+
+                    print("119")
+                    return JsonResponse({"Response": {"Status": "success"},
+                                            "message": "Both treatment and dispensing units verified successfully!"},
+                                        safe=False, status=status.HTTP_200_OK)
+                elif dev_obj.serial_no2:
+                    print("120")
+                    return JsonResponse({"Response": {"Status": "success"},
+                                            "message": "Treatment unit verified successfully!"},
+                                        safe=False, status=status.HTTP_200_OK)
+                elif dev_obj.serial_no3:
+                    return JsonResponse({"Response": {"Status": "success"},
+                                            "message": "Dispensing unit verified successfully!"},
+                                        safe=False, status=status.HTTP_200_OK)
+            return JsonResponse({"Response": {"Status": "error"},
+                                    "message": "1Token verification failed. Didn't get the token from device1"},
+                                safe=False, status=status.HTTP_200_OK)
+        except Exception as err:
+            return JsonResponse({"Response": {"Status": "error"},
+                                    "message": "Token verification failed, didn't get the device serial numbers over mqtt."
+                                            " {}".format(err)}, safe=False, status=status.HTTP_200_OK)
+        # else:
+        #     print("token auth for already existing device")
+        #     logger.info("Verify token for already added device")
+        #     print(authenticate_device)
+        #     try:
+        #         site_obj = Site.objects.get(company_id=request.user.company_id, site_name=site_name,
+        #                                     phone_verified=True)
+        #     except Exception as err:
+        #         logger.error("Verify token error , {}".format(err))
+        #         return JsonResponse({"Response": {"Status": "error"},
+        #                              "message": "OTP is not verified"},
+        #                             safe=False, status=status.HTTP_200_OK)
+        #     try:
+        #         sub_count = Subscription.objects.filter(site_id=site_obj.id).count()
+        #         logger.debug(sub_count)
+        #         if sub_count > 0:
+        #             dev_obj = Device.objects.get(site_id=site_obj.id)
+        #             response = {
+        #                 'device_name1': dev_obj.serial_no1,
+        #                 "device_name2": dev_obj.serial_no2,
+        #                 "device_name3": dev_obj.serial_no3
+        #             }
+        #             site_obj.token_verified = True
+        #             site_obj.token = False
+        #             site_obj.save()
+        #             len_authenticate_device = len(authenticate_device)
+        #             print(len_authenticate_device)
+        #             if (len_authenticate_device == 2) and (dev_obj.serial_no2 and dev_obj.serial_no3):
+        #             # if dev_obj.serial_no2 and dev_obj.serial_no3:
+        #                 return JsonResponse({"Response": {"Status": "success"},
+        #                                      "message": "Both treatment and dispensing units verified successfully!"},
+        #                                     safe=False, status=status.HTTP_200_OK)
+
+        #             elif len_authenticate_device == 1 and authenticate_device[0] == "treatment_unit" and dev_obj.serial_no2:
+        #                 return JsonResponse({"Response": {"Status": "success"},
+        #                                      "message": "Treatment unit verified successfully!"},
+        #                                     safe=False, status=status.HTTP_200_OK)
+        #             elif len_authenticate_device == 1 and authenticate_device[0] == "dispensing_unit" and dev_obj.serial_no3:
+        #                 return JsonResponse({"Response": {"Status": "success"},
+        #                                      "message": "Dispensing unit verified successfully!"},
+        #                                     safe=False, status=status.HTTP_200_OK)
+        #         return JsonResponse({"Response": {"Status": "error"},
+        #                              "message": "2Token verification failed. Didn't get the token from device2"},
+        #                             safe=False, status=status.HTTP_200_OK)
+        #     except Exception as err:
+        #         return JsonResponse({"Response": {"Status": "error"},
+        #                              "message": "Token verification failed, didn't get the device serial numbers over mqtt."
+        #                                         " {}".format(err)}, safe=False, status=status.HTTP_200_OK)
 
 
 # @csrf_exempt

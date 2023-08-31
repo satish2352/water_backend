@@ -173,44 +173,38 @@ class MqttClient:
                         if device_data is not None:
                             logger.info("re-auth request came for device {}".format(device_id)) # ! re-auth request
                             if device_data.serial_no2 is None:
-                                device_data.serial_no2 = panelid
-                                device_data.save()
-                                logger.info("Added device serial numbers")
-                                site_data = Site.objects.get(id=site_ids)
-                                site_data.is_treatment_unit = True
-                                site_data.token_verified = True
-                                site_data.save()
-                                logger.info("Updated site details for treatment unit")
-                                subscription_data = Subscription()
-                                subscription_data.site_id = site_ids
-                                subscription_data.is_treatment_unit = True
-                                subscription_data.company_id = company_ids
-                                subscription_data.save()
-                                #changes by sir
-                                # subscription_data = Subscription.objects.get(site_id=site_ids)
-                                # subscription_data.site_id = site_ids
-                                # subscription_data.is_treatment_unit = True
-                                # subscription_data.company_id = company_ids
-                                # subscription_data.save()
-                                logger.info("Added subscription details for treatment unit")
+                                if panelid is not None:
+                                    device_data.serial_no2 = panelid
+                                    device_data.save()
+                                    logger.info("Added device serial numbers")
+                                    site_data = Site.objects.get(id=site_ids)
+                                    site_data.is_treatment_unit = True
+                                    site_data.token_verified = True
+                                    site_data.save()
+                                    logger.info("Updated site details for treatment unit")
+                                    subscription_data = Subscription()
+                                    subscription_data.site_id = site_ids
+                                    subscription_data.is_treatment_unit = True
+                                    subscription_data.company_id = company_ids
+                                    subscription_data.save()
+                                    logger.info("Added subscription details for treatment unit")
+                            
                             if device_data.serial_no3 is None:
-                                device_data.serial_no3 = atmid
-                                device_data.save()
-                                logger.info("Added device serial numbers")
-                                site_data = Site.objects.get(id=site_ids)
-                                site_data.is_dispensing_unit = True
-                                site_data.token_verified = True
-                                site_data.save()
-                                logger.info("Updated site details for dispensing unit")
-                                # subscription_data = Subscription.objects.get(site_id=site_id)
-                                # subscription_data.is_treatment_unit = True
-                                # subscription_data.save()
-                                subscription_data = Subscription()
-                                subscription_data.site_id = site_ids
-                                subscription_data.is_dispensing_unit = True
-                                subscription_data.company_id = company_ids
-                                subscription_data.save()
-                                logger.info("Added subscription details for dispensing unit")
+                                if atmid is not None:
+                                    device_data.serial_no3 = atmid
+                                    device_data.save()
+                                    logger.info("Added device serial numbers")
+                                    site_data = Site.objects.get(id=site_ids)
+                                    site_data.is_dispensing_unit = True
+                                    site_data.token_verified = True
+                                    site_data.save()
+                                    logger.info("Updated site details for dispensing unit")
+                                    subscription_data = Subscription()
+                                    subscription_data.site_id = site_ids
+                                    subscription_data.is_dispensing_unit = True
+                                    subscription_data.company_id = company_ids
+                                    subscription_data.save()
+                                    logger.info("Added subscription details for dispensing unit")
                         else:
                             logger.info("Got new device add request ")
                             if panelid and atmid:
@@ -243,22 +237,6 @@ class MqttClient:
                                 subscription_data1.company_id = company_ids
                                 subscription_data1.save()
                                 logger.info("Added subscription details for dispensing unit")
-
-                                # site_data = Site.objects.get(id=site_ids)
-                                # site_data.is_dispensing_unit = True
-                                # site_data.save()
-                                # logger.info("Updated site details for dispensing unit")
-
-                                # subscription_data = Subscription.objects.get(site_id=site_id)
-                                # subscription_data.is_treatment_unit = True
-                                # subscription_data.save()
-
-                                # subscription_data = Subscription()
-                                # subscription_data.site_id = site_ids
-                                # subscription_data.is_dispensing_unit = True
-                                # subscription_data.company_id = company_ids
-                                # subscription_data.save()
-                                # logger.info("Added subscription details for dispensing unit")
                             
                             elif panelid:
                                 logger.info("Got only panel id from device")
@@ -309,56 +287,7 @@ class MqttClient:
                                 subscription_data.company_id = company_ids
                                 subscription_data.save()
                                 logger.info("Added subscription details for dispensing unit")
-                        site_data = Site.objects.get(id=site_ids)
-                        print("*1*1*")
-                        company_names = Company.objects.get(id=company_ids)
-                        print("company_names:",company_names.company_name)
-                        records = [
-                        {
-                        "Device_id": panelid,
-                        "Device_name": "wc",
-                        "unit_type": "water_treatment",
-                        "company_name": company_ids,
-                        "site_name": site_data.site_name
-                        }
-                        ]
-                    
-                        record_atm=[
-                        {
-                        "Device_id": atmid,
-                        "Device_name": "wc",
-                        "unit_type": "water_dispense",
-                        "company_name": company_ids,
-                        "site_name": site_data.site_name
-                        }
-                        ]
-                        print("*2*2*")
-                        if "panelid" in data1:
-                            for record in records:
-                                info=device_info.objects.create(**record)
-                                info.save()
-                                logger.info("panel records Added")
-                        
-                        if "atmid" in data1:        
-                            for record in record_atm:
-                                info=device_info.objects.create(**record)
-                                info.save()
-                                logger.info("atm records Added")
-                        if atmid and panelid:
-                            for record in records:
-                                print("*3*3*")
-                                info=device_info.objects.create(**record)
-                        
-                                info.save()
-                                print("*5*5*")
-                            for record in record_atm:
-                                print("*3*3*")
-                                info=device_info.objects.create(**record)
-                        
-                                info.save()
-
-                        logger.info("Successfully added data to db over mqtt")
-                        print("*6*6*")
+                       
                     except Exception as err:
                         print("*7*7*")
                         transaction.set_rollback(True)
