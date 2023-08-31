@@ -92,7 +92,7 @@ site_ids=0
 panelid=None
 atmid=None
 company_ids=0
-mqttc = MqttClient()
+
 
 class MqttClient:
     def __init__(self, company_id):
@@ -384,6 +384,8 @@ class MqttClient:
     def stop(self):
         logger.info("MQTT - Disconnecting from mqtt broker and cleaning up")
         self.client.disconnect()
+
+mqttc = MqttClient()
 
 @api_view(['POST'])
 def obtain_token(request):
