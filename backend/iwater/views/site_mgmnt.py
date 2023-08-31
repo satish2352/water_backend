@@ -842,8 +842,8 @@ def send_otp(request):
 
         with transaction.atomic():
             try:
-                site_obj = Site.objects.get(company_id=request.user.company_id, site_name=site_name)
-                if site_obj:
+                site_obj = Site.objects.filter(company_id=request.user.company_id, site_name=site_name).first()
+                if site_obj is not None:
                     site_obj.site_name = site_name
                     site_obj.address = address
                     site_obj.city = city
