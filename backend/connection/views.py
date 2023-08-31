@@ -195,7 +195,7 @@ class MqttClient:
 
         logger.info("site_id {}".format(token_))
         logger.info("company_id {}".format(self.company_id))
-        site_obj = Site.objects.get(token=token_)
+        site_obj = Site.objects.get(token=data["token"])
         company_ids=site_obj.company_id
         site_ids=site_obj.id
         logger.info("device_id {}".format(device_id))
