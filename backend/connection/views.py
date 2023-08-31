@@ -364,7 +364,7 @@ class MqttClient:
                         transaction.set_rollback(True)
                         logger.error("MQTT - {}".format(err))
 
-    def on_connect_1(self, client, userdata, flags, rc):
+    def on_connect_1(self, client, userdata, flags, rc, otp_handler,ctrl_motr_handler):
         logger.info("MQTT - connected")
         # self.subscribe(self.topic)
         self.subscribe(self.topic_wc1)
