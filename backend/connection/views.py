@@ -219,242 +219,242 @@ class MqttClient:
                 #     print("doublicate_atm_id:",aaa.serial_no3)
                 print("doublicate_atm_id:",doublicate_atm_id)
             if doublicate_panel_id >0 or doublicate_atm_id >0:
-            logger.info("Doublicate device found")
+                logger.info("Doublicate device found")
             
             
             else:
-                with transaction.atomic():
-                    try:  # TODO
-                        pass
-                        print("001")
-                    # # Device.objects.get(site_id=site_id, serial_no1=device_id)
-                        try:
-                            print("002")
+            with transaction.atomic():
+                try:  # TODO
+                    pass
+                    print("001")
+                # # Device.objects.get(site_id=site_id, serial_no1=device_id)
+                    try:
+                        print("002")
 
-                            # device_data = Device.objects.get(site_id=site_id) # ! verfies device against site_id
-                            device_data = Device.objects.get(site_id=site_ids) # ! verfies device against site_id
-                            # print("Device data:",device_data)
-                            print("003")
+                        # device_data = Device.objects.get(site_id=site_id) # ! verfies device against site_id
+                        device_data = Device.objects.get(site_id=site_ids) # ! verfies device against site_id
+                        # print("Device data:",device_data)
+                        print("003")
 
-                        except Device.DoesNotExist:
-                            device_data = None
+                    except Device.DoesNotExist:
+                        device_data = None
 
-                        if device_data is not None:
-                            logger.info("re-auth request came for device {}".format(device_id)) # ! re-auth request
+                    if device_data is not None:
+                        logger.info("re-auth request came for device {}".format(device_id)) # ! re-auth request
 
-                            # device_data = Device.objects.get(site_id=site_id, serial_no1=device_id)
-                            if device_data.serial_no2 is None:
-                                device_data.serial_no2 = panelid
-                                device_data.save()
-                                logger.info("Added device serial numbers")
+                        # device_data = Device.objects.get(site_id=site_id, serial_no1=device_id)
+                        if device_data.serial_no2 is None:
+                            device_data.serial_no2 = panelid
+                            device_data.save()
+                            logger.info("Added device serial numbers")
 
-                                site_data = Site.objects.get(id=site_ids)
-                                site_data.is_treatment_unit = True
-                                site_data.token_verified = True
-                                site_data.save()
-                                logger.info("Updated site details for treatment unit")
+                            site_data = Site.objects.get(id=site_ids)
+                            site_data.is_treatment_unit = True
+                            site_data.token_verified = True
+                            site_data.save()
+                            logger.info("Updated site details for treatment unit")
 
-                                subscription_data = Subscription()
-                                subscription_data.site_id = site_ids
-                                subscription_data.is_treatment_unit = True
-                                subscription_data.company_id = self.company_id
-                                subscription_data.save()
-                                #changes by sir
+                            subscription_data = Subscription()
+                            subscription_data.site_id = site_ids
+                            subscription_data.is_treatment_unit = True
+                            subscription_data.company_id = self.company_id
+                            subscription_data.save()
+                            #changes by sir
 
-                                # subscription_data = Subscription.objects.get(site_id=site_ids)
-                                # subscription_data.site_id = site_ids
-                                # subscription_data.is_treatment_unit = True
-                                # subscription_data.company_id = self.company_id
-                                # subscription_data.save()
-                                logger.info("Added subscription details for treatment unit")
-                            if device_data.serial_no3 is None:
-                                device_data.serial_no3 = atmid
-                                device_data.save()
-                                logger.info("Added device serial numbers")
+                            # subscription_data = Subscription.objects.get(site_id=site_ids)
+                            # subscription_data.site_id = site_ids
+                            # subscription_data.is_treatment_unit = True
+                            # subscription_data.company_id = self.company_id
+                            # subscription_data.save()
+                            logger.info("Added subscription details for treatment unit")
+                        if device_data.serial_no3 is None:
+                            device_data.serial_no3 = atmid
+                            device_data.save()
+                            logger.info("Added device serial numbers")
 
-                                site_data = Site.objects.get(id=site_ids)
-                                site_data.is_dispensing_unit = True
-                                site_data.token_verified = True
-                                site_data.save()
-                                logger.info("Updated site details for dispensing unit")
+                            site_data = Site.objects.get(id=site_ids)
+                            site_data.is_dispensing_unit = True
+                            site_data.token_verified = True
+                            site_data.save()
+                            logger.info("Updated site details for dispensing unit")
 
-                                # subscription_data = Subscription.objects.get(site_id=site_id)
-                                # subscription_data.is_treatment_unit = True
-                                # subscription_data.save()
+                            # subscription_data = Subscription.objects.get(site_id=site_id)
+                            # subscription_data.is_treatment_unit = True
+                            # subscription_data.save()
 
-                                subscription_data = Subscription()
-                                subscription_data.site_id = site_ids
-                                subscription_data.is_dispensing_unit = True
-                                subscription_data.company_id = self.company_id
-                                subscription_data.save()
-                                logger.info("Added subscription details for dispensing unit")
+                            subscription_data = Subscription()
+                            subscription_data.site_id = site_ids
+                            subscription_data.is_dispensing_unit = True
+                            subscription_data.company_id = self.company_id
+                            subscription_data.save()
+                            logger.info("Added subscription details for dispensing unit")
 
-                        else:
-                            logger.info("Got new device add request ")
-                            if panelid and atmid:
-                                logger.info("Got both panel and atm id from device")
+                    else:
+                        logger.info("Got new device add request ")
+                        if panelid and atmid:
+                            logger.info("Got both panel and atm id from device")
 
+                            device_data = Device()
+                            device_data.serial_no1 = device_id
+                            device_data.serial_no2 = panelid
+                            device_data.serial_no3 = atmid
+                            device_data.site_id = site_ids
+                            device_data.save()
+                            logger.info("Added device serial numbers")
+
+                            site_data = Site.objects.get(id=site_ids)
+                            site_data.is_treatment_unit = True
+                            site_data.is_dispensing_unit = True
+                            site_data.token_verified = True
+                            site_data.save()
+                            logger.info("Updated site details for treatment unit")
+
+                            subscription_data = Subscription()
+                            subscription_data.site_id = site_ids
+                            subscription_data.is_treatment_unit = True
+                            subscription_data.company_id = self.company_id
+                            subscription_data.save()
+
+                            subscription_data1 = Subscription()
+                            subscription_data1.site_id = site_ids
+                            subscription_data1.is_dispensing_unit = True
+                            subscription_data1.company_id = self.company_id
+                            subscription_data1.save()
+                            logger.info("Added subscription details for dispensing unit")
+
+                            # site_data = Site.objects.get(id=site_ids)
+                            # site_data.is_dispensing_unit = True
+                            # site_data.save()
+                            # logger.info("Updated site details for dispensing unit")
+
+                            # subscription_data = Subscription.objects.get(site_id=site_id)
+                            # subscription_data.is_treatment_unit = True
+                            # subscription_data.save()
+
+                            # subscription_data = Subscription()
+                            # subscription_data.site_id = site_ids
+                            # subscription_data.is_dispensing_unit = True
+                            # subscription_data.company_id = self.company_id
+                            # subscription_data.save()
+                            # logger.info("Added subscription details for dispensing unit")
+                        
+                        elif panelid:
+                            logger.info("Got only panel id from device")
+
+                            device_data = Device()
+                            device_data.serial_no1 = device_id
+                            device_data.serial_no2 = panelid
+                            device_data.serial_no3 = atmid
+                            device_data.site_id = site_ids
+                            device_data.save()
+                            logger.info("Added device serial numbers")
+
+                            site_data = Site.objects.get(id=site_ids)
+                            site_data.is_treatment_unit = True
+                            site_data.token_verified = True
+                            site_data.save()
+                            logger.info("Updated site details for treatment unit")
+
+                            subscription_data = Subscription()
+                            subscription_data.site_id = site_ids
+                            subscription_data.is_treatment_unit = True
+                            subscription_data.company_id = self.company_id
+                            subscription_data.save()
+                            logger.info("Added subscription details for treatment unit")
+
+                        elif atmid:
+                            logger.info("Got only atm id from device")
+                            try:
                                 device_data = Device()
                                 device_data.serial_no1 = device_id
                                 device_data.serial_no2 = panelid
                                 device_data.serial_no3 = atmid
                                 device_data.site_id = site_ids
                                 device_data.save()
-                                logger.info("Added device serial numbers")
+                            except DatabaseError as e:
+                                print("25-8-23",e)
 
-                                site_data = Site.objects.get(id=site_ids)
-                                site_data.is_treatment_unit = True
-                                site_data.is_dispensing_unit = True
-                                site_data.token_verified = True
-                                site_data.save()
-                                logger.info("Updated site details for treatment unit")
+                            logger.info("data created successfully in device")
+                            site_data = Site.objects.get(id=site_ids)
+                            site_data.is_dispensing_unit = True
+                            site_data.token_verified = True
+                            site_data.save()
+                            logger.info("Updated site details for dispensing unit")
 
-                                subscription_data = Subscription()
-                                subscription_data.site_id = site_ids
-                                subscription_data.is_treatment_unit = True
-                                subscription_data.company_id = self.company_id
-                                subscription_data.save()
+                            subscription_data = Subscription()
+                            subscription_data.site_id = site_ids
+                            subscription_data.is_dispensing_unit = True
+                            subscription_data.company_id = self.company_id
+                            subscription_data.save()
+                            logger.info("Added subscription details for dispensing unit")
+                    site_data = Site.objects.get(id=site_ids)
+                    # company_names=Company.objects.get(company_id=self.company_id)
+                    print("*1*1*")
+                    # print("email is:",email)
+                    # print("email is:",user_login.email)
+                    # logger.info("email is:",user_login.email)
+                    # logged_user = User.objects.get(email=user_login.email)
 
-                                subscription_data1 = Subscription()
-                                subscription_data1.site_id = site_ids
-                                subscription_data1.is_dispensing_unit = True
-                                subscription_data1.company_id = self.company_id
-                                subscription_data1.save()
-                                logger.info("Added subscription details for dispensing unit")
+                    # company_names = Company.objects.get(id=logged_user.company_id)
+                    company_names = Company.objects.get(id=company_ids)
 
-                                # site_data = Site.objects.get(id=site_ids)
-                                # site_data.is_dispensing_unit = True
-                                # site_data.save()
-                                # logger.info("Updated site details for dispensing unit")
-
-                                # subscription_data = Subscription.objects.get(site_id=site_id)
-                                # subscription_data.is_treatment_unit = True
-                                # subscription_data.save()
-
-                                # subscription_data = Subscription()
-                                # subscription_data.site_id = site_ids
-                                # subscription_data.is_dispensing_unit = True
-                                # subscription_data.company_id = self.company_id
-                                # subscription_data.save()
-                                # logger.info("Added subscription details for dispensing unit")
-                            
-                            elif panelid:
-                                logger.info("Got only panel id from device")
-
-                                device_data = Device()
-                                device_data.serial_no1 = device_id
-                                device_data.serial_no2 = panelid
-                                device_data.serial_no3 = atmid
-                                device_data.site_id = site_ids
-                                device_data.save()
-                                logger.info("Added device serial numbers")
-
-                                site_data = Site.objects.get(id=site_ids)
-                                site_data.is_treatment_unit = True
-                                site_data.token_verified = True
-                                site_data.save()
-                                logger.info("Updated site details for treatment unit")
-
-                                subscription_data = Subscription()
-                                subscription_data.site_id = site_ids
-                                subscription_data.is_treatment_unit = True
-                                subscription_data.company_id = self.company_id
-                                subscription_data.save()
-                                logger.info("Added subscription details for treatment unit")
-
-                            elif atmid:
-                                logger.info("Got only atm id from device")
-                                try:
-                                    device_data = Device()
-                                    device_data.serial_no1 = device_id
-                                    device_data.serial_no2 = panelid
-                                    device_data.serial_no3 = atmid
-                                    device_data.site_id = site_ids
-                                    device_data.save()
-                                except DatabaseError as e:
-                                    print("25-8-23",e)
-
-                                logger.info("data created successfully in device")
-                                site_data = Site.objects.get(id=site_ids)
-                                site_data.is_dispensing_unit = True
-                                site_data.token_verified = True
-                                site_data.save()
-                                logger.info("Updated site details for dispensing unit")
-
-                                subscription_data = Subscription()
-                                subscription_data.site_id = site_ids
-                                subscription_data.is_dispensing_unit = True
-                                subscription_data.company_id = self.company_id
-                                subscription_data.save()
-                                logger.info("Added subscription details for dispensing unit")
-                        site_data = Site.objects.get(id=site_ids)
-                        # company_names=Company.objects.get(company_id=self.company_id)
-                        print("*1*1*")
-                        # print("email is:",email)
-                        # print("email is:",user_login.email)
-                        # logger.info("email is:",user_login.email)
-                        # logged_user = User.objects.get(email=user_login.email)
-
-                        # company_names = Company.objects.get(id=logged_user.company_id)
-                        company_names = Company.objects.get(id=company_ids)
-
-                        print("company_names:",company_names.company_name)
-                        records = [
-                        {
-                        "Device_id": panelid,
-                        "Device_name": "wc",
-                        "unit_type": "water_treatment",
-                        "company_name": company_names.company_name,
-                        "site_name": site_data.site_name
-                        }
-                        ]
+                    print("company_names:",company_names.company_name)
+                    records = [
+                    {
+                    "Device_id": panelid,
+                    "Device_name": "wc",
+                    "unit_type": "water_treatment",
+                    "company_name": company_names.company_name,
+                    "site_name": site_data.site_name
+                    }
+                    ]
+                
+                    record_atm=[
+                    {
+                    "Device_id": atmid,
+                    "Device_name": "wc",
+                    "unit_type": "water_dispense",
+                    "company_name": company_names.company_name,
+                    "site_name": site_data.site_name
+                    }
+                    ]
+                    print("*2*2*")
+                    # Insert the records into the collection
+                    # device_info.insert_many(records)
+                    if "panelid" in data1:
+                        for record in records:
+                            info=device_info.objects.create(**record)
+                            info.save()
+                            logger.info("panel records Added")
                     
-                        record_atm=[
-                        {
-                        "Device_id": atmid,
-                        "Device_name": "wc",
-                        "unit_type": "water_dispense",
-                        "company_name": company_names.company_name,
-                        "site_name": site_data.site_name
-                        }
-                        ]
-                        print("*2*2*")
-                        # Insert the records into the collection
-                        # device_info.insert_many(records)
-                        if "panelid" in data1:
-                            for record in records:
-                                info=device_info.objects.create(**record)
-                                info.save()
-                                logger.info("panel records Added")
-                        
-                        if "atmid" in data1:        
-                            for record in record_atm:
-                                info=device_info.objects.create(**record)
-                                info.save()
-                                logger.info("atm records Added")
+                    if "atmid" in data1:        
+                        for record in record_atm:
+                            info=device_info.objects.create(**record)
+                            info.save()
+                            logger.info("atm records Added")
 
 
 
 
-                        if atmid and panelid:
-                            for record in records:
-                                print("*3*3*")
-                                info=device_info.objects.create(**record)
-                        
-                                info.save()
-                                print("*5*5*")
-                            for record in record_atm:
-                                print("*3*3*")
-                                info=device_info.objects.create(**record)
-                        
-                                info.save()
+                    if atmid and panelid:
+                        for record in records:
+                            print("*3*3*")
+                            info=device_info.objects.create(**record)
+                     
+                            info.save()
+                            print("*5*5*")
+                        for record in record_atm:
+                            print("*3*3*")
+                            info=device_info.objects.create(**record)
+                     
+                            info.save()
 
-                        logger.info("Successfully added data to db over mqtt")
-                        print("*6*6*")
-                    except Exception as err:
-                        print("*7*7*")
-                        transaction.set_rollback(True)
-                        logger.error("MQTT - {}".format(err))
+                    logger.info("Successfully added data to db over mqtt")
+                    print("*6*6*")
+                except Exception as err:
+                    print("*7*7*")
+                    transaction.set_rollback(True)
+                    logger.error("MQTT - {}".format(err))
 
     def on_connect_1(self, client, userdata, flags, rc):
         logger.info("MQTT - connected")
