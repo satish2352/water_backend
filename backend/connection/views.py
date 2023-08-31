@@ -184,13 +184,13 @@ class MqttClient:
                                 subscription_data = Subscription()
                                 subscription_data.site_id = site_ids
                                 subscription_data.is_treatment_unit = True
-                                subscription_data.company_id = self.company_id
+                                subscription_data.company_id = company_ids
                                 subscription_data.save()
                                 #changes by sir
                                 # subscription_data = Subscription.objects.get(site_id=site_ids)
                                 # subscription_data.site_id = site_ids
                                 # subscription_data.is_treatment_unit = True
-                                # subscription_data.company_id = self.company_id
+                                # subscription_data.company_id = company_ids
                                 # subscription_data.save()
                                 logger.info("Added subscription details for treatment unit")
                             if device_data.serial_no3 is None:
@@ -208,7 +208,7 @@ class MqttClient:
                                 subscription_data = Subscription()
                                 subscription_data.site_id = site_ids
                                 subscription_data.is_dispensing_unit = True
-                                subscription_data.company_id = self.company_id
+                                subscription_data.company_id = company_ids
                                 subscription_data.save()
                                 logger.info("Added subscription details for dispensing unit")
                         else:
@@ -234,13 +234,13 @@ class MqttClient:
                                 subscription_data = Subscription()
                                 subscription_data.site_id = site_ids
                                 subscription_data.is_treatment_unit = True
-                                subscription_data.company_id = self.company_id
+                                subscription_data.company_id = company_ids
                                 subscription_data.save()
 
                                 subscription_data1 = Subscription()
                                 subscription_data1.site_id = site_ids
                                 subscription_data1.is_dispensing_unit = True
-                                subscription_data1.company_id = self.company_id
+                                subscription_data1.company_id = company_ids
                                 subscription_data1.save()
                                 logger.info("Added subscription details for dispensing unit")
 
@@ -256,7 +256,7 @@ class MqttClient:
                                 # subscription_data = Subscription()
                                 # subscription_data.site_id = site_ids
                                 # subscription_data.is_dispensing_unit = True
-                                # subscription_data.company_id = self.company_id
+                                # subscription_data.company_id = company_ids
                                 # subscription_data.save()
                                 # logger.info("Added subscription details for dispensing unit")
                             
@@ -280,7 +280,7 @@ class MqttClient:
                                 subscription_data = Subscription()
                                 subscription_data.site_id = site_ids
                                 subscription_data.is_treatment_unit = True
-                                subscription_data.company_id = self.company_id
+                                subscription_data.company_id = company_ids
                                 subscription_data.save()
                                 logger.info("Added subscription details for treatment unit")
 
@@ -306,7 +306,7 @@ class MqttClient:
                                 subscription_data = Subscription()
                                 subscription_data.site_id = site_ids
                                 subscription_data.is_dispensing_unit = True
-                                subscription_data.company_id = self.company_id
+                                subscription_data.company_id = company_ids
                                 subscription_data.save()
                                 logger.info("Added subscription details for dispensing unit")
                         site_data = Site.objects.get(id=site_ids)
@@ -318,7 +318,7 @@ class MqttClient:
                         "Device_id": panelid,
                         "Device_name": "wc",
                         "unit_type": "water_treatment",
-                        "company_name": company_names.company_name,
+                        "company_name": company_ids,
                         "site_name": site_data.site_name
                         }
                         ]
@@ -328,7 +328,7 @@ class MqttClient:
                         "Device_id": atmid,
                         "Device_name": "wc",
                         "unit_type": "water_dispense",
-                        "company_name": company_names.company_name,
+                        "company_name": company_ids,
                         "site_name": site_data.site_name
                         }
                         ]
