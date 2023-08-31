@@ -117,6 +117,11 @@ class MqttClient:
         print("Default handler on messege mqtt1")
         pass
     
+    def on_connect_1(self, client, userdata, flags, rc):
+        logger.info("MQTT - connected")
+        # self.subscribe(self.topic)
+        self.subscribe("wc1/#",ctrl_motr_handler)
+        self.subscribe("wc1/v1/OTP",otp_handler)
 
     def otp_handler(self, client, userdata, message):
         global token_,company_ids
@@ -365,17 +370,16 @@ class MqttClient:
                         transaction.set_rollback(True)
                         logger.error("MQTT - {}".format(err))
 
-    def on_connect_1(self, client, userdata, flags, rc, otp_handler,ctrl_motr_handler):
-        logger.info("MQTT - connected")
-        # self.subscribe(self.topic)
-        self.subscribe(self.topic_wc1)
-        self.client.message_callback_add("wc1/v1/OTP", otp_handler)
-        self.client.message_callback_add(self.topic_wc1, ctrl_motr_handler)
+   
+        
+        
         
 
-    def subscribe(self, topic):
+    def subscribe(self, topic,subscribe_callback):
         self.client.subscribe(topic,1)
+        self.client.message_callback_add(topic, subscribe_callback)
         logger.info("MQTT - Subscribed to topic '" + topic)
+ 
 
     def publish(self, topic, payload):
         logger.info("MQTT - Published message '" + str(payload) + "' on topic '" + topic)
