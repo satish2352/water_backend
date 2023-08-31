@@ -7971,19 +7971,19 @@ def ctrl_motr_handler(client, userdata, msg):
                     except Exception as e:
                         erro=Errors.objects.create(device_id=device_id,message_type=msg_type,e_discriptions=e,o_message=dict_str,service='flowsen4',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                         erro.save()
-topic = "test"
-try:
-    mqttc = mqtt.Client()
-    ssl_context= ssl_alpn()
-    mqttc.tls_set_context(context=ssl_context)
-    logger.info("start connect mqttc")
-    # mqttc.connect(aws_iot_endpoint, port=443)
-    mqttc.connect(aws_iot_endpoint, port=8883)
-    logger.info("connect success")
-    mqttc.subscribe('wc1/#',1)
-    mqttc.loop_start()
-except Exception as e:
-    logger.error("exception main()")
-    logger.error("e obj:{}".format(vars(e)))
-    traceback.print_exc(file=sys.stdout)
-mqttc.on_message = on_message
+# topic = "test"
+# try:
+#     mqttc = mqtt.Client()
+#     ssl_context= ssl_alpn()
+#     mqttc.tls_set_context(context=ssl_context)
+#     logger.info("start connect mqttc")
+#     # mqttc.connect(aws_iot_endpoint, port=443)
+#     mqttc.connect(aws_iot_endpoint, port=8883)
+#     logger.info("connect success")
+#     mqttc.subscribe('wc1/#',1)
+#     mqttc.loop_start()
+# except Exception as e:
+#     logger.error("exception main()")
+#     logger.error("e obj:{}".format(vars(e)))
+#     traceback.print_exc(file=sys.stdout)
+# mqttc.on_message = on_message
