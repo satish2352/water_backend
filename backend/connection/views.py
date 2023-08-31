@@ -3146,6 +3146,7 @@ class tap4settingViewset(viewsets.ModelViewSet):
 
 
 def otp_handler(self, client, userdata, message):
+        print("I am in otp_handler")
         global token_,company_ids
         print("Data received1!!!",message.payload)
         jstr=message.payload
@@ -3394,7 +3395,7 @@ def otp_handler(self, client, userdata, message):
 
    
 def ctrl_motr_handler(client, userdata, msg):
-
+        print("I am in ctrl_motr_handler")
         topic_from_broker =msg.topic
 
         if topic_from_broker != "wc1/v1/OTP":
