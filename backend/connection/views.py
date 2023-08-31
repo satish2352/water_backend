@@ -96,6 +96,7 @@ company_ids=0
 
 class MqttClient:
     def __init__(self):
+        print("Hi mqtt __init__")
         # _data_mqtt = settings.settings_get_mqttSettings()
         _topic = "wc1/v1/OTP"
         _topic_wc1 = "wc1/#"
@@ -385,6 +386,7 @@ class MqttClient:
         logger.info("MQTT - Disconnecting from mqtt broker and cleaning up")
         self.client.disconnect()
 
+print("Hi mqqtt client object going to create")
 mqttc = MqttClient()
 
 @api_view(['POST'])
@@ -561,7 +563,7 @@ class site_check(viewsets.ModelViewSet):
         for i in companydata:
             global cid
             cid=i.id
-        number_of_sites=mo.Site.objects.filter(company=self.company_id)
+        number_of_sites=mo.Site.objects.filter(company=companydata.id)
         site_name=[]
         for sit in number_of_sites:
             site_name.append(sit.site_name)
