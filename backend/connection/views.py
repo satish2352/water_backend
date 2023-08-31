@@ -92,7 +92,7 @@ site_ids=0
 panelid=None
 atmid=None
 company_ids=0
-mqttc = MqttClient
+mqttc = MqttClient()
 
 class MqttClient:
     def __init__(self, company_id):
