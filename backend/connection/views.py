@@ -95,12 +95,12 @@ company_ids=0
 
 
 class MqttClient:
-    def __init__(self, company_id):
+    def __init__(self):
         # _data_mqtt = settings.settings_get_mqttSettings()
         _topic = "wc1/v1/OTP"
         _topic_wc1 = "wc1/#"
         _port = 8883
-        self.company_id = company_id
+
         self.client = mqtt.Client()
         self.client = self.client 
         self.topic = _topic
