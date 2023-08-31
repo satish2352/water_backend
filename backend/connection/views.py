@@ -158,6 +158,10 @@ class MqttClient:
                 doublicate_atm_id=Device.objects.filter(serial_no3 =atmid).filter(~Q(site_id = site_ids)).count()
                 print("doublicate_atm_id:",doublicate_atm_id)
             if doublicate_panel_id >0 or doublicate_atm_id >0:
+                site_obj_new = Site.objects.get(company_id=company_ids, site_name=site_ids)
+                site_obj_new.token = None
+                site_obj_new.save()
+            
                 logger.info("Doublicate device found") 
             else:
                 with transaction.atomic():
@@ -180,6 +184,7 @@ class MqttClient:
                                     site_data = Site.objects.get(id=site_ids)
                                     site_data.is_treatment_unit = True
                                     site_data.token_verified = True
+                                    site_data.token = None
                                     site_data.save()
                                     logger.info("Updated site details for treatment unit")
                                     subscription_data = Subscription()
@@ -197,6 +202,7 @@ class MqttClient:
                                     site_data = Site.objects.get(id=site_ids)
                                     site_data.is_dispensing_unit = True
                                     site_data.token_verified = True
+                                    site_data.token = None
                                     site_data.save()
                                     logger.info("Updated site details for dispensing unit")
                                     subscription_data = Subscription()
@@ -222,6 +228,7 @@ class MqttClient:
                                 site_data.is_treatment_unit = True
                                 site_data.is_dispensing_unit = True
                                 site_data.token_verified = True
+                                site_data.token = None
                                 site_data.save()
                                 logger.info("Updated site details for treatment unit")
 
@@ -252,6 +259,7 @@ class MqttClient:
                                 site_data = Site.objects.get(id=site_ids)
                                 site_data.is_treatment_unit = True
                                 site_data.token_verified = True
+                                site_data.token = None
                                 site_data.save()
                                 logger.info("Updated site details for treatment unit")
 
@@ -278,6 +286,7 @@ class MqttClient:
                                 site_data = Site.objects.get(id=site_ids)
                                 site_data.is_dispensing_unit = True
                                 site_data.token_verified = True
+                                site_data.token = None
                                 site_data.save()
                                 logger.info("Updated site details for dispensing unit")
 

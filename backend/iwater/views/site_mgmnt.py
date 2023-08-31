@@ -827,84 +827,47 @@ def send_otp(request):
         phone_country = "+91"
         mob = re.sub(r"\D", "", request.data['phone'])
         site_mob = phone_country + str(mob)
-        logger.debug("site add input parameters {} {} {} {} {}".format(site_name, address, city, state, site_mob))
         try:
             existing_site = Site.objects.get(company_id=request.user.company_id, site_name=site_name)
             # ! checks for duplication of site name
-            if existing_site.token_verified and existing_site.phone_verified:
+            if existing_site.token_verified and existing_site.phone_verified and existing_site.is_dispensing_unit and existing_site.is_treatment_unit:
                 response = {"Response": {
                     "Status": "error"},
                     "message": "The site name is already used"
                 }
                 return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
-            # else:
-            #     Site.objects.get(phone=site_mob)
-            #     response = {"Response": {
-            #         "Status": "error"},
-            #         "message": "The phone number is already used for site registration"
-            #     }
-            #     return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
+         
         except Site.DoesNotExist:
             pass
 
-        # try:
-        #     si = Site.objects.get(phone=site_mob, site_name=site_name, phone_verified=True, token_verified=True)
-        #     # ! checks if phone number is already in used 
-        #     # ? Should be disabled ?
-        #     response = {"Response": {
-        #         "Status": "error"},
-        #         "message": "The phone number is already used for site registration"
-        #     }
-        #     return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
-        # except Site.DoesNotExist:
-        #     pass
-
         with transaction.atomic():
             try:
-                site_obj = Site.objects.filter(company_id=request.user.company_id, site_name=site_name)
-                print("*****:",site_obj)
+                site_obj = Site.objects.get(company_id=request.user.company_id, site_name=site_name)
                 if site_obj:
+                    site_obj.site_name = site_name
+                    site_obj.address = address
+                    site_obj.city = city
+                    site_obj.state = state
+                    site_obj.phone = site_mob
+                    site_obj.company = request.user.company
+                    site_obj.save()
                     logger.error("site {} already exists".format(site_name))
 
-                    # site_dat = Site.objects.get(company_id=request.user.company_id, site_name=site_name)
-                    # site_dat.site_name = site_name
-                    # site_dat.address = address
-                    # site_dat.city = city
-                    # site_dat.state = state
-                    # site_dat.phone = site_mob
-                    # site_dat.company = request.user.company
-                    # site_dat.save()
-                # else:
-                #     logger.info("site {} does not exists".format(site_name))
-                #     logger.info("so checking whether phone number is already used")
-                #     try:
-                #         Site.objects.get(phone=site_mob)
-                #         response = {"Response": {
-                #             "Status": "error"},
-                #             "message": "The phone number is already used for site registration"
-                #         }
-                #         return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
-                    
-                #     except Site.DoesNotExist:
-                #         pass
-                #     logger.info("phone number is not used, hence adding site details")
-                site_dat = Site()
-                # ! initiates instance of the site
-
-                site_dat.site_name = site_name
-                site_dat.address = address
-                site_dat.city = city
-                site_dat.state = state
-                site_dat.phone = site_mob
-                site_dat.company = request.user.company
-                site_dat.save()
-                    # ! saves the site
+                else:  
+                    site_data = Site()
+                    site_data.site_name = site_name
+                    site_data.address = address
+                    site_data.city = city
+                    site_data.state = state
+                    site_data.phone = site_mob
+                    site_data.company = request.user.company
+                    site_data.save()
             
             except Exception as err:
                 transaction.set_rollback(True)
                 logger.error("Error in adding site details; {}".format(err))
                 return JsonResponse({"Response": {"Status": "error"},
-                                     "message": "Site name is already taken"},
+                                     "message": "Data base write error for site details"},
                                     safe=False, status=status.HTTP_200_OK)
 
         try:
@@ -916,27 +879,17 @@ def send_otp(request):
                                     safe=False, status=status.HTTP_200_OK)
                 # return HttpResponse('No phone number is provided', status=400)
 
-            # if phone != site_obj.phone:
-            #     site_obj.phone = phone
-            #     site_obj.save()
-
-            # token = "{:04d}".format(randint(0, 9999))
-            if site_obj.phone_verified and site_obj.token_verified:
+        
+            if site_obj.phone_verified and site_obj.token_verified and site_obj.is_treatment_unit and site_obj.is_dispensing_unit:
                 return JsonResponse({"Response": {"Status": "error"},
                                      "message": "Site is already verified"},  # Site is already verified
                                     # Site name is already taken
                                     safe=False, status=status.HTTP_200_OK)
             else:
                 site_obj.phone_verified = False
-            logger.info("Both OTP and token are not verified hence resending the otp")
-            # threading.Thread(target=connect_mqtt_in_background, args=(request.user.company_id, )).start()
-            # ! connects MQTT 
-
-            # sent = site_obj.send_verification_sms(site_obj.id)
-            sent = site_obj.send_verification_sms(random.randint(1000, 9999))
-            # ! sends verification sms to the mobile
-            
-            logger.info("sent")
+                logger.info("Both OTP and token are not verified hence resending the otp")
+                sent = site_obj.send_verification_sms(random.randint(1000, 9999))
+                logger.info("otp sent")
             if sent["status"]:
                 return JsonResponse({"Response": {"Status": "success"},
                                      "message": "OTP sent to the registered number",
@@ -944,11 +897,9 @@ def send_otp(request):
                                      "otp": {"token": site_obj.token, "otp": sent["otp"]}  # TODO remove
                                      },
                                     safe=False, status=status.HTTP_200_OK)
-                # return HttpResponse('', status=200)
             return JsonResponse({"Response": {"Status": "error"},
-                                 "message": "Site name is already taken"},
+                                 "message": "SMS sendings failed"},
                                 safe=False, status=status.HTTP_200_OK)
-            # return HttpResponse('Invalid phone number', status=400)
         except Exception as err:
             return JsonResponse({"Response": {"Status": "error"},
                                  "message": "Invalid verification request; {}".format(err)},
@@ -1057,6 +1008,7 @@ def verify_token(request):
                 }
                 print("116")
                 site_obj.token_verified = True
+                site_obj.otp = None
                 print("117")
                 site_obj.save()
                 print("118")
@@ -1126,9 +1078,13 @@ def verify_token(request):
                     return JsonResponse({"Response": {"Status": "success"},
                                             "message": "Dispensing unit verified successfully!"},
                                         safe=False, status=status.HTTP_200_OK)
-            return JsonResponse({"Response": {"Status": "error"},
+            else:
+                site_obj.otp = None
+                site_obj.save()
+                return JsonResponse({"Response": {"Status": "error"},
                                     "message": "1Token verification failed. Didn't get the token from device1"},
                                 safe=False, status=status.HTTP_200_OK)
+            
         except Exception as err:
             return JsonResponse({"Response": {"Status": "error"},
                                     "message": "Token verification failed, didn't get the device serial numbers over mqtt."
