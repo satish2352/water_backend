@@ -144,7 +144,7 @@ class MqttClient:
 
         logger.info("token {}".format(token_))
         site_obj = Site.objects.filter(token=data["token"]).first()
-        logger.info("site_obj",site_obj)
+        # logger.info("site_obj",site_obj)
         if site_obj is not None:
             company_ids=site_obj.company_id
             site_ids=site_obj.id
