@@ -143,7 +143,6 @@ class MqttClient:
                 logger.info("atmid {}".format(atmid))
 
         logger.info("token {}".format(token_))
-        logger.info("company_id {}".format(self.company_id))
         site_obj = Site.objects.filter(token=data["token"])
         logger.info("site_obj",site_obj)
         if site_obj is not None:
@@ -365,3037 +364,8 @@ class MqttClient:
                         transaction.set_rollback(True)
                         logger.error("MQTT - {}".format(err))
 
-    def on_connect_1(self, client, userdata, flags, rc):
-        logger.info("MQTT - connected")
-        # self.subscribe(self.topic)
-        self.subscribe("wc1/#",ctrl_motr_handler)
-        self.subscribe("wc1/v1/OTP",self.otp_handler)
 
-
-        
-        
-        
-
-    def subscribe(self, topic,subscribe_callback):
-        self.client.subscribe(topic,1)
-        self.client.message_callback_add(topic, subscribe_callback)
-        logger.info("MQTT - Subscribed to topic '" + topic)
- 
-
-    def publish(self, topic, payload):
-        logger.info("MQTT - Published message '" + str(payload) + "' on topic '" + topic)
-        self.client.publish(topic, payload=payload)
-        # self.client.loop_stop()
-
-    def stop(self):
-        logger.info("MQTT - Disconnecting from mqtt broker and cleaning up")
-        self.client.disconnect()
-
-print("Hi mqqtt client object going to create")
-mqttc = MqttClient()
-
-@api_view(['POST'])
-def obtain_token(request):
-    username = request.data.get('username')
-    password = request.data.get('password')
-
-    if username and password:
-        user = authenticate(request, username=username, password=password)
-
-        if user is not None:
-            refresh = RefreshToken.for_user(user)
-
-            return Response({
-                'access': str(refresh.access_token),
-                'refresh': str(refresh),
-            })
-
-    return Response({'error': 'Invalid credentials'}, status=400)
- 
-def dateandtime():
-    year=datetime.today().strftime('%Y')
-    month=datetime.today().strftime('%m')
-    day=datetime.today().strftime('%d')
-    hour=datetime.now().strftime('%H')
-    minit=datetime.now().strftime('%M')
-    second=datetime.now().strftime('%S')
-    return year,month,day,hour,minit,second
-qs={}
-class LastRecordsView(viewsets.ModelViewSet):
-    def dispatch(self, request, *args, **kwargs):
-        my_list = [] 
-        fields_to_exclude = ['model', 'pk']
-        print(request.body,"BODY")
-        data = json.loads(request.body)
-        dinfo = device_info.objects.filter(**data)
-        did=dinfo[0].Device_id
-        last_error = Errors.objects.filter(device_id=did).order_by('-id')[:10]
-        if not last_error:
-            last_error={}
-        else:
-            last_error = serialize("json", last_error)
-            last_error = json.loads(last_error)
-            for item in last_error:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-                my_list.append(item['fields'])
-        last_error = json.dumps(my_list)
-        last_error = json.loads(last_error)
-        return JsonResponse(last_error, safe=False, content_type="application/json")
-#all data from minit table
-class all_panelListAPIView(generics.ListAPIView):
-    # define queryset
-	queryset = treat_panel.objects.all()
-	serializer_class = all_panelSerializer
-class all_cndListAPIView(generics.ListAPIView):
-    # define queryset
-	queryset = treat_cnd_sen.objects.all()
-	# specify serializer to be used
-	serializer_class = all_cndSerializer
-class all_tdsListAPIView(generics.ListAPIView):
-    # define queryset
-	queryset = treat_tds_sen.objects.all()
-	# specify serializer to be used
-	serializer_class = all_tdsSerializer
-class all_rwpListAPIView(generics.ListAPIView):
-    # define queryset
-	queryset = treat_rwp.objects.all()
-	# specify serializer to be used
-	serializer_class = all_rwpSerializer
-class all_ampv1ListAPIView(generics.ListAPIView):
-    # define queryset
-	queryset = treat_ampv1.objects.all()
-	# specify serializer to be used
-	serializer_class = all_ampv1Serializer  
-class all_ampv2ListAPIView(generics.ListAPIView):
-    # define queryset
-	queryset = treat_ampv2.objects.all()
-	# specify serializer to be used
-	serializer_class = all_ampv2Serializer       
-class all_ampv3ListAPIView(generics.ListAPIView):
-    # define queryset
-	queryset = treat_ampv3.objects.all()
-	# specify serializer to be used
-	serializer_class = all_ampv3Serializer
-class all_ampv4ListAPIView(generics.ListAPIView):
-    # define queryset
-	queryset = treat_ampv4.objects.all()
-	# specify serializer to be used
-	serializer_class = all_ampv4Serializer
-class all_ampv5ListAPIView(generics.ListAPIView):
-    # define queryset
-	queryset = treat_ampv5.objects.all()
-	# specify serializer to be used
-	serializer_class = all_ampv5Serializer
-class all_hppListAPIView(generics.ListAPIView):
-    # define queryset
-	queryset = treat_hpp.objects.all()
-	# specify serializer to be used
-	serializer_class = all_hppSerializer
-class all_F_flowsenListAPIView(generics.ListAPIView):
-    # define queryset
-	queryset = treat_F_flowsen.objects.all()
-	# specify serializer to be used
-	serializer_class = all_F_flowsenSerializer
-class all_P_flowsenListAPIView(generics.ListAPIView):
-    # define queryset
-	queryset = treat_P_flowsen.objects.all()
-	# specify serializer to be used
-	serializer_class = all_P_flowsenSerializer
-class all_cnd_consenListAPIView(generics.ListAPIView):
-    # define queryset
-	queryset = disp_cnd_consen.objects.all()
-	# specify serializer to be used
-	serializer_class = all_cnd_consenSerializer
-class all_tds_consenListAPIView(generics.ListAPIView):
-    # define queryset
-	queryset = disp_tds_consen.objects.all()
-	# specify serializer to be used
-	serializer_class = all_tds_consenSerializer
-class all_atmListAPIView(generics.ListAPIView):
-    # define queryset
-	queryset = disp_atm.objects.all()
-	# specify serializer to be used
-	serializer_class = all_atmSerializer
-class all_tap1ListAPIView(generics.ListAPIView):
-    # define queryset
-	queryset = disp_tap1.objects.all()
-	# specify serializer to be used
-	serializer_class = all_tap1Serializer
-class all_tap2ListAPIView(generics.ListAPIView):
-    # define queryset
-	queryset = disp_tap2.objects.all()
-	# specify serializer to be used
-	serializer_class = all_tap2Serializer
-class all_tap3ListAPIView(generics.ListAPIView):
-    # define queryset
-	queryset = disp_tap3.objects.all()
-	# specify serializer to be used
-	serializer_class = all_tap3Serializer
-class all_tap4ListAPIView(generics.ListAPIView):
-    # define queryset
-	queryset = disp_tap4.objects.all()
-	# specify serializer to be used
-	serializer_class = all_tap4Serializer
-class all_flowsen1ListAPIView(generics.ListAPIView):
-    # define queryset
-	queryset = disp_flowsen1.objects.all()
-	# specify serializer to be used
-	serializer_class = all_flowsen1Serializer
-class all_flowsen2ListAPIView(generics.ListAPIView):
-    # define queryset
-	queryset = disp_flowsen2.objects.all()
-	# specify serializer to be used
-	serializer_class = all_flowsen2Serializer
-class all_flowsen3ListAPIView(generics.ListAPIView):
-    # define queryset
-	queryset = disp_flowsen3.objects.all()
-	# specify serializer to be used
-	serializer_class = all_flowsen3Serializer
-class all_flowsen4ListAPIView(generics.ListAPIView):
-    # define queryset
-	queryset = disp_flowsen4.objects.all()
-	# specify serializer to be used
-	serializer_class = all_flowsen4Serializer
-import json
-cid=None
-class site_check(viewsets.ModelViewSet):
-    def dispatch(self, request, *args, **kwargs):
-        fields_to_exclude = ['model', 'pk']
-        print(request.body,"BODY")
-        data = json.loads(request.body)
-        print(data,type(data),"DATA")
-        companydata=mo.Company.objects.filter(company_name=data['company_name'])
-        for i in companydata:
-            global cid
-            cid=i.id
-        number_of_sites=mo.Site.objects.filter(company=companydata.id)
-        site_name=[]
-        for sit in number_of_sites:
-            site_name.append(sit.site_name)
-        response_data = {
-            #new code
-        'data': site_name,  # Include the 'data' field
-        'status': 200,  # Add the status field
-        'message': "Data get successful", # Add the message field
-        
-        }
-        response_data=[response_data]
-        return JsonResponse(response_data, safe=False, content_type="application/json")
-
-class updated_treat_rwpViewset(viewsets.ModelViewSet):
-    def dispatch(self, request, *args, **kwargs):
-        fields_to_exclude = ['model', 'pk']
-        data = json.loads(request.body)
-        dinfo = device_info.objects.filter(**data)
-        did=dinfo[0].Device_id
-        qs_sta = treat_rwp.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
-        if not qs_sta:
-            data_sta = {}
-        else:
-            data_sta = serialize("json", qs_sta)
-            data_sta = json.loads(data_sta)
-            for item in data_sta:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            data_sta = json.dumps(data_sta[0]["fields"])
-            data_sta = json.loads(data_sta)
-        
-        qs_set = treat_rwp.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
-        if not qs_set:
-            data_set = {}
-        else:
-            data_set = serialize("json", qs_set)
-            data_set = json.loads(data_set)
-            for item in data_set:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-
-            data_set = json.dumps(data_set[0]["fields"])
-            data_set = json.loads(data_set)
-
-        last_error=Errors.objects.filter(service='rwp')
-        if not last_error:
-            last_error={}
-        else:
-            last_error = serialize("json", last_error)
-            last_error = json.loads(last_error)
-            for item in last_error:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            
-            last_error = json.dumps(last_error[0]["fields"])
-            last_error = json.loads(last_error)
-
-        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
-        response_data = {
-            #new code
-        'data': data_final,  # Include the 'data' field
-        'status': 200,  # Add the status field
-        'message': "Data get successful", # Add the message field
-        
-        }
-        response_data=[response_data]
-        return JsonResponse(response_data, safe=False, content_type="application/json")
-    
-class updated_treat_cnd_senViewset(viewsets.ModelViewSet):
-	# define queryset
-    def dispatch(self, request, *args, **kwargs):
-        fields_to_exclude = ['model', 'pk']
-        data = json.loads(request.body)
-        print(data,type(data),"DATA**********")
-        dinfo = device_info.objects.filter(**data)
-        print(dinfo,type(dinfo),"device_info*****")
-        did=dinfo[0].Device_id
-        print(dinfo,type(dinfo))
-        print("**!!!***1:",did)
-        qs_sta = treat_cnd_sen.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
-        if not qs_sta:
-            data_sta = {}
-        else:
-            data_sta = serialize("json", qs_sta)
-            data_sta = json.loads(data_sta)
-            for item in data_sta:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            data_sta = json.dumps(data_sta[0]["fields"])
-            data_sta = json.loads(data_sta)
-        
-        qs_set = treat_cnd_sen.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
-        if not qs_set:
-            data_set = {}
-        else:
-            data_set = serialize("json", qs_set)
-            data_set = json.loads(data_set)
-            for item in data_set:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-
-            data_set = json.dumps(data_set[0]["fields"])
-            data_set = json.loads(data_set)
-
-        last_error=Errors.objects.filter(service='cnd_sen')
-        if not last_error:
-            last_error={}
-        else:
-            last_error = serialize("json", last_error)
-            last_error = json.loads(last_error)
-            for item in last_error:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            
-            last_error = json.dumps(last_error[0]["fields"])
-            last_error = json.loads(last_error)
-
-        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
-        response_data = {
-            #new code
-        'data': data_final,  # Include the 'data' field
-        'status': 200,  # Add the status field
-        'message': "Data get successful", # Add the message field
-        
-        }
-        response_data=[response_data]
-        return JsonResponse(response_data, safe=False, content_type="application/json")   
-    
-class updated_treat_tds_senViewset(viewsets.ModelViewSet):
-	# define queryset
-    def dispatch(self, request, *args, **kwargs):
-        fields_to_exclude = ['model', 'pk']
-        data = json.loads(request.body)
-        dinfo = device_info.objects.filter(**data)
-        did=dinfo[0].Device_id
-        
-        qs_sta = treat_tds_sen.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
-        if not qs_sta:
-            data_sta = {}
-        else:
-            data_sta = serialize("json", qs_sta)
-            data_sta = json.loads(data_sta)
-            for item in data_sta:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            data_sta = json.dumps(data_sta[0]["fields"])
-            data_sta = json.loads(data_sta)
-        
-        qs_set = treat_tds_sen.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
-        if not qs_set:
-            data_set = {}
-        else:
-            data_set = serialize("json", qs_set)
-            data_set = json.loads(data_set)
-            for item in data_set:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-
-            data_set = json.dumps(data_set[0]["fields"])
-            data_set = json.loads(data_set)
-
-        last_error=Errors.objects.filter(service='tds_sen')
-        if not last_error:
-            last_error={}
-        else:
-            last_error = serialize("json", last_error)
-            last_error = json.loads(last_error)
-            for item in last_error:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            
-            last_error = json.dumps(last_error[0]["fields"])
-            last_error = json.loads(last_error)
-
-        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
-        response_data = {
-            #new code
-        'data': data_final,  # Include the 'data' field
-        'status': 200,  # Add the status field
-        'message': "Data get successful", # Add the message field
-        
-        }
-        response_data=[response_data]
-        return JsonResponse(response_data, safe=False, content_type="application/json")    
-    
-class updated_treat_hppViewset(viewsets.ModelViewSet):
-	# define queryset
-    def dispatch(self, request, *args, **kwargs):
-        fields_to_exclude = ['model', 'pk']
-        data = json.loads(request.body)
-        dinfo = device_info.objects.filter(**data)
-        did=dinfo[0].Device_id
-        qs_sta = treat_hpp.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
-        if not qs_sta:
-            data_sta = {}
-        else:
-            data_sta = serialize("json", qs_sta)
-            data_sta = json.loads(data_sta)
-            for item in data_sta:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            data_sta = json.dumps(data_sta[0]["fields"])
-            data_sta = json.loads(data_sta)
-        
-        qs_set = treat_hpp.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
-        if not qs_set:
-            data_set = {}
-        else:
-            data_set = serialize("json", qs_set)
-            data_set = json.loads(data_set)
-            for item in data_set:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-
-            data_set = json.dumps(data_set[0]["fields"])
-            data_set = json.loads(data_set)
-
-        last_error=Errors.objects.filter(service='hpp')
-        if not last_error:
-            last_error={}
-        else:
-            last_error = serialize("json", last_error)
-            last_error = json.loads(last_error)
-            for item in last_error:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            
-            last_error = json.dumps(last_error[0]["fields"])
-            last_error = json.loads(last_error)
-
-        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
-        response_data = {
-            #new code
-        'data': data_final,  # Include the 'data' field
-        'status': 200,  # Add the status field
-        'message': "Data get successful", # Add the message field
-        
-        }
-        response_data=[response_data]
-        return JsonResponse(response_data, safe=False, content_type="application/json")    
-     
-class updated_treat_ampv1Viewset(viewsets.ModelViewSet):
-	# define queryset
-
-    def dispatch(self, request, *args, **kwargs):
-        try:
-            fields_to_exclude = ['model', 'pk']
-
-            data = json.loads(request.body)
-
-            dinfo = device_info.objects.filter(**data)
-            did=dinfo[0].Device_id
-        
-
-            qs_sta = treat_ampv1.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
-
-            if not qs_sta:
-                data_sta = {}
-            else:
-                data_sta = serialize("json", qs_sta)
-                data_sta = json.loads(data_sta)
-
-                for item in data_sta:
-                    item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-                data_sta = json.dumps(data_sta[0]["fields"])
-                data_sta = json.loads(data_sta)
-            
-            qs_set = treat_ampv1.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
-            if not qs_set:
-                data_set = {}
-            else:
-                data_set = serialize("json", qs_set)
-                data_set = json.loads(data_set)
-
-                for item in data_set:
-                    item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-
-                data_set = json.dumps(data_set[0]["fields"])
-                data_set = json.loads(data_set)
-
-
-            last_error=Errors.objects.filter(service='ampv1')
-            if not last_error:
-                last_error={}
-            else:
-                last_error = serialize("json", last_error)
-                last_error = json.loads(last_error)
-                for item in last_error:
-                    item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-                
-                last_error = json.dumps(last_error[0]["fields"])
-                last_error = json.loads(last_error)
-
-            data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
-            response_data = {
-                #new code
-            'data': data_final,  # Include the 'data' field
-            'status': 200,  # Add the status field
-            'message': "Data get successful", # Add the message field
-            
-            }
-            response_data=[response_data]
-            return JsonResponse(response_data, safe=False, content_type="application/json")    
-        except Exception as e :
-            print(e)  
-    
-class updated_treat_ampv2Viewset(viewsets.ModelViewSet):
-	# define queryset
-    def dispatch(self, request, *args, **kwargs):
-        fields_to_exclude = ['model', 'pk']
-        data = json.loads(request.body)
-        dinfo = device_info.objects.filter(**data)
-        did=dinfo[0].Device_id
-        qs_sta = treat_ampv2.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
-        if not qs_sta:
-            data_sta = {}
-        else:
-            data_sta = serialize("json", qs_sta)
-            data_sta = json.loads(data_sta)
-            for item in data_sta:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            data_sta = json.dumps(data_sta[0]["fields"])
-            data_sta = json.loads(data_sta)
-        
-        qs_set = treat_ampv2.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
-        if not qs_set:
-            data_set = {}
-        else:
-            data_set = serialize("json", qs_set)
-            data_set = json.loads(data_set)
-            for item in data_set:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-
-            data_set = json.dumps(data_set[0]["fields"])
-            data_set = json.loads(data_set)
-
-        last_error=Errors.objects.filter(service='ampv2')
-        if not last_error:
-            last_error={}
-        else:
-            last_error = serialize("json", last_error)
-            last_error = json.loads(last_error)
-            for item in last_error:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            
-            last_error = json.dumps(last_error[0]["fields"])
-            last_error = json.loads(last_error)
-
-        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
-        response_data = {
-            #new code
-        'data': data_final,  # Include the 'data' field
-        'status': 200,  # Add the status field
-        'message': "Data get successful", # Add the message field
-        
-        }
-        response_data=[response_data]
-        return JsonResponse(response_data, safe=False, content_type="application/json")    
-    
-class updated_treat_panelViewset(viewsets.ModelViewSet):
-	# define queryset
-    def dispatch(self, request, *args, **kwargs):
-        fields_to_exclude = ['model', 'pk']
-        data = json.loads(request.body)
-        dinfo = device_info.objects.filter(**data)
-        did=dinfo[0].Device_id
-        qs_sta = treat_panel.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
-        if not qs_sta:
-            data_sta = {}
-        else:
-            data_sta = serialize("json", qs_sta)
-            data_sta = json.loads(data_sta)
-            for item in data_sta:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            data_sta = json.dumps(data_sta[0]["fields"])
-            data_sta = json.loads(data_sta)
-        
-        qs_set = treat_panel.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
-        if not qs_set:
-            data_set = {}
-        else:
-            data_set = serialize("json", qs_set)
-            data_set = json.loads(data_set)
-            for item in data_set:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-
-            data_set = json.dumps(data_set[0]["fields"])
-            data_set = json.loads(data_set)
-
-        last_error=Errors.objects.filter(service='panel')
-        if not last_error:
-            last_error={}
-        else:
-            last_error = serialize("json", last_error)
-            last_error = json.loads(last_error)
-            for item in last_error:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            
-            last_error = json.dumps(last_error[0]["fields"])
-            last_error = json.loads(last_error)
-
-        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
-        response_data = {
-            #new code
-        'data': data_final,  # Include the 'data' field
-        'status': 200,  # Add the status field
-        'message': "Data get successful", # Add the message field
-        
-        }
-        response_data=[response_data]
-        return JsonResponse(response_data, safe=False, content_type="application/json")    
-
-class updated_disp_atmViewset(viewsets.ModelViewSet):
-	# define queryset
-    def dispatch(self, request, *args, **kwargs):
-        fields_to_exclude = ['model', 'pk']
-        data = json.loads(request.body)
-        dinfo = device_info.objects.filter(**data)
-        did=dinfo[0].Device_id
-        qs_sta = disp_atm.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
-        last_error=Errors.objects.filter(service='atm')
-        if not qs_sta:
-            data_sta = {}
-        else:
-            data_sta = serialize("json", qs_sta)
-            data_sta = json.loads(data_sta)
-            for item in data_sta:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            data_sta = json.dumps(data_sta[0]["fields"])
-            data_sta = json.loads(data_sta)
-        
-        qs_set = disp_atm.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
-        if not qs_set:
-            data_set = {}
-        else:
-            data_set = serialize("json", qs_set)
-            data_set = json.loads(data_set)
-            for item in data_set:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-
-            data_set = json.dumps(data_set[0]["fields"])
-            data_set = json.loads(data_set)
-
-        last_error=Errors.objects.filter(service='atm')
-        if not last_error:
-            last_error={}
-        else:
-            last_error = serialize("json", last_error)
-            last_error = json.loads(last_error)
-            for item in last_error:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            
-            last_error = json.dumps(last_error[0]["fields"])
-            last_error = json.loads(last_error)
-
-        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
-        response_data = {
-            #new code
-        'data': data_final,  # Include the 'data' field
-        'status': 200,  # Add the status field
-        'message': "Data get successful", # Add the message field
-        
-        }
-        response_data=[response_data]
-        return JsonResponse(response_data, safe=False, content_type="application/json")    
-      
-class getDeviceID(viewsets.ModelViewSet):
-	# define queryset
-    def dispatch(self, request, *args, **kwargs):
-        try:
-            did = 0
-            data_dict = json.loads(request.body)
-            value_list = list(data_dict.values())
-            dinfo = device_info.objects.filter(componant_name=value_list[2], unit_type=value_list[1], company_name=value_list[0])
-            # print("value_list",dinfo)
-            # data = serialize("json", dinfo, fields=('Device_id'))
-            # return HttpResponse(data, content_type="application/json")
-
-            fields_to_exclude = ['model', 'pk']
-                
-            data = serialize("json", dinfo)
-            data = json.loads(data)
-            
-            for item in data:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            
-            
-            if not data:
-                response_data = {
-                    'data': [],  # Include the 'data' field
-                    'status': 200,  # Add the status field
-                    'message': "Data not found"  # Add the message field
-                }
-            else:     
-                data = json.dumps(data[0]["fields"])
-                data = json.loads(data)
-                data = [data]
-                response_data = {
-                    'data': data[0],  # Include the 'data' field
-                    'status': 200,  # Add the status field
-                    'message': "Data get successfully"  # Add the message field
-                }
-            response_data=[response_data]
-        except Exception as e:
-                    response_data = {
-                        'data':e,  # Include the 'data' field
-                        'status': 200,  # Add the status field
-                        'message': "Exception found"  # Add the message field
-                    }
-        
-        return JsonResponse(response_data, safe=False, content_type="application/json")
-
-
-class updated_disp_tap1Viewset(viewsets.ModelViewSet):
-	# define queryset
-    def dispatch(self, request, *args, **kwargs):
-        fields_to_exclude = ['model', 'pk']
-        data = json.loads(request.body)
-        dinfo = device_info.objects.filter(**data)
-        did=dinfo[0].Device_id
-        qs_sta = disp_tap1.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
-        if not qs_sta:
-            data_sta = {}
-        else:
-            data_sta = serialize("json", qs_sta)
-            data_sta = json.loads(data_sta)
-            for item in data_sta:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            data_sta = json.dumps(data_sta[0]["fields"])
-            data_sta = json.loads(data_sta)
-        
-        qs_set = disp_tap1.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
-        if not qs_set:
-            data_set = {}
-        else:
-            data_set = serialize("json", qs_set)
-            data_set = json.loads(data_set)
-            for item in data_set:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-
-            data_set = json.dumps(data_set[0]["fields"])
-            data_set = json.loads(data_set)
-
-        last_error=Errors.objects.filter(service='tap1')
-        if not last_error:
-            last_error={}
-        else:
-            last_error = serialize("json", last_error)
-            last_error = json.loads(last_error)
-            for item in last_error:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            
-            last_error = json.dumps(last_error[0]["fields"])
-            last_error = json.loads(last_error)
-
-        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
-        response_data = {
-            #new code
-        'data': data_final,  # Include the 'data' field
-        'status': 200,  # Add the status field
-        'message': "Data get successful", # Add the message field
-        
-        }
-        response_data=[response_data]
-        return JsonResponse(response_data, safe=False, content_type="application/json")    
-    
-class updated_disp_tap2Viewset(viewsets.ModelViewSet):
-	# define queryset
-    def dispatch(self, request, *args, **kwargs):
-        fields_to_exclude = ['model', 'pk']
-        data = json.loads(request.body)
-        dinfo = device_info.objects.filter(**data)
-        did=dinfo[0].Device_id
-        qs_sta = disp_tap2.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
-        if not qs_sta:
-            data_sta = {}
-        else:
-            data_sta = serialize("json", qs_sta)
-            data_sta = json.loads(data_sta)
-            for item in data_sta:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            data_sta = json.dumps(data_sta[0]["fields"])
-            data_sta = json.loads(data_sta)
-        
-        qs_set = disp_tap2.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
-        if not qs_set:
-            data_set = {}
-        else:
-            data_set = serialize("json", qs_set)
-            data_set = json.loads(data_set)
-            for item in data_set:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-
-            data_set = json.dumps(data_set[0]["fields"])
-            data_set = json.loads(data_set)
-
-        last_error=Errors.objects.filter(service='tap2')
-        if not last_error:
-            last_error={}
-        else:
-            last_error = serialize("json", last_error)
-            last_error = json.loads(last_error)
-            for item in last_error:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            
-            last_error = json.dumps(last_error[0]["fields"])
-            last_error = json.loads(last_error)
-
-        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
-        response_data = {
-            #new code
-        'data': data_final,  # Include the 'data' field
-        'status': 200,  # Add the status field
-        'message': "Data get successful", # Add the message field
-        
-        }
-        response_data=[response_data]
-        return JsonResponse(response_data, safe=False, content_type="application/json")    
-           
-class updated_disp_tap3Viewset(viewsets.ModelViewSet):
-	# define queryset
-    def dispatch(self, request, *args, **kwargs):
-        fields_to_exclude = ['model', 'pk']
-        data = json.loads(request.body)
-        dinfo = device_info.objects.filter(**data)
-        did=dinfo[0].Device_id
-        qs_sta = disp_tap3.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
-        if not qs_sta:
-            data_sta = {}
-        else:
-            data_sta = serialize("json", qs_sta)
-            data_sta = json.loads(data_sta)
-            for item in data_sta:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            data_sta = json.dumps(data_sta[0]["fields"])
-            data_sta = json.loads(data_sta)
-        
-        qs_set = disp_tap3.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
-        if not qs_set:
-            data_set = {}
-        else:
-            data_set = serialize("json", qs_set)
-            data_set = json.loads(data_set)
-            for item in data_set:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-
-            data_set = json.dumps(data_set[0]["fields"])
-            data_set = json.loads(data_set)
-
-        last_error=Errors.objects.filter(service='tap3')
-        if not last_error:
-            last_error={}
-        else:
-            last_error = serialize("json", last_error)
-            last_error = json.loads(last_error)
-            for item in last_error:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            
-            last_error = json.dumps(last_error[0]["fields"])
-            last_error = json.loads(last_error)
-
-        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
-        response_data = {
-            #new code
-        'data': data_final,  # Include the 'data' field
-        'status': 200,  # Add the status field
-        'message': "Data get successful", # Add the message field
-        
-        }
-        response_data=[response_data]
-        return JsonResponse(response_data, safe=False, content_type="application/json")    
-       
-class updated_disp_tap4Viewset(viewsets.ModelViewSet):
-	# define queryset
-    def dispatch(self, request, *args, **kwargs):
-        fields_to_exclude = ['model', 'pk']
-        data = json.loads(request.body)
-        dinfo = device_info.objects.filter(**data)
-        did=dinfo[0].Device_id
-        qs_sta = disp_tap4.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
-        if not qs_sta:
-            data_sta = {}
-        else:
-            data_sta = serialize("json", qs_sta)
-            data_sta = json.loads(data_sta)
-            for item in data_sta:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            data_sta = json.dumps(data_sta[0]["fields"])
-            data_sta = json.loads(data_sta)
-        
-        qs_set = disp_tap4.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
-        if not qs_set:
-            data_set = {}
-        else:
-            data_set = serialize("json", qs_set)
-            data_set = json.loads(data_set)
-            for item in data_set:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-
-            data_set = json.dumps(data_set[0]["fields"])
-            data_set = json.loads(data_set)
-
-        last_error=Errors.objects.filter(service='tap4')
-        if not last_error:
-            last_error={}
-        else:
-            last_error = serialize("json", last_error)
-            last_error = json.loads(last_error)
-            for item in last_error:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            
-            last_error = json.dumps(last_error[0]["fields"])
-            last_error = json.loads(last_error)
-
-        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
-        response_data = {
-            #new code
-        'data': data_final,  # Include the 'data' field
-        'status': 200,  # Add the status field
-        'message': "Data get successful", # Add the message field
-        
-        }
-        response_data=[response_data]
-        return JsonResponse(response_data, safe=False, content_type="application/json")    
-       
-class updated_disp_cnd_consenViewset(viewsets.ModelViewSet):
-	# define queryset
-    def dispatch(self, request, *args, **kwargs):
-        fields_to_exclude = ['model', 'pk']
-        data = json.loads(request.body)
-        dinfo = device_info.objects.filter(**data)
-        did=dinfo[0].Device_id
-        qs_sta = disp_cnd_consen.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
-        if not qs_sta:
-            data_sta = {}
-        else:
-            data_sta = serialize("json", qs_sta)
-            data_sta = json.loads(data_sta)
-            for item in data_sta:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            data_sta = json.dumps(data_sta[0]["fields"])
-            data_sta = json.loads(data_sta)
-        
-        qs_set = disp_cnd_consen.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
-        if not qs_set:
-            data_set = {}
-        else:
-            data_set = serialize("json", qs_set)
-            data_set = json.loads(data_set)
-            for item in data_set:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-
-            data_set = json.dumps(data_set[0]["fields"])
-            data_set = json.loads(data_set)
-
-        last_error=Errors.objects.filter(service='cnd_consen')
-        if not last_error:
-            last_error={}
-        else:
-            last_error = serialize("json", last_error)
-            last_error = json.loads(last_error)
-            for item in last_error:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            
-            last_error = json.dumps(last_error[0]["fields"])
-            last_error = json.loads(last_error)
-
-        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
-        response_data = {
-            #new code
-        'data': data_final,  # Include the 'data' field
-        'status': 200,  # Add the status field
-        'message': "Data get successful", # Add the message field
-        
-        }
-        response_data=[response_data]
-        return JsonResponse(response_data, safe=False, content_type="application/json")    
-    
-class updated_disp_tds_consenViewset(viewsets.ModelViewSet):
-    # define queryset
-    def dispatch(self, request, *args, **kwargs):
-        fields_to_exclude = ['model', 'pk']
-        data = json.loads(request.body)
-        dinfo = device_info.objects.filter(**data)
-        did=dinfo[0].Device_id
-        qs_sta = disp_tds_consen.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
-        if not qs_sta:
-            data_sta = {}
-        else:
-            data_sta = serialize("json", qs_sta)
-            data_sta = json.loads(data_sta)
-            for item in data_sta:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            data_sta = json.dumps(data_sta[0]["fields"])
-            data_sta = json.loads(data_sta)
-        
-        qs_set = disp_tds_consen.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
-        if not qs_set:
-            data_set = {}
-        else:
-            data_set = serialize("json", qs_set)
-            data_set = json.loads(data_set)
-            for item in data_set:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-
-            data_set = json.dumps(data_set[0]["fields"])
-            data_set = json.loads(data_set)
-
-        last_error=Errors.objects.filter(service='tds_consen')
-        if not last_error:
-            last_error={}
-        else:
-            last_error = serialize("json", last_error)
-            last_error = json.loads(last_error)
-            for item in last_error:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            
-            last_error = json.dumps(last_error[0]["fields"])
-            last_error = json.loads(last_error)
-
-        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
-        response_data = {
-            #new code
-        'data': data_final,  # Include the 'data' field
-        'status': 200,  # Add the status field
-        'message': "Data get successful", # Add the message field
-        
-        }
-        response_data=[response_data]
-        return JsonResponse(response_data, safe=False, content_type="application/json")    
-      
-class updated_treat_F_flowsenViewset(viewsets.ModelViewSet):
-	# define queryset
-    def dispatch(self, request, *args, **kwargs):
-        fields_to_exclude = ['model', 'pk']
-        data = json.loads(request.body)
-        dinfo = device_info.objects.filter(**data)
-        did=dinfo[0].Device_id
-        qs_sta = treat_F_flowsen.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
-        if not qs_sta:
-            data_sta = {}
-        else:
-            data_sta = serialize("json", qs_sta)
-            data_sta = json.loads(data_sta)
-            for item in data_sta:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            data_sta = json.dumps(data_sta[0]["fields"])
-            data_sta = json.loads(data_sta)
-        
-        qs_set = treat_F_flowsen.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
-        if not qs_set:
-            data_set = {}
-        else:
-            data_set = serialize("json", qs_set)
-            data_set = json.loads(data_set)
-            for item in data_set:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-
-            data_set = json.dumps(data_set[0]["fields"])
-            data_set = json.loads(data_set)
-
-        last_error=Errors.objects.filter(service='F_flowsen')
-        if not last_error:
-            last_error={}
-        else:
-            last_error = serialize("json", last_error)
-            last_error = json.loads(last_error)
-            for item in last_error:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            
-            last_error = json.dumps(last_error[0]["fields"])
-            last_error = json.loads(last_error)
-
-        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
-        response_data = {
-            #new code
-        'data': data_final,  # Include the 'data' field
-        'status': 200,  # Add the status field
-        'message': "Data get successful", # Add the message field
-        
-        }
-        response_data=[response_data]
-        return JsonResponse(response_data, safe=False, content_type="application/json")    
-        
-class getDeviceID(viewsets.ModelViewSet):
-	# define queryset
-    def dispatch(self, request, *args, **kwargs):
-        try:
-            did = 0
-            data_dict = json.loads(request.body)
-            value_list = list(data_dict.values())
-            dinfo = device_info.objects.filter(componant_name=value_list[2], unit_type=value_list[1], company_name=value_list[0])
-            fields_to_exclude = ['model', 'pk']
-                
-            data = serialize("json", dinfo)
-            data = json.loads(data)
-            
-            for item in data:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            
-            
-            if not data:
-                response_data = {
-                    'data': [],  # Include the 'data' field
-                    'status': 200,  # Add the status field
-                    'message': "Data not found"  # Add the message field
-                }
-            else:     
-                data = json.dumps(data[0]["fields"])
-                data = json.loads(data)
-                data = [data]
-                response_data = {
-                    'data': data[0],  # Include the 'data' field
-                    'status': 200,  # Add the status field
-                    'message': "Data get successfully"  # Add the message field
-                }
-            response_data=[response_data]
-        except Exception as e:
-                    response_data = {
-                        'data':e,  # Include the 'data' field
-                        'status': 200,  # Add the status field
-                        'message': "Exception found"  # Add the message field
-                    }
-        
-        return JsonResponse(response_data, safe=False, content_type="application/json")
-
-class updated_treat_P_flowsenViewset(viewsets.ModelViewSet):
-	# define queryset
-    def dispatch(self, request, *args, **kwargs):
-        fields_to_exclude = ['model', 'pk']
-        data = json.loads(request.body)
-        dinfo = device_info.objects.filter(**data)
-        did=dinfo[0].Device_id
-        qs_sta = treat_P_flowsen.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
-        if not qs_sta:
-            data_sta = {}
-        else:
-            data_sta = serialize("json", qs_sta)
-            data_sta = json.loads(data_sta)
-            for item in data_sta:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            data_sta = json.dumps(data_sta[0]["fields"])
-            data_sta = json.loads(data_sta)
-        
-        qs_set = treat_P_flowsen.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
-        if not qs_set:
-            data_set = {}
-        else:
-            data_set = serialize("json", qs_set)
-            data_set = json.loads(data_set)
-            for item in data_set:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-
-            data_set = json.dumps(data_set[0]["fields"])
-            data_set = json.loads(data_set)
-
-        last_error=Errors.objects.filter(service='P_flowsen')
-        if not last_error:
-            last_error={}
-        else:
-            last_error = serialize("json", last_error)
-            last_error = json.loads(last_error)
-            for item in last_error:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            
-            last_error = json.dumps(last_error[0]["fields"])
-            last_error = json.loads(last_error)
-
-        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
-        response_data = {
-            #new code
-        'data': data_final,  # Include the 'data' field
-        'status': 200,  # Add the status field
-        'message': "Data get successful", # Add the message field
-        
-        }
-        response_data=[response_data]
-        return JsonResponse(response_data, safe=False, content_type="application/json")    
-       
-class updated_disp_flowsen1Viewset(viewsets.ModelViewSet):
-	# define queryset
-    def dispatch(self, request, *args, **kwargs):
-        fields_to_exclude = ['model', 'pk']
-        data = json.loads(request.body)
-        dinfo = device_info.objects.filter(**data)
-        did=dinfo[0].Device_id
-        qs_sta = disp_flowsen1.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
-        if not qs_sta:
-            data_sta = {}
-        else:
-            data_sta = serialize("json", qs_sta)
-            data_sta = json.loads(data_sta)
-            for item in data_sta:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            data_sta = json.dumps(data_sta[0]["fields"])
-            data_sta = json.loads(data_sta)
-        
-        qs_set = disp_flowsen1.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
-        if not qs_set:
-            data_set = {}
-        else:
-            data_set = serialize("json", qs_set)
-            data_set = json.loads(data_set)
-            for item in data_set:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-
-            data_set = json.dumps(data_set[0]["fields"])
-            data_set = json.loads(data_set)
-
-        last_error=Errors.objects.filter(service='flowsen1')
-        if not last_error:
-            last_error={}
-        else:
-            last_error = serialize("json", last_error)
-            last_error = json.loads(last_error)
-            for item in last_error:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            
-            last_error = json.dumps(last_error[0]["fields"])
-            last_error = json.loads(last_error)
-
-        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
-        response_data = {
-            #new code
-        'data': data_final,  # Include the 'data' field
-        'status': 200,  # Add the status field
-        'message': "Data get successful", # Add the message field 
-        }
-        response_data=[response_data]
-        return JsonResponse(response_data, safe=False, content_type="application/json")    
-    
-class updated_disp_flowsen2Viewset(viewsets.ModelViewSet):
-	# define queryset
-    def dispatch(self, request, *args, **kwargs):
-        fields_to_exclude = ['model', 'pk']
-        data = json.loads(request.body)
-        dinfo = device_info.objects.filter(**data)
-        did=dinfo[0].Device_id
-        qs_sta = disp_flowsen2.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
-        if not qs_sta:
-            data_sta = {}
-        else:
-            data_sta = serialize("json", qs_sta)
-            data_sta = json.loads(data_sta)
-            for item in data_sta:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            data_sta = json.dumps(data_sta[0]["fields"])
-            data_sta = json.loads(data_sta)
-        
-        qs_set = disp_flowsen2.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
-        if not qs_set:
-            data_set = {}
-        else:
-            data_set = serialize("json", qs_set)
-            data_set = json.loads(data_set)
-            for item in data_set:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-
-            data_set = json.dumps(data_set[0]["fields"])
-            data_set = json.loads(data_set)
-
-        last_error=Errors.objects.filter(service='flowsen2')
-        if not last_error:
-            last_error={}
-        else:
-            last_error = serialize("json", last_error)
-            last_error = json.loads(last_error)
-            for item in last_error:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            
-            last_error = json.dumps(last_error[0]["fields"])
-            last_error = json.loads(last_error)
-
-        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
-        response_data = {
-            #new code
-        'data': data_final,  # Include the 'data' field
-        'status': 200,  # Add the status field
-        'message': "Data get successful", # Add the message field
-        
-        }
-        response_data=[response_data]
-        return JsonResponse(response_data, safe=False, content_type="application/json")    
-     
-class updated_disp_flowsen3Viewset(viewsets.ModelViewSet):
-	# define queryset
-    def dispatch(self, request, *args, **kwargs):
-        fields_to_exclude = ['model', 'pk']
-        data = json.loads(request.body)
-        dinfo = device_info.objects.filter(**data)
-        did=dinfo[0].Device_id
-        qs_sta = disp_flowsen3.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
-        if not qs_sta:
-            data_sta = {}
-        else:
-            data_sta = serialize("json", qs_sta)
-            data_sta = json.loads(data_sta)
-            for item in data_sta:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            data_sta = json.dumps(data_sta[0]["fields"])
-            data_sta = json.loads(data_sta)
-        
-        qs_set = disp_flowsen3.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
-        if not qs_set:
-            data_set = {}
-        else:
-            data_set = serialize("json", qs_set)
-            data_set = json.loads(data_set)
-            for item in data_set:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-
-            data_set = json.dumps(data_set[0]["fields"])
-            data_set = json.loads(data_set)
-
-        last_error=Errors.objects.filter(service='flowsen3')
-        if not last_error:
-            last_error={}
-        else:
-            last_error = serialize("json", last_error)
-            last_error = json.loads(last_error)
-            for item in last_error:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            
-            last_error = json.dumps(last_error[0]["fields"])
-            last_error = json.loads(last_error)
-
-        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
-        response_data = {
-            #new code
-        'data': data_final,  # Include the 'data' field
-        'status': 200,  # Add the status field
-        'message': "Data get successful", # Add the message field
-        
-        }
-        response_data=[response_data]
-        return JsonResponse(response_data, safe=False, content_type="application/json")    
-     
-class updated_disp_flowsen4Viewset(viewsets.ModelViewSet):
-	# define queryset
-    def dispatch(self, request, *args, **kwargs):
-        fields_to_exclude = ['model', 'pk']
-        data = json.loads(request.body)
-        dinfo = device_info.objects.filter(**data)
-        did=dinfo[0].Device_id
-        qs_sta = disp_flowsen4.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
-        if not qs_sta:
-            data_sta = {}
-        else:
-            data_sta = serialize("json", qs_sta)
-            data_sta = json.loads(data_sta)
-            for item in data_sta:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            data_sta = json.dumps(data_sta[0]["fields"])
-            data_sta = json.loads(data_sta)
-        
-        qs_set = disp_flowsen4.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
-        if not qs_set:
-            data_set = {}
-        else:
-            data_set = serialize("json", qs_set)
-            data_set = json.loads(data_set)
-            for item in data_set:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-
-            data_set = json.dumps(data_set[0]["fields"])
-            data_set = json.loads(data_set)
-
-        last_error=Errors.objects.filter(service='flowsen4')
-        if not last_error:
-            last_error={}
-        else:
-            last_error = serialize("json", last_error)
-            last_error = json.loads(last_error)
-            for item in last_error:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-            
-            last_error = json.dumps(last_error[0]["fields"])
-            last_error = json.loads(last_error)
-
-        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
-        response_data = {
-            #new code
-        'data': data_final,  # Include the 'data' field
-        'status': 200,  # Add the status field
-        'message': "Data get successful", # Add the message field
-        
-        }
-        response_data=[response_data]
-        return JsonResponse(response_data, safe=False, content_type="application/json")    
-      
-class cnd_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = cnd_repo_yearly.objects.all()
-	# specify serializer to be used
-	serializer_class = cnd_YearlySerializer       
-class cnd_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = cnd_repo_hourly.objects.all()
-	# specify serializer to be used
-	serializer_class = cnd_HourlySerializer       
-class cnd_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = cnd_repo_monthly.objects.all()
-	# specify serializer to be used
-	serializer_class = cnd_MonthlySerializer        
-class cnd_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = cnd_repo_daily.objects.all()
-	# specify serializer to be used
-	serializer_class = cnd_DailySerializer
-class tds_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = tds_repo_yearly.objects.all()
-	# specify serializer to be used
-	serializer_class = tds_YearlySerializer       
-class tds_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = tds_repo_hourly.objects.all()
-	# specify serializer to be used
-	serializer_class = tds_HourlySerializer        
-class tds_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = tds_repo_monthly.objects.all()
-	# specify serializer to be used
-	serializer_class = tds_MonthlySerializer        
-class tds_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = tds_repo_daily.objects.all()
-	# specify serializer to be used
-	serializer_class = tds_DailySerializer
-class rwp_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = rwp_repo_yearly.objects.all()
-	# specify serializer to be used
-	serializer_class = rwp_YearlySerializer        
-class rwp_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = rwp_repo_hourly.objects.all()
-	# specify serializer to be used
-	serializer_class = rwp_HourlySerializer        
-class rwp_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = rwp_repo_monthly.objects.all()
-	# specify serializer to be used
-	serializer_class = rwp_MonthlySerializer        
-class rwp_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = rwp_repo_daily.objects.all()
-	# specify serializer to be used
-	serializer_class = rwp_DailySerializer
-class hpp_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = hpp_repo_yearly.objects.all()
-	# specify serializer to be used
-	serializer_class = hpp_YearlySerializer       
-class hpp_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = hpp_repo_hourly.objects.all()
-	# specify serializer to be used
-	serializer_class = hpp_HourlySerializer        
-class hpp_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = hpp_repo_monthly.objects.all()
-	# specify serializer to be used
-	serializer_class = hpp_MonthlySerializer       
-class hpp_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = hpp_repo_daily.objects.all()
-	# specify serializer to be used
-	serializer_class = hpp_DailySerializer
-class panel_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = hpp_repo_yearly.objects.all()
-	# specify serializer to be used
-	serializer_class = hpp_YearlySerializer        
-class panel_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = panel_repo_hourly.objects.all()
-	# specify serializer to be used
-	serializer_class = panel_HourlySerializer        
-class panel_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = panel_repo_monthly.objects.all()
-	# specify serializer to be used
-	serializer_class = panel_MonthlySerializer       
-class panel_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = panel_repo_daily.objects.all()
-	# specify serializer to be used
-	serializer_class = panel_DailySerializer
-class F_flowsen_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = F_flowsen_repo_yearly.objects.all()
-	# specify serializer to be used
-	serializer_class = F_flowsen_YearlySerializer
-class P_flowsen_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = P_flowsen_repo_yearly.objects.all()
-	# specify serializer to be used
-	serializer_class = P_flowsen_YearlySerializer       
-class F_flowsen_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = F_flowsen_repo_hourly.objects.all()
-	# specify serializer to be used
-	serializer_class = F_flowsen_HourlySerializer       
-class P_flowsen_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = P_flowsen_repo_hourly.objects.all()
-	# specify serializer to be used
-	serializer_class = P_flowsen_HourlySerializer       
-class F_flowsen_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = F_flowsen_repo_monthly.objects.all()
-	# specify serializer to be used
-	serializer_class = F_flowsen_MonthlySerializer        
-class P_flowsen_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = P_flowsen_repo_monthly.objects.all()
-	# specify serializer to be used
-	serializer_class = P_flowsen_MonthlySerializer        
-class F_flowsen_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = F_flowsen_repo_daily.objects.all()
-	# specify serializer to be used
-	serializer_class = F_flowsen_DailySerializer              
-class P_flowsen_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = P_flowsen_repo_daily.objects.all()
-	# specify serializer to be used
-	serializer_class = P_flowsen_DailySerializer       
-class ampv1_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = ampv1_repo_yearly.objects.all()
-	# specify serializer to be used
-	serializer_class = ampv1_YearlySerializer        
-class ampv1_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = ampv1_repo_hourly.objects.all()
-	# specify serializer to be used
-	serializer_class = ampv1_HourlySerializer        
-class ampv1_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = ampv1_repo_monthly.objects.all()
-	# specify serializer to be used
-	serializer_class = ampv1_MonthlySerializer        
-class ampv1_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = ampv1_repo_daily.objects.all()
-	# specify serializer to be used
-	serializer_class = ampv1_DailySerializer               
-class ampv2_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = ampv2_repo_yearly.objects.all()
-	# specify serializer to be used
-	serializer_class = ampv2_YearlySerializer        
-class ampv2_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = ampv2_repo_hourly.objects.all()
-	# specify serializer to be used
-	serializer_class = ampv2_HourlySerializer       
-class ampv2_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = ampv2_repo_monthly.objects.all()
-	# specify serializer to be used
-	serializer_class = ampv2_MonthlySerializer       
-class ampv2_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = ampv2_repo_daily.objects.all()
-	# specify serializer to be used
-	serializer_class = ampv2_DailySerializer             
-class ampv3_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = ampv3_repo_yearly.objects.all()
-	# specify serializer to be used
-	serializer_class = ampv3_YearlySerializer
-                       
-class ampv3_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = ampv3_repo_hourly.objects.all()
-	# specify serializer to be used
-	serializer_class = ampv3_HourlySerializer
-        
-class ampv3_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = ampv3_repo_monthly.objects.all()
-	# specify serializer to be used
-	serializer_class = ampv3_MonthlySerializer
-        
-class ampv3_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = ampv3_repo_daily.objects.all()
-	# specify serializer to be used
-	serializer_class = ampv3_DailySerializer       
-        
-class ampv4_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = ampv4_repo_yearly.objects.all()
-	# specify serializer to be used
-	serializer_class = ampv4_YearlySerializer
-                        
-class ampv4_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = ampv4_repo_hourly.objects.all()
-	# specify serializer to be used
-	serializer_class = ampv4_HourlySerializer
-        
-class ampv4_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = ampv4_repo_monthly.objects.all()
-	# specify serializer to be used
-	serializer_class = ampv4_MonthlySerializer
-        
-class ampv4_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = ampv4_repo_daily.objects.all()
-	# specify serializer to be used
-	serializer_class = ampv4_DailySerializer       
-        
-class ampv5_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = ampv5_repo_yearly.objects.all()
-	# specify serializer to be used
-	serializer_class = ampv5_YearlySerializer
-                       
-class ampv5_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = ampv5_repo_hourly.objects.all()
-	# specify serializer to be used
-	serializer_class = ampv5_HourlySerializer
-        
-class ampv5_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = ampv5_repo_monthly.objects.all()
-	# specify serializer to be used
-	serializer_class = ampv5_MonthlySerializer
-        
-class ampv5_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = ampv5_repo_daily.objects.all()
-	# specify serializer to be used
-	serializer_class = ampv5_DailySerializer       
-class tap1_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = tap1_repo_yearly.objects.all()
-	# specify serializer to be used
-	serializer_class = tap1_YearlySerializer
-                       
-class tap1_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = tap1_repo_hourly.objects.all()
-	# specify serializer to be used
-	serializer_class = tap1_HourlySerializer
-        
-class tap1_MonthlyViewset(viewsets.ModelViewSet):
-    # define queryset
-    queryset = tap1_repo_monthly.objects.all()
-    # specify serializer to be used
-    serializer_class = tap1_MonthlySerializer
-    authentication_classes = [JWTAuthentication]
-class MyTokenObtainPairView(TokenObtainPairView):
-    pass
-
-class MyTokenRefreshView(TokenRefreshView):
-    pass
-        
-class tap1_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = tap1_repo_daily.objects.all()
-	# specify serializer to be used
-	serializer_class = tap1_DailySerializer       
-class tap2_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = tap2_repo_yearly.objects.all()
-	# specify serializer to be used
-	serializer_class = tap2_YearlySerializer
-                    
-class tap2_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = tap2_repo_hourly.objects.all()
-	# specify serializer to be used
-	serializer_class = tap2_HourlySerializer
-        
-class tap2_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = tap2_repo_monthly.objects.all()
-	# specify serializer to be used
-	serializer_class = tap2_MonthlySerializer
-        
-class tap2_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = tap2_repo_daily.objects.all()
-	# specify serializer to be used
-	serializer_class = tap2_DailySerializer       
-class tap3_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = tap3_repo_yearly.objects.all()
-	# specify serializer to be used
-	serializer_class = tap3_YearlySerializer
-                
-class tap3_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = tap3_repo_hourly.objects.all()
-	# specify serializer to be used
-	serializer_class = tap3_HourlySerializer
-        
-class tap3_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = tap3_repo_monthly.objects.all()
-	# specify serializer to be used
-	serializer_class = tap3_MonthlySerializer
-        
-class tap3_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = tap3_repo_daily.objects.all()
-	# specify serializer to be used
-	serializer_class = tap3_DailySerializer       
-class tap4_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = tap4_repo_yearly.objects.all()
-	# specify serializer to be used
-	serializer_class = tap4_YearlySerializer
-                        
-class tap4_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = tap4_repo_hourly.objects.all()
-	# specify serializer to be used
-	serializer_class = tap4_HourlySerializer
-        
-class tap4_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = tap4_repo_monthly.objects.all()
-	# specify serializer to be used
-	serializer_class = tap4_MonthlySerializer
-        
-class tap4_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = tap4_repo_daily.objects.all()
-	# specify serializer to be used
-	serializer_class = tap4_DailySerializer       
-        
-class cnd_consen_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = cnd_consen_repo_yearly.objects.all()
-	# specify serializer to be used
-	serializer_class = cnd_consen_YearlySerializer
-                        
-class tds_consen_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = tds_consen_repo_yearly.objects.all()
-	# specify serializer to be used
-	serializer_class = tds_consen_YearlySerializer
-                       
-class cnd_consen_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = cnd_consen_repo_hourly.objects.all()
-	# specify serializer to be used
-	serializer_class = cnd_consen_HourlySerializer
-class tds_consen_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = tds_consen_repo_hourly.objects.all()
-	# specify serializer to be used
-	serializer_class = tds_consen_HourlySerializer
-        
-class cnd_consen_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = cnd_consen_repo_monthly.objects.all()
-	# specify serializer to be used
-	serializer_class = cnd_consen_MonthlySerializer
-class tds_consen_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = tds_consen_repo_monthly.objects.all()
-	# specify serializer to be used
-	serializer_class = tds_consen_MonthlySerializer
-        
-class cnd_consen_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = cnd_consen_repo_daily.objects.all()
-	# specify serializer to be used
-	serializer_class = cnd_consen_DailySerializer
-class tds_consen_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = tds_consen_repo_daily.objects.all()
-	# specify serializer to be used
-	serializer_class = tds_consen_DailySerializer
-
-class atm_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = atm_repo_yearly.objects.all()
-	# specify serializer to be used
-	serializer_class = atm_YearlySerializer
-                       
-class atm_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = atm_repo_hourly.objects.all()
-	# specify serializer to be used
-	serializer_class = atm_HourlySerializer
-        
-class atm_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = atm_repo_monthly.objects.all()
-	# specify serializer to be used
-	serializer_class = atm_MonthlySerializer
-        
-class atm_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = atm_repo_daily.objects.all()
-	# specify serializer to be used
-	serializer_class = atm_DailySerializer
-class flowsen1_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = flowsen1_repo_yearly.objects.all()
-	# specify serializer to be used
-	serializer_class = flowsen1_YearlySerializer
-                       
-class flowsen1_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = flowsen1_repo_hourly.objects.all()
-	# specify serializer to be used
-	serializer_class = flowsen1_HourlySerializer
-        
-class flowsen1_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = flowsen1_repo_monthly.objects.all()
-	# specify serializer to be used
-	serializer_class = flowsen1_MonthlySerializer
-        
-class flowsen1_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = flowsen1_repo_daily.objects.all()
-	# specify serializer to be used
-	serializer_class = flowsen1_DailySerializer   
-
-class flowsen2_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = flowsen2_repo_yearly.objects.all()
-	# specify serializer to be used
-	serializer_class = flowsen2_YearlySerializer
-                        
-class flowsen2_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = flowsen2_repo_hourly.objects.all()
-	# specify serializer to be used
-	serializer_class = flowsen2_HourlySerializer
-        
-class flowsen2_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = flowsen2_repo_monthly.objects.all()
-	# specify serializer to be used
-	serializer_class = flowsen2_MonthlySerializer
-        
-class flowsen2_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = flowsen2_repo_daily.objects.all()
-	# specify serializer to be used
-	serializer_class = flowsen2_DailySerializer   
-
-class flowsen3_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = flowsen3_repo_yearly.objects.all()
-	# specify serializer to be used
-	serializer_class = flowsen3_YearlySerializer
-                       
-class flowsen3_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = flowsen3_repo_hourly.objects.all()
-	# specify serializer to be used
-	serializer_class = flowsen3_HourlySerializer
-        
-class flowsen3_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = flowsen3_repo_monthly.objects.all()
-	# specify serializer to be used
-	serializer_class = flowsen3_MonthlySerializer
-        
-class flowsen3_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = flowsen1_repo_daily.objects.all()
-	# specify serializer to be used
-	serializer_class = flowsen1_DailySerializer   
-
-class flowsen4_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = flowsen4_repo_yearly.objects.all()
-	# specify serializer to be used
-	serializer_class = flowsen4_YearlySerializer
-                       
-class flowsen4_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = flowsen4_repo_hourly.objects.all()
-	# specify serializer to be used
-	serializer_class = flowsen4_HourlySerializer
-        
-class flowsen4_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = flowsen4_repo_monthly.objects.all()
-	# specify serializer to be used
-	serializer_class = flowsen4_MonthlySerializer
-        
-class flowsen4_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = flowsen4_repo_daily.objects.all()
-	# specify serializer to be used
-	serializer_class = flowsen4_DailySerializer
-
-# # import mongoengine
-# # mongoengine.connect(db=waterinn, host=localhost:27017, username=username, password=pwc)
-class TopicViewSet(viewsets.ModelViewSet):
-	# define queryset
-	queryset = topics.objects.all()
-	# specify serializer to be used
-	serializer_class = TopicSerializer
-        
-        
-class DeviceViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = device_info.objects.all()
-	# specify serializer to be used
-	serializer_class = DeviceSerializer
-        
-class keyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = key_info.objects.all()
-	# specify serializer to be used
-	serializer_class = KeySerializer
-        
-        
-class GraphViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = graph_info.objects.all()
-	# specify serializer to be used
-	serializer_class = GraphSerializer
-class TopicViewSet(viewsets.ModelViewSet):
-	# define queryset
-	queryset = topics.objects.all()
-	# specify serializer to be used
-	serializer_class = TopicSerializer
-        
-class DeviceViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = device_info.objects.all()
-	# specify serializer to be used
-	serializer_class = DeviceSerializer
-        
-class keyViewset(viewsets.ModelViewSet):
-	# define queryset
-	queryset = key_info.objects.all()
-	# specify serializer to be used
-	serializer_class = KeySerializer
-        
-class RwpstateViewset(viewsets.ModelViewSet):
-        # define queryset
-        queryset = Rwp_state.objects.all()
-        # specify serializer to be used
-        serializer_class = RwpstateSerializer
-
-        deviceid=0
-        def dispatch(self, request, *args, **kwargs):
-            try:
-                data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
-                
-                value_list=list(data_dict.values())
-                print("datadict:",data_dict)
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
-                for x in dinfo:
-                    global deviceid
-                    did=x.Device_id
-                    deviceid=did
-                    cmpname=x.componant_name
-                    
-                for key in unwanted_keys:
-                    if key in data_dict:
-                        del data_dict[key]
-                print("datadict1:",data_dict)
-                for key in data_dict:
-                    data_dict[key] = str(data_dict[key])
-                mqttc.publish(f'wc1/{did}/chgsta/{cmpname}',str(data_dict).replace(' ',''))
-                print("***$$$@",str(data_dict).replace(' ',''))
-                dd=dateandtime()
-                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} rwp status change has been requested - status:{value_list[3]}"
-                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='rwp',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                erro.save()
-
-            except Exception as e:
-                pass  
-            return super().dispatch(request)    
-        def perform_create(self, serializer):
-            try:
-                serializer.save()  # Save the data to the database
-                ddid=Rwp_state.objects.filter(device_id='').update(device_id=deviceid)
-                ddid.save()
-            except Exception as e:
-                pass    
-        def desptroy(self, request):
-            try:
-                instance = self.get_object()
-                self.perform_destroy(instance)
-            except Http404:
-                pass
-
-did=0
-class rwpsettingViewset(viewsets.ModelViewSet):
-	# define queryset
-    print("hi ok ")
-    # queryset = rwp_setting.objects.all().order_by('-id')[:1]
-    queryset = rwp_setting.objects.all()
-	# specify serializer to be used
-    serializer_class = rwpsettingSerializer
-    def dispatch(self, request, *args, **kwargs):
-        
-        try:
-            data_dict = json.loads(request.body)
-            unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name"]  # Example of unwanted keys
-            print("dict data is:",data_dict)
-            value_list=list(data_dict.values())
-            print("value_list:",value_list)
-            dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
-            for x in dinfo:
-                print("did id:",x.Device_id)
-                did=x.Device_id
-                cmpname=x.componant_name
-                print("ddddid is",did)
-            for key in unwanted_keys:
-                if key in data_dict:
-                    del data_dict[key]
-            for key in data_dict:
-                    data_dict[key] = str(data_dict[key])
-            mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
-            
-            print("data send to hivemq")
-            dd=dateandtime()
-            e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} rwp settings change has been requested - over load current:{value_list[3]}, span:{value_list[4]}, dry run current:{value_list[5]}"
-            erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='rwp',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-            erro.save()
-            
-        except Exception as e:
-            print("Error",e)
-            dd=dateandtime()
-            e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} Hpp has a fault-{e}"
-            erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='hpp',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-            erro.save()
-        return super().dispatch(request)    
-    def perform_create(self, serializer):
-        try:
-            data_dict = serializer.validated_data
-            # unwanted_keys = ["unit_type", "water_treatment", "company_name", "componant_nam,"site_name"e"]
-            # Get the device information based on the provided values
-            dinfo = device_info.objects.filter(componant_name=data_dict['componant_name'],
-                                               unit_type=data_dict['unit_type'],
-                                              company_name=data_dict['company_name']).last()
-            deviceid=0
-            if dinfo:
-                did = dinfo.Device_id
-                deviceid=did
-                cmpname = dinfo.componant_name
-            serializer.save()  # Save the data to the database
-            ddid=rwp_setting.objects.filter(device_id='').update(device_id=deviceid)
-            ddid.save()
-            
-        except Exception as e:
-            print("Error:", e)
-    def desptroy(self, request):
-        try:
-            instance = self.get_object()
-            self.perform_destroy(instance)
-        except Http404:
-            pass
-class hppstateViewset(viewsets.ModelViewSet):
-	# define queryset
-        queryset = hpp_state.objects.all()
-
-        # specify serializer to be used
-        serializer_class = hppstateSerializer
-
-        deviceid=0
-        def dispatch(self, request, *args, **kwargs):
-            try:
-                data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
-                
-                value_list=list(data_dict.values())
-                
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
-                global deviceid
-                for x in dinfo:
-                    
-                    did=x.Device_id
-                    cmpname=x.componant_name
-                    deviceid=did
-                for key in unwanted_keys:
-                    if key in data_dict:
-                        del data_dict[key]
-                for key in data_dict:
-                    data_dict[key] = str(data_dict[key])
-                mqttc.publish(f'wc1/{did}/chgsta/{cmpname}',str(data_dict).replace(' ',''))
-                dd=dateandtime()
-                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} Hpp status change has been requested - status:{value_list[3]}"
-                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='hpp',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                erro.save()
-
-            except Exception as e:
-                dd=dateandtime()
-                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} Hpp has a fault-{e}"
-                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='hpp',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                erro.save()   
-            return super().dispatch(request)    
-        def perform_create(self, serializer):
-            try:
-
-                serializer.save()  # Save the data to the database
-                ddid=hpp_state.objects.filter(device_id='').update(device_id=deviceid)
-                ddid.save()
-            except Exception as e:
-                pass     
-        def desptroy(self, request):
-            try:
-                instance = self.get_object()
-                self.perform_destroy(instance)
-            except Http404:
-                pass   
-class hppsettingViewset(viewsets.ModelViewSet):
-        # define queryset
-        queryset = hpp_setting.objects.all()
-        # specify serializer to be used
-        serializer_class = hppsettingSerializer
-
-        deviceid=0
-        def dispatch(self, request, *args, **kwargs):
-            
-            try:
-                data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
-                
-                value_list=list(data_dict.values())
-                
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
-                global deviceid
-                for x in dinfo:
-                    did=x.Device_id
-                    cmpname=x.componant_name
-                    deviceid=did
-                for key in unwanted_keys:
-                    if key in data_dict:
-                        del data_dict[key]
-                for key in data_dict:
-                    data_dict[key] = str(data_dict[key])
-                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
-                dd=dateandtime()
-                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} Hpp settings change has been requested - over load current:{value_list[3]}, span:{value_list[4]}, dry run current:{value_list[5]}"
-                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='hpp',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                erro.save()
-
-            except Exception as e:
-                pass    
-            return super().dispatch(request)    
-        def perform_create(self, serializer):
-            try:
-                serializer.save()  # Save the data to the database
-                ddid=hpp_setting.objects.filter(device_id='').update(device_id=deviceid)
-                ddid.save()
-                
-            except Exception as e:
-                pass        
-        def desptroy(self, request):
-            try:
-                instance = self.get_object()
-                self.perform_destroy(instance)
-            except Http404:
-                pass
-class device_infoViewset(viewsets.ModelViewSet):
-        # define queryset
-        def dispatch(self, request, *args, **kwargs):
-            fields_to_exclude = ['model', 'pk']
-
-            data = json.loads(request.body)
-            print(data,type(data),"DATA11:")
-            u_id=data['user_id']
-            print("uid",u_id)
-            dinfo = device_info.objects.filter(company_name=data['company_name'])
-            print(dinfo,type(dinfo))
-            allsites=[]
-            for si in dinfo:
-                allsites.append(si.site_name)
-            allsiteset=set(allsites)
-            allsitelist=list(allsiteset)
-            sites=[]
-            raw_sql = "SELECT iwater_site.site_name FROM iwater_site INNER JOIN iwater_site_permissions ON iwater_site.id=iwater_site_permissions.site_id WHERE iwater_site_permissions.user_id=%s"
-
-            try:
-                # Execute the raw SQL query and fetch the results
-                with connection.cursor() as cursor:
-                    cursor.execute(raw_sql,[u_id])
-                    results = cursor.fetchall()
-                    print("Results",results)
-                # Print the results
-                for result in results:
-                    print("Site Name1:", result[0])
-                    sites.append(result[0])
-            except Exception as e:
-                print("***")
-            if data['user_role']== "super_admin" or data['user_role']== "administrator":
-
-                siteset=set(allsites)
-                siteset=list(siteset)
-            else:
-                siteset=set(sites)
-                siteset=list(siteset)
-            response_data = {
-                #new code
-            'data': siteset,  # Include the 'data' field
-            'status': 200,  # Add the status field
-            'message': "Data get successful", # Add the message field
-            
-            }
-            response_data=[response_data]
-            return JsonResponse(response_data, safe=False, content_type="application/json")           
-class cndsettingViewset(viewsets.ModelViewSet):
-	# define queryset
-        queryset = cnd_setting.objects.all()
-        serializer_class = cndsettingSerializer
-
-        deviceid =0
-        def dispatch(self, request, *args, **kwargs):
-            try:
-                data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
-                value_list=list(data_dict.values())
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
-                did = 0
-                cmpname = ''
-                global deviceid
-                for x in dinfo:
-                    did=x.Device_id
-                    deviceid=did
-                    cmpname=x.componant_name
-                for key in unwanted_keys:
-                    if key in data_dict:
-                        del data_dict[key]
-                for key in data_dict:
-                    data_dict[key] = str(data_dict[key])
-                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
-                dd=dateandtime()
-                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} cnd settings change has been requested - span:{value_list[3]}, trip_setpoint:{value_list[4]}, atert_setpoint:{value_list[5]}"
-                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='cnd',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                erro.save()
-            except Exception as e:
-                pass
-            return super().dispatch(request)    
-        def perform_create(self, serializer):
-            try:
-                serializer.save()  # Save the data to the database
-                ddid=cnd_setting.objects.filter(device_id='').update(device_id=deviceid)
-                ddid.save()
-            except Exception as e:
-                pass        
-        def desptroy(self, request):
-            try:
-                instance = self.get_object()
-                self.perform_destroy(instance)
-            except Http404:
-                pass
-        
-class tdssettingViewset(viewsets.ModelViewSet):
-        # define queryset
-        queryset = tds_setting.objects.all()
-
-        # specify serializer to be used
-        serializer_class = tdssettingSerializer
-
-        deviceid=0
-        def dispatch(self, request, *args, **kwargs):
-        
-            try:
-                data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
-                
-                value_list=list(data_dict.values())
-                print("valuelist is:",value_list)
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
-                global deviceid
-                for x in dinfo:
-                    
-                    did=x.Device_id
-                    cmpname=x.componant_name
-                    deviceid=did
-                for key in unwanted_keys:
-                    if key in data_dict:
-                        del data_dict[key]
-                for key in data_dict:
-                    data_dict[key] = str(data_dict[key])
-                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
-                print("data successfully send to hivemqtt")
-                print("did is:",did)
-                print("cname:",cmpname)
-                dd=dateandtime()
-                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tds settings change has been requested - span:{value_list[3]}, trip_setpoint:{value_list[4]}, atert_setpoint:{value_list[5]}"
-                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tds',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                erro.save()
-            except Exception as e:
-                pass    
-            return super().dispatch(request)    
-        def perform_create(self, serializer):
-            try:
-                serializer.save()  # Save the data to the database
-                ddid=tds_setting.objects.filter(device_id='').update(device_id=deviceid)
-                ddid.save()
-            except Exception as e:
-                pass        
-        def desptroy(self, request):
-            try:
-                instance = self.get_object()
-                self.perform_destroy(instance)
-            except Http404:
-                pass
-    
-class FflowsensettingViewset(viewsets.ModelViewSet):
-        # define queryset
-        queryset = F_flowsen_setting.objects.all()
-
-        # specify serializer to be used
-        serializer_class = FflowsensettingSerializer
-
-        deviceid=0
-        def dispatch(self, request, *args, **kwargs):
-        
-            try:
-                data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
-                
-                value_list=list(data_dict.values())
-                
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
-                global deviceid
-                for x in dinfo:
-                    
-                    did=x.Device_id
-                    cmpname=x.componant_name
-                    deviceid=did
-                for key in unwanted_keys:
-                    if key in data_dict:
-                        del data_dict[key]
-                for key in data_dict:
-                    data_dict[key] = str(data_dict[key])
-                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
-                dd=dateandtime()
-                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} Fflowsen settings change has been requested - flow factor:{value_list[3]}"
-                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='Fflowsen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                erro.save()
-
-            except Exception as e:
-                pass    
-            return super().dispatch(request)    
-        def perform_create(self, serializer):
-            try:
-                serializer.save()  # Save the data to the database
-                ddid=F_flowsen_setting.objects.filter(device_id='').update(device_id=deviceid)
-                ddid.save()
-            except Exception as e:
-                pass        
-        def desptroy(self, request):
-            try:
-                instance = self.get_object()
-                self.perform_destroy(instance)
-            except Http404:
-                pass
-        
-class PflowsensettingViewset(viewsets.ModelViewSet):
-	# define queryset
-        queryset = P_flowsen_setting.objects.all()
-
-        # specify serializer to be used
-        serializer_class =PflowsensettingSerializer
-
-        deviceid=0
-        def dispatch(self, request, *args, **kwargs):
-        
-            try:
-                data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
-                
-                value_list=list(data_dict.values())
-                
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
-                global deviceid
-                for x in dinfo:
-                    
-                    did=x.Device_id
-                    cmpname=x.componant_name
-                    deviceid=did
-                for key in unwanted_keys:
-                    if key in data_dict:
-                        del data_dict[key]
-                for key in data_dict:
-                    data_dict[key] = str(data_dict[key])
-                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
-                dd=dateandtime()
-                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} Pflowsen settings change has been requested - flow factor:{value_list[3]}"
-                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='Pflowsen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                erro.save()
-
-            except Exception as e:
-                pass    
-            return super().dispatch(request)    
-        def perform_create(self, serializer):
-            try:
-                serializer.save()  # Save the data to the database
-                ddid=P_flowsen_setting.objects.filter(device_id='').update(device_id=deviceid)
-                ddid.save()
-            except Exception as e:
-                pass        
-        def desptroy(self, request):
-            try:
-                instance = self.get_object()
-                self.perform_destroy(instance)
-            except Http404:
-                pass
-class panelsettingViewset(viewsets.ModelViewSet):
-	# define queryset
-        queryset = panel_setting.objects.all()
-
-        # specify serializer to be used
-        serializer_class = panelsettingSerializer
-
-        deviceid=0
-        def dispatch(self, request, *args, **kwargs):
-        
-            try:
-                data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
-                
-                value_list=list(data_dict.values())
-                
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
-                global deviceid
-                for x in dinfo:
-                    
-                    did=x.Device_id
-                    cmpname=x.componant_name
-                    deviceid=did
-                for key in unwanted_keys:
-                    if key in data_dict:
-                        del data_dict[key]
-                changesrt=data_dict['srt']
-                changesrt=changesrt.split(":")
-                hrtominit=int(changesrt[0])*60
-                data_dict['srt']=hrtominit+int(changesrt[1])
-                for key in data_dict:
-                    data_dict[key] = str(data_dict[key])
-                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
-                print("MMM:",data_dict)
-                dd=dateandtime()
-                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} panel settings change has been requested - mode:{value_list[3]}, under voltage:{value_list[6]}, over voltage:{value_list[7]}, span:{value_list[8]}, no.of multiport valve:{value_list[4]}, sensor type:{value_list[5]}, service time:{value_list[9]}, backwash time:{value_list[10]}, rinse time:{value_list[11]}"
-                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='panel',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                erro.save()    
-
-            except Exception as e:
-                pass    
-            return super().dispatch(request)    
-        def perform_create(self, serializer):
-            try:
-                serializer.save()  # Save the data to the database
-                ddid=panel_setting.objects.filter(device_id='').update(device_id=deviceid)
-                ddid.save()
-            except Exception as e:
-                pass        
-        def desptroy(self, request):
-            try:
-                instance = self.get_object()
-                self.perform_destroy(instance)
-            except Http404:
-                pass
-class atmsettingViewset(viewsets.ModelViewSet):
-	# define queryset
-        queryset = atm_setting.objects.all()
-
-        # specify serializer to be used
-        serializer_class = atmsettingSerializer
-
-        deviceid=0
-        def dispatch(self, request, *args, **kwargs):
-        
-            try:
-                data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id","ntt"]  # Example of unwanted keys
-                
-                value_list=list(data_dict.values())
-                
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
-                global deviceid
-                for x in dinfo:
-                    
-                    did=x.Device_id
-                    cmpname=x.componant_name
-                    deviceid=did
-                for key in unwanted_keys:
-                    if key in data_dict:
-                        del data_dict[key]
-                for key in data_dict:
-                    data_dict[key] = str(data_dict[key])
-                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
-                dd=dateandtime()
-                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} atm settings change has been requested - over no. Of  tap:{value_list[3]}, no. Of volume:{value_list[4]}, volume1:{value_list[5]}, volume2:{value_list[6]}, volume3:{value_list[7]}, volume4:{value_list[8]}, rate1:{value_list[9]}, rate2:{value_list[10]}, rate3:{value_list[11]}, rate4:{value_list[12]}"
-                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='atm',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                erro.save() 
-
-            except Exception as e:
-                pass    
-            return super().dispatch(request)    
-        def perform_create(self, serializer):
-            try:
-                serializer.save()  # Save the data to the database
-                ddid=atm_setting.objects.filter(device_id='').update(device_id=deviceid)
-                ddid.save()
-            except Exception as e:
-                pass        
-        def desptroy(self, request):
-            try:
-                instance = self.get_object()
-                self.perform_destroy(instance)
-            except Http404:
-                pass
-        
-class cnd_consensettingViewset(viewsets.ModelViewSet):
-    # define queryset
-        queryset = cnd_consen_setting.objects.all()
-
-        # specify serializer to be used
-        serializer_class = cnd_consensettingSerializer
-
-        deviceid=0
-        def dispatch(self, request, *args, **kwargs):
-        
-            try:
-                data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
-                
-                value_list=list(data_dict.values())
-                
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
-                global deviceid
-                for x in dinfo:
-                    did=x.Device_id
-                    cmpname=x.componant_name
-                    deviceid=did
-                for key in unwanted_keys:
-                    if key in data_dict:
-                        del data_dict[key]
-                print("device is:", deviceid)
-                for key in data_dict:
-                    data_dict[key] = str(data_dict[key])
-                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
-                dd=dateandtime()
-                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} cnd_consen settings change has been requested - span:{value_list[3]}, atert_setpoint:{value_list[4]}"
-                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='cnd_consen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                erro.save()
-
-            except Exception as e:
-                pass    
-            return super().dispatch(request)    
-        def perform_create(self, serializer):
-            try:
-                serializer.save()  # Save the data to the database
-                ddid=cnd_consen_setting.objects.filter(device_id='').update(device_id=deviceid)
-                ddid.save()
-            except Exception as e:
-                pass        
-        def desptroy(self, request):
-            try:
-                instance = self.get_object()
-                self.perform_destroy(instance)
-            except Http404:
-                pass
-class tds_consensettingViewset(viewsets.ModelViewSet):
-    # define queryset
-        queryset = tds_consen_setting.objects.all()
-
-        # specify serializer to be used
-        serializer_class = tds_consensettingSerializer
-
-        deviceid=0
-        def dispatch(self, request, *args, **kwargs):
-        
-            try:
-                data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
-                
-                value_list=list(data_dict.values())
-                
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
-                global deviceid
-                for x in dinfo:
-                    
-                    did=x.Device_id
-                    cmpname=x.componant_name
-                    deviceid=did
-                for key in unwanted_keys:
-                    if key in data_dict:
-                        del data_dict[key]
-                for key in data_dict:
-                    data_dict[key] = str(data_dict[key])
-                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
-                dd=dateandtime()
-                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tds_consen settings change has been requested - span:{value_list[3]}, atert_setpoint:{value_list[4]}"
-                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tds_consen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                erro.save()
-
-            except Exception as e:
-                pass    
-            return super().dispatch(request)    
-        def perform_create(self, serializer):
-            try:
-                serializer.save()  # Save the data to the database
-                ddid=tds_setting.objects.filter(device_id='').update(device_id=deviceid)
-                ddid.save()
-            except Exception as e:
-                pass        
-        def desptroy(self, request):
-            try:
-                instance = self.get_object()
-                self.perform_destroy(instance)
-            except Http404:
-                pass
-class ampv1stateViewset(viewsets.ModelViewSet):
-        # define queryset
-        queryset = ampv1_state.objects.all()
-
-        # specify serializer to be used
-        serializer_class = ampv1stateSerializer
-
-        deviceid=0
-        def dispatch(self, request, *args, **kwargs):
-        
-            try:
-                data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
-                
-                value_list=list(data_dict.values())
-                
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
-                global deviceid
-                for x in dinfo:
-                    
-                    did=x.Device_id
-                    cmpname=x.componant_name
-                    deviceid=did
-                for key in unwanted_keys:
-                    if key in data_dict:
-                        del data_dict[key]
-                for key in data_dict:
-                    data_dict[key] = str(data_dict[key])
-                mqttc.publish(f'wc1/{did}/chgsta/{cmpname}',str(data_dict).replace(' ',''))
-                dd=dateandtime()
-                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} ampv1 status change has been requested - position:{value_list[3]}"
-                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='ampv1',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                erro.save()
-
-            except Exception as e:
-                pass    
-            return super().dispatch(request)    
-        def perform_create(self, serializer):
-            try:
-                serializer.save()  # Save the data to the database
-                ddid=ampv1_state.objects.filter(device_id='').update(device_id=deviceid)
-                ddid.save()
-            except Exception as e:
-                pass        
-        def desptroy(self, request):
-            try:
-                instance = self.get_object()
-                self.perform_destroy(instance)
-            except Http404:
-                pass
-        
-class ampv1settingViewset(viewsets.ModelViewSet):
-# 	# define queryset
-        queryset = ampv1_setting.objects.all()
-
-        # specify serializer to be used
-        serializer_class = ampv1settingSerializer
-
-        deviceid=0
-        def dispatch(self, request, *args, **kwargs):
-        
-            try:
-                data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
-                
-                value_list=list(data_dict.values())
-                
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
-                global deviceid
-                for x in dinfo:
-                    
-                    did=x.Device_id
-                    cmpname=x.componant_name
-                    deviceid=did
-                for key in unwanted_keys:
-                    if key in data_dict:
-                        del data_dict[key]
-                changesrt=data_dict['srt']
-                changesrt=changesrt.split(":")
-                hrtominit=int(changesrt[0])*60
-                data_dict['srt']=hrtominit+int(changesrt[1])
-                for key in data_dict:
-                    data_dict[key] = str(data_dict[key])
-                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
-                print("Dattta:",data_dict)
-                dd=dateandtime()
-                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} ampv1 settings change has been requested - service time:{value_list[8]}, backwash time:{value_list[9]}, rins time:{value_list[10]}, motor on delay time:{value_list[11]}, output1:{value_list[12]}, output2:{value_list[13]}, output3:{value_list[14]}, input1:{value_list[4]}, input2:{value_list[5]}, input3:{value_list[6]}, pressure switch input:{value_list[7]}, sensor type:{value_list[3]}"
-                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='ampv1',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                erro.save()
-
-            except Exception as e:
-                pass    
-            return super().dispatch(request)    
-        def perform_create(self, serializer):
-            try:
-                serializer.save()  # Save the data to the database
-                ddid=ampv1_setting.objects.filter(device_id='').update(device_id=deviceid)
-                ddid.save()
-            except Exception as e:
-                pass        
-        def desptroy(self, request):
-            try:
-                instance = self.get_object()
-                self.perform_destroy(instance)
-            except Http404:
-                pass
-class ampv2stateViewset(viewsets.ModelViewSet):
-        # define queryset
-        queryset = ampv2_state.objects.all()
-
-        # specify serializer to be used
-        serializer_class = ampv2stateSerializer
-
-        deviceid=0
-        def dispatch(self, request, *args, **kwargs):
-        
-            try:
-                data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
-                
-                value_list=list(data_dict.values())
-                
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
-                global deviceid
-                for x in dinfo:
-                    
-                    did=x.Device_id
-                    cmpname=x.componant_name
-                    deviceid=did
-                for key in unwanted_keys:
-                    if key in data_dict:
-                        del data_dict[key]
-                for key in data_dict:
-                    data_dict[key] = str(data_dict[key])
-                mqttc.publish(f'wc1/{did}/chgsta/{cmpname}',str(data_dict).replace(' ',''))
-                dd=dateandtime()
-                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} ampv2 status change has been requested - position:{value_list[3]}"
-                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='ampv2',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                erro.save()
-            except Exception as e:
-                pass    
-            return super().dispatch(request)    
-        def perform_create(self, serializer):
-            try:
-                serializer.save()  # Save the data to the database
-                ddid=ampv2_state.objects.filter(device_id='').update(device_id=deviceid)
-                ddid.save()
-            except Exception as e:
-                pass        
-        def desptroy(self, request):
-            try:
-                instance = self.get_object()
-                self.perform_destroy(instance)
-            except Http404:
-                pass
-class ampv2settingViewset(viewsets.ModelViewSet):
-	# define queryset
-        queryset = ampv2_setting.objects.all()
-
-        # specify serializer to be used
-        serializer_class = ampv2settingSerializer
-
-        deviceid=0
-        def dispatch(self, request, *args, **kwargs):
-        
-            try:
-                data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
-                
-                value_list=list(data_dict.values())
-                
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
-                global deviceid
-                for x in dinfo:
-                    
-                    did=x.Device_id
-                    cmpname=x.componant_name
-                    deviceid=did
-                for key in unwanted_keys:
-                    if key in data_dict:
-                        del data_dict[key]
-                changesrt=data_dict['srt']
-                changesrt=changesrt.split(":")
-                hrtominit=int(changesrt[0])*60
-                data_dict['srt']=hrtominit+int(changesrt[1])
-                for key in data_dict:
-                    data_dict[key] = str(data_dict[key])
-                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
-                dd=dateandtime()
-                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} ampv2 settings change has been requested - service time:{value_list[8]}, backwash time:{value_list[9]}, rins time:{value_list[10]}, motor on delay time:{value_list[11]}, output1:{value_list[12]}, output2:{value_list[13]}, output3:{value_list[14]}, input1:{value_list[4]}, input2:{value_list[5]}, input3:{value_list[6]}, pressure switch input:{value_list[7]}, sensor type:{value_list[3]}"
-                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='ampv2',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                erro.save()
-            except Exception as e:
-                pass    
-            return super().dispatch(request)    
-        def perform_create(self, serializer):
-            try:
-                serializer.save()  # Save the data to the database
-                ddid=ampv2_setting.objects.filter(device_id='').update(device_id=deviceid)
-                ddid.save()
-            except Exception as e:
-                pass        
-        def desptroy(self, request):
-            try:
-                instance = self.get_object()
-                self.perform_destroy(instance)
-            except Http404:
-                pass
-
-class tap1settingViewset(viewsets.ModelViewSet):
-	# define queryset
-        queryset = tap1_setting.objects.all()
-
-        # specify serializer to be used
-        serializer_class = tap1settingSerializer
-
-        deviceid=0
-        def dispatch(self, request, *args, **kwargs):
-        
-            try:
-                data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
-                
-                value_list=list(data_dict.values())
-                
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
-                global deviceid
-                for x in dinfo:
-                    
-                    did=x.Device_id
-                    cmpname=x.componant_name
-                    deviceid=did
-                for key in unwanted_keys:
-                    if key in data_dict:
-                        del data_dict[key]
-                for key in data_dict:
-                    data_dict[key] = str(data_dict[key])
-                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
-                print("*!*!*!:",data_dict)
-                dd=dateandtime()
-                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tap1 settings change has been requested - pulse1:{value_list[3]}, pulse2:{value_list[4]}, pulse3:{value_list[5]}, pulse4:{value_list[6]}"
-                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tap1',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                erro.save()
-
-            except Exception as e:
-                pass    
-            return super().dispatch(request)    
-        def perform_create(self, serializer):
-            try:
-                serializer.save()  # Save the data to the database
-                ddid=tap1_setting.objects.filter(device_id='').update(device_id=deviceid)
-                ddid.save()
-            except Exception as e:
-                pass        
-        def desptroy(self, request):
-            try:
-                instance = self.get_object()
-                self.perform_destroy(instance)
-            except Http404:
-                pass
-class tap2settingViewset(viewsets.ModelViewSet):
-	# define queryset
-        queryset = tap2_setting.objects.all()
-
-        # specify serializer to be used
-        serializer_class = tap2settingSerializer
-
-        deviceid=0
-        def dispatch(self, request, *args, **kwargs):
-        
-            try:
-                data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
-                
-                value_list=list(data_dict.values())
-                
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
-                global deviceid
-                for x in dinfo:
-                    
-                    did=x.Device_id
-                    cmpname=x.componant_name
-                    deviceid=did
-                for key in unwanted_keys:
-                    if key in data_dict:
-                        del data_dict[key]
-                for key in data_dict:
-                    data_dict[key] = str(data_dict[key])
-                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
-                dd=dateandtime()
-                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tap2 settings change has been requested - pulse1:{value_list[1]}, pulse2:{value_list[2]}, pulse3:{value_list[3]}, pulse4:{value_list[4]}"
-                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tap2',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                erro.save()
-
-            except Exception as e:
-                pass    
-            return super().dispatch(request)    
-        def perform_create(self, serializer):
-            try:
-                serializer.save()  # Save the data to the database
-                ddid=tap2_setting.objects.filter(device_id='').update(device_id=deviceid)
-                ddid.save()
-            except Exception as e:
-                pass        
-        def desptroy(self, request):
-            try:
-                instance = self.get_object()
-                self.perform_destroy(instance)
-            except Http404:
-                pass
-class tap3settingViewset(viewsets.ModelViewSet):
-	# define queryset
-        queryset = tap3_setting.objects.all()
-
-        # specify serializer to be used
-        serializer_class = tap3settingSerializer
-
-        deviceid=0
-        def dispatch(self, request, *args, **kwargs):
-        
-            try:
-                data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
-                
-                value_list=list(data_dict.values())
-                
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
-                global deviceid
-                for x in dinfo:
-                    
-                    did=x.Device_id
-                    cmpname=x.componant_name
-                    deviceid=did
-                for key in unwanted_keys:
-                    if key in data_dict:
-                        del data_dict[key]
-                for key in data_dict:
-                    data_dict[key] = str(data_dict[key])
-                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
-                dd=dateandtime()
-                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tap3 settings change has been requested - pulse1:{value_list[3]}, pulse2:{value_list[4]}, pulse3:{value_list[5]}, pulse4:{value_list[6]}"
-                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tap3',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                erro.save()
-
-            except Exception as e:
-                pass    
-            return super().dispatch(request)    
-        def perform_create(self, serializer):
-            try:
-                serializer.save()  # Save the data to the database
-                ddid=tap3_setting.objects.filter(device_id='').update(device_id=deviceid)
-                ddid.save()
-            except Exception as e:
-                pass        
-        def desptroy(self, request):
-            try:
-                instance = self.get_object()
-                self.perform_destroy(instance)
-            except Http404:
-                pass
-class tap4settingViewset(viewsets.ModelViewSet):
-	# define queryset
-        queryset = tap4_setting.objects.all()
-
-        # specify serializer to be used
-        serializer_class = tap4settingSerializer
-
-    
-        deviceid=0
-        def dispatch(self, request, *args, **kwargs):
-        
-            try:
-                data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
-                
-                value_list=list(data_dict.values())
-                
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
-                global deviceid
-                for x in dinfo:
-                    
-                    did=x.Device_id
-                    cmpname=x.componant_name
-                    deviceid=did
-                for key in unwanted_keys:
-                    if key in data_dict:
-                        del data_dict[key]
-                for key in data_dict:
-                    data_dict[key] = str(data_dict[key])
-                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
-                dd=dateandtime()
-                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tap4 settings change has been requested - pulse1:{value_list[3]}, pulse2:{value_list[4]}, pulse3:{value_list[5]}, pulse4:{value_list[6]}"
-                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tap4',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                erro.save()
-
-
-            except Exception as e:
-                pass    
-            return super().dispatch(request)    
-        def perform_create(self, serializer):
-            try:
-                serializer.save()  # Save the data to the database
-                ddid=tap4_setting.objects.filter(device_id='').update(device_id=deviceid)
-                ddid.save()
-            except Exception as e:
-                pass        
-        def desptroy(self, request):
-            try:
-                instance = self.get_object()
-                self.perform_destroy(instance)
-            except Http404:
-                pass
-
-
-
-   
-def ctrl_motr_handler(client, userdata, msg):
+    def ctrl_motr_handler(self, client, userdata, msg):
         print("I am in ctrl_motr_handler")
         topic_from_broker =msg.topic
 
@@ -7982,6 +4952,3038 @@ def ctrl_motr_handler(client, userdata, msg):
                     except Exception as e:
                         erro=Errors.objects.create(device_id=device_id,message_type=msg_type,e_discriptions=e,o_message=dict_str,service='flowsen4',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                         erro.save()
+
+    def on_connect_1(self, client, userdata, flags, rc):
+        logger.info("MQTT - connected")
+        # self.subscribe(self.topic)
+        self.subscribe("wc1/#",self.ctrl_motr_handler)
+        self.subscribe("wc1/v1/OTP",self.otp_handler)
+
+
+        
+        
+        
+
+    def subscribe(self, topic,subscribe_callback):
+        self.client.subscribe(topic,1)
+        self.client.message_callback_add(topic, subscribe_callback)
+        logger.info("MQTT - Subscribed to topic '" + topic)
+ 
+
+    def publish(self, topic, payload):
+        logger.info("MQTT - Published message '" + str(payload) + "' on topic '" + topic)
+        self.client.publish(topic, payload=payload)
+        # self.client.loop_stop()
+
+    def stop(self):
+        logger.info("MQTT - Disconnecting from mqtt broker and cleaning up")
+        self.client.disconnect()
+
+print("Hi mqqtt client object going to create")
+mqttc = MqttClient()
+
+@api_view(['POST'])
+def obtain_token(request):
+    username = request.data.get('username')
+    password = request.data.get('password')
+
+    if username and password:
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            refresh = RefreshToken.for_user(user)
+
+            return Response({
+                'access': str(refresh.access_token),
+                'refresh': str(refresh),
+            })
+
+    return Response({'error': 'Invalid credentials'}, status=400)
+ 
+def dateandtime():
+    year=datetime.today().strftime('%Y')
+    month=datetime.today().strftime('%m')
+    day=datetime.today().strftime('%d')
+    hour=datetime.now().strftime('%H')
+    minit=datetime.now().strftime('%M')
+    second=datetime.now().strftime('%S')
+    return year,month,day,hour,minit,second
+qs={}
+class LastRecordsView(viewsets.ModelViewSet):
+    def dispatch(self, request, *args, **kwargs):
+        my_list = [] 
+        fields_to_exclude = ['model', 'pk']
+        print(request.body,"BODY")
+        data = json.loads(request.body)
+        dinfo = device_info.objects.filter(**data)
+        did=dinfo[0].Device_id
+        last_error = Errors.objects.filter(device_id=did).order_by('-id')[:10]
+        if not last_error:
+            last_error={}
+        else:
+            last_error = serialize("json", last_error)
+            last_error = json.loads(last_error)
+            for item in last_error:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+                my_list.append(item['fields'])
+        last_error = json.dumps(my_list)
+        last_error = json.loads(last_error)
+        return JsonResponse(last_error, safe=False, content_type="application/json")
+#all data from minit table
+class all_panelListAPIView(generics.ListAPIView):
+    # define queryset
+	queryset = treat_panel.objects.all()
+	serializer_class = all_panelSerializer
+class all_cndListAPIView(generics.ListAPIView):
+    # define queryset
+	queryset = treat_cnd_sen.objects.all()
+	# specify serializer to be used
+	serializer_class = all_cndSerializer
+class all_tdsListAPIView(generics.ListAPIView):
+    # define queryset
+	queryset = treat_tds_sen.objects.all()
+	# specify serializer to be used
+	serializer_class = all_tdsSerializer
+class all_rwpListAPIView(generics.ListAPIView):
+    # define queryset
+	queryset = treat_rwp.objects.all()
+	# specify serializer to be used
+	serializer_class = all_rwpSerializer
+class all_ampv1ListAPIView(generics.ListAPIView):
+    # define queryset
+	queryset = treat_ampv1.objects.all()
+	# specify serializer to be used
+	serializer_class = all_ampv1Serializer  
+class all_ampv2ListAPIView(generics.ListAPIView):
+    # define queryset
+	queryset = treat_ampv2.objects.all()
+	# specify serializer to be used
+	serializer_class = all_ampv2Serializer       
+class all_ampv3ListAPIView(generics.ListAPIView):
+    # define queryset
+	queryset = treat_ampv3.objects.all()
+	# specify serializer to be used
+	serializer_class = all_ampv3Serializer
+class all_ampv4ListAPIView(generics.ListAPIView):
+    # define queryset
+	queryset = treat_ampv4.objects.all()
+	# specify serializer to be used
+	serializer_class = all_ampv4Serializer
+class all_ampv5ListAPIView(generics.ListAPIView):
+    # define queryset
+	queryset = treat_ampv5.objects.all()
+	# specify serializer to be used
+	serializer_class = all_ampv5Serializer
+class all_hppListAPIView(generics.ListAPIView):
+    # define queryset
+	queryset = treat_hpp.objects.all()
+	# specify serializer to be used
+	serializer_class = all_hppSerializer
+class all_F_flowsenListAPIView(generics.ListAPIView):
+    # define queryset
+	queryset = treat_F_flowsen.objects.all()
+	# specify serializer to be used
+	serializer_class = all_F_flowsenSerializer
+class all_P_flowsenListAPIView(generics.ListAPIView):
+    # define queryset
+	queryset = treat_P_flowsen.objects.all()
+	# specify serializer to be used
+	serializer_class = all_P_flowsenSerializer
+class all_cnd_consenListAPIView(generics.ListAPIView):
+    # define queryset
+	queryset = disp_cnd_consen.objects.all()
+	# specify serializer to be used
+	serializer_class = all_cnd_consenSerializer
+class all_tds_consenListAPIView(generics.ListAPIView):
+    # define queryset
+	queryset = disp_tds_consen.objects.all()
+	# specify serializer to be used
+	serializer_class = all_tds_consenSerializer
+class all_atmListAPIView(generics.ListAPIView):
+    # define queryset
+	queryset = disp_atm.objects.all()
+	# specify serializer to be used
+	serializer_class = all_atmSerializer
+class all_tap1ListAPIView(generics.ListAPIView):
+    # define queryset
+	queryset = disp_tap1.objects.all()
+	# specify serializer to be used
+	serializer_class = all_tap1Serializer
+class all_tap2ListAPIView(generics.ListAPIView):
+    # define queryset
+	queryset = disp_tap2.objects.all()
+	# specify serializer to be used
+	serializer_class = all_tap2Serializer
+class all_tap3ListAPIView(generics.ListAPIView):
+    # define queryset
+	queryset = disp_tap3.objects.all()
+	# specify serializer to be used
+	serializer_class = all_tap3Serializer
+class all_tap4ListAPIView(generics.ListAPIView):
+    # define queryset
+	queryset = disp_tap4.objects.all()
+	# specify serializer to be used
+	serializer_class = all_tap4Serializer
+class all_flowsen1ListAPIView(generics.ListAPIView):
+    # define queryset
+	queryset = disp_flowsen1.objects.all()
+	# specify serializer to be used
+	serializer_class = all_flowsen1Serializer
+class all_flowsen2ListAPIView(generics.ListAPIView):
+    # define queryset
+	queryset = disp_flowsen2.objects.all()
+	# specify serializer to be used
+	serializer_class = all_flowsen2Serializer
+class all_flowsen3ListAPIView(generics.ListAPIView):
+    # define queryset
+	queryset = disp_flowsen3.objects.all()
+	# specify serializer to be used
+	serializer_class = all_flowsen3Serializer
+class all_flowsen4ListAPIView(generics.ListAPIView):
+    # define queryset
+	queryset = disp_flowsen4.objects.all()
+	# specify serializer to be used
+	serializer_class = all_flowsen4Serializer
+import json
+cid=None
+class site_check(viewsets.ModelViewSet):
+    def dispatch(self, request, *args, **kwargs):
+        fields_to_exclude = ['model', 'pk']
+        print(request.body,"BODY")
+        data = json.loads(request.body)
+        print(data,type(data),"DATA")
+        companydata=mo.Company.objects.filter(company_name=data['company_name'])
+        for i in companydata:
+            global cid
+            cid=i.id
+        number_of_sites=mo.Site.objects.filter(company=companydata.id)
+        site_name=[]
+        for sit in number_of_sites:
+            site_name.append(sit.site_name)
+        response_data = {
+            #new code
+        'data': site_name,  # Include the 'data' field
+        'status': 200,  # Add the status field
+        'message': "Data get successful", # Add the message field
+        
+        }
+        response_data=[response_data]
+        return JsonResponse(response_data, safe=False, content_type="application/json")
+
+class updated_treat_rwpViewset(viewsets.ModelViewSet):
+    def dispatch(self, request, *args, **kwargs):
+        fields_to_exclude = ['model', 'pk']
+        data = json.loads(request.body)
+        dinfo = device_info.objects.filter(**data)
+        did=dinfo[0].Device_id
+        qs_sta = treat_rwp.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
+        if not qs_sta:
+            data_sta = {}
+        else:
+            data_sta = serialize("json", qs_sta)
+            data_sta = json.loads(data_sta)
+            for item in data_sta:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            data_sta = json.dumps(data_sta[0]["fields"])
+            data_sta = json.loads(data_sta)
+        
+        qs_set = treat_rwp.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
+        if not qs_set:
+            data_set = {}
+        else:
+            data_set = serialize("json", qs_set)
+            data_set = json.loads(data_set)
+            for item in data_set:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+
+            data_set = json.dumps(data_set[0]["fields"])
+            data_set = json.loads(data_set)
+
+        last_error=Errors.objects.filter(service='rwp')
+        if not last_error:
+            last_error={}
+        else:
+            last_error = serialize("json", last_error)
+            last_error = json.loads(last_error)
+            for item in last_error:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            
+            last_error = json.dumps(last_error[0]["fields"])
+            last_error = json.loads(last_error)
+
+        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
+        response_data = {
+            #new code
+        'data': data_final,  # Include the 'data' field
+        'status': 200,  # Add the status field
+        'message': "Data get successful", # Add the message field
+        
+        }
+        response_data=[response_data]
+        return JsonResponse(response_data, safe=False, content_type="application/json")
+    
+class updated_treat_cnd_senViewset(viewsets.ModelViewSet):
+	# define queryset
+    def dispatch(self, request, *args, **kwargs):
+        fields_to_exclude = ['model', 'pk']
+        data = json.loads(request.body)
+        print(data,type(data),"DATA**********")
+        dinfo = device_info.objects.filter(**data)
+        print(dinfo,type(dinfo),"device_info*****")
+        did=dinfo[0].Device_id
+        print(dinfo,type(dinfo))
+        print("**!!!***1:",did)
+        qs_sta = treat_cnd_sen.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
+        if not qs_sta:
+            data_sta = {}
+        else:
+            data_sta = serialize("json", qs_sta)
+            data_sta = json.loads(data_sta)
+            for item in data_sta:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            data_sta = json.dumps(data_sta[0]["fields"])
+            data_sta = json.loads(data_sta)
+        
+        qs_set = treat_cnd_sen.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
+        if not qs_set:
+            data_set = {}
+        else:
+            data_set = serialize("json", qs_set)
+            data_set = json.loads(data_set)
+            for item in data_set:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+
+            data_set = json.dumps(data_set[0]["fields"])
+            data_set = json.loads(data_set)
+
+        last_error=Errors.objects.filter(service='cnd_sen')
+        if not last_error:
+            last_error={}
+        else:
+            last_error = serialize("json", last_error)
+            last_error = json.loads(last_error)
+            for item in last_error:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            
+            last_error = json.dumps(last_error[0]["fields"])
+            last_error = json.loads(last_error)
+
+        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
+        response_data = {
+            #new code
+        'data': data_final,  # Include the 'data' field
+        'status': 200,  # Add the status field
+        'message': "Data get successful", # Add the message field
+        
+        }
+        response_data=[response_data]
+        return JsonResponse(response_data, safe=False, content_type="application/json")   
+    
+class updated_treat_tds_senViewset(viewsets.ModelViewSet):
+	# define queryset
+    def dispatch(self, request, *args, **kwargs):
+        fields_to_exclude = ['model', 'pk']
+        data = json.loads(request.body)
+        dinfo = device_info.objects.filter(**data)
+        did=dinfo[0].Device_id
+        
+        qs_sta = treat_tds_sen.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
+        if not qs_sta:
+            data_sta = {}
+        else:
+            data_sta = serialize("json", qs_sta)
+            data_sta = json.loads(data_sta)
+            for item in data_sta:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            data_sta = json.dumps(data_sta[0]["fields"])
+            data_sta = json.loads(data_sta)
+        
+        qs_set = treat_tds_sen.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
+        if not qs_set:
+            data_set = {}
+        else:
+            data_set = serialize("json", qs_set)
+            data_set = json.loads(data_set)
+            for item in data_set:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+
+            data_set = json.dumps(data_set[0]["fields"])
+            data_set = json.loads(data_set)
+
+        last_error=Errors.objects.filter(service='tds_sen')
+        if not last_error:
+            last_error={}
+        else:
+            last_error = serialize("json", last_error)
+            last_error = json.loads(last_error)
+            for item in last_error:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            
+            last_error = json.dumps(last_error[0]["fields"])
+            last_error = json.loads(last_error)
+
+        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
+        response_data = {
+            #new code
+        'data': data_final,  # Include the 'data' field
+        'status': 200,  # Add the status field
+        'message': "Data get successful", # Add the message field
+        
+        }
+        response_data=[response_data]
+        return JsonResponse(response_data, safe=False, content_type="application/json")    
+    
+class updated_treat_hppViewset(viewsets.ModelViewSet):
+	# define queryset
+    def dispatch(self, request, *args, **kwargs):
+        fields_to_exclude = ['model', 'pk']
+        data = json.loads(request.body)
+        dinfo = device_info.objects.filter(**data)
+        did=dinfo[0].Device_id
+        qs_sta = treat_hpp.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
+        if not qs_sta:
+            data_sta = {}
+        else:
+            data_sta = serialize("json", qs_sta)
+            data_sta = json.loads(data_sta)
+            for item in data_sta:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            data_sta = json.dumps(data_sta[0]["fields"])
+            data_sta = json.loads(data_sta)
+        
+        qs_set = treat_hpp.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
+        if not qs_set:
+            data_set = {}
+        else:
+            data_set = serialize("json", qs_set)
+            data_set = json.loads(data_set)
+            for item in data_set:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+
+            data_set = json.dumps(data_set[0]["fields"])
+            data_set = json.loads(data_set)
+
+        last_error=Errors.objects.filter(service='hpp')
+        if not last_error:
+            last_error={}
+        else:
+            last_error = serialize("json", last_error)
+            last_error = json.loads(last_error)
+            for item in last_error:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            
+            last_error = json.dumps(last_error[0]["fields"])
+            last_error = json.loads(last_error)
+
+        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
+        response_data = {
+            #new code
+        'data': data_final,  # Include the 'data' field
+        'status': 200,  # Add the status field
+        'message': "Data get successful", # Add the message field
+        
+        }
+        response_data=[response_data]
+        return JsonResponse(response_data, safe=False, content_type="application/json")    
+     
+class updated_treat_ampv1Viewset(viewsets.ModelViewSet):
+	# define queryset
+
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            fields_to_exclude = ['model', 'pk']
+
+            data = json.loads(request.body)
+
+            dinfo = device_info.objects.filter(**data)
+            did=dinfo[0].Device_id
+        
+
+            qs_sta = treat_ampv1.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
+
+            if not qs_sta:
+                data_sta = {}
+            else:
+                data_sta = serialize("json", qs_sta)
+                data_sta = json.loads(data_sta)
+
+                for item in data_sta:
+                    item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+                data_sta = json.dumps(data_sta[0]["fields"])
+                data_sta = json.loads(data_sta)
+            
+            qs_set = treat_ampv1.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
+            if not qs_set:
+                data_set = {}
+            else:
+                data_set = serialize("json", qs_set)
+                data_set = json.loads(data_set)
+
+                for item in data_set:
+                    item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+
+                data_set = json.dumps(data_set[0]["fields"])
+                data_set = json.loads(data_set)
+
+
+            last_error=Errors.objects.filter(service='ampv1')
+            if not last_error:
+                last_error={}
+            else:
+                last_error = serialize("json", last_error)
+                last_error = json.loads(last_error)
+                for item in last_error:
+                    item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+                
+                last_error = json.dumps(last_error[0]["fields"])
+                last_error = json.loads(last_error)
+
+            data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
+            response_data = {
+                #new code
+            'data': data_final,  # Include the 'data' field
+            'status': 200,  # Add the status field
+            'message': "Data get successful", # Add the message field
+            
+            }
+            response_data=[response_data]
+            return JsonResponse(response_data, safe=False, content_type="application/json")    
+        except Exception as e :
+            print(e)  
+    
+class updated_treat_ampv2Viewset(viewsets.ModelViewSet):
+	# define queryset
+    def dispatch(self, request, *args, **kwargs):
+        fields_to_exclude = ['model', 'pk']
+        data = json.loads(request.body)
+        dinfo = device_info.objects.filter(**data)
+        did=dinfo[0].Device_id
+        qs_sta = treat_ampv2.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
+        if not qs_sta:
+            data_sta = {}
+        else:
+            data_sta = serialize("json", qs_sta)
+            data_sta = json.loads(data_sta)
+            for item in data_sta:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            data_sta = json.dumps(data_sta[0]["fields"])
+            data_sta = json.loads(data_sta)
+        
+        qs_set = treat_ampv2.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
+        if not qs_set:
+            data_set = {}
+        else:
+            data_set = serialize("json", qs_set)
+            data_set = json.loads(data_set)
+            for item in data_set:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+
+            data_set = json.dumps(data_set[0]["fields"])
+            data_set = json.loads(data_set)
+
+        last_error=Errors.objects.filter(service='ampv2')
+        if not last_error:
+            last_error={}
+        else:
+            last_error = serialize("json", last_error)
+            last_error = json.loads(last_error)
+            for item in last_error:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            
+            last_error = json.dumps(last_error[0]["fields"])
+            last_error = json.loads(last_error)
+
+        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
+        response_data = {
+            #new code
+        'data': data_final,  # Include the 'data' field
+        'status': 200,  # Add the status field
+        'message': "Data get successful", # Add the message field
+        
+        }
+        response_data=[response_data]
+        return JsonResponse(response_data, safe=False, content_type="application/json")    
+    
+class updated_treat_panelViewset(viewsets.ModelViewSet):
+	# define queryset
+    def dispatch(self, request, *args, **kwargs):
+        fields_to_exclude = ['model', 'pk']
+        data = json.loads(request.body)
+        dinfo = device_info.objects.filter(**data)
+        did=dinfo[0].Device_id
+        qs_sta = treat_panel.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
+        if not qs_sta:
+            data_sta = {}
+        else:
+            data_sta = serialize("json", qs_sta)
+            data_sta = json.loads(data_sta)
+            for item in data_sta:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            data_sta = json.dumps(data_sta[0]["fields"])
+            data_sta = json.loads(data_sta)
+        
+        qs_set = treat_panel.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
+        if not qs_set:
+            data_set = {}
+        else:
+            data_set = serialize("json", qs_set)
+            data_set = json.loads(data_set)
+            for item in data_set:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+
+            data_set = json.dumps(data_set[0]["fields"])
+            data_set = json.loads(data_set)
+
+        last_error=Errors.objects.filter(service='panel')
+        if not last_error:
+            last_error={}
+        else:
+            last_error = serialize("json", last_error)
+            last_error = json.loads(last_error)
+            for item in last_error:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            
+            last_error = json.dumps(last_error[0]["fields"])
+            last_error = json.loads(last_error)
+
+        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
+        response_data = {
+            #new code
+        'data': data_final,  # Include the 'data' field
+        'status': 200,  # Add the status field
+        'message': "Data get successful", # Add the message field
+        
+        }
+        response_data=[response_data]
+        return JsonResponse(response_data, safe=False, content_type="application/json")    
+
+class updated_disp_atmViewset(viewsets.ModelViewSet):
+	# define queryset
+    def dispatch(self, request, *args, **kwargs):
+        fields_to_exclude = ['model', 'pk']
+        data = json.loads(request.body)
+        dinfo = device_info.objects.filter(**data)
+        did=dinfo[0].Device_id
+        qs_sta = disp_atm.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
+        last_error=Errors.objects.filter(service='atm')
+        if not qs_sta:
+            data_sta = {}
+        else:
+            data_sta = serialize("json", qs_sta)
+            data_sta = json.loads(data_sta)
+            for item in data_sta:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            data_sta = json.dumps(data_sta[0]["fields"])
+            data_sta = json.loads(data_sta)
+        
+        qs_set = disp_atm.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
+        if not qs_set:
+            data_set = {}
+        else:
+            data_set = serialize("json", qs_set)
+            data_set = json.loads(data_set)
+            for item in data_set:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+
+            data_set = json.dumps(data_set[0]["fields"])
+            data_set = json.loads(data_set)
+
+        last_error=Errors.objects.filter(service='atm')
+        if not last_error:
+            last_error={}
+        else:
+            last_error = serialize("json", last_error)
+            last_error = json.loads(last_error)
+            for item in last_error:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            
+            last_error = json.dumps(last_error[0]["fields"])
+            last_error = json.loads(last_error)
+
+        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
+        response_data = {
+            #new code
+        'data': data_final,  # Include the 'data' field
+        'status': 200,  # Add the status field
+        'message': "Data get successful", # Add the message field
+        
+        }
+        response_data=[response_data]
+        return JsonResponse(response_data, safe=False, content_type="application/json")    
+      
+class getDeviceID(viewsets.ModelViewSet):
+	# define queryset
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            did = 0
+            data_dict = json.loads(request.body)
+            value_list = list(data_dict.values())
+            dinfo = device_info.objects.filter(componant_name=value_list[2], unit_type=value_list[1], company_name=value_list[0])
+            # print("value_list",dinfo)
+            # data = serialize("json", dinfo, fields=('Device_id'))
+            # return HttpResponse(data, content_type="application/json")
+
+            fields_to_exclude = ['model', 'pk']
+                
+            data = serialize("json", dinfo)
+            data = json.loads(data)
+            
+            for item in data:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            
+            
+            if not data:
+                response_data = {
+                    'data': [],  # Include the 'data' field
+                    'status': 200,  # Add the status field
+                    'message': "Data not found"  # Add the message field
+                }
+            else:     
+                data = json.dumps(data[0]["fields"])
+                data = json.loads(data)
+                data = [data]
+                response_data = {
+                    'data': data[0],  # Include the 'data' field
+                    'status': 200,  # Add the status field
+                    'message': "Data get successfully"  # Add the message field
+                }
+            response_data=[response_data]
+        except Exception as e:
+                    response_data = {
+                        'data':e,  # Include the 'data' field
+                        'status': 200,  # Add the status field
+                        'message': "Exception found"  # Add the message field
+                    }
+        
+        return JsonResponse(response_data, safe=False, content_type="application/json")
+
+
+class updated_disp_tap1Viewset(viewsets.ModelViewSet):
+	# define queryset
+    def dispatch(self, request, *args, **kwargs):
+        fields_to_exclude = ['model', 'pk']
+        data = json.loads(request.body)
+        dinfo = device_info.objects.filter(**data)
+        did=dinfo[0].Device_id
+        qs_sta = disp_tap1.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
+        if not qs_sta:
+            data_sta = {}
+        else:
+            data_sta = serialize("json", qs_sta)
+            data_sta = json.loads(data_sta)
+            for item in data_sta:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            data_sta = json.dumps(data_sta[0]["fields"])
+            data_sta = json.loads(data_sta)
+        
+        qs_set = disp_tap1.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
+        if not qs_set:
+            data_set = {}
+        else:
+            data_set = serialize("json", qs_set)
+            data_set = json.loads(data_set)
+            for item in data_set:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+
+            data_set = json.dumps(data_set[0]["fields"])
+            data_set = json.loads(data_set)
+
+        last_error=Errors.objects.filter(service='tap1')
+        if not last_error:
+            last_error={}
+        else:
+            last_error = serialize("json", last_error)
+            last_error = json.loads(last_error)
+            for item in last_error:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            
+            last_error = json.dumps(last_error[0]["fields"])
+            last_error = json.loads(last_error)
+
+        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
+        response_data = {
+            #new code
+        'data': data_final,  # Include the 'data' field
+        'status': 200,  # Add the status field
+        'message': "Data get successful", # Add the message field
+        
+        }
+        response_data=[response_data]
+        return JsonResponse(response_data, safe=False, content_type="application/json")    
+    
+class updated_disp_tap2Viewset(viewsets.ModelViewSet):
+	# define queryset
+    def dispatch(self, request, *args, **kwargs):
+        fields_to_exclude = ['model', 'pk']
+        data = json.loads(request.body)
+        dinfo = device_info.objects.filter(**data)
+        did=dinfo[0].Device_id
+        qs_sta = disp_tap2.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
+        if not qs_sta:
+            data_sta = {}
+        else:
+            data_sta = serialize("json", qs_sta)
+            data_sta = json.loads(data_sta)
+            for item in data_sta:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            data_sta = json.dumps(data_sta[0]["fields"])
+            data_sta = json.loads(data_sta)
+        
+        qs_set = disp_tap2.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
+        if not qs_set:
+            data_set = {}
+        else:
+            data_set = serialize("json", qs_set)
+            data_set = json.loads(data_set)
+            for item in data_set:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+
+            data_set = json.dumps(data_set[0]["fields"])
+            data_set = json.loads(data_set)
+
+        last_error=Errors.objects.filter(service='tap2')
+        if not last_error:
+            last_error={}
+        else:
+            last_error = serialize("json", last_error)
+            last_error = json.loads(last_error)
+            for item in last_error:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            
+            last_error = json.dumps(last_error[0]["fields"])
+            last_error = json.loads(last_error)
+
+        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
+        response_data = {
+            #new code
+        'data': data_final,  # Include the 'data' field
+        'status': 200,  # Add the status field
+        'message': "Data get successful", # Add the message field
+        
+        }
+        response_data=[response_data]
+        return JsonResponse(response_data, safe=False, content_type="application/json")    
+           
+class updated_disp_tap3Viewset(viewsets.ModelViewSet):
+	# define queryset
+    def dispatch(self, request, *args, **kwargs):
+        fields_to_exclude = ['model', 'pk']
+        data = json.loads(request.body)
+        dinfo = device_info.objects.filter(**data)
+        did=dinfo[0].Device_id
+        qs_sta = disp_tap3.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
+        if not qs_sta:
+            data_sta = {}
+        else:
+            data_sta = serialize("json", qs_sta)
+            data_sta = json.loads(data_sta)
+            for item in data_sta:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            data_sta = json.dumps(data_sta[0]["fields"])
+            data_sta = json.loads(data_sta)
+        
+        qs_set = disp_tap3.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
+        if not qs_set:
+            data_set = {}
+        else:
+            data_set = serialize("json", qs_set)
+            data_set = json.loads(data_set)
+            for item in data_set:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+
+            data_set = json.dumps(data_set[0]["fields"])
+            data_set = json.loads(data_set)
+
+        last_error=Errors.objects.filter(service='tap3')
+        if not last_error:
+            last_error={}
+        else:
+            last_error = serialize("json", last_error)
+            last_error = json.loads(last_error)
+            for item in last_error:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            
+            last_error = json.dumps(last_error[0]["fields"])
+            last_error = json.loads(last_error)
+
+        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
+        response_data = {
+            #new code
+        'data': data_final,  # Include the 'data' field
+        'status': 200,  # Add the status field
+        'message': "Data get successful", # Add the message field
+        
+        }
+        response_data=[response_data]
+        return JsonResponse(response_data, safe=False, content_type="application/json")    
+       
+class updated_disp_tap4Viewset(viewsets.ModelViewSet):
+	# define queryset
+    def dispatch(self, request, *args, **kwargs):
+        fields_to_exclude = ['model', 'pk']
+        data = json.loads(request.body)
+        dinfo = device_info.objects.filter(**data)
+        did=dinfo[0].Device_id
+        qs_sta = disp_tap4.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
+        if not qs_sta:
+            data_sta = {}
+        else:
+            data_sta = serialize("json", qs_sta)
+            data_sta = json.loads(data_sta)
+            for item in data_sta:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            data_sta = json.dumps(data_sta[0]["fields"])
+            data_sta = json.loads(data_sta)
+        
+        qs_set = disp_tap4.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
+        if not qs_set:
+            data_set = {}
+        else:
+            data_set = serialize("json", qs_set)
+            data_set = json.loads(data_set)
+            for item in data_set:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+
+            data_set = json.dumps(data_set[0]["fields"])
+            data_set = json.loads(data_set)
+
+        last_error=Errors.objects.filter(service='tap4')
+        if not last_error:
+            last_error={}
+        else:
+            last_error = serialize("json", last_error)
+            last_error = json.loads(last_error)
+            for item in last_error:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            
+            last_error = json.dumps(last_error[0]["fields"])
+            last_error = json.loads(last_error)
+
+        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
+        response_data = {
+            #new code
+        'data': data_final,  # Include the 'data' field
+        'status': 200,  # Add the status field
+        'message': "Data get successful", # Add the message field
+        
+        }
+        response_data=[response_data]
+        return JsonResponse(response_data, safe=False, content_type="application/json")    
+       
+class updated_disp_cnd_consenViewset(viewsets.ModelViewSet):
+	# define queryset
+    def dispatch(self, request, *args, **kwargs):
+        fields_to_exclude = ['model', 'pk']
+        data = json.loads(request.body)
+        dinfo = device_info.objects.filter(**data)
+        did=dinfo[0].Device_id
+        qs_sta = disp_cnd_consen.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
+        if not qs_sta:
+            data_sta = {}
+        else:
+            data_sta = serialize("json", qs_sta)
+            data_sta = json.loads(data_sta)
+            for item in data_sta:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            data_sta = json.dumps(data_sta[0]["fields"])
+            data_sta = json.loads(data_sta)
+        
+        qs_set = disp_cnd_consen.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
+        if not qs_set:
+            data_set = {}
+        else:
+            data_set = serialize("json", qs_set)
+            data_set = json.loads(data_set)
+            for item in data_set:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+
+            data_set = json.dumps(data_set[0]["fields"])
+            data_set = json.loads(data_set)
+
+        last_error=Errors.objects.filter(service='cnd_consen')
+        if not last_error:
+            last_error={}
+        else:
+            last_error = serialize("json", last_error)
+            last_error = json.loads(last_error)
+            for item in last_error:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            
+            last_error = json.dumps(last_error[0]["fields"])
+            last_error = json.loads(last_error)
+
+        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
+        response_data = {
+            #new code
+        'data': data_final,  # Include the 'data' field
+        'status': 200,  # Add the status field
+        'message': "Data get successful", # Add the message field
+        
+        }
+        response_data=[response_data]
+        return JsonResponse(response_data, safe=False, content_type="application/json")    
+    
+class updated_disp_tds_consenViewset(viewsets.ModelViewSet):
+    # define queryset
+    def dispatch(self, request, *args, **kwargs):
+        fields_to_exclude = ['model', 'pk']
+        data = json.loads(request.body)
+        dinfo = device_info.objects.filter(**data)
+        did=dinfo[0].Device_id
+        qs_sta = disp_tds_consen.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
+        if not qs_sta:
+            data_sta = {}
+        else:
+            data_sta = serialize("json", qs_sta)
+            data_sta = json.loads(data_sta)
+            for item in data_sta:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            data_sta = json.dumps(data_sta[0]["fields"])
+            data_sta = json.loads(data_sta)
+        
+        qs_set = disp_tds_consen.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
+        if not qs_set:
+            data_set = {}
+        else:
+            data_set = serialize("json", qs_set)
+            data_set = json.loads(data_set)
+            for item in data_set:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+
+            data_set = json.dumps(data_set[0]["fields"])
+            data_set = json.loads(data_set)
+
+        last_error=Errors.objects.filter(service='tds_consen')
+        if not last_error:
+            last_error={}
+        else:
+            last_error = serialize("json", last_error)
+            last_error = json.loads(last_error)
+            for item in last_error:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            
+            last_error = json.dumps(last_error[0]["fields"])
+            last_error = json.loads(last_error)
+
+        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
+        response_data = {
+            #new code
+        'data': data_final,  # Include the 'data' field
+        'status': 200,  # Add the status field
+        'message': "Data get successful", # Add the message field
+        
+        }
+        response_data=[response_data]
+        return JsonResponse(response_data, safe=False, content_type="application/json")    
+      
+class updated_treat_F_flowsenViewset(viewsets.ModelViewSet):
+	# define queryset
+    def dispatch(self, request, *args, **kwargs):
+        fields_to_exclude = ['model', 'pk']
+        data = json.loads(request.body)
+        dinfo = device_info.objects.filter(**data)
+        did=dinfo[0].Device_id
+        qs_sta = treat_F_flowsen.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
+        if not qs_sta:
+            data_sta = {}
+        else:
+            data_sta = serialize("json", qs_sta)
+            data_sta = json.loads(data_sta)
+            for item in data_sta:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            data_sta = json.dumps(data_sta[0]["fields"])
+            data_sta = json.loads(data_sta)
+        
+        qs_set = treat_F_flowsen.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
+        if not qs_set:
+            data_set = {}
+        else:
+            data_set = serialize("json", qs_set)
+            data_set = json.loads(data_set)
+            for item in data_set:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+
+            data_set = json.dumps(data_set[0]["fields"])
+            data_set = json.loads(data_set)
+
+        last_error=Errors.objects.filter(service='F_flowsen')
+        if not last_error:
+            last_error={}
+        else:
+            last_error = serialize("json", last_error)
+            last_error = json.loads(last_error)
+            for item in last_error:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            
+            last_error = json.dumps(last_error[0]["fields"])
+            last_error = json.loads(last_error)
+
+        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
+        response_data = {
+            #new code
+        'data': data_final,  # Include the 'data' field
+        'status': 200,  # Add the status field
+        'message': "Data get successful", # Add the message field
+        
+        }
+        response_data=[response_data]
+        return JsonResponse(response_data, safe=False, content_type="application/json")    
+        
+class getDeviceID(viewsets.ModelViewSet):
+	# define queryset
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            did = 0
+            data_dict = json.loads(request.body)
+            value_list = list(data_dict.values())
+            dinfo = device_info.objects.filter(componant_name=value_list[2], unit_type=value_list[1], company_name=value_list[0])
+            fields_to_exclude = ['model', 'pk']
+                
+            data = serialize("json", dinfo)
+            data = json.loads(data)
+            
+            for item in data:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            
+            
+            if not data:
+                response_data = {
+                    'data': [],  # Include the 'data' field
+                    'status': 200,  # Add the status field
+                    'message': "Data not found"  # Add the message field
+                }
+            else:     
+                data = json.dumps(data[0]["fields"])
+                data = json.loads(data)
+                data = [data]
+                response_data = {
+                    'data': data[0],  # Include the 'data' field
+                    'status': 200,  # Add the status field
+                    'message': "Data get successfully"  # Add the message field
+                }
+            response_data=[response_data]
+        except Exception as e:
+                    response_data = {
+                        'data':e,  # Include the 'data' field
+                        'status': 200,  # Add the status field
+                        'message': "Exception found"  # Add the message field
+                    }
+        
+        return JsonResponse(response_data, safe=False, content_type="application/json")
+
+class updated_treat_P_flowsenViewset(viewsets.ModelViewSet):
+	# define queryset
+    def dispatch(self, request, *args, **kwargs):
+        fields_to_exclude = ['model', 'pk']
+        data = json.loads(request.body)
+        dinfo = device_info.objects.filter(**data)
+        did=dinfo[0].Device_id
+        qs_sta = treat_P_flowsen.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
+        if not qs_sta:
+            data_sta = {}
+        else:
+            data_sta = serialize("json", qs_sta)
+            data_sta = json.loads(data_sta)
+            for item in data_sta:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            data_sta = json.dumps(data_sta[0]["fields"])
+            data_sta = json.loads(data_sta)
+        
+        qs_set = treat_P_flowsen.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
+        if not qs_set:
+            data_set = {}
+        else:
+            data_set = serialize("json", qs_set)
+            data_set = json.loads(data_set)
+            for item in data_set:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+
+            data_set = json.dumps(data_set[0]["fields"])
+            data_set = json.loads(data_set)
+
+        last_error=Errors.objects.filter(service='P_flowsen')
+        if not last_error:
+            last_error={}
+        else:
+            last_error = serialize("json", last_error)
+            last_error = json.loads(last_error)
+            for item in last_error:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            
+            last_error = json.dumps(last_error[0]["fields"])
+            last_error = json.loads(last_error)
+
+        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
+        response_data = {
+            #new code
+        'data': data_final,  # Include the 'data' field
+        'status': 200,  # Add the status field
+        'message': "Data get successful", # Add the message field
+        
+        }
+        response_data=[response_data]
+        return JsonResponse(response_data, safe=False, content_type="application/json")    
+       
+class updated_disp_flowsen1Viewset(viewsets.ModelViewSet):
+	# define queryset
+    def dispatch(self, request, *args, **kwargs):
+        fields_to_exclude = ['model', 'pk']
+        data = json.loads(request.body)
+        dinfo = device_info.objects.filter(**data)
+        did=dinfo[0].Device_id
+        qs_sta = disp_flowsen1.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
+        if not qs_sta:
+            data_sta = {}
+        else:
+            data_sta = serialize("json", qs_sta)
+            data_sta = json.loads(data_sta)
+            for item in data_sta:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            data_sta = json.dumps(data_sta[0]["fields"])
+            data_sta = json.loads(data_sta)
+        
+        qs_set = disp_flowsen1.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
+        if not qs_set:
+            data_set = {}
+        else:
+            data_set = serialize("json", qs_set)
+            data_set = json.loads(data_set)
+            for item in data_set:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+
+            data_set = json.dumps(data_set[0]["fields"])
+            data_set = json.loads(data_set)
+
+        last_error=Errors.objects.filter(service='flowsen1')
+        if not last_error:
+            last_error={}
+        else:
+            last_error = serialize("json", last_error)
+            last_error = json.loads(last_error)
+            for item in last_error:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            
+            last_error = json.dumps(last_error[0]["fields"])
+            last_error = json.loads(last_error)
+
+        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
+        response_data = {
+            #new code
+        'data': data_final,  # Include the 'data' field
+        'status': 200,  # Add the status field
+        'message': "Data get successful", # Add the message field 
+        }
+        response_data=[response_data]
+        return JsonResponse(response_data, safe=False, content_type="application/json")    
+    
+class updated_disp_flowsen2Viewset(viewsets.ModelViewSet):
+	# define queryset
+    def dispatch(self, request, *args, **kwargs):
+        fields_to_exclude = ['model', 'pk']
+        data = json.loads(request.body)
+        dinfo = device_info.objects.filter(**data)
+        did=dinfo[0].Device_id
+        qs_sta = disp_flowsen2.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
+        if not qs_sta:
+            data_sta = {}
+        else:
+            data_sta = serialize("json", qs_sta)
+            data_sta = json.loads(data_sta)
+            for item in data_sta:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            data_sta = json.dumps(data_sta[0]["fields"])
+            data_sta = json.loads(data_sta)
+        
+        qs_set = disp_flowsen2.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
+        if not qs_set:
+            data_set = {}
+        else:
+            data_set = serialize("json", qs_set)
+            data_set = json.loads(data_set)
+            for item in data_set:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+
+            data_set = json.dumps(data_set[0]["fields"])
+            data_set = json.loads(data_set)
+
+        last_error=Errors.objects.filter(service='flowsen2')
+        if not last_error:
+            last_error={}
+        else:
+            last_error = serialize("json", last_error)
+            last_error = json.loads(last_error)
+            for item in last_error:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            
+            last_error = json.dumps(last_error[0]["fields"])
+            last_error = json.loads(last_error)
+
+        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
+        response_data = {
+            #new code
+        'data': data_final,  # Include the 'data' field
+        'status': 200,  # Add the status field
+        'message': "Data get successful", # Add the message field
+        
+        }
+        response_data=[response_data]
+        return JsonResponse(response_data, safe=False, content_type="application/json")    
+     
+class updated_disp_flowsen3Viewset(viewsets.ModelViewSet):
+	# define queryset
+    def dispatch(self, request, *args, **kwargs):
+        fields_to_exclude = ['model', 'pk']
+        data = json.loads(request.body)
+        dinfo = device_info.objects.filter(**data)
+        did=dinfo[0].Device_id
+        qs_sta = disp_flowsen3.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
+        if not qs_sta:
+            data_sta = {}
+        else:
+            data_sta = serialize("json", qs_sta)
+            data_sta = json.loads(data_sta)
+            for item in data_sta:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            data_sta = json.dumps(data_sta[0]["fields"])
+            data_sta = json.loads(data_sta)
+        
+        qs_set = disp_flowsen3.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
+        if not qs_set:
+            data_set = {}
+        else:
+            data_set = serialize("json", qs_set)
+            data_set = json.loads(data_set)
+            for item in data_set:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+
+            data_set = json.dumps(data_set[0]["fields"])
+            data_set = json.loads(data_set)
+
+        last_error=Errors.objects.filter(service='flowsen3')
+        if not last_error:
+            last_error={}
+        else:
+            last_error = serialize("json", last_error)
+            last_error = json.loads(last_error)
+            for item in last_error:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            
+            last_error = json.dumps(last_error[0]["fields"])
+            last_error = json.loads(last_error)
+
+        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
+        response_data = {
+            #new code
+        'data': data_final,  # Include the 'data' field
+        'status': 200,  # Add the status field
+        'message': "Data get successful", # Add the message field
+        
+        }
+        response_data=[response_data]
+        return JsonResponse(response_data, safe=False, content_type="application/json")    
+     
+class updated_disp_flowsen4Viewset(viewsets.ModelViewSet):
+	# define queryset
+    def dispatch(self, request, *args, **kwargs):
+        fields_to_exclude = ['model', 'pk']
+        data = json.loads(request.body)
+        dinfo = device_info.objects.filter(**data)
+        did=dinfo[0].Device_id
+        qs_sta = disp_flowsen4.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
+        if not qs_sta:
+            data_sta = {}
+        else:
+            data_sta = serialize("json", qs_sta)
+            data_sta = json.loads(data_sta)
+            for item in data_sta:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            data_sta = json.dumps(data_sta[0]["fields"])
+            data_sta = json.loads(data_sta)
+        
+        qs_set = disp_flowsen4.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
+        if not qs_set:
+            data_set = {}
+        else:
+            data_set = serialize("json", qs_set)
+            data_set = json.loads(data_set)
+            for item in data_set:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+
+            data_set = json.dumps(data_set[0]["fields"])
+            data_set = json.loads(data_set)
+
+        last_error=Errors.objects.filter(service='flowsen4')
+        if not last_error:
+            last_error={}
+        else:
+            last_error = serialize("json", last_error)
+            last_error = json.loads(last_error)
+            for item in last_error:
+                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+            
+            last_error = json.dumps(last_error[0]["fields"])
+            last_error = json.loads(last_error)
+
+        data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
+        response_data = {
+            #new code
+        'data': data_final,  # Include the 'data' field
+        'status': 200,  # Add the status field
+        'message': "Data get successful", # Add the message field
+        
+        }
+        response_data=[response_data]
+        return JsonResponse(response_data, safe=False, content_type="application/json")    
+      
+class cnd_YearlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = cnd_repo_yearly.objects.all()
+	# specify serializer to be used
+	serializer_class = cnd_YearlySerializer       
+class cnd_HourlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = cnd_repo_hourly.objects.all()
+	# specify serializer to be used
+	serializer_class = cnd_HourlySerializer       
+class cnd_MonthlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = cnd_repo_monthly.objects.all()
+	# specify serializer to be used
+	serializer_class = cnd_MonthlySerializer        
+class cnd_DailyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = cnd_repo_daily.objects.all()
+	# specify serializer to be used
+	serializer_class = cnd_DailySerializer
+class tds_YearlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = tds_repo_yearly.objects.all()
+	# specify serializer to be used
+	serializer_class = tds_YearlySerializer       
+class tds_HourlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = tds_repo_hourly.objects.all()
+	# specify serializer to be used
+	serializer_class = tds_HourlySerializer        
+class tds_MonthlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = tds_repo_monthly.objects.all()
+	# specify serializer to be used
+	serializer_class = tds_MonthlySerializer        
+class tds_DailyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = tds_repo_daily.objects.all()
+	# specify serializer to be used
+	serializer_class = tds_DailySerializer
+class rwp_YearlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = rwp_repo_yearly.objects.all()
+	# specify serializer to be used
+	serializer_class = rwp_YearlySerializer        
+class rwp_HourlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = rwp_repo_hourly.objects.all()
+	# specify serializer to be used
+	serializer_class = rwp_HourlySerializer        
+class rwp_MonthlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = rwp_repo_monthly.objects.all()
+	# specify serializer to be used
+	serializer_class = rwp_MonthlySerializer        
+class rwp_DailyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = rwp_repo_daily.objects.all()
+	# specify serializer to be used
+	serializer_class = rwp_DailySerializer
+class hpp_YearlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = hpp_repo_yearly.objects.all()
+	# specify serializer to be used
+	serializer_class = hpp_YearlySerializer       
+class hpp_HourlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = hpp_repo_hourly.objects.all()
+	# specify serializer to be used
+	serializer_class = hpp_HourlySerializer        
+class hpp_MonthlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = hpp_repo_monthly.objects.all()
+	# specify serializer to be used
+	serializer_class = hpp_MonthlySerializer       
+class hpp_DailyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = hpp_repo_daily.objects.all()
+	# specify serializer to be used
+	serializer_class = hpp_DailySerializer
+class panel_YearlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = hpp_repo_yearly.objects.all()
+	# specify serializer to be used
+	serializer_class = hpp_YearlySerializer        
+class panel_HourlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = panel_repo_hourly.objects.all()
+	# specify serializer to be used
+	serializer_class = panel_HourlySerializer        
+class panel_MonthlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = panel_repo_monthly.objects.all()
+	# specify serializer to be used
+	serializer_class = panel_MonthlySerializer       
+class panel_DailyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = panel_repo_daily.objects.all()
+	# specify serializer to be used
+	serializer_class = panel_DailySerializer
+class F_flowsen_YearlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = F_flowsen_repo_yearly.objects.all()
+	# specify serializer to be used
+	serializer_class = F_flowsen_YearlySerializer
+class P_flowsen_YearlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = P_flowsen_repo_yearly.objects.all()
+	# specify serializer to be used
+	serializer_class = P_flowsen_YearlySerializer       
+class F_flowsen_HourlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = F_flowsen_repo_hourly.objects.all()
+	# specify serializer to be used
+	serializer_class = F_flowsen_HourlySerializer       
+class P_flowsen_HourlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = P_flowsen_repo_hourly.objects.all()
+	# specify serializer to be used
+	serializer_class = P_flowsen_HourlySerializer       
+class F_flowsen_MonthlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = F_flowsen_repo_monthly.objects.all()
+	# specify serializer to be used
+	serializer_class = F_flowsen_MonthlySerializer        
+class P_flowsen_MonthlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = P_flowsen_repo_monthly.objects.all()
+	# specify serializer to be used
+	serializer_class = P_flowsen_MonthlySerializer        
+class F_flowsen_DailyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = F_flowsen_repo_daily.objects.all()
+	# specify serializer to be used
+	serializer_class = F_flowsen_DailySerializer              
+class P_flowsen_DailyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = P_flowsen_repo_daily.objects.all()
+	# specify serializer to be used
+	serializer_class = P_flowsen_DailySerializer       
+class ampv1_YearlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = ampv1_repo_yearly.objects.all()
+	# specify serializer to be used
+	serializer_class = ampv1_YearlySerializer        
+class ampv1_HourlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = ampv1_repo_hourly.objects.all()
+	# specify serializer to be used
+	serializer_class = ampv1_HourlySerializer        
+class ampv1_MonthlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = ampv1_repo_monthly.objects.all()
+	# specify serializer to be used
+	serializer_class = ampv1_MonthlySerializer        
+class ampv1_DailyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = ampv1_repo_daily.objects.all()
+	# specify serializer to be used
+	serializer_class = ampv1_DailySerializer               
+class ampv2_YearlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = ampv2_repo_yearly.objects.all()
+	# specify serializer to be used
+	serializer_class = ampv2_YearlySerializer        
+class ampv2_HourlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = ampv2_repo_hourly.objects.all()
+	# specify serializer to be used
+	serializer_class = ampv2_HourlySerializer       
+class ampv2_MonthlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = ampv2_repo_monthly.objects.all()
+	# specify serializer to be used
+	serializer_class = ampv2_MonthlySerializer       
+class ampv2_DailyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = ampv2_repo_daily.objects.all()
+	# specify serializer to be used
+	serializer_class = ampv2_DailySerializer             
+class ampv3_YearlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = ampv3_repo_yearly.objects.all()
+	# specify serializer to be used
+	serializer_class = ampv3_YearlySerializer
+                       
+class ampv3_HourlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = ampv3_repo_hourly.objects.all()
+	# specify serializer to be used
+	serializer_class = ampv3_HourlySerializer
+        
+class ampv3_MonthlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = ampv3_repo_monthly.objects.all()
+	# specify serializer to be used
+	serializer_class = ampv3_MonthlySerializer
+        
+class ampv3_DailyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = ampv3_repo_daily.objects.all()
+	# specify serializer to be used
+	serializer_class = ampv3_DailySerializer       
+        
+class ampv4_YearlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = ampv4_repo_yearly.objects.all()
+	# specify serializer to be used
+	serializer_class = ampv4_YearlySerializer
+                        
+class ampv4_HourlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = ampv4_repo_hourly.objects.all()
+	# specify serializer to be used
+	serializer_class = ampv4_HourlySerializer
+        
+class ampv4_MonthlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = ampv4_repo_monthly.objects.all()
+	# specify serializer to be used
+	serializer_class = ampv4_MonthlySerializer
+        
+class ampv4_DailyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = ampv4_repo_daily.objects.all()
+	# specify serializer to be used
+	serializer_class = ampv4_DailySerializer       
+        
+class ampv5_YearlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = ampv5_repo_yearly.objects.all()
+	# specify serializer to be used
+	serializer_class = ampv5_YearlySerializer
+                       
+class ampv5_HourlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = ampv5_repo_hourly.objects.all()
+	# specify serializer to be used
+	serializer_class = ampv5_HourlySerializer
+        
+class ampv5_MonthlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = ampv5_repo_monthly.objects.all()
+	# specify serializer to be used
+	serializer_class = ampv5_MonthlySerializer
+        
+class ampv5_DailyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = ampv5_repo_daily.objects.all()
+	# specify serializer to be used
+	serializer_class = ampv5_DailySerializer       
+class tap1_YearlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = tap1_repo_yearly.objects.all()
+	# specify serializer to be used
+	serializer_class = tap1_YearlySerializer
+                       
+class tap1_HourlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = tap1_repo_hourly.objects.all()
+	# specify serializer to be used
+	serializer_class = tap1_HourlySerializer
+        
+class tap1_MonthlyViewset(viewsets.ModelViewSet):
+    # define queryset
+    queryset = tap1_repo_monthly.objects.all()
+    # specify serializer to be used
+    serializer_class = tap1_MonthlySerializer
+    authentication_classes = [JWTAuthentication]
+class MyTokenObtainPairView(TokenObtainPairView):
+    pass
+
+class MyTokenRefreshView(TokenRefreshView):
+    pass
+        
+class tap1_DailyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = tap1_repo_daily.objects.all()
+	# specify serializer to be used
+	serializer_class = tap1_DailySerializer       
+class tap2_YearlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = tap2_repo_yearly.objects.all()
+	# specify serializer to be used
+	serializer_class = tap2_YearlySerializer
+                    
+class tap2_HourlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = tap2_repo_hourly.objects.all()
+	# specify serializer to be used
+	serializer_class = tap2_HourlySerializer
+        
+class tap2_MonthlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = tap2_repo_monthly.objects.all()
+	# specify serializer to be used
+	serializer_class = tap2_MonthlySerializer
+        
+class tap2_DailyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = tap2_repo_daily.objects.all()
+	# specify serializer to be used
+	serializer_class = tap2_DailySerializer       
+class tap3_YearlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = tap3_repo_yearly.objects.all()
+	# specify serializer to be used
+	serializer_class = tap3_YearlySerializer
+                
+class tap3_HourlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = tap3_repo_hourly.objects.all()
+	# specify serializer to be used
+	serializer_class = tap3_HourlySerializer
+        
+class tap3_MonthlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = tap3_repo_monthly.objects.all()
+	# specify serializer to be used
+	serializer_class = tap3_MonthlySerializer
+        
+class tap3_DailyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = tap3_repo_daily.objects.all()
+	# specify serializer to be used
+	serializer_class = tap3_DailySerializer       
+class tap4_YearlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = tap4_repo_yearly.objects.all()
+	# specify serializer to be used
+	serializer_class = tap4_YearlySerializer
+                        
+class tap4_HourlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = tap4_repo_hourly.objects.all()
+	# specify serializer to be used
+	serializer_class = tap4_HourlySerializer
+        
+class tap4_MonthlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = tap4_repo_monthly.objects.all()
+	# specify serializer to be used
+	serializer_class = tap4_MonthlySerializer
+        
+class tap4_DailyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = tap4_repo_daily.objects.all()
+	# specify serializer to be used
+	serializer_class = tap4_DailySerializer       
+        
+class cnd_consen_YearlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = cnd_consen_repo_yearly.objects.all()
+	# specify serializer to be used
+	serializer_class = cnd_consen_YearlySerializer
+                        
+class tds_consen_YearlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = tds_consen_repo_yearly.objects.all()
+	# specify serializer to be used
+	serializer_class = tds_consen_YearlySerializer
+                       
+class cnd_consen_HourlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = cnd_consen_repo_hourly.objects.all()
+	# specify serializer to be used
+	serializer_class = cnd_consen_HourlySerializer
+class tds_consen_HourlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = tds_consen_repo_hourly.objects.all()
+	# specify serializer to be used
+	serializer_class = tds_consen_HourlySerializer
+        
+class cnd_consen_MonthlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = cnd_consen_repo_monthly.objects.all()
+	# specify serializer to be used
+	serializer_class = cnd_consen_MonthlySerializer
+class tds_consen_MonthlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = tds_consen_repo_monthly.objects.all()
+	# specify serializer to be used
+	serializer_class = tds_consen_MonthlySerializer
+        
+class cnd_consen_DailyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = cnd_consen_repo_daily.objects.all()
+	# specify serializer to be used
+	serializer_class = cnd_consen_DailySerializer
+class tds_consen_DailyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = tds_consen_repo_daily.objects.all()
+	# specify serializer to be used
+	serializer_class = tds_consen_DailySerializer
+
+class atm_YearlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = atm_repo_yearly.objects.all()
+	# specify serializer to be used
+	serializer_class = atm_YearlySerializer
+                       
+class atm_HourlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = atm_repo_hourly.objects.all()
+	# specify serializer to be used
+	serializer_class = atm_HourlySerializer
+        
+class atm_MonthlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = atm_repo_monthly.objects.all()
+	# specify serializer to be used
+	serializer_class = atm_MonthlySerializer
+        
+class atm_DailyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = atm_repo_daily.objects.all()
+	# specify serializer to be used
+	serializer_class = atm_DailySerializer
+class flowsen1_YearlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = flowsen1_repo_yearly.objects.all()
+	# specify serializer to be used
+	serializer_class = flowsen1_YearlySerializer
+                       
+class flowsen1_HourlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = flowsen1_repo_hourly.objects.all()
+	# specify serializer to be used
+	serializer_class = flowsen1_HourlySerializer
+        
+class flowsen1_MonthlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = flowsen1_repo_monthly.objects.all()
+	# specify serializer to be used
+	serializer_class = flowsen1_MonthlySerializer
+        
+class flowsen1_DailyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = flowsen1_repo_daily.objects.all()
+	# specify serializer to be used
+	serializer_class = flowsen1_DailySerializer   
+
+class flowsen2_YearlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = flowsen2_repo_yearly.objects.all()
+	# specify serializer to be used
+	serializer_class = flowsen2_YearlySerializer
+                        
+class flowsen2_HourlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = flowsen2_repo_hourly.objects.all()
+	# specify serializer to be used
+	serializer_class = flowsen2_HourlySerializer
+        
+class flowsen2_MonthlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = flowsen2_repo_monthly.objects.all()
+	# specify serializer to be used
+	serializer_class = flowsen2_MonthlySerializer
+        
+class flowsen2_DailyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = flowsen2_repo_daily.objects.all()
+	# specify serializer to be used
+	serializer_class = flowsen2_DailySerializer   
+
+class flowsen3_YearlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = flowsen3_repo_yearly.objects.all()
+	# specify serializer to be used
+	serializer_class = flowsen3_YearlySerializer
+                       
+class flowsen3_HourlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = flowsen3_repo_hourly.objects.all()
+	# specify serializer to be used
+	serializer_class = flowsen3_HourlySerializer
+        
+class flowsen3_MonthlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = flowsen3_repo_monthly.objects.all()
+	# specify serializer to be used
+	serializer_class = flowsen3_MonthlySerializer
+        
+class flowsen3_DailyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = flowsen1_repo_daily.objects.all()
+	# specify serializer to be used
+	serializer_class = flowsen1_DailySerializer   
+
+class flowsen4_YearlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = flowsen4_repo_yearly.objects.all()
+	# specify serializer to be used
+	serializer_class = flowsen4_YearlySerializer
+                       
+class flowsen4_HourlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = flowsen4_repo_hourly.objects.all()
+	# specify serializer to be used
+	serializer_class = flowsen4_HourlySerializer
+        
+class flowsen4_MonthlyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = flowsen4_repo_monthly.objects.all()
+	# specify serializer to be used
+	serializer_class = flowsen4_MonthlySerializer
+        
+class flowsen4_DailyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = flowsen4_repo_daily.objects.all()
+	# specify serializer to be used
+	serializer_class = flowsen4_DailySerializer
+
+# # import mongoengine
+# # mongoengine.connect(db=waterinn, host=localhost:27017, username=username, password=pwc)
+class TopicViewSet(viewsets.ModelViewSet):
+	# define queryset
+	queryset = topics.objects.all()
+	# specify serializer to be used
+	serializer_class = TopicSerializer
+        
+        
+class DeviceViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = device_info.objects.all()
+	# specify serializer to be used
+	serializer_class = DeviceSerializer
+        
+class keyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = key_info.objects.all()
+	# specify serializer to be used
+	serializer_class = KeySerializer
+        
+        
+class GraphViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = graph_info.objects.all()
+	# specify serializer to be used
+	serializer_class = GraphSerializer
+class TopicViewSet(viewsets.ModelViewSet):
+	# define queryset
+	queryset = topics.objects.all()
+	# specify serializer to be used
+	serializer_class = TopicSerializer
+        
+class DeviceViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = device_info.objects.all()
+	# specify serializer to be used
+	serializer_class = DeviceSerializer
+        
+class keyViewset(viewsets.ModelViewSet):
+	# define queryset
+	queryset = key_info.objects.all()
+	# specify serializer to be used
+	serializer_class = KeySerializer
+        
+class RwpstateViewset(viewsets.ModelViewSet):
+        # define queryset
+        queryset = Rwp_state.objects.all()
+        # specify serializer to be used
+        serializer_class = RwpstateSerializer
+
+        deviceid=0
+        def dispatch(self, request, *args, **kwargs):
+            try:
+                data_dict = json.loads(request.body)
+                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                
+                value_list=list(data_dict.values())
+                print("datadict:",data_dict)
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                for x in dinfo:
+                    global deviceid
+                    did=x.Device_id
+                    deviceid=did
+                    cmpname=x.componant_name
+                    
+                for key in unwanted_keys:
+                    if key in data_dict:
+                        del data_dict[key]
+                print("datadict1:",data_dict)
+                for key in data_dict:
+                    data_dict[key] = str(data_dict[key])
+                mqttc.publish(f'wc1/{did}/chgsta/{cmpname}',str(data_dict).replace(' ',''))
+                print("***$$$@",str(data_dict).replace(' ',''))
+                dd=dateandtime()
+                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} rwp status change has been requested - status:{value_list[3]}"
+                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='rwp',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                erro.save()
+
+            except Exception as e:
+                pass  
+            return super().dispatch(request)    
+        def perform_create(self, serializer):
+            try:
+                serializer.save()  # Save the data to the database
+                ddid=Rwp_state.objects.filter(device_id='').update(device_id=deviceid)
+                ddid.save()
+            except Exception as e:
+                pass    
+        def desptroy(self, request):
+            try:
+                instance = self.get_object()
+                self.perform_destroy(instance)
+            except Http404:
+                pass
+
+did=0
+class rwpsettingViewset(viewsets.ModelViewSet):
+	# define queryset
+    print("hi ok ")
+    # queryset = rwp_setting.objects.all().order_by('-id')[:1]
+    queryset = rwp_setting.objects.all()
+	# specify serializer to be used
+    serializer_class = rwpsettingSerializer
+    def dispatch(self, request, *args, **kwargs):
+        
+        try:
+            data_dict = json.loads(request.body)
+            unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name"]  # Example of unwanted keys
+            print("dict data is:",data_dict)
+            value_list=list(data_dict.values())
+            print("value_list:",value_list)
+            dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+            for x in dinfo:
+                print("did id:",x.Device_id)
+                did=x.Device_id
+                cmpname=x.componant_name
+                print("ddddid is",did)
+            for key in unwanted_keys:
+                if key in data_dict:
+                    del data_dict[key]
+            for key in data_dict:
+                    data_dict[key] = str(data_dict[key])
+            mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
+            
+            print("data send to hivemq")
+            dd=dateandtime()
+            e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} rwp settings change has been requested - over load current:{value_list[3]}, span:{value_list[4]}, dry run current:{value_list[5]}"
+            erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='rwp',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+            erro.save()
+            
+        except Exception as e:
+            print("Error",e)
+            dd=dateandtime()
+            e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} Hpp has a fault-{e}"
+            erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='hpp',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+            erro.save()
+        return super().dispatch(request)    
+    def perform_create(self, serializer):
+        try:
+            data_dict = serializer.validated_data
+            # unwanted_keys = ["unit_type", "water_treatment", "company_name", "componant_nam,"site_name"e"]
+            # Get the device information based on the provided values
+            dinfo = device_info.objects.filter(componant_name=data_dict['componant_name'],
+                                               unit_type=data_dict['unit_type'],
+                                              company_name=data_dict['company_name']).last()
+            deviceid=0
+            if dinfo:
+                did = dinfo.Device_id
+                deviceid=did
+                cmpname = dinfo.componant_name
+            serializer.save()  # Save the data to the database
+            ddid=rwp_setting.objects.filter(device_id='').update(device_id=deviceid)
+            ddid.save()
+            
+        except Exception as e:
+            print("Error:", e)
+    def desptroy(self, request):
+        try:
+            instance = self.get_object()
+            self.perform_destroy(instance)
+        except Http404:
+            pass
+class hppstateViewset(viewsets.ModelViewSet):
+	# define queryset
+        queryset = hpp_state.objects.all()
+
+        # specify serializer to be used
+        serializer_class = hppstateSerializer
+
+        deviceid=0
+        def dispatch(self, request, *args, **kwargs):
+            try:
+                data_dict = json.loads(request.body)
+                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                
+                value_list=list(data_dict.values())
+                
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                global deviceid
+                for x in dinfo:
+                    
+                    did=x.Device_id
+                    cmpname=x.componant_name
+                    deviceid=did
+                for key in unwanted_keys:
+                    if key in data_dict:
+                        del data_dict[key]
+                for key in data_dict:
+                    data_dict[key] = str(data_dict[key])
+                mqttc.publish(f'wc1/{did}/chgsta/{cmpname}',str(data_dict).replace(' ',''))
+                dd=dateandtime()
+                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} Hpp status change has been requested - status:{value_list[3]}"
+                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='hpp',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                erro.save()
+
+            except Exception as e:
+                dd=dateandtime()
+                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} Hpp has a fault-{e}"
+                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='hpp',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                erro.save()   
+            return super().dispatch(request)    
+        def perform_create(self, serializer):
+            try:
+
+                serializer.save()  # Save the data to the database
+                ddid=hpp_state.objects.filter(device_id='').update(device_id=deviceid)
+                ddid.save()
+            except Exception as e:
+                pass     
+        def desptroy(self, request):
+            try:
+                instance = self.get_object()
+                self.perform_destroy(instance)
+            except Http404:
+                pass   
+class hppsettingViewset(viewsets.ModelViewSet):
+        # define queryset
+        queryset = hpp_setting.objects.all()
+        # specify serializer to be used
+        serializer_class = hppsettingSerializer
+
+        deviceid=0
+        def dispatch(self, request, *args, **kwargs):
+            
+            try:
+                data_dict = json.loads(request.body)
+                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                
+                value_list=list(data_dict.values())
+                
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                global deviceid
+                for x in dinfo:
+                    did=x.Device_id
+                    cmpname=x.componant_name
+                    deviceid=did
+                for key in unwanted_keys:
+                    if key in data_dict:
+                        del data_dict[key]
+                for key in data_dict:
+                    data_dict[key] = str(data_dict[key])
+                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
+                dd=dateandtime()
+                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} Hpp settings change has been requested - over load current:{value_list[3]}, span:{value_list[4]}, dry run current:{value_list[5]}"
+                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='hpp',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                erro.save()
+
+            except Exception as e:
+                pass    
+            return super().dispatch(request)    
+        def perform_create(self, serializer):
+            try:
+                serializer.save()  # Save the data to the database
+                ddid=hpp_setting.objects.filter(device_id='').update(device_id=deviceid)
+                ddid.save()
+                
+            except Exception as e:
+                pass        
+        def desptroy(self, request):
+            try:
+                instance = self.get_object()
+                self.perform_destroy(instance)
+            except Http404:
+                pass
+class device_infoViewset(viewsets.ModelViewSet):
+        # define queryset
+        def dispatch(self, request, *args, **kwargs):
+            fields_to_exclude = ['model', 'pk']
+
+            data = json.loads(request.body)
+            print(data,type(data),"DATA11:")
+            u_id=data['user_id']
+            print("uid",u_id)
+            dinfo = device_info.objects.filter(company_name=data['company_name'])
+            print(dinfo,type(dinfo))
+            allsites=[]
+            for si in dinfo:
+                allsites.append(si.site_name)
+            allsiteset=set(allsites)
+            allsitelist=list(allsiteset)
+            sites=[]
+            raw_sql = "SELECT iwater_site.site_name FROM iwater_site INNER JOIN iwater_site_permissions ON iwater_site.id=iwater_site_permissions.site_id WHERE iwater_site_permissions.user_id=%s"
+
+            try:
+                # Execute the raw SQL query and fetch the results
+                with connection.cursor() as cursor:
+                    cursor.execute(raw_sql,[u_id])
+                    results = cursor.fetchall()
+                    print("Results",results)
+                # Print the results
+                for result in results:
+                    print("Site Name1:", result[0])
+                    sites.append(result[0])
+            except Exception as e:
+                print("***")
+            if data['user_role']== "super_admin" or data['user_role']== "administrator":
+
+                siteset=set(allsites)
+                siteset=list(siteset)
+            else:
+                siteset=set(sites)
+                siteset=list(siteset)
+            response_data = {
+                #new code
+            'data': siteset,  # Include the 'data' field
+            'status': 200,  # Add the status field
+            'message': "Data get successful", # Add the message field
+            
+            }
+            response_data=[response_data]
+            return JsonResponse(response_data, safe=False, content_type="application/json")           
+class cndsettingViewset(viewsets.ModelViewSet):
+	# define queryset
+        queryset = cnd_setting.objects.all()
+        serializer_class = cndsettingSerializer
+
+        deviceid =0
+        def dispatch(self, request, *args, **kwargs):
+            try:
+                data_dict = json.loads(request.body)
+                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                value_list=list(data_dict.values())
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                did = 0
+                cmpname = ''
+                global deviceid
+                for x in dinfo:
+                    did=x.Device_id
+                    deviceid=did
+                    cmpname=x.componant_name
+                for key in unwanted_keys:
+                    if key in data_dict:
+                        del data_dict[key]
+                for key in data_dict:
+                    data_dict[key] = str(data_dict[key])
+                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
+                dd=dateandtime()
+                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} cnd settings change has been requested - span:{value_list[3]}, trip_setpoint:{value_list[4]}, atert_setpoint:{value_list[5]}"
+                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='cnd',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                erro.save()
+            except Exception as e:
+                pass
+            return super().dispatch(request)    
+        def perform_create(self, serializer):
+            try:
+                serializer.save()  # Save the data to the database
+                ddid=cnd_setting.objects.filter(device_id='').update(device_id=deviceid)
+                ddid.save()
+            except Exception as e:
+                pass        
+        def desptroy(self, request):
+            try:
+                instance = self.get_object()
+                self.perform_destroy(instance)
+            except Http404:
+                pass
+        
+class tdssettingViewset(viewsets.ModelViewSet):
+        # define queryset
+        queryset = tds_setting.objects.all()
+
+        # specify serializer to be used
+        serializer_class = tdssettingSerializer
+
+        deviceid=0
+        def dispatch(self, request, *args, **kwargs):
+        
+            try:
+                data_dict = json.loads(request.body)
+                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                
+                value_list=list(data_dict.values())
+                print("valuelist is:",value_list)
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                global deviceid
+                for x in dinfo:
+                    
+                    did=x.Device_id
+                    cmpname=x.componant_name
+                    deviceid=did
+                for key in unwanted_keys:
+                    if key in data_dict:
+                        del data_dict[key]
+                for key in data_dict:
+                    data_dict[key] = str(data_dict[key])
+                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
+                print("data successfully send to hivemqtt")
+                print("did is:",did)
+                print("cname:",cmpname)
+                dd=dateandtime()
+                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tds settings change has been requested - span:{value_list[3]}, trip_setpoint:{value_list[4]}, atert_setpoint:{value_list[5]}"
+                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tds',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                erro.save()
+            except Exception as e:
+                pass    
+            return super().dispatch(request)    
+        def perform_create(self, serializer):
+            try:
+                serializer.save()  # Save the data to the database
+                ddid=tds_setting.objects.filter(device_id='').update(device_id=deviceid)
+                ddid.save()
+            except Exception as e:
+                pass        
+        def desptroy(self, request):
+            try:
+                instance = self.get_object()
+                self.perform_destroy(instance)
+            except Http404:
+                pass
+    
+class FflowsensettingViewset(viewsets.ModelViewSet):
+        # define queryset
+        queryset = F_flowsen_setting.objects.all()
+
+        # specify serializer to be used
+        serializer_class = FflowsensettingSerializer
+
+        deviceid=0
+        def dispatch(self, request, *args, **kwargs):
+        
+            try:
+                data_dict = json.loads(request.body)
+                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                
+                value_list=list(data_dict.values())
+                
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                global deviceid
+                for x in dinfo:
+                    
+                    did=x.Device_id
+                    cmpname=x.componant_name
+                    deviceid=did
+                for key in unwanted_keys:
+                    if key in data_dict:
+                        del data_dict[key]
+                for key in data_dict:
+                    data_dict[key] = str(data_dict[key])
+                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
+                dd=dateandtime()
+                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} Fflowsen settings change has been requested - flow factor:{value_list[3]}"
+                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='Fflowsen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                erro.save()
+
+            except Exception as e:
+                pass    
+            return super().dispatch(request)    
+        def perform_create(self, serializer):
+            try:
+                serializer.save()  # Save the data to the database
+                ddid=F_flowsen_setting.objects.filter(device_id='').update(device_id=deviceid)
+                ddid.save()
+            except Exception as e:
+                pass        
+        def desptroy(self, request):
+            try:
+                instance = self.get_object()
+                self.perform_destroy(instance)
+            except Http404:
+                pass
+        
+class PflowsensettingViewset(viewsets.ModelViewSet):
+	# define queryset
+        queryset = P_flowsen_setting.objects.all()
+
+        # specify serializer to be used
+        serializer_class =PflowsensettingSerializer
+
+        deviceid=0
+        def dispatch(self, request, *args, **kwargs):
+        
+            try:
+                data_dict = json.loads(request.body)
+                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                
+                value_list=list(data_dict.values())
+                
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                global deviceid
+                for x in dinfo:
+                    
+                    did=x.Device_id
+                    cmpname=x.componant_name
+                    deviceid=did
+                for key in unwanted_keys:
+                    if key in data_dict:
+                        del data_dict[key]
+                for key in data_dict:
+                    data_dict[key] = str(data_dict[key])
+                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
+                dd=dateandtime()
+                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} Pflowsen settings change has been requested - flow factor:{value_list[3]}"
+                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='Pflowsen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                erro.save()
+
+            except Exception as e:
+                pass    
+            return super().dispatch(request)    
+        def perform_create(self, serializer):
+            try:
+                serializer.save()  # Save the data to the database
+                ddid=P_flowsen_setting.objects.filter(device_id='').update(device_id=deviceid)
+                ddid.save()
+            except Exception as e:
+                pass        
+        def desptroy(self, request):
+            try:
+                instance = self.get_object()
+                self.perform_destroy(instance)
+            except Http404:
+                pass
+class panelsettingViewset(viewsets.ModelViewSet):
+	# define queryset
+        queryset = panel_setting.objects.all()
+
+        # specify serializer to be used
+        serializer_class = panelsettingSerializer
+
+        deviceid=0
+        def dispatch(self, request, *args, **kwargs):
+        
+            try:
+                data_dict = json.loads(request.body)
+                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                
+                value_list=list(data_dict.values())
+                
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                global deviceid
+                for x in dinfo:
+                    
+                    did=x.Device_id
+                    cmpname=x.componant_name
+                    deviceid=did
+                for key in unwanted_keys:
+                    if key in data_dict:
+                        del data_dict[key]
+                changesrt=data_dict['srt']
+                changesrt=changesrt.split(":")
+                hrtominit=int(changesrt[0])*60
+                data_dict['srt']=hrtominit+int(changesrt[1])
+                for key in data_dict:
+                    data_dict[key] = str(data_dict[key])
+                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
+                print("MMM:",data_dict)
+                dd=dateandtime()
+                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} panel settings change has been requested - mode:{value_list[3]}, under voltage:{value_list[6]}, over voltage:{value_list[7]}, span:{value_list[8]}, no.of multiport valve:{value_list[4]}, sensor type:{value_list[5]}, service time:{value_list[9]}, backwash time:{value_list[10]}, rinse time:{value_list[11]}"
+                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='panel',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                erro.save()    
+
+            except Exception as e:
+                pass    
+            return super().dispatch(request)    
+        def perform_create(self, serializer):
+            try:
+                serializer.save()  # Save the data to the database
+                ddid=panel_setting.objects.filter(device_id='').update(device_id=deviceid)
+                ddid.save()
+            except Exception as e:
+                pass        
+        def desptroy(self, request):
+            try:
+                instance = self.get_object()
+                self.perform_destroy(instance)
+            except Http404:
+                pass
+class atmsettingViewset(viewsets.ModelViewSet):
+	# define queryset
+        queryset = atm_setting.objects.all()
+
+        # specify serializer to be used
+        serializer_class = atmsettingSerializer
+
+        deviceid=0
+        def dispatch(self, request, *args, **kwargs):
+        
+            try:
+                data_dict = json.loads(request.body)
+                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id","ntt"]  # Example of unwanted keys
+                
+                value_list=list(data_dict.values())
+                
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                global deviceid
+                for x in dinfo:
+                    
+                    did=x.Device_id
+                    cmpname=x.componant_name
+                    deviceid=did
+                for key in unwanted_keys:
+                    if key in data_dict:
+                        del data_dict[key]
+                for key in data_dict:
+                    data_dict[key] = str(data_dict[key])
+                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
+                dd=dateandtime()
+                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} atm settings change has been requested - over no. Of  tap:{value_list[3]}, no. Of volume:{value_list[4]}, volume1:{value_list[5]}, volume2:{value_list[6]}, volume3:{value_list[7]}, volume4:{value_list[8]}, rate1:{value_list[9]}, rate2:{value_list[10]}, rate3:{value_list[11]}, rate4:{value_list[12]}"
+                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='atm',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                erro.save() 
+
+            except Exception as e:
+                pass    
+            return super().dispatch(request)    
+        def perform_create(self, serializer):
+            try:
+                serializer.save()  # Save the data to the database
+                ddid=atm_setting.objects.filter(device_id='').update(device_id=deviceid)
+                ddid.save()
+            except Exception as e:
+                pass        
+        def desptroy(self, request):
+            try:
+                instance = self.get_object()
+                self.perform_destroy(instance)
+            except Http404:
+                pass
+        
+class cnd_consensettingViewset(viewsets.ModelViewSet):
+    # define queryset
+        queryset = cnd_consen_setting.objects.all()
+
+        # specify serializer to be used
+        serializer_class = cnd_consensettingSerializer
+
+        deviceid=0
+        def dispatch(self, request, *args, **kwargs):
+        
+            try:
+                data_dict = json.loads(request.body)
+                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                
+                value_list=list(data_dict.values())
+                
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                global deviceid
+                for x in dinfo:
+                    did=x.Device_id
+                    cmpname=x.componant_name
+                    deviceid=did
+                for key in unwanted_keys:
+                    if key in data_dict:
+                        del data_dict[key]
+                print("device is:", deviceid)
+                for key in data_dict:
+                    data_dict[key] = str(data_dict[key])
+                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
+                dd=dateandtime()
+                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} cnd_consen settings change has been requested - span:{value_list[3]}, atert_setpoint:{value_list[4]}"
+                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='cnd_consen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                erro.save()
+
+            except Exception as e:
+                pass    
+            return super().dispatch(request)    
+        def perform_create(self, serializer):
+            try:
+                serializer.save()  # Save the data to the database
+                ddid=cnd_consen_setting.objects.filter(device_id='').update(device_id=deviceid)
+                ddid.save()
+            except Exception as e:
+                pass        
+        def desptroy(self, request):
+            try:
+                instance = self.get_object()
+                self.perform_destroy(instance)
+            except Http404:
+                pass
+class tds_consensettingViewset(viewsets.ModelViewSet):
+    # define queryset
+        queryset = tds_consen_setting.objects.all()
+
+        # specify serializer to be used
+        serializer_class = tds_consensettingSerializer
+
+        deviceid=0
+        def dispatch(self, request, *args, **kwargs):
+        
+            try:
+                data_dict = json.loads(request.body)
+                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                
+                value_list=list(data_dict.values())
+                
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                global deviceid
+                for x in dinfo:
+                    
+                    did=x.Device_id
+                    cmpname=x.componant_name
+                    deviceid=did
+                for key in unwanted_keys:
+                    if key in data_dict:
+                        del data_dict[key]
+                for key in data_dict:
+                    data_dict[key] = str(data_dict[key])
+                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
+                dd=dateandtime()
+                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tds_consen settings change has been requested - span:{value_list[3]}, atert_setpoint:{value_list[4]}"
+                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tds_consen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                erro.save()
+
+            except Exception as e:
+                pass    
+            return super().dispatch(request)    
+        def perform_create(self, serializer):
+            try:
+                serializer.save()  # Save the data to the database
+                ddid=tds_setting.objects.filter(device_id='').update(device_id=deviceid)
+                ddid.save()
+            except Exception as e:
+                pass        
+        def desptroy(self, request):
+            try:
+                instance = self.get_object()
+                self.perform_destroy(instance)
+            except Http404:
+                pass
+class ampv1stateViewset(viewsets.ModelViewSet):
+        # define queryset
+        queryset = ampv1_state.objects.all()
+
+        # specify serializer to be used
+        serializer_class = ampv1stateSerializer
+
+        deviceid=0
+        def dispatch(self, request, *args, **kwargs):
+        
+            try:
+                data_dict = json.loads(request.body)
+                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                
+                value_list=list(data_dict.values())
+                
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                global deviceid
+                for x in dinfo:
+                    
+                    did=x.Device_id
+                    cmpname=x.componant_name
+                    deviceid=did
+                for key in unwanted_keys:
+                    if key in data_dict:
+                        del data_dict[key]
+                for key in data_dict:
+                    data_dict[key] = str(data_dict[key])
+                mqttc.publish(f'wc1/{did}/chgsta/{cmpname}',str(data_dict).replace(' ',''))
+                dd=dateandtime()
+                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} ampv1 status change has been requested - position:{value_list[3]}"
+                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='ampv1',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                erro.save()
+
+            except Exception as e:
+                pass    
+            return super().dispatch(request)    
+        def perform_create(self, serializer):
+            try:
+                serializer.save()  # Save the data to the database
+                ddid=ampv1_state.objects.filter(device_id='').update(device_id=deviceid)
+                ddid.save()
+            except Exception as e:
+                pass        
+        def desptroy(self, request):
+            try:
+                instance = self.get_object()
+                self.perform_destroy(instance)
+            except Http404:
+                pass
+        
+class ampv1settingViewset(viewsets.ModelViewSet):
+# 	# define queryset
+        queryset = ampv1_setting.objects.all()
+
+        # specify serializer to be used
+        serializer_class = ampv1settingSerializer
+
+        deviceid=0
+        def dispatch(self, request, *args, **kwargs):
+        
+            try:
+                data_dict = json.loads(request.body)
+                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                
+                value_list=list(data_dict.values())
+                
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                global deviceid
+                for x in dinfo:
+                    
+                    did=x.Device_id
+                    cmpname=x.componant_name
+                    deviceid=did
+                for key in unwanted_keys:
+                    if key in data_dict:
+                        del data_dict[key]
+                changesrt=data_dict['srt']
+                changesrt=changesrt.split(":")
+                hrtominit=int(changesrt[0])*60
+                data_dict['srt']=hrtominit+int(changesrt[1])
+                for key in data_dict:
+                    data_dict[key] = str(data_dict[key])
+                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
+                print("Dattta:",data_dict)
+                dd=dateandtime()
+                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} ampv1 settings change has been requested - service time:{value_list[8]}, backwash time:{value_list[9]}, rins time:{value_list[10]}, motor on delay time:{value_list[11]}, output1:{value_list[12]}, output2:{value_list[13]}, output3:{value_list[14]}, input1:{value_list[4]}, input2:{value_list[5]}, input3:{value_list[6]}, pressure switch input:{value_list[7]}, sensor type:{value_list[3]}"
+                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='ampv1',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                erro.save()
+
+            except Exception as e:
+                pass    
+            return super().dispatch(request)    
+        def perform_create(self, serializer):
+            try:
+                serializer.save()  # Save the data to the database
+                ddid=ampv1_setting.objects.filter(device_id='').update(device_id=deviceid)
+                ddid.save()
+            except Exception as e:
+                pass        
+        def desptroy(self, request):
+            try:
+                instance = self.get_object()
+                self.perform_destroy(instance)
+            except Http404:
+                pass
+class ampv2stateViewset(viewsets.ModelViewSet):
+        # define queryset
+        queryset = ampv2_state.objects.all()
+
+        # specify serializer to be used
+        serializer_class = ampv2stateSerializer
+
+        deviceid=0
+        def dispatch(self, request, *args, **kwargs):
+        
+            try:
+                data_dict = json.loads(request.body)
+                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                
+                value_list=list(data_dict.values())
+                
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                global deviceid
+                for x in dinfo:
+                    
+                    did=x.Device_id
+                    cmpname=x.componant_name
+                    deviceid=did
+                for key in unwanted_keys:
+                    if key in data_dict:
+                        del data_dict[key]
+                for key in data_dict:
+                    data_dict[key] = str(data_dict[key])
+                mqttc.publish(f'wc1/{did}/chgsta/{cmpname}',str(data_dict).replace(' ',''))
+                dd=dateandtime()
+                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} ampv2 status change has been requested - position:{value_list[3]}"
+                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='ampv2',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                erro.save()
+            except Exception as e:
+                pass    
+            return super().dispatch(request)    
+        def perform_create(self, serializer):
+            try:
+                serializer.save()  # Save the data to the database
+                ddid=ampv2_state.objects.filter(device_id='').update(device_id=deviceid)
+                ddid.save()
+            except Exception as e:
+                pass        
+        def desptroy(self, request):
+            try:
+                instance = self.get_object()
+                self.perform_destroy(instance)
+            except Http404:
+                pass
+class ampv2settingViewset(viewsets.ModelViewSet):
+	# define queryset
+        queryset = ampv2_setting.objects.all()
+
+        # specify serializer to be used
+        serializer_class = ampv2settingSerializer
+
+        deviceid=0
+        def dispatch(self, request, *args, **kwargs):
+        
+            try:
+                data_dict = json.loads(request.body)
+                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                
+                value_list=list(data_dict.values())
+                
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                global deviceid
+                for x in dinfo:
+                    
+                    did=x.Device_id
+                    cmpname=x.componant_name
+                    deviceid=did
+                for key in unwanted_keys:
+                    if key in data_dict:
+                        del data_dict[key]
+                changesrt=data_dict['srt']
+                changesrt=changesrt.split(":")
+                hrtominit=int(changesrt[0])*60
+                data_dict['srt']=hrtominit+int(changesrt[1])
+                for key in data_dict:
+                    data_dict[key] = str(data_dict[key])
+                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
+                dd=dateandtime()
+                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} ampv2 settings change has been requested - service time:{value_list[8]}, backwash time:{value_list[9]}, rins time:{value_list[10]}, motor on delay time:{value_list[11]}, output1:{value_list[12]}, output2:{value_list[13]}, output3:{value_list[14]}, input1:{value_list[4]}, input2:{value_list[5]}, input3:{value_list[6]}, pressure switch input:{value_list[7]}, sensor type:{value_list[3]}"
+                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='ampv2',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                erro.save()
+            except Exception as e:
+                pass    
+            return super().dispatch(request)    
+        def perform_create(self, serializer):
+            try:
+                serializer.save()  # Save the data to the database
+                ddid=ampv2_setting.objects.filter(device_id='').update(device_id=deviceid)
+                ddid.save()
+            except Exception as e:
+                pass        
+        def desptroy(self, request):
+            try:
+                instance = self.get_object()
+                self.perform_destroy(instance)
+            except Http404:
+                pass
+
+class tap1settingViewset(viewsets.ModelViewSet):
+	# define queryset
+        queryset = tap1_setting.objects.all()
+
+        # specify serializer to be used
+        serializer_class = tap1settingSerializer
+
+        deviceid=0
+        def dispatch(self, request, *args, **kwargs):
+        
+            try:
+                data_dict = json.loads(request.body)
+                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                
+                value_list=list(data_dict.values())
+                
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                global deviceid
+                for x in dinfo:
+                    
+                    did=x.Device_id
+                    cmpname=x.componant_name
+                    deviceid=did
+                for key in unwanted_keys:
+                    if key in data_dict:
+                        del data_dict[key]
+                for key in data_dict:
+                    data_dict[key] = str(data_dict[key])
+                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
+                print("*!*!*!:",data_dict)
+                dd=dateandtime()
+                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tap1 settings change has been requested - pulse1:{value_list[3]}, pulse2:{value_list[4]}, pulse3:{value_list[5]}, pulse4:{value_list[6]}"
+                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tap1',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                erro.save()
+
+            except Exception as e:
+                pass    
+            return super().dispatch(request)    
+        def perform_create(self, serializer):
+            try:
+                serializer.save()  # Save the data to the database
+                ddid=tap1_setting.objects.filter(device_id='').update(device_id=deviceid)
+                ddid.save()
+            except Exception as e:
+                pass        
+        def desptroy(self, request):
+            try:
+                instance = self.get_object()
+                self.perform_destroy(instance)
+            except Http404:
+                pass
+class tap2settingViewset(viewsets.ModelViewSet):
+	# define queryset
+        queryset = tap2_setting.objects.all()
+
+        # specify serializer to be used
+        serializer_class = tap2settingSerializer
+
+        deviceid=0
+        def dispatch(self, request, *args, **kwargs):
+        
+            try:
+                data_dict = json.loads(request.body)
+                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                
+                value_list=list(data_dict.values())
+                
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                global deviceid
+                for x in dinfo:
+                    
+                    did=x.Device_id
+                    cmpname=x.componant_name
+                    deviceid=did
+                for key in unwanted_keys:
+                    if key in data_dict:
+                        del data_dict[key]
+                for key in data_dict:
+                    data_dict[key] = str(data_dict[key])
+                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
+                dd=dateandtime()
+                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tap2 settings change has been requested - pulse1:{value_list[1]}, pulse2:{value_list[2]}, pulse3:{value_list[3]}, pulse4:{value_list[4]}"
+                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tap2',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                erro.save()
+
+            except Exception as e:
+                pass    
+            return super().dispatch(request)    
+        def perform_create(self, serializer):
+            try:
+                serializer.save()  # Save the data to the database
+                ddid=tap2_setting.objects.filter(device_id='').update(device_id=deviceid)
+                ddid.save()
+            except Exception as e:
+                pass        
+        def desptroy(self, request):
+            try:
+                instance = self.get_object()
+                self.perform_destroy(instance)
+            except Http404:
+                pass
+class tap3settingViewset(viewsets.ModelViewSet):
+	# define queryset
+        queryset = tap3_setting.objects.all()
+
+        # specify serializer to be used
+        serializer_class = tap3settingSerializer
+
+        deviceid=0
+        def dispatch(self, request, *args, **kwargs):
+        
+            try:
+                data_dict = json.loads(request.body)
+                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                
+                value_list=list(data_dict.values())
+                
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                global deviceid
+                for x in dinfo:
+                    
+                    did=x.Device_id
+                    cmpname=x.componant_name
+                    deviceid=did
+                for key in unwanted_keys:
+                    if key in data_dict:
+                        del data_dict[key]
+                for key in data_dict:
+                    data_dict[key] = str(data_dict[key])
+                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
+                dd=dateandtime()
+                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tap3 settings change has been requested - pulse1:{value_list[3]}, pulse2:{value_list[4]}, pulse3:{value_list[5]}, pulse4:{value_list[6]}"
+                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tap3',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                erro.save()
+
+            except Exception as e:
+                pass    
+            return super().dispatch(request)    
+        def perform_create(self, serializer):
+            try:
+                serializer.save()  # Save the data to the database
+                ddid=tap3_setting.objects.filter(device_id='').update(device_id=deviceid)
+                ddid.save()
+            except Exception as e:
+                pass        
+        def desptroy(self, request):
+            try:
+                instance = self.get_object()
+                self.perform_destroy(instance)
+            except Http404:
+                pass
+class tap4settingViewset(viewsets.ModelViewSet):
+	# define queryset
+        queryset = tap4_setting.objects.all()
+
+        # specify serializer to be used
+        serializer_class = tap4settingSerializer
+
+    
+        deviceid=0
+        def dispatch(self, request, *args, **kwargs):
+        
+            try:
+                data_dict = json.loads(request.body)
+                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                
+                value_list=list(data_dict.values())
+                
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                global deviceid
+                for x in dinfo:
+                    
+                    did=x.Device_id
+                    cmpname=x.componant_name
+                    deviceid=did
+                for key in unwanted_keys:
+                    if key in data_dict:
+                        del data_dict[key]
+                for key in data_dict:
+                    data_dict[key] = str(data_dict[key])
+                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
+                dd=dateandtime()
+                e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tap4 settings change has been requested - pulse1:{value_list[3]}, pulse2:{value_list[4]}, pulse3:{value_list[5]}, pulse4:{value_list[6]}"
+                erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tap4',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                erro.save()
+
+
+            except Exception as e:
+                pass    
+            return super().dispatch(request)    
+        def perform_create(self, serializer):
+            try:
+                serializer.save()  # Save the data to the database
+                ddid=tap4_setting.objects.filter(device_id='').update(device_id=deviceid)
+                ddid.save()
+            except Exception as e:
+                pass        
+        def desptroy(self, request):
+            try:
+                instance = self.get_object()
+                self.perform_destroy(instance)
+            except Http404:
+                pass
+
+
+
+   
+
 # topic = "test"
 # try:
 #     mqttc = mqtt.Client()
