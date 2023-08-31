@@ -53,7 +53,7 @@ urlpatterns = [
     # modify sites
     path('send_otp/', views.send_otp),
     path('verify_otp/', views.verify_otp),
-    path('verify_token/', views.verify_token),
+    # path('verify_token/', views.verify_token),
     path('add_site/', views.add_site),
     path('get_device/<int:pk>', views.get_device),
     path('re_auth_device/', views.re_auth_device),
