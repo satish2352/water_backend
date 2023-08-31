@@ -929,7 +929,7 @@ def send_otp(request):
             else:
                 site_obj.phone_verified = False
             logger.info("Both OTP and token are not verified hence resending the otp")
-            threading.Thread(target=connect_mqtt_in_background, args=(request.user.company_id, )).start()
+            # threading.Thread(target=connect_mqtt_in_background, args=(request.user.company_id, )).start()
             # ! connects MQTT 
 
             # sent = site_obj.send_verification_sms(site_obj.id)
