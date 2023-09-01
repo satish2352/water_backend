@@ -51,23 +51,16 @@ def user_login(request):
                     login(request, user)
                     logged_user = User.objects.get(email=email)
                     sitefinder=logged_user.company_id
-                    print("Site", sitefinder)
                     sits=Site.objects.filter(company_id=sitefinder)
                     company_name = Company.objects.get(id=logged_user.company_id)
                     userfinder=logged_user.id
-                    print("User:", userfinder)
                     # user_id=SitePermission.objects.get(id=
-                    print("Sits",sits)
                     if sits:
-                        print("outer loop")
                         for site in sits:
-                            print("*****")
                             sitename=site.site_name
                     else:
                         sitename=''
-                    print("sitename:",sitename)
                     if user.is_blocked:
-                        print('blokced')
                         if request.path != reverse('blocked'):
                             return redirect('blocked')
             

@@ -22,13 +22,11 @@ class SmsPinGenerator:
 
     def make_pin(self, site):
         pin = "{:04d}".format(randint(0, 9999))
-        print(pin)
         # cache.set('pin({phone_number})'.format(phone_number=site.phone), pin, self.valid_for)
         return pin
 
     def make_6_pin(self, site):
         pin = "{:06d}".format(randint(0, 999999))
-        print(pin)
         # cache.set('pin({phone_number})'.format(phone_number=site.phone), pin, self.valid_for)
         return pin
 

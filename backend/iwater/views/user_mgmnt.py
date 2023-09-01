@@ -536,7 +536,6 @@ def edit_user(request, pk):
 # ! block and unblock functionality
 @api_view(['POST'])
 def block_user(request, email):
-    print(email)
     user = get_object_or_404(User, email=email)
     # user_profile = UserProfile.objects.get(user=user)
     user.is_blocked = True
