@@ -454,13 +454,13 @@ class SerchinfoSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = device_info
 		fields='__all__'
-		# fields=['company_name',]
+		# fields=['company_id',]
 class rwpsettingSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = rwp_setting
-		fields=['drc','olc','spn','unit_type','company_name','componant_name']
+		fields=['drc','olc','spn','unit_type','company_id','componant_name']
 	# 	print("hi am from serilization")
-	# 	fields=['olc','drc','spn','unit_type','company_name','componant_name']
+	# 	fields=['olc','drc','spn','unit_type','company_id','componant_name']
 
 	# 	def get_author_serializer(self):
 	# 		# here write the logic to compute the value based on object
@@ -478,90 +478,90 @@ class rwpsettingSerializer(serializers.HyperlinkedModelSerializer):
 class RwpstateSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = Rwp_state
-		fields=['sts','unit_type','company_name','componant_name']
+		fields=['sts','unit_type','company_id','componant_name']
 # class rwpsettingSerializer(serializers.HyperlinkedModelSerializer):
 # 	class Meta:
 # 		model = rwp_setting
 # 		print("hi am from serilization")
-# 		fields=['olc','drc','spn','unit_type','company_name','componant_name']
+# 		fields=['olc','drc','spn','unit_type','company_id','componant_name']
 
 
 class hppstateSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = hpp_state
-		fields=['sts','unit_type','company_name','componant_name']
+		fields=['sts','unit_type','company_id','componant_name']
 class hppsettingSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = hpp_setting
-		fields=['drc','olc','spn','unit_type','company_name','componant_name']
+		fields=['drc','olc','spn','unit_type','company_id','componant_name']
 
 class cndsettingSerializer(serializers.HyperlinkedModelSerializer):
 	# new_field = serializers.CharField()
 	class Meta:
 		model = cnd_setting
-		fields=['spn','tsp','asp','unit_type','company_name','componant_name']
+		fields=['spn','tsp','asp','unit_type','company_id','componant_name']
 
 class tdssettingSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = tds_setting
-		fields=['spn','tsp','asp','unit_type','company_name','componant_name']
+		fields=['spn','tsp','asp','unit_type','company_id','componant_name']
 class FflowsensettingSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = F_flowsen_setting
-		fields=['ff1','unit_type','company_name','componant_name']
+		fields=['ff1','unit_type','company_id','componant_name']
 
 class PflowsensettingSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = P_flowsen_setting
-		fields=['ff2','unit_type','company_name','componant_name']
+		fields=['ff2','unit_type','company_id','componant_name']
 class panelsettingSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = panel_setting
-		fields=['mod','unv','ovv','spn','nmv','stp','srt','bkt','rst','unit_type','company_name','componant_name']
+		fields=['mod','unv','ovv','spn','nmv','stp','srt','bkt','rst','unit_type','company_id','componant_name']
 class atmsettingSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = atm_setting
-		fields=['ntp','nov','vl1','vl2','vl3','vl4','re1','re2','re3','re4','unit_type','company_name','componant_name']
+		fields=['ntp','nov','vl1','vl2','vl3','vl4','re1','re2','re3','re4','unit_type','company_id','componant_name']
 class cnd_consensettingSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = cnd_consen_setting
-		fields=['spn','asp','unit_type','company_name','componant_name']
+		fields=['spn','asp','unit_type','company_id','componant_name']
 class tds_consensettingSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = tds_consen_setting
-		fields=['spn','asp','unit_type','company_name','componant_name']
+		fields=['spn','asp','unit_type','company_id','componant_name']
 class tap1settingSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = tap1_setting
-		fields=['p1','p2','p3','p4','unit_type','company_name','componant_name']
+		fields=['p1','p2','p3','p4','unit_type','company_id','componant_name']
 class tap2settingSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = tap2_setting
-		fields=['p1','p2','p3','p4','unit_type','company_name','componant_name']
+		fields=['p1','p2','p3','p4','unit_type','company_id','componant_name']
 class tap3settingSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = tap3_setting
-		fields=['p1','p2','p3','p4','unit_type','company_name','componant_name']
+		fields=['p1','p2','p3','p4','unit_type','company_id','componant_name']
 class tap4settingSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = tap4_setting
-		fields=['p1','p2','p3','p4','unit_type','company_name','componant_name']
+		fields=['p1','p2','p3','p4','unit_type','company_id','componant_name']
 class ampv1stateSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = ampv1_state
-		fields=['pos','unit_type','company_name','componant_name']
+		fields=['pos','unit_type','company_id','componant_name']
 class ampv1settingSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = ampv1_setting
-		fields=['srt','bkt','rst','mot','stp','op1','op2','op3','ip1','ip2','ip3','psi','unit_type','company_name','componant_name']
+		fields=['srt','bkt','rst','mot','stp','op1','op2','op3','ip1','ip2','ip3','psi','unit_type','company_id','componant_name']
 class ampv2stateSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = ampv2_state
-		fields=['pos','unit_type','company_name','componant_name']
+		fields=['pos','unit_type','company_id','componant_name']
 class ampv2settingSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = ampv2_setting
-		fields=['srt','bkt','rst','mot','stp','op1','op2','op3','ip1','ip2','ip3','psi','unit_type','company_name','componant_name']
+		fields=['srt','bkt','rst','mot','stp','op1','op2','op3','ip1','ip2','ip3','psi','unit_type','company_id','componant_name']
 class flowsen1_DailySerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = flowsen1_repo_daily

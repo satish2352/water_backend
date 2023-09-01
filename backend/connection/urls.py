@@ -147,7 +147,7 @@ router.register(r'updated_disp_flowsen1',updated_disp_flowsen1Viewset,basename='
 router.register(r'updated_disp_flowsen2',updated_disp_flowsen2Viewset,basename='disp_flowsen2')
 router.register(r'updated_disp_flowsen3',updated_disp_flowsen3Viewset,basename='disp_flowsen3')
 router.register(r'updated_disp_flowsen4',updated_disp_flowsen4Viewset,basename='disp_flowsen4')
-router.register(r'get_device_id',getDeviceID,basename='get_device_id')
+# router.register(r'get_device_id',getDeviceID,basename='get_device_id')
 
 router.register(r'last-records',LastRecordsView,basename='last-records')
 

@@ -5090,11 +5090,11 @@ class site_check(viewsets.ModelViewSet):
         print(request.body,"BODY")
         data = json.loads(request.body)
         print(data,type(data),"DATA")
-        companydata=mo.Company.objects.filter(company_name=data['company_name'])
+        companydata=mo.Company.objects.filter(company_id=data['company_id'])
         for i in companydata:
             global cid
             cid=i.id
-        number_of_sites=mo.Site.objects.filter(company=companydata.id)
+        number_of_sites=mo.Site.objects.filter(company=data['company_id'])
         site_name=[]
         for sit in number_of_sites:
             site_name.append(sit.site_name)
@@ -5549,51 +5549,51 @@ class updated_disp_atmViewset(viewsets.ModelViewSet):
         response_data=[response_data]
         return JsonResponse(response_data, safe=False, content_type="application/json")    
       
-class getDeviceID(viewsets.ModelViewSet):
-	# define queryset
-    def dispatch(self, request, *args, **kwargs):
-        try:
-            did = 0
-            data_dict = json.loads(request.body)
-            value_list = list(data_dict.values())
-            dinfo = device_info.objects.filter(componant_name=value_list[2], unit_type=value_list[1], company_name=value_list[0])
-            # print("value_list",dinfo)
-            # data = serialize("json", dinfo, fields=('Device_id'))
-            # return HttpResponse(data, content_type="application/json")
+# class getDeviceID(viewsets.ModelViewSet):
+# 	# define queryset
+#     def dispatch(self, request, *args, **kwargs):
+#         try:
+#             did = 0
+#             data_dict = json.loads(request.body)
+#             value_list = list(data_dict.values())
+#             dinfo = device_info.objects.filter(componant_name=value_list[2], unit_type=value_list[1], company_id=value_list[0])
+#             # print("value_list",dinfo)
+#             # data = serialize("json", dinfo, fields=('Device_id'))
+#             # return HttpResponse(data, content_type="application/json")
 
-            fields_to_exclude = ['model', 'pk']
+#             fields_to_exclude = ['model', 'pk']
                 
-            data = serialize("json", dinfo)
-            data = json.loads(data)
+#             data = serialize("json", dinfo)
+#             data = json.loads(data)
             
-            for item in data:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+#             for item in data:
+#                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
             
             
-            if not data:
-                response_data = {
-                    'data': [],  # Include the 'data' field
-                    'status': 200,  # Add the status field
-                    'message': "Data not found"  # Add the message field
-                }
-            else:     
-                data = json.dumps(data[0]["fields"])
-                data = json.loads(data)
-                data = [data]
-                response_data = {
-                    'data': data[0],  # Include the 'data' field
-                    'status': 200,  # Add the status field
-                    'message': "Data get successfully"  # Add the message field
-                }
-            response_data=[response_data]
-        except Exception as e:
-                    response_data = {
-                        'data':e,  # Include the 'data' field
-                        'status': 200,  # Add the status field
-                        'message': "Exception found"  # Add the message field
-                    }
+#             if not data:
+#                 response_data = {
+#                     'data': [],  # Include the 'data' field
+#                     'status': 200,  # Add the status field
+#                     'message': "Data not found"  # Add the message field
+#                 }
+#             else:     
+#                 data = json.dumps(data[0]["fields"])
+#                 data = json.loads(data)
+#                 data = [data]
+#                 response_data = {
+#                     'data': data[0],  # Include the 'data' field
+#                     'status': 200,  # Add the status field
+#                     'message': "Data get successfully"  # Add the message field
+#                 }
+#             response_data=[response_data]
+#         except Exception as e:
+#                     response_data = {
+#                         'data':e,  # Include the 'data' field
+#                         'status': 200,  # Add the status field
+#                         'message': "Exception found"  # Add the message field
+#                     }
         
-        return JsonResponse(response_data, safe=False, content_type="application/json")
+#         return JsonResponse(response_data, safe=False, content_type="application/json")
 
 
 class updated_disp_tap1Viewset(viewsets.ModelViewSet):
@@ -5967,47 +5967,47 @@ class updated_treat_F_flowsenViewset(viewsets.ModelViewSet):
         response_data=[response_data]
         return JsonResponse(response_data, safe=False, content_type="application/json")    
         
-class getDeviceID(viewsets.ModelViewSet):
-	# define queryset
-    def dispatch(self, request, *args, **kwargs):
-        try:
-            did = 0
-            data_dict = json.loads(request.body)
-            value_list = list(data_dict.values())
-            dinfo = device_info.objects.filter(componant_name=value_list[2], unit_type=value_list[1], company_name=value_list[0])
-            fields_to_exclude = ['model', 'pk']
+# class getDeviceID(viewsets.ModelViewSet):
+# 	# define queryset
+#     def dispatch(self, request, *args, **kwargs):
+#         try:
+#             did = 0
+#             data_dict = json.loads(request.body)
+#             value_list = list(data_dict.values())
+#             dinfo = device_info.objects.filter(componant_name=value_list[2], unit_type=value_list[1], company_id=value_list[0])
+#             fields_to_exclude = ['model', 'pk']
                 
-            data = serialize("json", dinfo)
-            data = json.loads(data)
+#             data = serialize("json", dinfo)
+#             data = json.loads(data)
             
-            for item in data:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+#             for item in data:
+#                 item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
             
             
-            if not data:
-                response_data = {
-                    'data': [],  # Include the 'data' field
-                    'status': 200,  # Add the status field
-                    'message': "Data not found"  # Add the message field
-                }
-            else:     
-                data = json.dumps(data[0]["fields"])
-                data = json.loads(data)
-                data = [data]
-                response_data = {
-                    'data': data[0],  # Include the 'data' field
-                    'status': 200,  # Add the status field
-                    'message': "Data get successfully"  # Add the message field
-                }
-            response_data=[response_data]
-        except Exception as e:
-                    response_data = {
-                        'data':e,  # Include the 'data' field
-                        'status': 200,  # Add the status field
-                        'message': "Exception found"  # Add the message field
-                    }
+#             if not data:
+#                 response_data = {
+#                     'data': [],  # Include the 'data' field
+#                     'status': 200,  # Add the status field
+#                     'message': "Data not found"  # Add the message field
+#                 }
+#             else:     
+#                 data = json.dumps(data[0]["fields"])
+#                 data = json.loads(data)
+#                 data = [data]
+#                 response_data = {
+#                     'data': data[0],  # Include the 'data' field
+#                     'status': 200,  # Add the status field
+#                     'message': "Data get successfully"  # Add the message field
+#                 }
+#             response_data=[response_data]
+#         except Exception as e:
+#                     response_data = {
+#                         'data':e,  # Include the 'data' field
+#                         'status': 200,  # Add the status field
+#                         'message': "Exception found"  # Add the message field
+#                     }
         
-        return JsonResponse(response_data, safe=False, content_type="application/json")
+#         return JsonResponse(response_data, safe=False, content_type="application/json")
 
 class updated_treat_P_flowsenViewset(viewsets.ModelViewSet):
 	# define queryset
@@ -6842,11 +6842,11 @@ class RwpstateViewset(viewsets.ModelViewSet):
         def dispatch(self, request, *args, **kwargs):
             try:
                 data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]  # Example of unwanted keys
                 
                 value_list=list(data_dict.values())
                 print("datadict:",data_dict)
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
                 for x in dinfo:
                     global deviceid
                     did=x.Device_id
@@ -6895,11 +6895,11 @@ class rwpsettingViewset(viewsets.ModelViewSet):
         
         try:
             data_dict = json.loads(request.body)
-            unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name"]  # Example of unwanted keys
+            unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name"]  # Example of unwanted keys
             print("dict data is:",data_dict)
             value_list=list(data_dict.values())
             print("value_list:",value_list)
-            dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+            dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
             for x in dinfo:
                 print("did id:",x.Device_id)
                 did=x.Device_id
@@ -6928,11 +6928,11 @@ class rwpsettingViewset(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         try:
             data_dict = serializer.validated_data
-            # unwanted_keys = ["unit_type", "water_treatment", "company_name", "componant_nam,"site_name"e"]
+            # unwanted_keys = ["unit_type", "water_treatment", "company_id", "componant_nam,"site_name"e"]
             # Get the device information based on the provided values
             dinfo = device_info.objects.filter(componant_name=data_dict['componant_name'],
                                                unit_type=data_dict['unit_type'],
-                                              company_name=data_dict['company_name']).last()
+                                              company_id=data_dict['company_id']).last()
             deviceid=0
             if dinfo:
                 did = dinfo.Device_id
@@ -6961,11 +6961,11 @@ class hppstateViewset(viewsets.ModelViewSet):
         def dispatch(self, request, *args, **kwargs):
             try:
                 data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]  # Example of unwanted keys
                 
                 value_list=list(data_dict.values())
                 
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
                 global deviceid
                 for x in dinfo:
                     
@@ -7014,11 +7014,11 @@ class hppsettingViewset(viewsets.ModelViewSet):
             
             try:
                 data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]  # Example of unwanted keys
                 
                 value_list=list(data_dict.values())
                 
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
                 global deviceid
                 for x in dinfo:
                     did=x.Device_id
@@ -7061,7 +7061,7 @@ class device_infoViewset(viewsets.ModelViewSet):
             print(data,type(data),"DATA11:")
             u_id=data['user_id']
             print("uid",u_id)
-            dinfo = device_info.objects.filter(company_name=data['company_name'])
+            dinfo = device_info.objects.filter(company_id=data['company_id'])
             print(dinfo,type(dinfo))
             allsites=[]
             for si in dinfo:
@@ -7108,9 +7108,9 @@ class cndsettingViewset(viewsets.ModelViewSet):
         def dispatch(self, request, *args, **kwargs):
             try:
                 data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]  # Example of unwanted keys
                 value_list=list(data_dict.values())
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
                 did = 0
                 cmpname = ''
                 global deviceid
@@ -7157,11 +7157,11 @@ class tdssettingViewset(viewsets.ModelViewSet):
         
             try:
                 data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]  # Example of unwanted keys
                 
                 value_list=list(data_dict.values())
                 print("valuelist is:",value_list)
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
                 global deviceid
                 for x in dinfo:
                     
@@ -7210,11 +7210,11 @@ class FflowsensettingViewset(viewsets.ModelViewSet):
         
             try:
                 data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]  # Example of unwanted keys
                 
                 value_list=list(data_dict.values())
                 
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
                 global deviceid
                 for x in dinfo:
                     
@@ -7261,11 +7261,11 @@ class PflowsensettingViewset(viewsets.ModelViewSet):
         
             try:
                 data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]  # Example of unwanted keys
                 
                 value_list=list(data_dict.values())
                 
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
                 global deviceid
                 for x in dinfo:
                     
@@ -7311,11 +7311,11 @@ class panelsettingViewset(viewsets.ModelViewSet):
         
             try:
                 data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]  # Example of unwanted keys
                 
                 value_list=list(data_dict.values())
                 
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
                 global deviceid
                 for x in dinfo:
                     
@@ -7366,11 +7366,11 @@ class atmsettingViewset(viewsets.ModelViewSet):
         
             try:
                 data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id","ntt"]  # Example of unwanted keys
+                unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id","ntt"]  # Example of unwanted keys
                 
                 value_list=list(data_dict.values())
                 
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
                 global deviceid
                 for x in dinfo:
                     
@@ -7417,11 +7417,11 @@ class cnd_consensettingViewset(viewsets.ModelViewSet):
         
             try:
                 data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]  # Example of unwanted keys
                 
                 value_list=list(data_dict.values())
                 
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
                 global deviceid
                 for x in dinfo:
                     did=x.Device_id
@@ -7467,11 +7467,11 @@ class tds_consensettingViewset(viewsets.ModelViewSet):
         
             try:
                 data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]  # Example of unwanted keys
                 
                 value_list=list(data_dict.values())
                 
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
                 global deviceid
                 for x in dinfo:
                     
@@ -7517,11 +7517,11 @@ class ampv1stateViewset(viewsets.ModelViewSet):
         
             try:
                 data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]  # Example of unwanted keys
                 
                 value_list=list(data_dict.values())
                 
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
                 global deviceid
                 for x in dinfo:
                     
@@ -7568,11 +7568,11 @@ class ampv1settingViewset(viewsets.ModelViewSet):
         
             try:
                 data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]  # Example of unwanted keys
                 
                 value_list=list(data_dict.values())
                 
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
                 global deviceid
                 for x in dinfo:
                     
@@ -7623,11 +7623,11 @@ class ampv2stateViewset(viewsets.ModelViewSet):
         
             try:
                 data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]  # Example of unwanted keys
                 
                 value_list=list(data_dict.values())
                 
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
                 global deviceid
                 for x in dinfo:
                     
@@ -7672,11 +7672,11 @@ class ampv2settingViewset(viewsets.ModelViewSet):
         
             try:
                 data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]  # Example of unwanted keys
                 
                 value_list=list(data_dict.values())
                 
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
                 global deviceid
                 for x in dinfo:
                     
@@ -7726,11 +7726,11 @@ class tap1settingViewset(viewsets.ModelViewSet):
         
             try:
                 data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]  # Example of unwanted keys
                 
                 value_list=list(data_dict.values())
                 
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
                 global deviceid
                 for x in dinfo:
                     
@@ -7777,11 +7777,11 @@ class tap2settingViewset(viewsets.ModelViewSet):
         
             try:
                 data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]  # Example of unwanted keys
                 
                 value_list=list(data_dict.values())
                 
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
                 global deviceid
                 for x in dinfo:
                     
@@ -7827,11 +7827,11 @@ class tap3settingViewset(viewsets.ModelViewSet):
         
             try:
                 data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]  # Example of unwanted keys
                 
                 value_list=list(data_dict.values())
                 
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
                 global deviceid
                 for x in dinfo:
                     
@@ -7878,11 +7878,11 @@ class tap4settingViewset(viewsets.ModelViewSet):
         
             try:
                 data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_name","componant_name","site_name","device_id"]  # Example of unwanted keys
+                unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]  # Example of unwanted keys
                 
                 value_list=list(data_dict.values())
                 
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_name=value_list[0])
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
                 global deviceid
                 for x in dinfo:
                     

@@ -2466,7 +2466,7 @@ class device_info(models.Model):
     Device_id=models.CharField(max_length=100)
     Device_name=models.CharField(max_length=100)    
     unit_type=models.CharField(max_length=100)
-    company_name=models.CharField(max_length=100)
+    company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     site_name=models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -2510,13 +2510,13 @@ class rwp_setting(models.Model):
     drc=models.CharField(max_length=100)
     spn=models.CharField(max_length=100)
     unit_type=models.CharField(max_length=100)
-    company_name=models.CharField(max_length=100)
+    company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100) 
     device_id=models.CharField(max_length=100)   
     
 
     def str(self):
-        return self.olc,self.drc,self.spn,self.unit_type,self.company_name,self.componant_name   
+        return self.olc,self.drc,self.spn,self.unit_type,self.company_id,self.componant_name   
     # class Meta:
     #     app_label = 'devices'
     # class Meta:
@@ -2527,7 +2527,7 @@ class hpp_setting(models.Model):
     drc=models.CharField(max_length=100)
     spn=models.CharField(max_length=100)
     unit_type=models.CharField(max_length=100)
-    company_name=models.CharField(max_length=100)
+    company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)    
     device_id=models.CharField(max_length=100)
 
@@ -2543,7 +2543,7 @@ class cnd_setting(models.Model):
     tsp=models.CharField(max_length=100)
     asp=models.CharField(max_length=100)
     unit_type=models.CharField(max_length=100)
-    company_name=models.CharField(max_length=100)
+    company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)  
     device_id=models.CharField(max_length=100)
     def str(self):
@@ -2557,7 +2557,7 @@ class tds_setting(models.Model):
     tsp=models.CharField(max_length=100)
     asp=models.CharField(max_length=100)
     unit_type=models.CharField(max_length=100)
-    company_name=models.CharField(max_length=100)
+    company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)  
     device_id=models.CharField(max_length=100)
     def str(self):
@@ -2581,7 +2581,7 @@ class panel_setting(models.Model):
     rst=models.CharField(max_length=100)    
     componant_name=models.CharField(max_length=100)    
     unit_type=models.CharField(max_length=100)    
-    company_name=models.CharField(max_length=100)    
+    company_id=models.CharField(max_length=100)    
     device_id=models.CharField(max_length=100)
     def str(self):
         return self.mod 
@@ -2602,7 +2602,7 @@ class atm_setting(models.Model):
     re3=models.CharField(max_length=100)    
     re4=models.CharField(max_length=100)
     unit_type=models.CharField(max_length=100)
-    company_name=models.CharField(max_length=100)
+    company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)    
     device_id=models.CharField(max_length=100)
 
@@ -2617,7 +2617,7 @@ class cnd_consen_setting(models.Model):
     spn=models.CharField(max_length=100)
     asp=models.CharField(max_length=100)
     unit_type=models.CharField(max_length=100)
-    company_name=models.CharField(max_length=100)
+    company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)
     def str(self):
@@ -2631,7 +2631,7 @@ class tds_consen_setting(models.Model):
     spn=models.CharField(max_length=100)
     asp=models.CharField(max_length=100)
     unit_type=models.CharField(max_length=100)
-    company_name=models.CharField(max_length=100)
+    company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)
     def str(self):
@@ -2647,7 +2647,7 @@ class tap1_setting(models.Model):
     p3=models.CharField(max_length=100)
     p4=models.CharField(max_length=100)
     unit_type=models.CharField(max_length=100)
-    company_name=models.CharField(max_length=100)
+    company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)
     def str(self):
@@ -2662,7 +2662,7 @@ class tap2_setting(models.Model):
     p3=models.CharField(max_length=100)
     p4=models.CharField(max_length=100)
     unit_type=models.CharField(max_length=100)
-    company_name=models.CharField(max_length=100)
+    company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)
     def str(self):
@@ -2677,7 +2677,7 @@ class tap3_setting(models.Model):
     p3=models.CharField(max_length=100)
     p4=models.CharField(max_length=100)
     unit_type=models.CharField(max_length=100)
-    company_name=models.CharField(max_length=100)
+    company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)
     def str(self):
@@ -2692,7 +2692,7 @@ class tap4_setting(models.Model):
     p3=models.CharField(max_length=100)
     p4=models.CharField(max_length=100)
     unit_type=models.CharField(max_length=100)
-    company_name=models.CharField(max_length=100)
+    company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)
     def str(self):
@@ -2706,7 +2706,7 @@ class tap4_setting(models.Model):
 class Rwp_state(models.Model):
     sts=models.CharField(max_length=100) 
     unit_type=models.CharField(max_length=100)
-    company_name=models.CharField(max_length=100)
+    company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)
     def str(self):
@@ -2720,7 +2720,7 @@ class Rwp_state(models.Model):
 class hpp_state(models.Model):
     sts=models.CharField(max_length=100)
     unit_type=models.CharField(max_length=100)
-    company_name=models.CharField(max_length=100)
+    company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)
     def str(self):
@@ -2734,7 +2734,7 @@ class hpp_state(models.Model):
 class F_flowsen_setting(models.Model):
     ff1=models.CharField(max_length=100)
     unit_type=models.CharField(max_length=100)
-    company_name=models.CharField(max_length=100)
+    company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)
     def str(self):
@@ -2747,7 +2747,7 @@ class F_flowsen_setting(models.Model):
 class P_flowsen_setting(models.Model):
     ff2=models.CharField(max_length=100)
     unit_type=models.CharField(max_length=100)
-    company_name=models.CharField(max_length=100)
+    company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)
     def str(self):
@@ -2772,7 +2772,7 @@ class ampv1_setting(models.Model):
     ip3=models.CharField(max_length=100)
     psi=models.CharField(max_length=100)
     unit_type=models.CharField(max_length=100)
-    company_name=models.CharField(max_length=100)
+    company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)
     def str(self):
@@ -2796,7 +2796,7 @@ class ampv2_setting(models.Model):
     ip3=models.CharField(max_length=100)
     psi=models.CharField(max_length=100)
     unit_type=models.CharField(max_length=100)
-    company_name=models.CharField(max_length=100)
+    company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)
     def str(self):
@@ -2809,7 +2809,7 @@ class ampv2_setting(models.Model):
 class ampv1_state(models.Model):
     pos=models.CharField(max_length=100)
     unit_type=models.CharField(max_length=100)
-    company_name=models.CharField(max_length=100)
+    company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)
     def str(self):
@@ -2821,7 +2821,7 @@ class ampv1_state(models.Model):
 class ampv2_state(models.Model):
     pos=models.CharField(max_length=100)
     unit_type=models.CharField(max_length=100)
-    company_name=models.CharField(max_length=100)
+    company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)
     def str(self):
