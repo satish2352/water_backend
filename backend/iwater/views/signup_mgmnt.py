@@ -54,7 +54,6 @@ def user_login(request):
                     sits=Site.objects.filter(company_id=sitefinder)
                     company_name = Company.objects.get(id=logged_user.company_id)
                     userfinder=logged_user.id
-                    site_obj = Site.objects.filter(company_id=sitefinder).first()
                     # user_id=SitePermission.objects.get(id=
                     if sits:
                         for site in sits:
@@ -88,14 +87,14 @@ def user_login(request):
                             'contact_no': logged_user.phone,
                             'site_name':sitename,
                             'company_name':company_name.company_name,
-                            'company_id':site_obj.company_id,
+                            'company_id':company_name.id,
                             'user_id':userfinder
                         }
                     }
                     if role == "super_admin":
                         company_details = Company.objects.get(id=logged_user.company_id)
                         user_data["user"]["company_name"] = company_details.company_name
-                        user_data["user"]["company_id"] = site_obj.company_id,
+                        user_data["user"]["company_id"] = company_name.id,
                         user_data["user"]["gst_no"] = company_details.gst_no
                         user_data["user"]["address1"] = company_details.address1
                         user_data["user"]["address2"] = company_details.address2
