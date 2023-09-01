@@ -39,14 +39,10 @@ def user_login(request):
             password = request.data['password']
             logger.info("Email: {},".format(email))
             user = authenticate(request, email=email, password=password)
+            print("user auth ",user)
             logger.info("Logged in user is {}".format(user))
             
-          
-            
             if user is not None:
-
-                
-
                 if user.is_active:
                     login(request, user)
                     logged_user = User.objects.get(email=email)
@@ -87,14 +83,14 @@ def user_login(request):
                             'contact_no': logged_user.phone,
                             'site_name':sitename,
                             'company_name':company_name.company_name,
-                            'company_id':company_name.id,
+                            'company_id':user.company_id,
                             'user_id':userfinder
                         }
                     }
                     if role == "super_admin":
                         company_details = Company.objects.get(id=logged_user.company_id)
                         user_data["user"]["company_name"] = company_details.company_name
-                        user_data["user"]["company_id"] = company_name.id,
+                        user_data["user"]["company_id"] = user.company_id,
                         user_data["user"]["gst_no"] = company_details.gst_no
                         user_data["user"]["address1"] = company_details.address1
                         user_data["user"]["address2"] = company_details.address2
