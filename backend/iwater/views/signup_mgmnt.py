@@ -61,6 +61,7 @@ def user_login(request):
                             company_id_new=site.company_id
                     else:
                         sitename=''
+                        company_id_new=''
                     if user.is_blocked:
                         if request.path != reverse('blocked'):
                             return redirect('blocked')
