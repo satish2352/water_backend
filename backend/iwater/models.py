@@ -140,7 +140,6 @@ class User(AbstractUser, PermissionsMixin):
         token_cache_time = self.token_created.replace(tzinfo=None)
         current_time = datetime.today().replace(tzinfo=None)
         difference = (current_time - token_cache_time).total_seconds()
-        # print(difference)
         if difference > AUTH_LINK_VALID_FOR:
             return True
 
@@ -151,7 +150,6 @@ class User(AbstractUser, PermissionsMixin):
         # token_cache_time = self.token_created.replace(tzinfo=None)
         # current_time = datetime.today().replace(tzinfo=None)
         # difference = (current_time - token_cache_time).total_seconds()
-        # print(difference)
         # if difference > OTP_VALID_FOR:
         #     return False
 
@@ -162,8 +160,7 @@ class User(AbstractUser, PermissionsMixin):
         return False
 
     def set_password_email(self, site_domain, brand_name, support_email, support_phone):
-        print(site_domain)
-        print('sending email')
+
         token = account_verification_token.make_token(self)
         mail_subject = "Set Password for Initiative Water Account"
         text_content = render_to_string('set-password.txt', {
@@ -184,7 +181,6 @@ class User(AbstractUser, PermissionsMixin):
         email = EmailMultiAlternatives(
             mail_subject, text_content, to=[self.email]
         )
-        # print(text_content)
         email.mixed_subtype = 'related'
         email.send()
 
@@ -206,7 +202,6 @@ class User(AbstractUser, PermissionsMixin):
     #     email = EmailMultiAlternatives(
     #         mail_subject, mail_content, to=[self.email]
     #     )
-    #     # print(text_content)
     #     email.mixed_subtype = 'related'
     #     email.send()
     #
@@ -242,8 +237,7 @@ class User(AbstractUser, PermissionsMixin):
     #
     #     return True
     def send_set_password_email(self, site_domain, brand_name, support_email, support_phone, inviter=None):
-        print(site_domain)
-        print('reached here')
+   
         token = account_verification_token.make_token(self)
         mail_subject = "Invite for Initiative Water Account"
         mail_content = render_to_string('set-password.txt', {
@@ -262,7 +256,6 @@ class User(AbstractUser, PermissionsMixin):
         email = EmailMultiAlternatives(
             mail_subject, mail_content, to=[self.email]
         )
-        # print(text_content)
         email.mixed_subtype = 'related'
         email.send()
 
@@ -312,20 +305,15 @@ class User(AbstractUser, PermissionsMixin):
         otp_cache_time = self.otp_created.replace(tzinfo=None)
         current_time = datetime.today().replace(tzinfo=None)
         difference = (current_time - otp_cache_time).total_seconds()
-        # print(difference)
 
         if not self.phone:
-            # print("no phone")
             return {"status": False}
         if self.phone_verified:
-            # print(self.phone_verified)
-            # print("phone_verified")
             return {"status": False, "difference": difference}
 
         # otp_cache_time = self.otp_created.replace(tzinfo=None)
         # current_time = datetime.today().replace(tzinfo=None)
         # difference = (current_time - otp_cache_time).total_seconds()
-        # print(difference)
         if difference > OTP_VALID_FOR:
             return {"status": False, "difference": difference}
 
@@ -557,20 +545,15 @@ class Site(models.Model):
         otp_cache_time = self.otp_created.replace(tzinfo=None)
         current_time = datetime.today().replace(tzinfo=None)
         difference = (current_time - otp_cache_time).total_seconds()
-        # print(difference)
 
         if not self.phone:
-            # print("no phone")
             return {"status": False}
         # if self.phone_verified:  # TODO commented for re-auth
-        #     # print(self.phone_verified)
-        #     # print("phone_verified")
         #     return {"status": False, "difference": difference}
 
         # otp_cache_time = self.otp_created.replace(tzinfo=None)
         # current_time = datetime.today().replace(tzinfo=None)
         # difference = (current_time - otp_cache_time).total_seconds()
-        # print(difference)
         if difference > OTP_VALID_FOR:
             return {"status": False, "difference": difference}
 
@@ -602,7 +585,6 @@ class Site(models.Model):
 
         # Generate verification code
         code = SmsPinGenerator().make_pin(self)
-        print("token is:",token)
         self.otp = code
         self.otp_created = datetime.today()
         self.token='{0:04}'.format(token)  #store token in site
@@ -625,10 +607,8 @@ class Site(models.Model):
         client = plivo.RestClient(auth_id, auth_token)
         input_string={'token':'{0:04}'.format(token),'otp': code +",app:wc, The Secret OTP for initiative Device"}
         input_string=str(input_string)
-        print("before replace:",input_string)
         output_string = input_string.replace("'", "").replace(": ", ":").replace(", ", ",").replace('"','').replace("wc,","wc, ")
         # output_string=dict(output_string)
-        print("Output is: " + output_string)
         message_created = client.messages.create(
            # src="+919645578992",                       #9645578992 changed to 9607007015 by bharti
             src="+919607007015",                #Number updated by Sourabh ref: call with Bharati Ma'am
@@ -672,17 +652,13 @@ class SiteCopy(models.Model):
 
     def verify_phone(self, code):
         if not self.phone:
-            # print("no phone")
             return False
         if self.phone_verified:
-            # print(self.phone_verified)
-            # print("phone_verified")
             return False
 
         otp_cache_time = self.otp_created.replace(tzinfo=None)
         current_time = datetime.today().replace(tzinfo=None)
         difference = (current_time - otp_cache_time).total_seconds()
-        # print(difference)
         if difference > OTP_VALID_FOR:
             return False
 
@@ -816,7 +792,6 @@ class Order(models.Model):
 
     def __str__(self):
         # resp = ("{}-{}".format(self.subscription, self.payment_status))
-        # print(resp)
         # f"{self.pk}-{self.subscription}-{self.payment_status}"
         return str(self.pk) + "--" + str(self.provider_order_id)
 

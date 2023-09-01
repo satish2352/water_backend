@@ -28,5 +28,5 @@ class SmsMessage:
             client = Client(self._account_sid, self._auth_token)
             client.api.account.messages.create(to=to_number, from_=from_number, body=self.message or 'Please ignore this message.')
         except TwilioRestException as e:
-            print(e)
+            print("exception at line  31 ")
             pass

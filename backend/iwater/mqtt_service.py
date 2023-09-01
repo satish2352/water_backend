@@ -38,10 +38,8 @@ PORT = env("DATABASE_PORT")
 #     server.quit()
 #
 # def send_email_at(send_time):
-#     print(send_time.timestamp() - time.time())
 #     time.sleep(send_time.timestamp() - time.time())
 #     send_email()
-#     print('email sent')
 #
 # first_email_time = dt.datetime.now()# dt.datetime(2022,10,26,3,0,0) # set your sending time in UTC
 # interval = dt.timedelta(minutes=1) # set the interval for sending the email
@@ -98,7 +96,6 @@ class Client:
         data = json.loads(str(message.payload.decode('utf-8')))
         logger.info("MQTT data {}".format(data))
         site_id = str(data["token"]).lstrip("0")
-        print(site_id)
         device_id = data["deviceid"]
         panelid = data["panelid"] if data["panelid"] else None
         atmid = data["atmid"] if data["atmid"] else None
@@ -114,17 +111,14 @@ class Client:
                 add_device = "insert into iwater_device (device_name1, serial_no1, device_name2, serial_no2, site_id) " \
                              "values (%s ,%s, %s, %s, %s);"
                 device_data = (device_id, panelid, device_id, atmid, site_id)
-                print(device_data)
                 cursor.execute(add_device, device_data)
                 update_site = "update  iwater_site set is_treatment_unit=1 where id=%s;"
                 site_data = (site_id,)
                 cursor.execute(update_site, site_data)
-                print("updated is_treatment_unit")
 
                 update_site = "update  iwater_site set is_dispensing_unit=1 where id=%s;"
                 site_data = (site_id,)
                 cursor.execute(update_site, site_data)
-                print("updated is_dispensing_unit")
 
                 update_subscription = "update  iwater_subscription set is_treatment_unit=1 where site_id=%s;"
                 site_data = (site_id,)
@@ -134,7 +128,6 @@ class Client:
                 site_data = (site_id,)
                 cursor.execute(get_company_id, site_data)
                 company_id = cursor.fetchone()[0]
-                print(company_id)
 
                 update_subscription = "insert  into iwater_subscription (is_treatment_unit, is_dispensing_unit, site_id, company_id) " \
                              "values (%s, %s, %s);"
@@ -171,8 +164,7 @@ class Client:
                 # cnx.commit()
             cnx.commit()
         except Exception as err:
-            print(err)
-            logger.error("MQTT - {}".format(err))
+            print("Exception at line 167")
 
     def on_connect(self, client, userdata, flags, rc):
         logger.info("MQTT - connected")

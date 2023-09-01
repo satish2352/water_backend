@@ -44,5 +44,6 @@ except (IOError, ValueError) as err:
     # If logging error happened, system logic needs to pass in order to avoid system crash
     # Therefore, system will not log anything
     # TODO: Think about how system can handle logging error
-    print(err)
-    logger.exception(err)
+    # print(err)
+    # logger.exception(err)
+    pass

@@ -9,7 +9,6 @@ from django.test import TestCase
 # # headers = {'authorization': "O3hiCG2Tz7tcS4HFrsAdmpULKJea0gBjR5Ix6foMYPu1bkvWVE67D2Qj4TUZekadKnYvI9RCiu1hEwpN",
 # #            'Content-Type': "application/x-www-form-urlencoded",'Cache-Control': "no-cache",}
 # # response = requests.request("POST", url, data=payload, headers=headers)
-# # print(response.text)
 # url = "https://www.fast2sms.com/dev/bulkV2"
 #
 # querystring = {
