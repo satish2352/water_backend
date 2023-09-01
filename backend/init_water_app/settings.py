@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import os
 
 from pathlib import Path
-
+import logging.config
 import environ
 env = environ.Env()
 environ.Env.read_env()
@@ -145,11 +145,17 @@ DATABASES = {
             'password': MONGO_DATABASE_PASS,  # MongoDB password
             'authSource': 'waterinnDB',      # Authentication source
             'authMechanism': 'SCRAM-SHA-1',  # Authentication mechanism
-        } 
-        # 'HOST':"127.0.0.1",  # Typically 'localhost' or the MongoDB server IP
-        # 'PORT': '27017',  # Default is 27017
-        # 'USER': "admin123",   # If using authentication
-        # 'PASSWORD': 'Jzfq2n6b4n15',  # If using authentication   
+        },
+        'LOGGING': {
+                'version': 1,
+                'loggers': {
+                    'djongo': {
+                        'level': 'DEBUG',
+                        'propagate': False,                        
+                    }
+                },
+             } 
+        
     }
     
 }
@@ -199,7 +205,7 @@ STATIC_URL = 'pub/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 # settings.py
-
+# LOGGING_CONFIG=None
 DATABASE_ROUTERS = ['connection.router.connectionRouter']
 
 # Default primary key field type
