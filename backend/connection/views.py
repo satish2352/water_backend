@@ -4907,7 +4907,7 @@ class LastRecordsView(viewsets.ModelViewSet):
         my_list = [] 
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
-        dinfo = device_info.objects.filter(**data)
+        dinfo = device_info.objects.filter(**data).last()
         if dinfo is not None:
             did=dinfo[0].Device_id
             last_error = Errors.objects.filter(device_id=did).order_by('-id')[:10]
