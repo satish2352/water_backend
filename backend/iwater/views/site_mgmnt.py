@@ -517,10 +517,10 @@ def verify_token(request):
 
     if request.method == 'POST':
         site_name = request.data['site_name']
-        # try:
-        #     authenticate_device = request.data['authenticate_device']
-        # except Exception as err:
-        #     authenticate_device = None
+        try:
+            authenticate_device = request.data['authenticate_device']
+        except Exception as err:
+            authenticate_device = None
 
         # if authenticate_device is None:
     
