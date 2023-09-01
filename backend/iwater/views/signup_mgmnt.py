@@ -86,14 +86,14 @@ def user_login(request):
                             'contact_no': logged_user.phone,
                             'site_name':sitename,
                             'company_name':company_name.company_name,
-                            'company_id':company_name[0].id,
+                            'company_id':company_name.id[0],
                             'user_id':userfinder
                         }
                     }
                     if role == "super_admin":
                         company_details = Company.objects.get(id=logged_user.company_id)
                         user_data["user"]["company_name"] = company_details.company_name
-                        user_data["user"]["company_id"] = company_name[0].id,
+                        user_data["user"]["company_id"] = company_name.id[0],
                         user_data["user"]["gst_no"] = company_details.gst_no
                         user_data["user"]["address1"] = company_details.address1
                         user_data["user"]["address2"] = company_details.address2
