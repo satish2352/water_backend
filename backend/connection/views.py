@@ -96,8 +96,7 @@ company_ids=0
 
 class MqttClient:
     def __init__(self):
-        ##print("Hi mqtt __init__")
-        # _data_mqtt = settings.settings_get_mqttSettings()
+        print("Hi mqtt __init__")
         _topic = "wc1/v1/OTP"
         _topic_wc1 = "wc1/#"
         _port = 8883
@@ -114,109 +113,88 @@ class MqttClient:
         self.client.loop_start()
 
     def on_message_1(self, client, userdata, message):
-        #print("Default handler on messege mqtt1")
         pass
     
     def otp_handler(self, client, userdata, message):
-        #print("I am in otp_handler")
+        print("I am in otp_handler")
         global token_,company_ids
         #print("Data received1!!!",message.payload)
         jstr=message.payload
         if isinstance(jstr, bytes):
             data1 = jstr.decode("utf-8")
-        #print("Data received!!!",data1)
-        #logger.info("MQTT data {}".format(data1))
         data=eval(data1)
-        #print("new data is:",data,type(data))
         token_ = data["token"]
         device_id = data["deviceid"]
         if "panelid" in data1:
             global panelid
             panelid = data["panelid"] if data["panelid"] else None
             if panelid:
-                #logger.info("panelid {}".format(panelid))
                 pass
 
         if "atmid" in data1:
             global atmid
             atmid = data["atmid"] if data["atmid"] else None
             if atmid:
-                #logger.info("atmid {}".format(atmid))
                 pass
 
-        #logger.info("token {}".format(token_))
         site_obj = Site.objects.filter(token=data["token"]).first()
-        # #logger.info("site_obj",site_obj)
         if site_obj is not None:
             company_ids=site_obj.company_id
             site_ids=site_obj.id
-            #logger.info("device_id {}".format(device_id))
             doublicate_panel_id=0
             doublicate_atm_id=0
             if panelid is not None:
                 doublicate_panel_id=Device.objects.filter(serial_no2 =panelid).filter(~Q(site_id = site_ids)).count()
-                #print("doublicate_panel_id: ",doublicate_panel_id)
             if atmid is not None:
                 doublicate_atm_id=Device.objects.filter(serial_no3 =atmid).filter(~Q(site_id = site_ids)).count()
-                #print("doublicate_atm_id:",doublicate_atm_id)
             if doublicate_panel_id >0 or doublicate_atm_id >0:
                 site_obj_new = Site.objects.get(company_id=company_ids, site_name=site_ids)
                 site_obj_new.token = None
                 site_obj_new.save()
-            
-                #logger.info("Doublicate device found") 
             else:
                 with transaction.atomic():
                     try:  # TODO
-                        # pass
-                        #print("001")
                         try:
-                            #print("002")
                             device_data = Device.objects.get(site_id=site_ids) # ! verfies device against site_id
-                            #print("003")
                         except Device.DoesNotExist:
                             device_data = None
                         if device_data is not None:
-                            #logger.info("re-auth request came for device {}".format(device_id)) # ! re-auth request
                             if device_data.serial_no2 is None:
                                 if panelid is not None:
                                     device_data.serial_no2 = panelid
                                     device_data.save()
-                                    #logger.info("Added device serial numbers")
+
                                     site_data = Site.objects.get(id=site_ids)
                                     site_data.is_treatment_unit = True
                                     site_data.token_verified = True
                                     site_data.token = None
                                     site_data.save()
-                                    #logger.info("Updated site details for treatment unit")
+
                                     subscription_data = Subscription()
                                     subscription_data.site_id = site_ids
                                     subscription_data.is_treatment_unit = True
                                     subscription_data.company_id = company_ids
                                     subscription_data.save()
-                                    #logger.info("Added subscription details for treatment unit")
                             
                             if device_data.serial_no3 is None:
                                 if atmid is not None:
                                     device_data.serial_no3 = atmid
                                     device_data.save()
-                                    #logger.info("Added device serial numbers")
+
                                     site_data = Site.objects.get(id=site_ids)
                                     site_data.is_dispensing_unit = True
                                     site_data.token_verified = True
                                     site_data.token = None
                                     site_data.save()
-                                    #logger.info("Updated site details for dispensing unit")
+
                                     subscription_data = Subscription()
                                     subscription_data.site_id = site_ids
                                     subscription_data.is_dispensing_unit = True
                                     subscription_data.company_id = company_ids
                                     subscription_data.save()
-                                    #logger.info("Added subscription details for dispensing unit")
+
                         else:
-                            #logger.info("Got new device add request ")
                             if panelid and atmid:
-                                #logger.info("Got both panel and atm id from device")
 
                                 device_data = Device()
                                 device_data.serial_no1 = device_id
@@ -224,7 +202,6 @@ class MqttClient:
                                 device_data.serial_no3 = atmid
                                 device_data.site_id = site_ids
                                 device_data.save()
-                                #logger.info("Added device serial numbers")
 
                                 site_data = Site.objects.get(id=site_ids)
                                 site_data.is_treatment_unit = True
@@ -232,7 +209,6 @@ class MqttClient:
                                 site_data.token_verified = True
                                 site_data.token = None
                                 site_data.save()
-                                #logger.info("Updated site details for treatment unit")
 
                                 subscription_data = Subscription()
                                 subscription_data.site_id = site_ids
@@ -245,10 +221,8 @@ class MqttClient:
                                 subscription_data1.is_dispensing_unit = True
                                 subscription_data1.company_id = company_ids
                                 subscription_data1.save()
-                                #logger.info("Added subscription details for dispensing unit")
                             
                             elif panelid:
-                                #logger.info("Got only panel id from device")
 
                                 device_data = Device()
                                 device_data.serial_no1 = device_id
@@ -256,24 +230,20 @@ class MqttClient:
                                 device_data.serial_no3 = atmid
                                 device_data.site_id = site_ids
                                 device_data.save()
-                                #logger.info("Added device serial numbers")
 
                                 site_data = Site.objects.get(id=site_ids)
                                 site_data.is_treatment_unit = True
                                 site_data.token_verified = True
                                 site_data.token = None
                                 site_data.save()
-                                #logger.info("Updated site details for treatment unit")
 
                                 subscription_data = Subscription()
                                 subscription_data.site_id = site_ids
                                 subscription_data.is_treatment_unit = True
                                 subscription_data.company_id = company_ids
                                 subscription_data.save()
-                                #logger.info("Added subscription details for treatment unit")
 
                             elif atmid:
-                                #logger.info("Got only atm id from device")
                                 try:
                                     device_data = Device()
                                     device_data.serial_no1 = device_id
@@ -282,22 +252,19 @@ class MqttClient:
                                     device_data.site_id = site_ids
                                     device_data.save()
                                 except DatabaseError as e:
-                                    print("DatabaseError at line 283",e)
+                                    print("DatabaseError at line 283")
 
-                                #logger.info("data created successfully in device")
                                 site_data = Site.objects.get(id=site_ids)
                                 site_data.is_dispensing_unit = True
                                 site_data.token_verified = True
                                 site_data.token = None
                                 site_data.save()
-                                #logger.info("Updated site details for dispensing unit")
 
                                 subscription_data = Subscription()
                                 subscription_data.site_id = site_ids
                                 subscription_data.is_dispensing_unit = True
                                 subscription_data.company_id = company_ids
                                 subscription_data.save()
-                                #logger.info("Added subscription details for dispensing unit")
                        
                     except Exception as err:
                         transaction.set_rollback(True)
@@ -305,26 +272,20 @@ class MqttClient:
 
 
     def ctrl_motr_handler(self, client, userdata, msg):
-        ##print("I am in ctrl_motr_handler")
+        print("I am in ctrl_motr_handler")
         topic_from_broker =msg.topic
 
         if topic_from_broker != "wc1/v1/OTP":
             global msgo
-            ##print("Data from mqtt:",msg.payload)
             jstring=msg.payload
-            ##print("type is:",type(jstring))
             if isinstance(jstring, bytes):
                 dict_str = jstring.decode("utf-8")
-                ##print("dict_str:",dict_str,type(dict_str))
             if dict_str.startswith("{'") and dict_str.endswith("'}") or 'version' not in dict_str:
-                # dict_str = jstring.decode("UTF-8")
                 dict_split=dict_str.split(":")
-                ##print("dict_split:",dict_split,type(dict_split))
 
                 dict_data = ast.literal_eval(dict_str)
                 converted_list = [f"{key}:{value}" for key, value in dict_data.items()]
                 array_dat =converted_list
-                ##print("array_dat1:",array_dat,type(array_dat))
                 mydata ={}
                 cnd=0
                 tds=0
@@ -566,7 +527,6 @@ class MqttClient:
                 device_id=hmqm_split[1]
                 msg_type=hmqm_split[2]
                 if(msg_type == 'updset' or msg_type == 'updsta'):
-                    ##print("msg_type",msg_type)
                     components=hmqm_split[3]         
                     od=mydata.strip()         
                     repo_histobj=repo_history.objects.create(device_id=device_id,message_type=msg_type,component_name=components,msg_json=mydata1)
@@ -4906,19 +4866,13 @@ class MqttClient:
     def subscribe(self, topic,subscribe_callback):
         self.client.subscribe(topic,1)
         self.client.message_callback_add(topic, subscribe_callback)
-        #logger.info("MQTT - Subscribed to topic '" + topic)
- 
 
     def publish(self, topic, payload):
-        #logger.info("MQTT - Published message '" + str(payload) + "' on topic '" + topic)
         self.client.publish(topic, payload=payload)
-        # self.client.loop_stop()
 
     def stop(self):
-        #logger.info("MQTT - Disconnecting from mqtt broker and cleaning up")
         self.client.disconnect()
 
-##print("Hi mqqtt client object going to create")
 mqttc = MqttClient()
 
 @api_view(['POST'])
@@ -4952,7 +4906,6 @@ class LastRecordsView(viewsets.ModelViewSet):
     def dispatch(self, request, *args, **kwargs):
         my_list = [] 
         fields_to_exclude = ['model', 'pk']
-        #print(request.body,"BODY")
         data = json.loads(request.body)
         dinfo = device_info.objects.filter(**data)
         did=dinfo[0].Device_id
@@ -4970,118 +4923,113 @@ class LastRecordsView(viewsets.ModelViewSet):
         return JsonResponse(last_error, safe=False, content_type="application/json")
 #all data from minit table
 class all_panelListAPIView(generics.ListAPIView):
-    # define queryset
 	queryset = treat_panel.objects.all()
 	serializer_class = all_panelSerializer
 class all_cndListAPIView(generics.ListAPIView):
-    # define queryset
 	queryset = treat_cnd_sen.objects.all()
-	# specify serializer to be used
 	serializer_class = all_cndSerializer
 class all_tdsListAPIView(generics.ListAPIView):
-    # define queryset
 	queryset = treat_tds_sen.objects.all()
-	# specify serializer to be used
 	serializer_class = all_tdsSerializer
 class all_rwpListAPIView(generics.ListAPIView):
-    # define queryset
+    
 	queryset = treat_rwp.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = all_rwpSerializer
 class all_ampv1ListAPIView(generics.ListAPIView):
-    # define queryset
+    
 	queryset = treat_ampv1.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = all_ampv1Serializer  
 class all_ampv2ListAPIView(generics.ListAPIView):
-    # define queryset
+    
 	queryset = treat_ampv2.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = all_ampv2Serializer       
 class all_ampv3ListAPIView(generics.ListAPIView):
-    # define queryset
+    
 	queryset = treat_ampv3.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = all_ampv3Serializer
 class all_ampv4ListAPIView(generics.ListAPIView):
-    # define queryset
+    
 	queryset = treat_ampv4.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = all_ampv4Serializer
 class all_ampv5ListAPIView(generics.ListAPIView):
-    # define queryset
+    
 	queryset = treat_ampv5.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = all_ampv5Serializer
 class all_hppListAPIView(generics.ListAPIView):
-    # define queryset
+    
 	queryset = treat_hpp.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = all_hppSerializer
 class all_F_flowsenListAPIView(generics.ListAPIView):
-    # define queryset
+    
 	queryset = treat_F_flowsen.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = all_F_flowsenSerializer
 class all_P_flowsenListAPIView(generics.ListAPIView):
-    # define queryset
+    
 	queryset = treat_P_flowsen.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = all_P_flowsenSerializer
 class all_cnd_consenListAPIView(generics.ListAPIView):
-    # define queryset
+    
 	queryset = disp_cnd_consen.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = all_cnd_consenSerializer
 class all_tds_consenListAPIView(generics.ListAPIView):
-    # define queryset
+    
 	queryset = disp_tds_consen.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = all_tds_consenSerializer
 class all_atmListAPIView(generics.ListAPIView):
-    # define queryset
+    
 	queryset = disp_atm.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = all_atmSerializer
 class all_tap1ListAPIView(generics.ListAPIView):
-    # define queryset
+    
 	queryset = disp_tap1.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = all_tap1Serializer
 class all_tap2ListAPIView(generics.ListAPIView):
-    # define queryset
+    
 	queryset = disp_tap2.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = all_tap2Serializer
 class all_tap3ListAPIView(generics.ListAPIView):
-    # define queryset
+    
 	queryset = disp_tap3.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = all_tap3Serializer
 class all_tap4ListAPIView(generics.ListAPIView):
-    # define queryset
+    
 	queryset = disp_tap4.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = all_tap4Serializer
 class all_flowsen1ListAPIView(generics.ListAPIView):
-    # define queryset
+    
 	queryset = disp_flowsen1.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = all_flowsen1Serializer
 class all_flowsen2ListAPIView(generics.ListAPIView):
-    # define queryset
+    
 	queryset = disp_flowsen2.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = all_flowsen2Serializer
 class all_flowsen3ListAPIView(generics.ListAPIView):
-    # define queryset
+    
 	queryset = disp_flowsen3.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = all_flowsen3Serializer
 class all_flowsen4ListAPIView(generics.ListAPIView):
-    # define queryset
+    
 	queryset = disp_flowsen4.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = all_flowsen4Serializer
 import json
 cid=None
@@ -5162,7 +5110,7 @@ class updated_treat_rwpViewset(viewsets.ModelViewSet):
         return JsonResponse(response_data, safe=False, content_type="application/json")
     
 class updated_treat_cnd_senViewset(viewsets.ModelViewSet):
-	# define queryset
+	
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
@@ -5219,7 +5167,7 @@ class updated_treat_cnd_senViewset(viewsets.ModelViewSet):
         return JsonResponse(response_data, safe=False, content_type="application/json")   
     
 class updated_treat_tds_senViewset(viewsets.ModelViewSet):
-	# define queryset
+	
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
@@ -5273,7 +5221,7 @@ class updated_treat_tds_senViewset(viewsets.ModelViewSet):
         return JsonResponse(response_data, safe=False, content_type="application/json")    
     
 class updated_treat_hppViewset(viewsets.ModelViewSet):
-	# define queryset
+	
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
@@ -5326,7 +5274,7 @@ class updated_treat_hppViewset(viewsets.ModelViewSet):
         return JsonResponse(response_data, safe=False, content_type="application/json")    
      
 class updated_treat_ampv1Viewset(viewsets.ModelViewSet):
-	# define queryset
+	
 
     def dispatch(self, request, *args, **kwargs):
         try:
@@ -5391,7 +5339,7 @@ class updated_treat_ampv1Viewset(viewsets.ModelViewSet):
             print("Exception at line 5389",e)  
     
 class updated_treat_ampv2Viewset(viewsets.ModelViewSet):
-	# define queryset
+	
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
@@ -5444,7 +5392,7 @@ class updated_treat_ampv2Viewset(viewsets.ModelViewSet):
         return JsonResponse(response_data, safe=False, content_type="application/json")    
     
 class updated_treat_panelViewset(viewsets.ModelViewSet):
-	# define queryset
+	
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
@@ -5497,7 +5445,7 @@ class updated_treat_panelViewset(viewsets.ModelViewSet):
         return JsonResponse(response_data, safe=False, content_type="application/json")    
 
 class updated_disp_atmViewset(viewsets.ModelViewSet):
-	# define queryset
+	
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
@@ -5551,7 +5499,7 @@ class updated_disp_atmViewset(viewsets.ModelViewSet):
         return JsonResponse(response_data, safe=False, content_type="application/json")    
       
 # class getDeviceID(viewsets.ModelViewSet):
-# 	# define queryset
+# 	
 #     def dispatch(self, request, *args, **kwargs):
 #         try:
 #             did = 0
@@ -5598,7 +5546,7 @@ class updated_disp_atmViewset(viewsets.ModelViewSet):
 
 
 class updated_disp_tap1Viewset(viewsets.ModelViewSet):
-	# define queryset
+	
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
@@ -5651,7 +5599,7 @@ class updated_disp_tap1Viewset(viewsets.ModelViewSet):
         return JsonResponse(response_data, safe=False, content_type="application/json")    
     
 class updated_disp_tap2Viewset(viewsets.ModelViewSet):
-	# define queryset
+	
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
@@ -5704,7 +5652,7 @@ class updated_disp_tap2Viewset(viewsets.ModelViewSet):
         return JsonResponse(response_data, safe=False, content_type="application/json")    
            
 class updated_disp_tap3Viewset(viewsets.ModelViewSet):
-	# define queryset
+	
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
@@ -5757,7 +5705,7 @@ class updated_disp_tap3Viewset(viewsets.ModelViewSet):
         return JsonResponse(response_data, safe=False, content_type="application/json")    
        
 class updated_disp_tap4Viewset(viewsets.ModelViewSet):
-	# define queryset
+	
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
@@ -5810,7 +5758,7 @@ class updated_disp_tap4Viewset(viewsets.ModelViewSet):
         return JsonResponse(response_data, safe=False, content_type="application/json")    
        
 class updated_disp_cnd_consenViewset(viewsets.ModelViewSet):
-	# define queryset
+	
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
@@ -5863,7 +5811,7 @@ class updated_disp_cnd_consenViewset(viewsets.ModelViewSet):
         return JsonResponse(response_data, safe=False, content_type="application/json")    
     
 class updated_disp_tds_consenViewset(viewsets.ModelViewSet):
-    # define queryset
+    
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
@@ -5916,7 +5864,7 @@ class updated_disp_tds_consenViewset(viewsets.ModelViewSet):
         return JsonResponse(response_data, safe=False, content_type="application/json")    
       
 class updated_treat_F_flowsenViewset(viewsets.ModelViewSet):
-	# define queryset
+	
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
@@ -5969,7 +5917,7 @@ class updated_treat_F_flowsenViewset(viewsets.ModelViewSet):
         return JsonResponse(response_data, safe=False, content_type="application/json")    
         
 # class getDeviceID(viewsets.ModelViewSet):
-# 	# define queryset
+# 	
 #     def dispatch(self, request, *args, **kwargs):
 #         try:
 #             did = 0
@@ -6011,7 +5959,7 @@ class updated_treat_F_flowsenViewset(viewsets.ModelViewSet):
 #         return JsonResponse(response_data, safe=False, content_type="application/json")
 
 class updated_treat_P_flowsenViewset(viewsets.ModelViewSet):
-	# define queryset
+	
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
@@ -6064,7 +6012,7 @@ class updated_treat_P_flowsenViewset(viewsets.ModelViewSet):
         return JsonResponse(response_data, safe=False, content_type="application/json")    
        
 class updated_disp_flowsen1Viewset(viewsets.ModelViewSet):
-	# define queryset
+	
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
@@ -6116,7 +6064,7 @@ class updated_disp_flowsen1Viewset(viewsets.ModelViewSet):
         return JsonResponse(response_data, safe=False, content_type="application/json")    
     
 class updated_disp_flowsen2Viewset(viewsets.ModelViewSet):
-	# define queryset
+	
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
@@ -6169,7 +6117,7 @@ class updated_disp_flowsen2Viewset(viewsets.ModelViewSet):
         return JsonResponse(response_data, safe=False, content_type="application/json")    
      
 class updated_disp_flowsen3Viewset(viewsets.ModelViewSet):
-	# define queryset
+	
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
@@ -6222,7 +6170,7 @@ class updated_disp_flowsen3Viewset(viewsets.ModelViewSet):
         return JsonResponse(response_data, safe=False, content_type="application/json")    
      
 class updated_disp_flowsen4Viewset(viewsets.ModelViewSet):
-	# define queryset
+	
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
@@ -6275,272 +6223,272 @@ class updated_disp_flowsen4Viewset(viewsets.ModelViewSet):
         return JsonResponse(response_data, safe=False, content_type="application/json")    
       
 class cnd_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = cnd_repo_yearly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = cnd_YearlySerializer       
 class cnd_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = cnd_repo_hourly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = cnd_HourlySerializer       
 class cnd_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = cnd_repo_monthly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = cnd_MonthlySerializer        
 class cnd_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = cnd_repo_daily.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = cnd_DailySerializer
 class tds_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = tds_repo_yearly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = tds_YearlySerializer       
 class tds_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = tds_repo_hourly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = tds_HourlySerializer        
 class tds_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = tds_repo_monthly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = tds_MonthlySerializer        
 class tds_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = tds_repo_daily.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = tds_DailySerializer
 class rwp_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = rwp_repo_yearly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = rwp_YearlySerializer        
 class rwp_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = rwp_repo_hourly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = rwp_HourlySerializer        
 class rwp_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = rwp_repo_monthly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = rwp_MonthlySerializer        
 class rwp_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = rwp_repo_daily.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = rwp_DailySerializer
 class hpp_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = hpp_repo_yearly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = hpp_YearlySerializer       
 class hpp_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = hpp_repo_hourly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = hpp_HourlySerializer        
 class hpp_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = hpp_repo_monthly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = hpp_MonthlySerializer       
 class hpp_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = hpp_repo_daily.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = hpp_DailySerializer
 class panel_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = hpp_repo_yearly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = hpp_YearlySerializer        
 class panel_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = panel_repo_hourly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = panel_HourlySerializer        
 class panel_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = panel_repo_monthly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = panel_MonthlySerializer       
 class panel_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = panel_repo_daily.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = panel_DailySerializer
 class F_flowsen_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = F_flowsen_repo_yearly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = F_flowsen_YearlySerializer
 class P_flowsen_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = P_flowsen_repo_yearly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = P_flowsen_YearlySerializer       
 class F_flowsen_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = F_flowsen_repo_hourly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = F_flowsen_HourlySerializer       
 class P_flowsen_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = P_flowsen_repo_hourly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = P_flowsen_HourlySerializer       
 class F_flowsen_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = F_flowsen_repo_monthly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = F_flowsen_MonthlySerializer        
 class P_flowsen_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = P_flowsen_repo_monthly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = P_flowsen_MonthlySerializer        
 class F_flowsen_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = F_flowsen_repo_daily.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = F_flowsen_DailySerializer              
 class P_flowsen_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = P_flowsen_repo_daily.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = P_flowsen_DailySerializer       
 class ampv1_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = ampv1_repo_yearly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = ampv1_YearlySerializer        
 class ampv1_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = ampv1_repo_hourly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = ampv1_HourlySerializer        
 class ampv1_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = ampv1_repo_monthly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = ampv1_MonthlySerializer        
 class ampv1_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = ampv1_repo_daily.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = ampv1_DailySerializer               
 class ampv2_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = ampv2_repo_yearly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = ampv2_YearlySerializer        
 class ampv2_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = ampv2_repo_hourly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = ampv2_HourlySerializer       
 class ampv2_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = ampv2_repo_monthly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = ampv2_MonthlySerializer       
 class ampv2_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = ampv2_repo_daily.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = ampv2_DailySerializer             
 class ampv3_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = ampv3_repo_yearly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = ampv3_YearlySerializer
                        
 class ampv3_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = ampv3_repo_hourly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = ampv3_HourlySerializer
         
 class ampv3_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = ampv3_repo_monthly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = ampv3_MonthlySerializer
         
 class ampv3_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = ampv3_repo_daily.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = ampv3_DailySerializer       
         
 class ampv4_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = ampv4_repo_yearly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = ampv4_YearlySerializer
                         
 class ampv4_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = ampv4_repo_hourly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = ampv4_HourlySerializer
         
 class ampv4_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = ampv4_repo_monthly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = ampv4_MonthlySerializer
         
 class ampv4_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = ampv4_repo_daily.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = ampv4_DailySerializer       
         
 class ampv5_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = ampv5_repo_yearly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = ampv5_YearlySerializer
                        
 class ampv5_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = ampv5_repo_hourly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = ampv5_HourlySerializer
         
 class ampv5_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = ampv5_repo_monthly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = ampv5_MonthlySerializer
         
 class ampv5_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = ampv5_repo_daily.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = ampv5_DailySerializer       
 class tap1_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = tap1_repo_yearly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = tap1_YearlySerializer
                        
 class tap1_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = tap1_repo_hourly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = tap1_HourlySerializer
         
 class tap1_MonthlyViewset(viewsets.ModelViewSet):
-    # define queryset
+    
     queryset = tap1_repo_monthly.objects.all()
-    # specify serializer to be used
+    
     serializer_class = tap1_MonthlySerializer
     authentication_classes = [JWTAuthentication]
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -6550,293 +6498,293 @@ class MyTokenRefreshView(TokenRefreshView):
     pass
         
 class tap1_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = tap1_repo_daily.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = tap1_DailySerializer       
 class tap2_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = tap2_repo_yearly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = tap2_YearlySerializer
                     
 class tap2_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = tap2_repo_hourly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = tap2_HourlySerializer
         
 class tap2_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = tap2_repo_monthly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = tap2_MonthlySerializer
         
 class tap2_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = tap2_repo_daily.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = tap2_DailySerializer       
 class tap3_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = tap3_repo_yearly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = tap3_YearlySerializer
                 
 class tap3_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = tap3_repo_hourly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = tap3_HourlySerializer
         
 class tap3_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = tap3_repo_monthly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = tap3_MonthlySerializer
         
 class tap3_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = tap3_repo_daily.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = tap3_DailySerializer       
 class tap4_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = tap4_repo_yearly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = tap4_YearlySerializer
                         
 class tap4_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = tap4_repo_hourly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = tap4_HourlySerializer
         
 class tap4_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = tap4_repo_monthly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = tap4_MonthlySerializer
         
 class tap4_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = tap4_repo_daily.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = tap4_DailySerializer       
         
 class cnd_consen_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = cnd_consen_repo_yearly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = cnd_consen_YearlySerializer
                         
 class tds_consen_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = tds_consen_repo_yearly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = tds_consen_YearlySerializer
                        
 class cnd_consen_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = cnd_consen_repo_hourly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = cnd_consen_HourlySerializer
 class tds_consen_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = tds_consen_repo_hourly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = tds_consen_HourlySerializer
         
 class cnd_consen_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = cnd_consen_repo_monthly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = cnd_consen_MonthlySerializer
 class tds_consen_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = tds_consen_repo_monthly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = tds_consen_MonthlySerializer
         
 class cnd_consen_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = cnd_consen_repo_daily.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = cnd_consen_DailySerializer
 class tds_consen_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = tds_consen_repo_daily.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = tds_consen_DailySerializer
 
 class atm_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = atm_repo_yearly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = atm_YearlySerializer
                        
 class atm_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = atm_repo_hourly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = atm_HourlySerializer
         
 class atm_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = atm_repo_monthly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = atm_MonthlySerializer
         
 class atm_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = atm_repo_daily.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = atm_DailySerializer
 class flowsen1_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = flowsen1_repo_yearly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = flowsen1_YearlySerializer
                        
 class flowsen1_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = flowsen1_repo_hourly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = flowsen1_HourlySerializer
         
 class flowsen1_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = flowsen1_repo_monthly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = flowsen1_MonthlySerializer
         
 class flowsen1_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = flowsen1_repo_daily.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = flowsen1_DailySerializer   
 
 class flowsen2_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = flowsen2_repo_yearly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = flowsen2_YearlySerializer
                         
 class flowsen2_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = flowsen2_repo_hourly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = flowsen2_HourlySerializer
         
 class flowsen2_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = flowsen2_repo_monthly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = flowsen2_MonthlySerializer
         
 class flowsen2_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = flowsen2_repo_daily.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = flowsen2_DailySerializer   
 
 class flowsen3_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = flowsen3_repo_yearly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = flowsen3_YearlySerializer
                        
 class flowsen3_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = flowsen3_repo_hourly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = flowsen3_HourlySerializer
         
 class flowsen3_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = flowsen3_repo_monthly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = flowsen3_MonthlySerializer
         
 class flowsen3_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = flowsen1_repo_daily.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = flowsen1_DailySerializer   
 
 class flowsen4_YearlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = flowsen4_repo_yearly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = flowsen4_YearlySerializer
                        
 class flowsen4_HourlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = flowsen4_repo_hourly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = flowsen4_HourlySerializer
         
 class flowsen4_MonthlyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = flowsen4_repo_monthly.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = flowsen4_MonthlySerializer
         
 class flowsen4_DailyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = flowsen4_repo_daily.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = flowsen4_DailySerializer
 
 # # import mongoengine
 # # mongoengine.connect(db=waterinn, host=localhost:27017, username=username, password=pwc)
 class TopicViewSet(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = topics.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = TopicSerializer
         
         
 class DeviceViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = device_info.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = DeviceSerializer
         
 class keyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = key_info.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = KeySerializer
         
         
 class GraphViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = graph_info.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = GraphSerializer
 class TopicViewSet(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = topics.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = TopicSerializer
         
 class DeviceViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = device_info.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = DeviceSerializer
         
 class keyViewset(viewsets.ModelViewSet):
-	# define queryset
+	
 	queryset = key_info.objects.all()
-	# specify serializer to be used
+	
 	serializer_class = KeySerializer
         
 class RwpstateViewset(viewsets.ModelViewSet):
-        # define queryset
+        
         queryset = Rwp_state.objects.all()
-        # specify serializer to be used
+        
         serializer_class = RwpstateSerializer
 
         deviceid=0
@@ -6886,26 +6834,18 @@ class RwpstateViewset(viewsets.ModelViewSet):
 
 did=0
 class rwpsettingViewset(viewsets.ModelViewSet):
-	# define queryset
-    #print("hi ok ")
-    # queryset = rwp_setting.objects.all().order_by('-id')[:1]
     queryset = rwp_setting.objects.all()
-	# specify serializer to be used
     serializer_class = rwpsettingSerializer
     def dispatch(self, request, *args, **kwargs):
         
         try:
             data_dict = json.loads(request.body)
             unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name"]  # Example of unwanted keys
-            #print("dict data is:",data_dict)
             value_list=list(data_dict.values())
-            #print("value_list:",value_list)
             dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
             for x in dinfo:
-                #print("did id:",x.Device_id)
                 did=x.Device_id
                 cmpname=x.componant_name
-                #print("ddddid is",did)
             for key in unwanted_keys:
                 if key in data_dict:
                     del data_dict[key]
@@ -6913,14 +6853,12 @@ class rwpsettingViewset(viewsets.ModelViewSet):
                     data_dict[key] = str(data_dict[key])
             mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
             
-            #print("data send to hivemq")
             dd=dateandtime()
             e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} rwp settings change has been requested - over load current:{value_list[3]}, span:{value_list[4]}, dry run current:{value_list[5]}"
             erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='rwp',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
             erro.save()
             
         except Exception as e:
-            #print("Error",e)
             dd=dateandtime()
             e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} Hpp has a fault-{e}"
             erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='hpp',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
@@ -6944,7 +6882,7 @@ class rwpsettingViewset(viewsets.ModelViewSet):
             ddid.save()
             
         except Exception as e:
-            print("Error:", e)
+            print("Exception at line 6937:")
     def desptroy(self, request):
         try:
             instance = self.get_object()
@@ -6952,10 +6890,10 @@ class rwpsettingViewset(viewsets.ModelViewSet):
         except Http404:
             pass
 class hppstateViewset(viewsets.ModelViewSet):
-	# define queryset
+	
         queryset = hpp_state.objects.all()
 
-        # specify serializer to be used
+        
         serializer_class = hppstateSerializer
 
         deviceid=0
@@ -7005,9 +6943,9 @@ class hppstateViewset(viewsets.ModelViewSet):
             except Http404:
                 pass   
 class hppsettingViewset(viewsets.ModelViewSet):
-        # define queryset
+        
         queryset = hpp_setting.objects.all()
-        # specify serializer to be used
+        
         serializer_class = hppsettingSerializer
 
         deviceid=0
@@ -7054,16 +6992,13 @@ class hppsettingViewset(viewsets.ModelViewSet):
             except Http404:
                 pass
 class device_infoViewset(viewsets.ModelViewSet):
-        # define queryset
+        
         def dispatch(self, request, *args, **kwargs):
             fields_to_exclude = ['model', 'pk']
 
             data = json.loads(request.body)
-            #print(data,type(data),"DATA11:")
             u_id=data['user_id']
-            #print("uid",u_id)
             dinfo = device_info.objects.filter(company_id=data['company_id'])
-            #print(dinfo,type(dinfo))
             allsites=[]
             for si in dinfo:
                 allsites.append(si.site_name)
@@ -7077,13 +7012,10 @@ class device_infoViewset(viewsets.ModelViewSet):
                 with connection.cursor() as cursor:
                     cursor.execute(raw_sql,[u_id])
                     results = cursor.fetchall()
-                    #print("Results",results)
-                # Print the results
                 for result in results:
-                    #print("Site Name1:", result[0])
                     sites.append(result[0])
             except Exception as e:
-                print("exception at line 7085",e)
+                print("exception at line 7085")
             if data['user_role']== "super_admin" or data['user_role']== "administrator":
 
                 siteset=set(allsites)
@@ -7101,7 +7033,7 @@ class device_infoViewset(viewsets.ModelViewSet):
             response_data=[response_data]
             return JsonResponse(response_data, safe=False, content_type="application/json")           
 class cndsettingViewset(viewsets.ModelViewSet):
-	# define queryset
+	
         queryset = cnd_setting.objects.all()
         serializer_class = cndsettingSerializer
 
@@ -7147,10 +7079,10 @@ class cndsettingViewset(viewsets.ModelViewSet):
                 pass
         
 class tdssettingViewset(viewsets.ModelViewSet):
-        # define queryset
+        
         queryset = tds_setting.objects.all()
 
-        # specify serializer to be used
+        
         serializer_class = tdssettingSerializer
 
         deviceid=0
@@ -7161,7 +7093,6 @@ class tdssettingViewset(viewsets.ModelViewSet):
                 unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]  # Example of unwanted keys
                 
                 value_list=list(data_dict.values())
-                #print("valuelist is:",value_list)
                 dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
                 global deviceid
                 for x in dinfo:
@@ -7175,9 +7106,6 @@ class tdssettingViewset(viewsets.ModelViewSet):
                 for key in data_dict:
                     data_dict[key] = str(data_dict[key])
                 mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
-                #print("data successfully send to hivemqtt")
-                #print("did is:",did)
-                #print("cname:",cmpname)
                 dd=dateandtime()
                 e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tds settings change has been requested - span:{value_list[3]}, trip_setpoint:{value_list[4]}, atert_setpoint:{value_list[5]}"
                 erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tds',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
@@ -7200,10 +7128,10 @@ class tdssettingViewset(viewsets.ModelViewSet):
                 pass
     
 class FflowsensettingViewset(viewsets.ModelViewSet):
-        # define queryset
+        
         queryset = F_flowsen_setting.objects.all()
 
-        # specify serializer to be used
+        
         serializer_class = FflowsensettingSerializer
 
         deviceid=0
@@ -7251,10 +7179,10 @@ class FflowsensettingViewset(viewsets.ModelViewSet):
                 pass
         
 class PflowsensettingViewset(viewsets.ModelViewSet):
-	# define queryset
+	
         queryset = P_flowsen_setting.objects.all()
 
-        # specify serializer to be used
+        
         serializer_class =PflowsensettingSerializer
 
         deviceid=0
@@ -7301,10 +7229,10 @@ class PflowsensettingViewset(viewsets.ModelViewSet):
             except Http404:
                 pass
 class panelsettingViewset(viewsets.ModelViewSet):
-	# define queryset
+	
         queryset = panel_setting.objects.all()
 
-        # specify serializer to be used
+        
         serializer_class = panelsettingSerializer
 
         deviceid=0
@@ -7333,7 +7261,6 @@ class panelsettingViewset(viewsets.ModelViewSet):
                 for key in data_dict:
                     data_dict[key] = str(data_dict[key])
                 mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
-                #print("MMM:",data_dict)
                 dd=dateandtime()
                 e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} panel settings change has been requested - mode:{value_list[3]}, under voltage:{value_list[6]}, over voltage:{value_list[7]}, span:{value_list[8]}, no.of multiport valve:{value_list[4]}, sensor type:{value_list[5]}, service time:{value_list[9]}, backwash time:{value_list[10]}, rinse time:{value_list[11]}"
                 erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='panel',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
@@ -7356,10 +7283,10 @@ class panelsettingViewset(viewsets.ModelViewSet):
             except Http404:
                 pass
 class atmsettingViewset(viewsets.ModelViewSet):
-	# define queryset
+	
         queryset = atm_setting.objects.all()
 
-        # specify serializer to be used
+        
         serializer_class = atmsettingSerializer
 
         deviceid=0
@@ -7407,10 +7334,10 @@ class atmsettingViewset(viewsets.ModelViewSet):
                 pass
         
 class cnd_consensettingViewset(viewsets.ModelViewSet):
-    # define queryset
+    
         queryset = cnd_consen_setting.objects.all()
 
-        # specify serializer to be used
+        
         serializer_class = cnd_consensettingSerializer
 
         deviceid=0
@@ -7431,7 +7358,6 @@ class cnd_consensettingViewset(viewsets.ModelViewSet):
                 for key in unwanted_keys:
                     if key in data_dict:
                         del data_dict[key]
-                #print("device is:", deviceid)
                 for key in data_dict:
                     data_dict[key] = str(data_dict[key])
                 mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
@@ -7457,10 +7383,10 @@ class cnd_consensettingViewset(viewsets.ModelViewSet):
             except Http404:
                 pass
 class tds_consensettingViewset(viewsets.ModelViewSet):
-    # define queryset
+    
         queryset = tds_consen_setting.objects.all()
 
-        # specify serializer to be used
+        
         serializer_class = tds_consensettingSerializer
 
         deviceid=0
@@ -7507,10 +7433,10 @@ class tds_consensettingViewset(viewsets.ModelViewSet):
             except Http404:
                 pass
 class ampv1stateViewset(viewsets.ModelViewSet):
-        # define queryset
+        
         queryset = ampv1_state.objects.all()
 
-        # specify serializer to be used
+        
         serializer_class = ampv1stateSerializer
 
         deviceid=0
@@ -7558,10 +7484,10 @@ class ampv1stateViewset(viewsets.ModelViewSet):
                 pass
         
 class ampv1settingViewset(viewsets.ModelViewSet):
-# 	# define queryset
+# 	
         queryset = ampv1_setting.objects.all()
 
-        # specify serializer to be used
+        
         serializer_class = ampv1settingSerializer
 
         deviceid=0
@@ -7590,7 +7516,6 @@ class ampv1settingViewset(viewsets.ModelViewSet):
                 for key in data_dict:
                     data_dict[key] = str(data_dict[key])
                 mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
-                #print("Dattta:",data_dict)
                 dd=dateandtime()
                 e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} ampv1 settings change has been requested - service time:{value_list[8]}, backwash time:{value_list[9]}, rins time:{value_list[10]}, motor on delay time:{value_list[11]}, output1:{value_list[12]}, output2:{value_list[13]}, output3:{value_list[14]}, input1:{value_list[4]}, input2:{value_list[5]}, input3:{value_list[6]}, pressure switch input:{value_list[7]}, sensor type:{value_list[3]}"
                 erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='ampv1',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
@@ -7613,10 +7538,10 @@ class ampv1settingViewset(viewsets.ModelViewSet):
             except Http404:
                 pass
 class ampv2stateViewset(viewsets.ModelViewSet):
-        # define queryset
+        
         queryset = ampv2_state.objects.all()
 
-        # specify serializer to be used
+        
         serializer_class = ampv2stateSerializer
 
         deviceid=0
@@ -7662,10 +7587,10 @@ class ampv2stateViewset(viewsets.ModelViewSet):
             except Http404:
                 pass
 class ampv2settingViewset(viewsets.ModelViewSet):
-	# define queryset
+	
         queryset = ampv2_setting.objects.all()
 
-        # specify serializer to be used
+        
         serializer_class = ampv2settingSerializer
 
         deviceid=0
@@ -7716,10 +7641,10 @@ class ampv2settingViewset(viewsets.ModelViewSet):
                 pass
 
 class tap1settingViewset(viewsets.ModelViewSet):
-	# define queryset
+	
         queryset = tap1_setting.objects.all()
 
-        # specify serializer to be used
+        
         serializer_class = tap1settingSerializer
 
         deviceid=0
@@ -7744,7 +7669,6 @@ class tap1settingViewset(viewsets.ModelViewSet):
                 for key in data_dict:
                     data_dict[key] = str(data_dict[key])
                 mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
-                #print("*!*!*!:",data_dict)
                 dd=dateandtime()
                 e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tap1 settings change has been requested - pulse1:{value_list[3]}, pulse2:{value_list[4]}, pulse3:{value_list[5]}, pulse4:{value_list[6]}"
                 erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tap1',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
@@ -7767,10 +7691,10 @@ class tap1settingViewset(viewsets.ModelViewSet):
             except Http404:
                 pass
 class tap2settingViewset(viewsets.ModelViewSet):
-	# define queryset
+	
         queryset = tap2_setting.objects.all()
 
-        # specify serializer to be used
+        
         serializer_class = tap2settingSerializer
 
         deviceid=0
@@ -7817,10 +7741,10 @@ class tap2settingViewset(viewsets.ModelViewSet):
             except Http404:
                 pass
 class tap3settingViewset(viewsets.ModelViewSet):
-	# define queryset
+	
         queryset = tap3_setting.objects.all()
 
-        # specify serializer to be used
+        
         serializer_class = tap3settingSerializer
 
         deviceid=0
@@ -7867,10 +7791,10 @@ class tap3settingViewset(viewsets.ModelViewSet):
             except Http404:
                 pass
 class tap4settingViewset(viewsets.ModelViewSet):
-	# define queryset
+	
         queryset = tap4_setting.objects.all()
 
-        # specify serializer to be used
+        
         serializer_class = tap4settingSerializer
 
     
