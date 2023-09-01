@@ -48,7 +48,7 @@ def user_login(request):
                     login(request, user)
                     logged_user = User.objects.get(email=email)
                     sitefinder=logged_user.company_id
-                    new_company_id =int(logged_user.company_id)
+                    new_company_id =logged_user['company_id']
                     print("logged_user.company_id ",type(logged_user.company_id))
                     sits=Site.objects.filter(company_id=sitefinder)
                     company_name = Company.objects.get(id=logged_user.company_id)
