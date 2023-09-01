@@ -329,7 +329,7 @@ def site(request, pk):
 @api_view(['POST'])
 def send_otp(request):
 
-    not_verified_sites = Site.objects.filter(phone_verified=False, token_verified=False)
+    not_verified_sites = Site.objects.filter(token_verified=False)
     # ! defination of unverified sites collects model instance
 
     for not_verified_site in not_verified_sites.values():
@@ -532,7 +532,7 @@ def verify_token(request):
                 #mongodb device information
                 try:
 
-                    records = [
+                    records_panel = [
                     {
                     "Device_id": dev_obj.serial_no2,
                     "Device_name": "wc",
@@ -551,28 +551,30 @@ def verify_token(request):
                     "site_name": site_name
                     }
                     ]
-                
+                    records_panel_exist =device_info.objects.find(records_panel)
+                    record_atm_exist =device_info.objects.find(record_atm)
                     if dev_obj.serial_no2 and dev_obj.serial_no3:
-                        for record in records:
-                                info=device_info.objects.create(**record)
-                                info.save()
-                                logger.info("panel records Added")
-                        for record in record_atm:
-                                info=device_info.objects.create(**record)
-                                info.save()
-                                logger.info("atm records Added")
+                        
+                        if records_panel_exist is None:
+                            info=device_info.objects.create(records_panel)
+                            info.save()
+
+                        if record_atm_exist is None:
+                            info=device_info.objects.create(record_atm)
+                            info.save()
+                            logger.info("atm records Added")
                         
                     elif dev_obj.serial_no2:
-                        for record in records:
-                            info=device_info.objects.create(**record)
+                        if records_panel_exist is None:
+                            info=device_info.objects.create(records_panel)
                             info.save()
                             logger.info("panel records Added")
                        
                     elif dev_obj.serial_no3:
-                          for record in record_atm:
-                                info=device_info.objects.create(**record)
-                                info.save()
-                                logger.info("atm records Added")
+                        if record_atm_exist is None:
+                            info=device_info.objects.create(record_atm)
+                            info.save()
+                            logger.info("atm records Added")
 
                 except Exception as err:
                     return JsonResponse({"Response": {"Status": "error"},
