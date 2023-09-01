@@ -145,16 +145,16 @@ DATABASES = {
             'password': MONGO_DATABASE_PASS,  # MongoDB password
             'authSource': 'waterinnDB',      # Authentication source
             'authMechanism': 'SCRAM-SHA-1',  # Authentication mechanism
-        },
-        'LOGGING': {
-                'version': 1,
-                'loggers': {
-                    'djongo': {
-                        'level': 'DEBUG',
-                        'propagate': False,                        
-                    }
-                },
-             } 
+        }
+        # 'LOGGING': {
+        #         'version': 1,
+        #         'loggers': {
+        #             'djongo': {
+        #                 'level': 'DEBUG',
+        #                 'propagate': False,                        
+        #             }
+        #         },
+        #      } 
         
     }
     
