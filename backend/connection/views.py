@@ -96,7 +96,7 @@ company_ids=0
 
 class MqttClient:
     def __init__(self):
-        print("Hi mqtt __init__")
+        ##print("Hi mqtt __init__")
         # _data_mqtt = settings.settings_get_mqttSettings()
         _topic = "wc1/v1/OTP"
         _topic_wc1 = "wc1/#"
@@ -114,20 +114,20 @@ class MqttClient:
         self.client.loop_start()
 
     def on_message_1(self, client, userdata, message):
-        print("Default handler on messege mqtt1")
+        #print("Default handler on messege mqtt1")
         pass
     
     def otp_handler(self, client, userdata, message):
-        print("I am in otp_handler")
+        #print("I am in otp_handler")
         global token_,company_ids
-        print("Data received1!!!",message.payload)
+        #print("Data received1!!!",message.payload)
         jstr=message.payload
         if isinstance(jstr, bytes):
             data1 = jstr.decode("utf-8")
-        print("Data received!!!",data1)
+        #print("Data received!!!",data1)
         logger.info("MQTT data {}".format(data1))
         data=eval(data1)
-        print("new data is:",data,type(data))
+        #print("new data is:",data,type(data))
         token_ = data["token"]
         device_id = data["deviceid"]
         if "panelid" in data1:
@@ -153,10 +153,10 @@ class MqttClient:
             doublicate_atm_id=0
             if panelid is not None:
                 doublicate_panel_id=Device.objects.filter(serial_no2 =panelid).filter(~Q(site_id = site_ids)).count()
-                print("doublicate_panel_id: ",doublicate_panel_id)
+                #print("doublicate_panel_id: ",doublicate_panel_id)
             if atmid is not None:
                 doublicate_atm_id=Device.objects.filter(serial_no3 =atmid).filter(~Q(site_id = site_ids)).count()
-                print("doublicate_atm_id:",doublicate_atm_id)
+                #print("doublicate_atm_id:",doublicate_atm_id)
             if doublicate_panel_id >0 or doublicate_atm_id >0:
                 site_obj_new = Site.objects.get(company_id=company_ids, site_name=site_ids)
                 site_obj_new.token = None
@@ -167,11 +167,11 @@ class MqttClient:
                 with transaction.atomic():
                     try:  # TODO
                         # pass
-                        print("001")
+                        #print("001")
                         try:
-                            print("002")
+                            #print("002")
                             device_data = Device.objects.get(site_id=site_ids) # ! verfies device against site_id
-                            print("003")
+                            #print("003")
                         except Device.DoesNotExist:
                             device_data = None
                         if device_data is not None:
@@ -280,7 +280,7 @@ class MqttClient:
                                     device_data.site_id = site_ids
                                     device_data.save()
                                 except DatabaseError as e:
-                                    print("25-8-23",e)
+                                    print("DatabaseError at line 283",e)
 
                                 logger.info("data created successfully in device")
                                 site_data = Site.objects.get(id=site_ids)
@@ -298,32 +298,31 @@ class MqttClient:
                                 logger.info("Added subscription details for dispensing unit")
                        
                     except Exception as err:
-                        print("*7*7*")
                         transaction.set_rollback(True)
-                        logger.error("MQTT - {}".format(err))
+                        logger.error("Exception at line 302".format(err))
 
 
     def ctrl_motr_handler(self, client, userdata, msg):
-        print("I am in ctrl_motr_handler")
+        ##print("I am in ctrl_motr_handler")
         topic_from_broker =msg.topic
 
         if topic_from_broker != "wc1/v1/OTP":
             global msgo
-            print("Data from mqtt:",msg.payload)
+            ##print("Data from mqtt:",msg.payload)
             jstring=msg.payload
-            print("type is:",type(jstring))
+            ##print("type is:",type(jstring))
             if isinstance(jstring, bytes):
                 dict_str = jstring.decode("utf-8")
-                print("dict_str:",dict_str,type(dict_str))
+                ##print("dict_str:",dict_str,type(dict_str))
             if dict_str.startswith("{'") and dict_str.endswith("'}") or 'version' not in dict_str:
                 # dict_str = jstring.decode("UTF-8")
                 dict_split=dict_str.split(":")
-                print("dict_split:",dict_split,type(dict_split))
+                ##print("dict_split:",dict_split,type(dict_split))
 
                 dict_data = ast.literal_eval(dict_str)
                 converted_list = [f"{key}:{value}" for key, value in dict_data.items()]
                 array_dat =converted_list
-                print("array_dat1:",array_dat,type(array_dat))
+                ##print("array_dat1:",array_dat,type(array_dat))
                 mydata ={}
                 cnd=0
                 tds=0
@@ -565,7 +564,7 @@ class MqttClient:
                 device_id=hmqm_split[1]
                 msg_type=hmqm_split[2]
                 if(msg_type == 'updset' or msg_type == 'updsta'):
-                    print("msg_type",msg_type)
+                    ##print("msg_type",msg_type)
                     components=hmqm_split[3]         
                     od=mydata.strip()         
                     repo_histobj=repo_history.objects.create(device_id=device_id,message_type=msg_type,component_name=components,msg_json=mydata1)
@@ -4917,7 +4916,7 @@ class MqttClient:
         logger.info("MQTT - Disconnecting from mqtt broker and cleaning up")
         self.client.disconnect()
 
-print("Hi mqqtt client object going to create")
+##print("Hi mqqtt client object going to create")
 mqttc = MqttClient()
 
 @api_view(['POST'])
@@ -4951,7 +4950,7 @@ class LastRecordsView(viewsets.ModelViewSet):
     def dispatch(self, request, *args, **kwargs):
         my_list = [] 
         fields_to_exclude = ['model', 'pk']
-        print(request.body,"BODY")
+        #print(request.body,"BODY")
         data = json.loads(request.body)
         dinfo = device_info.objects.filter(**data)
         did=dinfo[0].Device_id
@@ -5087,9 +5086,9 @@ cid=None
 class site_check(viewsets.ModelViewSet):
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
-        print(request.body,"BODY")
+        #print(request.body,"BODY")
         data = json.loads(request.body)
-        print(data,type(data),"DATA")
+        #print(data,type(data),"DATA")
         companydata=mo.Company.objects.filter(company_id=data['company_id'])
         for i in companydata:
             global cid
@@ -5165,12 +5164,12 @@ class updated_treat_cnd_senViewset(viewsets.ModelViewSet):
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
-        print(data,type(data),"DATA**********")
+        #print(data,type(data),"DATA**********")
         dinfo = device_info.objects.filter(**data)
-        print(dinfo,type(dinfo),"device_info*****")
+        #print(dinfo,type(dinfo),"device_info*****")
         did=dinfo[0].Device_id
-        print(dinfo,type(dinfo))
-        print("**!!!***1:",did)
+        #print(dinfo,type(dinfo))
+        #print("**!!!***1:",did)
         qs_sta = treat_cnd_sen.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
         if not qs_sta:
             data_sta = {}
@@ -5387,7 +5386,7 @@ class updated_treat_ampv1Viewset(viewsets.ModelViewSet):
             response_data=[response_data]
             return JsonResponse(response_data, safe=False, content_type="application/json")    
         except Exception as e :
-            print(e)  
+            print("Exception at line 5389",e)  
     
 class updated_treat_ampv2Viewset(viewsets.ModelViewSet):
 	# define queryset
@@ -5557,7 +5556,7 @@ class updated_disp_atmViewset(viewsets.ModelViewSet):
 #             data_dict = json.loads(request.body)
 #             value_list = list(data_dict.values())
 #             dinfo = device_info.objects.filter(componant_name=value_list[2], unit_type=value_list[1], company_id=value_list[0])
-#             # print("value_list",dinfo)
+#             # #print("value_list",dinfo)
 #             # data = serialize("json", dinfo, fields=('Device_id'))
 #             # return HttpResponse(data, content_type="application/json")
 
@@ -6845,7 +6844,7 @@ class RwpstateViewset(viewsets.ModelViewSet):
                 unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]  # Example of unwanted keys
                 
                 value_list=list(data_dict.values())
-                print("datadict:",data_dict)
+                #print("datadict:",data_dict)
                 dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
                 for x in dinfo:
                     global deviceid
@@ -6856,11 +6855,11 @@ class RwpstateViewset(viewsets.ModelViewSet):
                 for key in unwanted_keys:
                     if key in data_dict:
                         del data_dict[key]
-                print("datadict1:",data_dict)
+                #print("datadict1:",data_dict)
                 for key in data_dict:
                     data_dict[key] = str(data_dict[key])
                 mqttc.publish(f'wc1/{did}/chgsta/{cmpname}',str(data_dict).replace(' ',''))
-                print("***$$$@",str(data_dict).replace(' ',''))
+                #print("***$$$@",str(data_dict).replace(' ',''))
                 dd=dateandtime()
                 e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} rwp status change has been requested - status:{value_list[3]}"
                 erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='rwp',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
@@ -6886,7 +6885,7 @@ class RwpstateViewset(viewsets.ModelViewSet):
 did=0
 class rwpsettingViewset(viewsets.ModelViewSet):
 	# define queryset
-    print("hi ok ")
+    #print("hi ok ")
     # queryset = rwp_setting.objects.all().order_by('-id')[:1]
     queryset = rwp_setting.objects.all()
 	# specify serializer to be used
@@ -6896,15 +6895,15 @@ class rwpsettingViewset(viewsets.ModelViewSet):
         try:
             data_dict = json.loads(request.body)
             unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name"]  # Example of unwanted keys
-            print("dict data is:",data_dict)
+            #print("dict data is:",data_dict)
             value_list=list(data_dict.values())
-            print("value_list:",value_list)
+            #print("value_list:",value_list)
             dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
             for x in dinfo:
-                print("did id:",x.Device_id)
+                #print("did id:",x.Device_id)
                 did=x.Device_id
                 cmpname=x.componant_name
-                print("ddddid is",did)
+                #print("ddddid is",did)
             for key in unwanted_keys:
                 if key in data_dict:
                     del data_dict[key]
@@ -6912,14 +6911,14 @@ class rwpsettingViewset(viewsets.ModelViewSet):
                     data_dict[key] = str(data_dict[key])
             mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
             
-            print("data send to hivemq")
+            #print("data send to hivemq")
             dd=dateandtime()
             e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} rwp settings change has been requested - over load current:{value_list[3]}, span:{value_list[4]}, dry run current:{value_list[5]}"
             erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='rwp',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
             erro.save()
             
         except Exception as e:
-            print("Error",e)
+            #print("Error",e)
             dd=dateandtime()
             e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} Hpp has a fault-{e}"
             erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='hpp',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
@@ -7058,11 +7057,11 @@ class device_infoViewset(viewsets.ModelViewSet):
             fields_to_exclude = ['model', 'pk']
 
             data = json.loads(request.body)
-            print(data,type(data),"DATA11:")
+            #print(data,type(data),"DATA11:")
             u_id=data['user_id']
-            print("uid",u_id)
+            #print("uid",u_id)
             dinfo = device_info.objects.filter(company_id=data['company_id'])
-            print(dinfo,type(dinfo))
+            #print(dinfo,type(dinfo))
             allsites=[]
             for si in dinfo:
                 allsites.append(si.site_name)
@@ -7076,13 +7075,13 @@ class device_infoViewset(viewsets.ModelViewSet):
                 with connection.cursor() as cursor:
                     cursor.execute(raw_sql,[u_id])
                     results = cursor.fetchall()
-                    print("Results",results)
+                    #print("Results",results)
                 # Print the results
                 for result in results:
-                    print("Site Name1:", result[0])
+                    #print("Site Name1:", result[0])
                     sites.append(result[0])
             except Exception as e:
-                print("***")
+                print("exception at line 7085",e)
             if data['user_role']== "super_admin" or data['user_role']== "administrator":
 
                 siteset=set(allsites)
@@ -7160,7 +7159,7 @@ class tdssettingViewset(viewsets.ModelViewSet):
                 unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]  # Example of unwanted keys
                 
                 value_list=list(data_dict.values())
-                print("valuelist is:",value_list)
+                #print("valuelist is:",value_list)
                 dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
                 global deviceid
                 for x in dinfo:
@@ -7174,9 +7173,9 @@ class tdssettingViewset(viewsets.ModelViewSet):
                 for key in data_dict:
                     data_dict[key] = str(data_dict[key])
                 mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
-                print("data successfully send to hivemqtt")
-                print("did is:",did)
-                print("cname:",cmpname)
+                #print("data successfully send to hivemqtt")
+                #print("did is:",did)
+                #print("cname:",cmpname)
                 dd=dateandtime()
                 e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tds settings change has been requested - span:{value_list[3]}, trip_setpoint:{value_list[4]}, atert_setpoint:{value_list[5]}"
                 erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tds',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
@@ -7332,7 +7331,7 @@ class panelsettingViewset(viewsets.ModelViewSet):
                 for key in data_dict:
                     data_dict[key] = str(data_dict[key])
                 mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
-                print("MMM:",data_dict)
+                #print("MMM:",data_dict)
                 dd=dateandtime()
                 e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} panel settings change has been requested - mode:{value_list[3]}, under voltage:{value_list[6]}, over voltage:{value_list[7]}, span:{value_list[8]}, no.of multiport valve:{value_list[4]}, sensor type:{value_list[5]}, service time:{value_list[9]}, backwash time:{value_list[10]}, rinse time:{value_list[11]}"
                 erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='panel',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
@@ -7430,7 +7429,7 @@ class cnd_consensettingViewset(viewsets.ModelViewSet):
                 for key in unwanted_keys:
                     if key in data_dict:
                         del data_dict[key]
-                print("device is:", deviceid)
+                #print("device is:", deviceid)
                 for key in data_dict:
                     data_dict[key] = str(data_dict[key])
                 mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
@@ -7589,7 +7588,7 @@ class ampv1settingViewset(viewsets.ModelViewSet):
                 for key in data_dict:
                     data_dict[key] = str(data_dict[key])
                 mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
-                print("Dattta:",data_dict)
+                #print("Dattta:",data_dict)
                 dd=dateandtime()
                 e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} ampv1 settings change has been requested - service time:{value_list[8]}, backwash time:{value_list[9]}, rins time:{value_list[10]}, motor on delay time:{value_list[11]}, output1:{value_list[12]}, output2:{value_list[13]}, output3:{value_list[14]}, input1:{value_list[4]}, input2:{value_list[5]}, input3:{value_list[6]}, pressure switch input:{value_list[7]}, sensor type:{value_list[3]}"
                 erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='ampv1',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
@@ -7743,7 +7742,7 @@ class tap1settingViewset(viewsets.ModelViewSet):
                 for key in data_dict:
                     data_dict[key] = str(data_dict[key])
                 mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
-                print("*!*!*!:",data_dict)
+                #print("*!*!*!:",data_dict)
                 dd=dateandtime()
                 e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tap1 settings change has been requested - pulse1:{value_list[3]}, pulse2:{value_list[4]}, pulse3:{value_list[5]}, pulse4:{value_list[6]}"
                 erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tap1',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
