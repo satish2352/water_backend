@@ -178,7 +178,7 @@ def user_login(request):
         response = {"Response": {"Status": "error"}, "message": "Method {} not allowed".format(request.method)}
         return JsonResponse(response, safe=False, status=status.HTTP_405_METHOD_NOT_ALLOWED)
     except DatabaseError as e:
-        print("DatabaseError at line 283")
+        print("DatabaseError at line 180", e)
 
 @api_view(['POST'])
 def otp_login(request, uidb64):
