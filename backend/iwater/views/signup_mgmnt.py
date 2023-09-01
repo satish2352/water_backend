@@ -87,7 +87,7 @@ def user_login(request):
                                 'contact_no': logged_user.phone,
                                 'site_name':sitename,
                                 'company_name':company_name.company_name,
-                                'company_id':2323,
+                                'company_id':new_company_id,
                                 'user_id':userfinder
                             }
                         }
