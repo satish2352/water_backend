@@ -175,6 +175,10 @@ class MqttClient:
                                     subscription_data.is_treatment_unit = True
                                     subscription_data.company_id = company_ids
                                     subscription_data.save()
+                                else :
+                                    site_data = Site.objects.get(id=site_ids)
+                                    site_data.token = None
+                                    site_data.save()
                             
                             if device_data.serial_no3 is None:
                                 if atmid is not None:
@@ -192,6 +196,11 @@ class MqttClient:
                                     subscription_data.is_dispensing_unit = True
                                     subscription_data.company_id = company_ids
                                     subscription_data.save()
+                                    
+                                else :
+                                    site_data = Site.objects.get(id=site_ids)
+                                    site_data.token = None
+                                    site_data.save()
 
                         else:
                             if panelid and atmid:
