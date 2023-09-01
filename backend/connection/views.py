@@ -4908,19 +4908,21 @@ class LastRecordsView(viewsets.ModelViewSet):
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
         dinfo = device_info.objects.filter(**data)
-        did=dinfo[0].Device_id
-        last_error = Errors.objects.filter(device_id=did).order_by('-id')[:10]
-        if not last_error:
-            last_error={}
-        else:
-            last_error = serialize("json", last_error)
+        if dinfo is not None:
+            did=dinfo[0].Device_id
+            last_error = Errors.objects.filter(device_id=did).order_by('-id')[:10]
+            if not last_error:
+                last_error={}
+            else:
+                last_error = serialize("json", last_error)
+                last_error = json.loads(last_error)
+                for item in last_error:
+                    item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+                    my_list.append(item['fields'])
+            last_error = json.dumps(my_list)
             last_error = json.loads(last_error)
-            for item in last_error:
-                item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-                my_list.append(item['fields'])
-        last_error = json.dumps(my_list)
-        last_error = json.loads(last_error)
-        return JsonResponse(last_error, safe=False, content_type="application/json")
+            return JsonResponse(last_error, safe=False, content_type="application/json")
+
 #all data from minit table
 class all_panelListAPIView(generics.ListAPIView):
 	queryset = treat_panel.objects.all()
