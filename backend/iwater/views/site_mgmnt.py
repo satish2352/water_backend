@@ -330,6 +330,7 @@ def site(request, pk):
 def send_otp(request):
 
     not_verified_sites = Site.objects.filter(token_verified=False)
+    not_verified_sites_phone = Site.objects.filter(phone_verified=False)
     # ! defination of unverified sites collects model instance
 
     for not_verified_site in not_verified_sites.values():
@@ -343,6 +344,20 @@ def send_otp(request):
             Site.objects.filter(id=not_verified_site["id"]).delete()
             logger.info("Deleted timed out unverified site {}: {}".format(not_verified_site["id"],
                                                                           not_verified_site["site_name"]))
+
+
+    for not_verified_site_p in not_verified_sites_phone.values():
+        logger.debug("unverified site {}: {}".format(not_verified_site_p["id"], not_verified_site_p["site_name"]))
+        otp_cache_time_p = not_verified_site_p["otp_created"].replace(tzinfo=None)
+        current_time_p = datetime.today().replace(tzinfo=None)
+        difference_p = (current_time_p - otp_cache_time_p).total_seconds()
+        if difference_p > 1800:
+            logger.info("Deleting timed out unverified site {}: {}".format(not_verified_site_p["id"],
+                                                                           not_verified_site_p["site_name"]))
+            Site.objects.filter(id=not_verified_site_p["id"]).delete()
+            logger.info("Deleted timed out unverified site {}: {}".format(not_verified_site_p["id"],
+                                                                          not_verified_site_p["site_name"]))
+
 
     # Request to send verification sms
     if request.method == 'POST':
