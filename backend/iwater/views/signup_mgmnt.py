@@ -13,7 +13,7 @@ from django.utils.http import urlsafe_base64_decode
 from rest_framework.authtoken.models import Token
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
-
+from django.db import transaction, DatabaseError
 from iwater.models import User, Company,Site,SitePermission
 
 from iwater.iw_logger import logger
@@ -26,157 +26,159 @@ email=''
 
 @api_view(['POST'])
 def user_login(request):
-    logger.info("Login request")
-    logger.info("User before  login {}".format(request.user))
-    if request.method == 'POST':
+    try:
+        logger.info("Login request")
+        logger.info("User before  login {}".format(request.user))
+        if request.method == 'POST':
 
-        login_type = request.data['login_type']
-        if login_type == "email":
-            global email
-            logger.info("Email based login")
-            email = request.data['email']
+            login_type = request.data['login_type']
+            if login_type == "email":
+                global email
+                logger.info("Email based login")
+                email = request.data['email']
 
-            password = request.data['password']
-            logger.info("Email: {},".format(email))
-            user = authenticate(request, email=email, password=password)
-            print("user auth ",user)
-            logger.info("Logged in user is {}".format(user))
-            
-            if user is not None:
-                if user.is_active:
+                password = request.data['password']
+                logger.info("Email: {},".format(email))
+                user = authenticate(request, email=email, password=password)
+                print("user auth ",user)
+                logger.info("Logged in user is {}".format(user))
+                
+                if user is not None:
+                    if user.is_active:
 
-                    login(request, user)
-                    logged_user = User.objects.get(email=email)
-                    sitefinder=logged_user.company_id
-                    new_company_id =logged_user['company_id']
-                    print("logged_user.company_id ",type(logged_user.company_id))
-                    sits=Site.objects.filter(company_id=sitefinder)
-                    company_name = Company.objects.get(id=logged_user.company_id)
-                    userfinder=logged_user.id
-                    # user_id=SitePermission.objects.get(id=
-                    if sits:
-                        for site in sits:
-                            sitename=site.site_name
-                    else:
-                        sitename=''
-                        # company_id_new=''
-                    if user.is_blocked:
-                        if request.path != reverse('blocked'):
-                            return redirect('blocked')
-            
-                    # Block ends
+                        login(request, user)
+                        logged_user = User.objects.get(email=email)
+                        sitefinder=logged_user.company_id
+                        new_company_id =logged_user['company_id']
+                        print("logged_user.company_id ",type(logged_user.company_id))
+                        sits=Site.objects.filter(company_id=sitefinder)
+                        company_name = Company.objects.get(id=logged_user.company_id)
+                        userfinder=logged_user.id
+                        # user_id=SitePermission.objects.get(id=
+                        if sits:
+                            for site in sits:
+                                sitename=site.site_name
+                        else:
+                            sitename=''
+                            # company_id_new=''
+                        if user.is_blocked:
+                            if request.path != reverse('blocked'):
+                                return redirect('blocked')
+                
+                        # Block ends
 
-                    role = ""
-                    if logged_user.is_super_admin:
-                        role = "super_admin"
-                    elif logged_user.is_admin:
-                        role = "administrator"
-                    elif logged_user.is_supervisor:
-                        role = "supervisor"
-                    elif logged_user.is_operator:
-                        role = "operator"
+                        role = ""
+                        if logged_user.is_super_admin:
+                            role = "super_admin"
+                        elif logged_user.is_admin:
+                            role = "administrator"
+                        elif logged_user.is_supervisor:
+                            role = "supervisor"
+                        elif logged_user.is_operator:
+                            role = "operator"
 
-                    user_data = {
-                        "user": {
-                            'serial_no': logged_user.id,
-                            'creation_date': logged_user.date_joined,
-                            'username': logged_user.username,
-                            'user_role': role,
-                            'email': logged_user.email,
-                            'contact_no': logged_user.phone,
-                            'site_name':sitename,
-                            'company_name':company_name.company_name,
-                            'company_id':new_company_id,
-                            'user_id':userfinder
+                        user_data = {
+                            "user": {
+                                'serial_no': logged_user.id,
+                                'creation_date': logged_user.date_joined,
+                                'username': logged_user.username,
+                                'user_role': role,
+                                'email': logged_user.email,
+                                'contact_no': logged_user.phone,
+                                'site_name':sitename,
+                                'company_name':company_name.company_name,
+                                'company_id':new_company_id,
+                                'user_id':userfinder
+                            }
                         }
-                    }
-                    if role == "super_admin":
-                        company_details = Company.objects.get(id=logged_user.company_id)
-                        user_data["user"]["company_name"] = company_details.company_name
-                        user_data["user"]["company_id"] = new_company_id,
-                        user_data["user"]["gst_no"] = company_details.gst_no
-                        user_data["user"]["address1"] = company_details.address1
-                        user_data["user"]["address2"] = company_details.address2
-                        user_data["user"]["city"] = company_details.city
-                        user_data["user"]["state"] = company_details.state
-                        user_data["user"]["pincode"] = company_details.pincode
-                    logger.info(user_data)
-                    token, created = Token.objects.get_or_create(user=user)
-                    token = {'token': token.key}
-                    logger.info(token)
-                    user_data.update(token)
-                    logger.info(user_data)
-                    return JsonResponse({"Response": {
-                        "Status": "status"},
-                        "Data": user_data
-                    }, safe=False, status=status.HTTP_200_OK)
+                        if role == "super_admin":
+                            company_details = Company.objects.get(id=logged_user.company_id)
+                            user_data["user"]["company_name"] = company_details.company_name
+                            user_data["user"]["company_id"] = new_company_id,
+                            user_data["user"]["gst_no"] = company_details.gst_no
+                            user_data["user"]["address1"] = company_details.address1
+                            user_data["user"]["address2"] = company_details.address2
+                            user_data["user"]["city"] = company_details.city
+                            user_data["user"]["state"] = company_details.state
+                            user_data["user"]["pincode"] = company_details.pincode
+                        logger.info(user_data)
+                        token, created = Token.objects.get_or_create(user=user)
+                        token = {'token': token.key}
+                        logger.info(token)
+                        user_data.update(token)
+                        logger.info(user_data)
+                        return JsonResponse({"Response": {
+                            "Status": "status"},
+                            "Data": user_data
+                        }, safe=False, status=status.HTTP_200_OK)
+                    else:
+                        return JsonResponse({"Response": {
+                            "Status": "error"},
+                            "message": "The company account is deleted or the user is blocked. Please contact admin"
+                        }, safe=False, status=status.HTTP_200_OK)
                 else:
                     return JsonResponse({"Response": {
                         "Status": "error"},
-                        "message": "The company account is deleted or the user is blocked. Please contact admin"
+                        "message": "Invalid mail id or password"
                     }, safe=False, status=status.HTTP_200_OK)
+            elif login_type == "phone":
+                logger.info("OTP based login")
+                phone_country = "+91"
+                mob = re.sub(r"\D", "", request.data['phone'])
+                phone = phone_country + str(mob)
+                logger.info("phone {}".format(phone))
+                try:
+                    user = User.objects.get(phone=phone)
+                except User.DoesNotExist:
+                    user = None
+                # print(user)
+                logger.info("User with phone {}".format(user))
+                if user is not None:
+                    user = User.objects.get(phone=phone)
+                    sent = user.send_login_sms()
+                    # logger.info(sent)
+                    if sent["status"]:
+                        logger.info("Sent otp")
+                        return JsonResponse({"Response": {"Status": "success"},
+                                            "message": "OTP sent to the registered number",
+                                            "valid_for": OTP_VALID_FOR,
+                                            "otp": "{}".format(sent["otp"]),
+                                            "Data": {'uid': urlsafe_base64_encode(force_bytes(user.id))}
+                                            # TODO remove
+                                            },
+                                            safe=False, status=status.HTTP_200_OK)
+
+                    elif sent["status"] is False:
+                        response = {"Response": {
+                            "Status": "success"},
+                            "message": "Phone number is not verified. Please accept the invitation sent to your mobile number",
+                        }
+                        logger.info(response)
+                        return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
+                    else:
+                        response = {"Response": {
+                            "Status": "error"},
+                            "message": "Error in sending OTP",
+                        }
+                        logger.info(response)
+                        return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
+                else:
+                    response = {"Response": {
+                        "Status": "error"},
+                        "message": "You are not registered with this phone number",
+                    }
+                    logger.info(response)
+                    return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
             else:
                 return JsonResponse({"Response": {
                     "Status": "error"},
-                    "message": "Invalid mail id or password"
+                    "message": "Invalid login type"
                 }, safe=False, status=status.HTTP_200_OK)
-        elif login_type == "phone":
-            logger.info("OTP based login")
-            phone_country = "+91"
-            mob = re.sub(r"\D", "", request.data['phone'])
-            phone = phone_country + str(mob)
-            logger.info("phone {}".format(phone))
-            try:
-                user = User.objects.get(phone=phone)
-            except User.DoesNotExist:
-                user = None
-            # print(user)
-            logger.info("User with phone {}".format(user))
-            if user is not None:
-                user = User.objects.get(phone=phone)
-                sent = user.send_login_sms()
-                # logger.info(sent)
-                if sent["status"]:
-                    logger.info("Sent otp")
-                    return JsonResponse({"Response": {"Status": "success"},
-                                         "message": "OTP sent to the registered number",
-                                         "valid_for": OTP_VALID_FOR,
-                                         "otp": "{}".format(sent["otp"]),
-                                         "Data": {'uid': urlsafe_base64_encode(force_bytes(user.id))}
-                                         # TODO remove
-                                         },
-                                        safe=False, status=status.HTTP_200_OK)
 
-                elif sent["status"] is False:
-                    response = {"Response": {
-                        "Status": "success"},
-                        "message": "Phone number is not verified. Please accept the invitation sent to your mobile number",
-                    }
-                    logger.info(response)
-                    return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
-                else:
-                    response = {"Response": {
-                        "Status": "error"},
-                        "message": "Error in sending OTP",
-                    }
-                    logger.info(response)
-                    return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
-            else:
-                response = {"Response": {
-                    "Status": "error"},
-                    "message": "You are not registered with this phone number",
-                }
-                logger.info(response)
-                return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
-        else:
-            return JsonResponse({"Response": {
-                "Status": "error"},
-                "message": "Invalid login type"
-            }, safe=False, status=status.HTTP_200_OK)
-
-    response = {"Response": {"Status": "error"}, "message": "Method {} not allowed".format(request.method)}
-    return JsonResponse(response, safe=False, status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
+        response = {"Response": {"Status": "error"}, "message": "Method {} not allowed".format(request.method)}
+        return JsonResponse(response, safe=False, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    except DatabaseError as e:
+        print("DatabaseError at line 283")
 
 @api_view(['POST'])
 def otp_login(request, uidb64):
