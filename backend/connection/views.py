@@ -125,7 +125,7 @@ class MqttClient:
         if isinstance(jstr, bytes):
             data1 = jstr.decode("utf-8")
         #print("Data received!!!",data1)
-        logger.info("MQTT data {}".format(data1))
+        #logger.info("MQTT data {}".format(data1))
         data=eval(data1)
         #print("new data is:",data,type(data))
         token_ = data["token"]
@@ -134,21 +134,23 @@ class MqttClient:
             global panelid
             panelid = data["panelid"] if data["panelid"] else None
             if panelid:
-                logger.info("panelid {}".format(panelid))
+                #logger.info("panelid {}".format(panelid))
+                pass
 
         if "atmid" in data1:
             global atmid
             atmid = data["atmid"] if data["atmid"] else None
             if atmid:
-                logger.info("atmid {}".format(atmid))
+                #logger.info("atmid {}".format(atmid))
+                pass
 
-        logger.info("token {}".format(token_))
+        #logger.info("token {}".format(token_))
         site_obj = Site.objects.filter(token=data["token"]).first()
-        # logger.info("site_obj",site_obj)
+        # #logger.info("site_obj",site_obj)
         if site_obj is not None:
             company_ids=site_obj.company_id
             site_ids=site_obj.id
-            logger.info("device_id {}".format(device_id))
+            #logger.info("device_id {}".format(device_id))
             doublicate_panel_id=0
             doublicate_atm_id=0
             if panelid is not None:
@@ -162,7 +164,7 @@ class MqttClient:
                 site_obj_new.token = None
                 site_obj_new.save()
             
-                logger.info("Doublicate device found") 
+                #logger.info("Doublicate device found") 
             else:
                 with transaction.atomic():
                     try:  # TODO
@@ -175,46 +177,46 @@ class MqttClient:
                         except Device.DoesNotExist:
                             device_data = None
                         if device_data is not None:
-                            logger.info("re-auth request came for device {}".format(device_id)) # ! re-auth request
+                            #logger.info("re-auth request came for device {}".format(device_id)) # ! re-auth request
                             if device_data.serial_no2 is None:
                                 if panelid is not None:
                                     device_data.serial_no2 = panelid
                                     device_data.save()
-                                    logger.info("Added device serial numbers")
+                                    #logger.info("Added device serial numbers")
                                     site_data = Site.objects.get(id=site_ids)
                                     site_data.is_treatment_unit = True
                                     site_data.token_verified = True
                                     site_data.token = None
                                     site_data.save()
-                                    logger.info("Updated site details for treatment unit")
+                                    #logger.info("Updated site details for treatment unit")
                                     subscription_data = Subscription()
                                     subscription_data.site_id = site_ids
                                     subscription_data.is_treatment_unit = True
                                     subscription_data.company_id = company_ids
                                     subscription_data.save()
-                                    logger.info("Added subscription details for treatment unit")
+                                    #logger.info("Added subscription details for treatment unit")
                             
                             if device_data.serial_no3 is None:
                                 if atmid is not None:
                                     device_data.serial_no3 = atmid
                                     device_data.save()
-                                    logger.info("Added device serial numbers")
+                                    #logger.info("Added device serial numbers")
                                     site_data = Site.objects.get(id=site_ids)
                                     site_data.is_dispensing_unit = True
                                     site_data.token_verified = True
                                     site_data.token = None
                                     site_data.save()
-                                    logger.info("Updated site details for dispensing unit")
+                                    #logger.info("Updated site details for dispensing unit")
                                     subscription_data = Subscription()
                                     subscription_data.site_id = site_ids
                                     subscription_data.is_dispensing_unit = True
                                     subscription_data.company_id = company_ids
                                     subscription_data.save()
-                                    logger.info("Added subscription details for dispensing unit")
+                                    #logger.info("Added subscription details for dispensing unit")
                         else:
-                            logger.info("Got new device add request ")
+                            #logger.info("Got new device add request ")
                             if panelid and atmid:
-                                logger.info("Got both panel and atm id from device")
+                                #logger.info("Got both panel and atm id from device")
 
                                 device_data = Device()
                                 device_data.serial_no1 = device_id
@@ -222,7 +224,7 @@ class MqttClient:
                                 device_data.serial_no3 = atmid
                                 device_data.site_id = site_ids
                                 device_data.save()
-                                logger.info("Added device serial numbers")
+                                #logger.info("Added device serial numbers")
 
                                 site_data = Site.objects.get(id=site_ids)
                                 site_data.is_treatment_unit = True
@@ -230,7 +232,7 @@ class MqttClient:
                                 site_data.token_verified = True
                                 site_data.token = None
                                 site_data.save()
-                                logger.info("Updated site details for treatment unit")
+                                #logger.info("Updated site details for treatment unit")
 
                                 subscription_data = Subscription()
                                 subscription_data.site_id = site_ids
@@ -243,10 +245,10 @@ class MqttClient:
                                 subscription_data1.is_dispensing_unit = True
                                 subscription_data1.company_id = company_ids
                                 subscription_data1.save()
-                                logger.info("Added subscription details for dispensing unit")
+                                #logger.info("Added subscription details for dispensing unit")
                             
                             elif panelid:
-                                logger.info("Got only panel id from device")
+                                #logger.info("Got only panel id from device")
 
                                 device_data = Device()
                                 device_data.serial_no1 = device_id
@@ -254,24 +256,24 @@ class MqttClient:
                                 device_data.serial_no3 = atmid
                                 device_data.site_id = site_ids
                                 device_data.save()
-                                logger.info("Added device serial numbers")
+                                #logger.info("Added device serial numbers")
 
                                 site_data = Site.objects.get(id=site_ids)
                                 site_data.is_treatment_unit = True
                                 site_data.token_verified = True
                                 site_data.token = None
                                 site_data.save()
-                                logger.info("Updated site details for treatment unit")
+                                #logger.info("Updated site details for treatment unit")
 
                                 subscription_data = Subscription()
                                 subscription_data.site_id = site_ids
                                 subscription_data.is_treatment_unit = True
                                 subscription_data.company_id = company_ids
                                 subscription_data.save()
-                                logger.info("Added subscription details for treatment unit")
+                                #logger.info("Added subscription details for treatment unit")
 
                             elif atmid:
-                                logger.info("Got only atm id from device")
+                                #logger.info("Got only atm id from device")
                                 try:
                                     device_data = Device()
                                     device_data.serial_no1 = device_id
@@ -282,20 +284,20 @@ class MqttClient:
                                 except DatabaseError as e:
                                     print("DatabaseError at line 283",e)
 
-                                logger.info("data created successfully in device")
+                                #logger.info("data created successfully in device")
                                 site_data = Site.objects.get(id=site_ids)
                                 site_data.is_dispensing_unit = True
                                 site_data.token_verified = True
                                 site_data.token = None
                                 site_data.save()
-                                logger.info("Updated site details for dispensing unit")
+                                #logger.info("Updated site details for dispensing unit")
 
                                 subscription_data = Subscription()
                                 subscription_data.site_id = site_ids
                                 subscription_data.is_dispensing_unit = True
                                 subscription_data.company_id = company_ids
                                 subscription_data.save()
-                                logger.info("Added subscription details for dispensing unit")
+                                #logger.info("Added subscription details for dispensing unit")
                        
                     except Exception as err:
                         transaction.set_rollback(True)
@@ -4891,7 +4893,7 @@ class MqttClient:
                         erro.save()
 
     def on_connect_1(self, client, userdata, flags, rc):
-        logger.info("MQTT - connected")
+        #logger.info("MQTT - connected")
         # self.subscribe(self.topic)
         self.subscribe("wc1/#",self.ctrl_motr_handler)
         self.subscribe("wc1/v1/OTP",self.otp_handler)
@@ -4904,16 +4906,16 @@ class MqttClient:
     def subscribe(self, topic,subscribe_callback):
         self.client.subscribe(topic,1)
         self.client.message_callback_add(topic, subscribe_callback)
-        logger.info("MQTT - Subscribed to topic '" + topic)
+        #logger.info("MQTT - Subscribed to topic '" + topic)
  
 
     def publish(self, topic, payload):
-        logger.info("MQTT - Published message '" + str(payload) + "' on topic '" + topic)
+        #logger.info("MQTT - Published message '" + str(payload) + "' on topic '" + topic)
         self.client.publish(topic, payload=payload)
         # self.client.loop_stop()
 
     def stop(self):
-        logger.info("MQTT - Disconnecting from mqtt broker and cleaning up")
+        #logger.info("MQTT - Disconnecting from mqtt broker and cleaning up")
         self.client.disconnect()
 
 ##print("Hi mqqtt client object going to create")
@@ -7916,24 +7918,3 @@ class tap4settingViewset(viewsets.ModelViewSet):
                 self.perform_destroy(instance)
             except Http404:
                 pass
-
-
-
-   
-
-# topic = "test"
-# try:
-#     mqttc = mqtt.Client()
-#     ssl_context= ssl_alpn()
-#     mqttc.tls_set_context(context=ssl_context)
-#     logger.info("start connect mqttc")
-#     # mqttc.connect(aws_iot_endpoint, port=443)
-#     mqttc.connect(aws_iot_endpoint, port=8883)
-#     logger.info("connect success")
-#     mqttc.subscribe('wc1/#',1)
-#     mqttc.loop_start()
-# except Exception as e:
-#     logger.error("exception main()")
-#     logger.error("e obj:{}".format(vars(e)))
-#     traceback.print_exc(file=sys.stdout)
-# mqttc.on_message = on_message
