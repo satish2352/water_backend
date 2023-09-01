@@ -35,17 +35,14 @@ def sub_update_scheduler():
             if(sub1["days_to_expire"]>0 and sub1["order_id"]!=None):
             ##---------------------Under Implement code with aseem Sir Logic------------------------------------------------------
                 div1= Device.objects.filter(site= a['id']).update(device2_sub_status="Active")
-                print(div1,' ',sub1) 
                 Treatment_Unit_Active.append(div1)
     
             elif(sub1["days_to_expire"]<=0):
                 div2= Device.objects.filter(site= a['id']).update(device2_sub_status="Expired")
-                print(div2,' ',sub1)
                 Treatment_Unit_Expired.append(div2)
 
             elif(sub1["days_to_expire"]>0 and sub1["order_id"]==None):
                 div3= Device.objects.filter(site= a['id']).update(device2_sub_status="Free_Trial")
-                print(div3,' ',sub1)
                 Treatment_Unit_Free_Trial.append(div3)
         else:
             ("NO Data found for Treatment Unit")
@@ -60,19 +57,16 @@ def sub_update_scheduler():
             if(sub2["days_to_expire"]>0 and sub2["order_id"]!=None):
             ##---------------------Under Implement code with aseem Sir Logic------------------------------------------------------
                 div4= Device.objects.filter(site= a['id']).update(device3_sub_status="Active")
-                print(div4,' ',sub2)
                 Dispensing_Unit_Active.append(div4) 
     
             elif(sub2["days_to_expire"]<=0):
                 div5= Device.objects.filter(site= a['id']).update(device3_sub_status="Expired")
-                print(div5,' ',sub2)
                 Dispensing_Unit_Expired.append(div5)
                 
 
             
             elif(sub2["days_to_expire"]>0 and sub2["order_id"]==None):
                 div6= Device.objects.filter(site= a['id']).update(device3_sub_status="Free_Trial")
-                print(div6,' ',sub2)
                 Dispensing_Unit_Free_Trial.append(div6)
         else:
             ("NO Data found for Dispensing Unit")
