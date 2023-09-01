@@ -757,26 +757,14 @@ def get_device(request, pk):
 @api_view(['POST'])
 def re_auth_device(request):
     logger.info("Got re_auth_device")
-
-    # Request to send verification sms
     if request.method == 'POST':
-        # phone = request.data['phone']
-        # site_name = request.data['site_name']
-
         site_name = request.data['site_name']
-        # address = request.data['address']
-        # city = request.data['city']
-        # state = request.data['state']
-        # phone_country = "+91"
-        # mob = re.sub(r"\D", "", request.data['phone'])
-        # site_mob = phone_country + str(mob)
 
         try:
             site_obj = Site.objects.get(company_id=request.user.company_id, site_name=site_name)
 
             logger.info("Re-auth request for device added")
-            threading.Thread(target=connect_mqtt_in_background, args=(request.user.company_id, )).start()
-            # sent = site_obj.send_verification_sms(site_obj.id)
+            # threading.Thread(target=connect_mqtt_in_background, args=(request.user.company_id, )).start()
             sent = site_obj.send_verification_sms(random.randint(1000, 9999))
             logger.info(sent)
             if sent["status"]:
@@ -786,7 +774,6 @@ def re_auth_device(request):
                                      "otp": {"token": "{0:04}".format(site_obj.id), "otp": sent["otp"]}  # TODO remove
                                      },
                                     safe=False, status=status.HTTP_200_OK)
-                # return HttpResponse('', status=200)
             else:
                 return JsonResponse({"Response": {"Status": "error"},
                                  "message": "phone already verified verified"},
