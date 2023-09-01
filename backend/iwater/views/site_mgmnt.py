@@ -105,14 +105,11 @@ def list_sites(request):
             for n in operator:
                 for m in n:
                     operators.append(m["username"])
-                    # operators_data.append(m)
 
-            # logger.info("----------------------")
             users = {
                 "supervisors": supervisors,
                 "operators": operators
             }
-            # logger.info(users)
 
             devices = {}
             device_obj = Device.objects.filter(site_id=site_info["id"])
@@ -142,8 +139,6 @@ def list_sites(request):
                     authenticated_devices = {"authenticated_devices": {
                         "dispensing_unit": dev["serial_no3"]}
                     }
-                # logger.info(devices)
-            # logger.info("----------------------")
             response_data = {}
             # if users["supervisors"] or users["operators"]:
             if True: #change by bharti ma'am
@@ -186,7 +181,6 @@ def list_sites(request):
             city_state.append(site_info["city"])
             city_state.append(site_info["state"])
 
-        logger.info('Response:')
         supervisor = []
         supervisrs = User.objects.filter(is_supervisor=True).filter(is_operator=False).filter(email_verified=1)\
             .filter(company_id=request.user.company_id)
@@ -209,8 +203,6 @@ def list_sites(request):
                 'no_of_sites': count
 
             })
-        logger.info("++++++++++++++===")
-        # logger.info(supervisor)
 
         operator = []
         operatrs = User.objects.filter(is_supervisor=False).filter(is_operator=True).filter(email_verified=1).\
@@ -237,9 +229,6 @@ def list_sites(request):
 
         context = {"sites": data, "unverified_sites": unverified_data, "city_state": list(set(city_state)), "supervisors": supervisor,
                    "operators": operator}
-        # logger.info(context)
-
-        # logger.info(len(data))
 
         return JsonResponse({"Response": {"Status": "success"}, "Data": context},
                             safe=False, status=status.HTTP_200_OK)
@@ -292,12 +281,10 @@ def site(request, pk):
                 for m in n:
                     operators.append(m["username"])
 
-            # logger.info("----------------------")
             users = {
                 "supervisors": supervisors,
                 "operators": operators
             }
-            # logger.info(users)
 
             devices = {}
             device_obj = Device.objects.filter(site_id=site_info["id"])
@@ -314,8 +301,7 @@ def site(request, pk):
                         dev["serial_no3"]
                     ],
                 }
-                # logger.info(devices)
-            # logger.info("----------------------")
+
             response_data = {
                 'serial_no': site_info["id"],
                 'creation_date': site_info["created"],
@@ -330,13 +316,9 @@ def site(request, pk):
                 'no_of_alerts': site_info["alerts"]
             }
             response_data.update(devices)
-            # logger.info(response_data)
             context.append(response_data)
 
-        logger.info('Response:')
-        logger.info(context)
-
-        logger.info(len(context))
+      
         return JsonResponse({"Response": {"Status": "success"}, "Data": context},
                             safe=False, status=status.HTTP_200_OK)
     return JsonResponse({"Response": {"Status": "success"}, "Data": "Bad request"},
@@ -346,8 +328,6 @@ def site(request, pk):
 # @login_required
 @api_view(['POST'])
 def send_otp(request):
-    logger.info("Got send otp request for site adding")
-    logger.info("Getting unverified sites")
 
     not_verified_sites = Site.objects.filter(phone_verified=False, token_verified=False)
     # ! defination of unverified sites collects model instance
@@ -521,46 +501,33 @@ def verify_token(request):
 
     if request.method == 'POST':
         site_name = request.data['site_name']
-        print("site_name: ", site_name)
         try:
-            print("Request data:",request.data)
             authenticate_device = request.data['authenticate_device']
         except Exception as err:
             authenticate_device = None
 
         # if authenticate_device is None:
     
-        print("token auth for new device")
-        logger.info("Verify token for newly added device")
         try:
             site_obj = Site.objects.get(company_id=request.user.company_id, site_name=site_name, phone_verified=True)
-            print("site_obj:", site_obj)
+
         except Exception as err:
             logger.error("Verify token error , {}".format(err))
             return JsonResponse({"Response": {"Status": "error"},
                                     "message": "OTP is not verified"},
                                 safe=False, status=status.HTTP_200_OK)
         try:
-            print("111")
             sub_count = Subscription.objects.filter(site_id=site_obj.id).count()
-            print("112")
-            logger.debug(sub_count)
-            print("113")
             if sub_count > 0:
-                print("114")
                 dev_obj = Device.objects.get(site_id=site_obj.id)
-                print("115")
                 response = {
                     'device_name1': dev_obj.serial_no1,
                     "device_name2": dev_obj.serial_no2,
                     "device_name3": dev_obj.serial_no3
                 }
-                print("116")
                 site_obj.token_verified = True
                 site_obj.otp = None
-                print("117")
                 site_obj.save()
-                print("118")
 
                 #mongodb device information
                 try:
@@ -614,12 +581,10 @@ def verify_token(request):
         
                 if dev_obj.serial_no2 and dev_obj.serial_no3:
 
-                    print("119")
                     return JsonResponse({"Response": {"Status": "success"},
                                             "message": "Both treatment and dispensing units verified successfully!"},
                                         safe=False, status=status.HTTP_200_OK)
                 elif dev_obj.serial_no2:
-                    print("120")
                     return JsonResponse({"Response": {"Status": "success"},
                                             "message": "Treatment unit verified successfully!"},
                                         safe=False, status=status.HTTP_200_OK)
@@ -639,9 +604,7 @@ def verify_token(request):
                                     "message": "Token verification failed, didn't get the device serial numbers over mqtt."
                                             " {}".format(err)}, safe=False, status=status.HTTP_200_OK)
         # else:
-        #     print("token auth for already existing device")
-        #     logger.info("Verify token for already added device")
-        #     print(authenticate_device)
+
         #     try:
         #         site_obj = Site.objects.get(company_id=request.user.company_id, site_name=site_name,
         #                                     phone_verified=True)
@@ -664,7 +627,7 @@ def verify_token(request):
         #             site_obj.token = False
         #             site_obj.save()
         #             len_authenticate_device = len(authenticate_device)
-        #             print(len_authenticate_device)
+
         #             if (len_authenticate_device == 2) and (dev_obj.serial_no2 and dev_obj.serial_no3):
         #             # if dev_obj.serial_no2 and dev_obj.serial_no3:
         #                 return JsonResponse({"Response": {"Status": "success"},
@@ -775,7 +738,7 @@ def get_device(request, pk):
                 "paneld_id": device.serial_no2,
                 "atm_id": device.serial_no3
             }
-            # print(device.serial_no1)
+
             response = {"Response": {
                 "Status": "success"},
                 "Data": context
