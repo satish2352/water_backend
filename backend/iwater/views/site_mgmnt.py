@@ -556,7 +556,7 @@ def verify_token(request):
                     "Device_id": dev_obj.serial_no2,
                     "Device_name": "wc",
                     "unit_type": "water_treatment",
-                    "company_id": user_obj['company_id'],
+                    "company_id": request.user.company_id,
                     "site_name": site_name
                     }
                     ]
@@ -566,7 +566,7 @@ def verify_token(request):
                     "Device_id": dev_obj.serial_no3,
                     "Device_name": "wc",
                     "unit_type": "water_dispense",
-                    "company_id": user_obj['company_id'],
+                    "company_id": request.user.company_id,
                     "site_name": site_name
                     }
                     ]
