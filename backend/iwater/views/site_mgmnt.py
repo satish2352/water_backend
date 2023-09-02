@@ -363,22 +363,18 @@ def send_otp(request):
     if request.method == 'POST':
         # phone = request.data['phone']
         # site_name = request.data['site_name']
-        print("send_otp request", request)
-        print("send_otp request data", request.data)
+        
         site_name = request.data['site_name']
         address = request.data['address']
         city = request.data['city']
         state = request.data['state']
         user_obj = request.data['user']
-
-        print("request.user ",request.user)
-        print("request.user.company_id ",request.user.company_id)
         
         phone_country = "+91"
         mob = re.sub(r"\D", "", request.data['phone'])
         site_mob = phone_country + str(mob)
         try:
-            existing_site = Site.objects.get(company_id=int(user_obj['company_id']), site_name=site_name)
+            existing_site = Site.objects.get(company_id=request.user.company_id, site_name=site_name)
             # ! checks for duplication of site name
             if existing_site.token_verified and existing_site.phone_verified and existing_site.is_dispensing_unit and existing_site.is_treatment_unit:
                 response = {"Response": {
@@ -392,7 +388,7 @@ def send_otp(request):
 
         with transaction.atomic():
             try:
-                site_obj = Site.objects.filter(company_id=int(user_obj['company_id']), site_name=site_name)
+                site_obj = Site.objects.filter(company_id=request.user.company_id, site_name=site_name)
                 site_obj_count = site_obj.count()
                 if site_obj_count > 0:
                     site_obj.site_name = site_name
