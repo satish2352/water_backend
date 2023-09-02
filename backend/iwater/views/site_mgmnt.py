@@ -3,7 +3,7 @@ import re
 import threading
 from connection.alpn_mqtt import *
 from datetime import datetime
-
+from django.db import DatabaseError
 import random
 from django.http.response import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
