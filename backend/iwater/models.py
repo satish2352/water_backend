@@ -586,7 +586,7 @@ class Site(models.Model):
         # Generate verification code
         code = SmsPinGenerator().make_pin(self)
         self.otp = code
-        self.phone_verified = False
+        # self.phone_verified = False
         self.otp_created = datetime.today()
         self.token='{0:04}'.format(token)  #store token in site
         self.save()

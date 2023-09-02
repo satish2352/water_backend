@@ -435,7 +435,10 @@ def send_otp(request):
                                     # Site name is already taken
                                     safe=False, status=status.HTTP_200_OK)
             else:
-                site_obj.phone_verified = False
+                if site_obj.phone_verified and site_obj.token_verified:
+                    pass
+                else:
+                    site_obj.phone_verified = False
                 logger.info("Both OTP and token are not verified hence resending the otp")
                 sent = site_obj.send_verification_sms(random.randint(1000, 9999))
                 logger.info("otp sent")
