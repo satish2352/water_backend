@@ -37,6 +37,7 @@ def list_sites(request):
     if request.method == 'GET':
 
         try:
+            print("request.user.id", request.user.id)
             logged_user = User.objects.get(request.user.id)
             role = ""
             if logged_user.is_super_admin or logged_user.is_admin:
