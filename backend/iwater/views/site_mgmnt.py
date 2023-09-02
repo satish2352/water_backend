@@ -36,23 +36,23 @@ def list_sites(request):
     operators_data = []
     if request.method == 'GET':
 
-        try:
+        # try:
             
-            logged_user = User.objects.get(request.user.id)
-            role = ""
-            if logged_user.is_super_admin or logged_user.is_admin:
-                valid_sites=mo.Site.objects.filter(company=request.user.company_id).filter(phone_verified=1,token_verified=1).order_by('-id')
-                # print("valid_sites ", valid_sites)
-                # print("type ",type(valid_sites))
+        #     logged_user = User.objects.get(request.user.id)
+        #     role = ""
+        #     if logged_user.is_super_admin or logged_user.is_admin:
+        #         valid_sites=mo.Site.objects.filter(company=request.user.company_id).filter(phone_verified=1,token_verified=1).order_by('-id')
+        #         # print("valid_sites ", valid_sites)
+        #         # print("type ",type(valid_sites))
                     
-            else:
-                valid_sites_for_user = mo.SitePermission.objects.filter(user_id=request.user.id)
-                valid_sites=mo.Site.objects.filter(id__in=valid_sites_for_user.values_list('site_id', flat=True)).filter(phone_verified=1,token_verified=1).order_by('-id')
-                # print("valid_sites ", valid_sites)
-                # print("type ",type(valid_sites))
-            # print(" valid_sites ", valid_sites)
-        except DatabaseError as e:
-            print("Exception at line 39 sites ",e)  
+        #     else:
+        #         valid_sites_for_user = mo.SitePermission.objects.filter(user_id=request.user.id)
+        #         valid_sites=mo.Site.objects.filter(id__in=valid_sites_for_user.values_list('site_id', flat=True)).filter(phone_verified=1,token_verified=1).order_by('-id')
+        #         # print("valid_sites ", valid_sites)
+        #         # print("type ",type(valid_sites))
+        #     # print(" valid_sites ", valid_sites)
+        # except DatabaseError as e:
+        #     print("Exception at line 39 sites ",e)  
         
         if request.user.is_operator:
             # ! access permission check 
@@ -64,12 +64,12 @@ def list_sites(request):
 
         authenticated_devices = {}
 
-        # site_obj = Site.objects.filter(company_id=request.user.company_id).filter(phone_verified=1,token_verified=1).order_by('-id')
+        site_obj = Site.objects.filter(company_id=request.user.company_id).filter(phone_verified=1,token_verified=1).order_by('-id')
 
         
         # ! collects model instance of site object where phone 
 
-        for site_info in valid_sites.values():
+        for site_info in site_obj.values():
             perm_obj = SitePermission.objects.filter(site_id=site_info["id"])
             supervisor = []
             operator = []
