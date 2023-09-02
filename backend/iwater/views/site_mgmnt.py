@@ -383,10 +383,8 @@ def send_otp(request):
                 }
                 return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
          
-        except Site.DoesNotExist:
-            return JsonResponse({"Response": {"Status": "error"},
-                                     "message": "company id not exist "},
-                                    safe=False, status=status.HTTP_200_OK)
+        except Exception as e :
+            print("Exception at line 387",e)  
 
         with transaction.atomic():
             try:
