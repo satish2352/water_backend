@@ -32,8 +32,8 @@ def list_sites(request):
         if logged_user.is_super_admin or logged_user.is_admin:
             valid_sites= Site.objects.filter(company=request.user.company_id).filter(phone_verified=1,token_verified=1).order_by('-id')
         else:
-            valid_sites_for_user =  SitePermission.objects.filter(user_id=request.user.id).filter(phone_verified=1,token_verified=1).order_by('-id')
-            valid_sites= Site.objects.filter(id__in=valid_sites_for_user.values_list('site_id', flat=True))
+            valid_sites_for_user =  SitePermission.objects.filter(user_id=request.user.id)
+            valid_sites= Site.objects.filter(id__in=valid_sites_for_user.values_list('site_id', flat=True)).filter(phone_verified=1,token_verified=1).order_by('-id')
 
     except Exception as e :
         print("Exception at line 5086 sites ",e)  
