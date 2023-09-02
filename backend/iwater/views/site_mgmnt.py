@@ -370,8 +370,7 @@ def send_otp(request):
         city = request.data['city']
         state = request.data['state']
         user_obj = request.data['user']
-        print("user_obj ",user_obj)
-        print("user_obj['company_id'] ",user_obj['company_id'])
+        
         phone_country = "+91"
         mob = re.sub(r"\D", "", request.data['phone'])
         site_mob = phone_country + str(mob)
@@ -476,9 +475,9 @@ def verify_otp(request):
     if request.method == 'POST':
         code = request.data['otpnumber']
         site_name = request.data['site_name']
-
+        user_obj = request.data['user']
         try:
-            site_obj = Site.objects.get(company_id=request.user.company_id, site_name=site_name)
+            site_obj = Site.objects.get(company_id=user_obj['company_id'], site_name=site_name)
             if not site_obj.phone:
                 return JsonResponse({"Response": {"Status": "error"},
                                      "message": "Verification failed. No phone number is provided"},
@@ -521,6 +520,7 @@ def verify_token(request):
 
     if request.method == 'POST':
         site_name = request.data['site_name']
+        user_obj = request.data['user']
         # try:
         #     authenticate_device = request.data['authenticate_device']
         # except Exception as err:
@@ -529,7 +529,7 @@ def verify_token(request):
         # if authenticate_device is None:
     
         try:
-            site_obj = Site.objects.get(company_id=request.user.company_id, site_name=site_name, phone_verified=True)
+            site_obj = Site.objects.get(company_id=user_obj['company_id'], site_name=site_name, phone_verified=True)
 
         except Exception as err:
             logger.error("Verify token error , {}".format(err))
@@ -557,7 +557,7 @@ def verify_token(request):
                     "Device_id": dev_obj.serial_no2,
                     "Device_name": "wc",
                     "unit_type": "water_treatment",
-                    "company_id": request.user.company_id,
+                    "company_id": user_obj['company_id'],
                     "site_name": site_name
                     }
                     ]
@@ -567,12 +567,14 @@ def verify_token(request):
                     "Device_id": dev_obj.serial_no3,
                     "Device_name": "wc",
                     "unit_type": "water_dispense",
-                    "company_id": request.user.company_id,
+                    "company_id": user_obj['company_id'],
                     "site_name": site_name
                     }
                     ]
                     records_panel_exist =device_info.objects.find(records_panel)
+                    print("records_panel_exist ",records_panel_exist)
                     record_atm_exist =device_info.objects.find(record_atm)
+                    print("record_atm_exist ",record_atm_exist)
                     if dev_obj.serial_no2 and dev_obj.serial_no3:
                         
                         if records_panel_exist is None:
