@@ -474,9 +474,9 @@ def verify_otp(request):
     if request.method == 'POST':
         code = request.data['otpnumber']
         site_name = request.data['site_name']
-        user_obj = request.data['user']
+
         try:
-            site_obj = Site.objects.get(company_id=user_obj['company_id'], site_name=site_name)
+            site_obj = Site.objects.get(company_id=request.user.company_id, site_name=site_name)
             if not site_obj.phone:
                 return JsonResponse({"Response": {"Status": "error"},
                                      "message": "Verification failed. No phone number is provided"},
@@ -519,7 +519,7 @@ def verify_token(request):
 
     if request.method == 'POST':
         site_name = request.data['site_name']
-        user_obj = request.data['user']
+
         # try:
         #     authenticate_device = request.data['authenticate_device']
         # except Exception as err:
@@ -528,7 +528,7 @@ def verify_token(request):
         # if authenticate_device is None:
     
         try:
-            site_obj = Site.objects.get(company_id=user_obj['company_id'], site_name=site_name, phone_verified=True)
+            site_obj = Site.objects.get(company_id=request.user.company_id, site_name=site_name, phone_verified=True)
 
         except Exception as err:
             logger.error("Verify token error , {}".format(err))
