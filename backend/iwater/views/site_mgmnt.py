@@ -370,6 +370,8 @@ def send_otp(request):
         city = request.data['city']
         state = request.data['state']
         user_obj = request.data['user']
+        print("user_obj ",user_obj)
+        print("user_obj['company_id'] ",user_obj['company_id'])
         phone_country = "+91"
         mob = re.sub(r"\D", "", request.data['phone'])
         site_mob = phone_country + str(mob)
