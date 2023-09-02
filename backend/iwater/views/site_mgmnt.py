@@ -551,25 +551,22 @@ def verify_token(request):
                 #mongodb device information
                 try:
 
-                    records_panel = [
-                    {
+                    records_panel = {
                     "Device_id": dev_obj.serial_no2,
                     "Device_name": "wc",
                     "unit_type": "water_treatment",
                     "company_id": request.user.company_id,
                     "site_name": site_name
                     }
-                    ]
                 
-                    record_atm=[
-                    {
+                    record_atm= {
                     "Device_id": dev_obj.serial_no3,
                     "Device_name": "wc",
                     "unit_type": "water_dispense",
                     "company_id": request.user.company_id,
                     "site_name": site_name
                     }
-                    ]
+                    
                     
                     records_panel_exist_ =device_info.objects.filter(Device_id= dev_obj.serial_no2)
                     records_panel_exist = records_panel_exist_.count()
