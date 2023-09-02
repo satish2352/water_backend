@@ -5065,7 +5065,7 @@ class site_check(viewsets.ModelViewSet):
                     site_name=[]
                     for sit in number_of_sites:
                         site_name.append(sit.site_name)
-            else
+            else:
                 valid_sites_for_user = mo.SitePermission.objects.filter(user_id=request.user.id)
                 number_of_sites=mo.Site.objects.filter(id__in=valid_sites_for_user.values_list('site_id', flat=True))
                 site_name=[]
