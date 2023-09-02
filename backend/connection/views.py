@@ -148,7 +148,7 @@ class MqttClient:
             if atmid is not None:
                 doublicate_atm_id=Device.objects.filter(serial_no3 =atmid).filter(~Q(site_id = site_ids)).count()
             if doublicate_panel_id >0 or doublicate_atm_id >0:
-                site_obj_new = Site.objects.get(company_id=company_ids, site_name=site_ids)
+                site_obj_new = Site.objects.get(company_id=company_ids, id=site_ids)
                 site_obj_new.token = None
                 site_obj_new.save()
             else:
