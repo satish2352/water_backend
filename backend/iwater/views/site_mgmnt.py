@@ -31,10 +31,11 @@ def list_sites(request):
         logged_user = User.objects.get(request.user.id)
         role = ""
         if logged_user.is_super_admin or logged_user.is_admin:
-            valid_sites= mo.Site.objects.filter(company=request.user.company_id)
+            valid_sites=mo.Site.objects.filter(company=request.user.company_id).filter(phone_verified=1,token_verified=1).order_by('-id')
+                
         else:
-            valid_sites_for_user =  mo.SitePermission.objects.filter(user_id=request.user.id)
-            valid_sites= mo.Site.objects.filter(id__in=valid_sites_for_user.values_list('site_id', flat=True))
+            valid_sites_for_user = mo.SitePermission.objects.filter(user_id=request.user.id)
+            valid_sites=mo.Site.objects.filter(id__in=valid_sites_for_user.values_list('site_id', flat=True)).filter(phone_verified=1,token_verified=1).order_by('-id')
 
     except Exception as e :
         print("Exception at line 39 sites ",e)  
