@@ -51,7 +51,7 @@ def list_sites(request):
                 print("valid_sites ", valid_sites)
                 print("type ",type(valid_sites))
             print(" valid_sites ", valid_sites)
-        except Exception as e :
+        except DatabaseError as e:
             print("Exception at line 39 sites ",e)  
         
         if request.user.is_operator:
