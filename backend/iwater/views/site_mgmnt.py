@@ -413,6 +413,7 @@ def send_otp(request):
             except Exception as err:
                 transaction.set_rollback(True)
                 logger.error("Error in adding site details; {}".format(err))
+                print("Error in adding site details ",err)
                 return JsonResponse({"Response": {"Status": "error"},
                                      "message": "Data base write error for site details"},
                                     safe=False, status=status.HTTP_200_OK)
