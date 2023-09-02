@@ -5057,16 +5057,17 @@ class site_check(viewsets.ModelViewSet):
         #     global cid
         #     cid=i.id
 
-        logged_user = User.objects.get(request.user.id)
-         role = ""
-        if logged_user.is_super_admin:
-            role = "super_admin"
-        elif logged_user.is_admin:
-            role = "administrator"
-        elif logged_user.is_supervisor:
-            role = "supervisor"
-        elif logged_user.is_operator:
-            role = "operator"
+        # logged_user = User.objects.get(request.user.id)
+        #  role = ""
+        # if logged_user.is_super_admin:
+        #     role = "super_admin"
+        # elif logged_user.is_admin:
+        #     role = "administrator"
+        # elif logged_user.is_supervisor:
+        #     role = "supervisor"
+        # elif logged_user.is_operator:
+        #     role = "operator"
+        
         number_of_sites=mo.Site.objects.filter(company=data['company_id'])
         site_name=[]
         for sit in number_of_sites:
