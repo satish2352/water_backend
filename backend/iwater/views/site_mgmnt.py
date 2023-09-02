@@ -388,7 +388,7 @@ def send_otp(request):
 
         with transaction.atomic():
             try:
-                site_obj = Site.objects.filter(company_id=request.user.company_id, site_name=site_name)
+                site_obj = Site.objects.get(company_id=request.user.company_id, site_name=site_name)
                 site_obj_count = site_obj.count()
                 if site_obj_count > 0:
                     site_obj.site_name = site_name
@@ -396,7 +396,7 @@ def send_otp(request):
                     site_obj.city = city
                     site_obj.state = state
                     site_obj.phone = site_mob
-                    site_obj.company = request.user.company
+                    site_obj.company_id = request.user.company_id
                     site_obj.save()
                     logger.error("site {} already exists".format(site_name))
 
@@ -407,7 +407,7 @@ def send_otp(request):
                     site_data.city = city
                     site_data.state = state
                     site_data.phone = site_mob
-                    site_data.company = request.user.company
+                    site_data.company_id = request.user.company_id
                     site_data.save()
             
             except Exception as err:
