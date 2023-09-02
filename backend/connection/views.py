@@ -5048,39 +5048,42 @@ import json
 cid=None
 class site_check(viewsets.ModelViewSet):
     def dispatch(self, request, *args, **kwargs):
-        fields_to_exclude = ['model', 'pk']
-        #print(request.body,"BODY")
-        data = json.loads(request.body)
-        #print(data,type(data),"DATA")
-        # companydata=mo.Company.objects.filter(company_id=data['company_id'])
-        # for i in companydata:
-        #     global cid
-        #     cid=i.id
+        try:
+            fields_to_exclude = ['model', 'pk']
+            #print(request.body,"BODY")
+            data = json.loads(request.body)
+            #print(data,type(data),"DATA")
+            # companydata=mo.Company.objects.filter(company_id=data['company_id'])
+            # for i in companydata:
+            #     global cid
+            #     cid=i.id
 
-        # logged_user = User.objects.get(request.user.id)
-        #  role = ""
-        # if logged_user.is_super_admin:
-        #     role = "super_admin"
-        # elif logged_user.is_admin:
-        #     role = "administrator"
-        # elif logged_user.is_supervisor:
-        #     role = "supervisor"
-        # elif logged_user.is_operator:
-        #     role = "operator"
+            logged_user = User.objects.get(request.user.id)
+            role = ""
+            if logged_user.is_super_admin or logged_user.is_admin:
+                    number_of_sites=mo.Site.objects.filter(company=request.user.company_id)
+                    site_name=[]
+                    for sit in number_of_sites:
+                        site_name.append(sit.site_name)
+            else
+                valid_sites_for_user = mo.SitePermission.objects.filter(user_id=request.user.id)
+                number_of_sites=mo.Site.objects.filter(id__in=valid_sites_for_user.values_list('site_id', flat=True))
+                site_name=[]
+                for sit in number_of_sites:
+                    site_name.append(sit.site_name)
         
-        number_of_sites=mo.Site.objects.filter(company=data['company_id'])
-        site_name=[]
-        for sit in number_of_sites:
-            site_name.append(sit.site_name)
-        response_data = {
-            #new code
-        'data': site_name,  # Include the 'data' field
-        'status': 200,  # Add the status field
-        'message': "Data get successful", # Add the message field
-        
-        }
-        response_data=[response_data]
-        return JsonResponse(response_data, safe=False, content_type="application/json")
+            response_data = {
+                #new code
+            'data': site_name,  # Include the 'data' field
+            'status': 200,  # Add the status field
+            'message': "Data get successful", # Add the message field
+            
+            }
+            response_data=[response_data]
+            return JsonResponse(response_data, safe=False, content_type="application/json")
+
+        except Exception as e :
+            print("Exception at line 5086 sites ",e)  
 
 class updated_treat_rwpViewset(viewsets.ModelViewSet):
     def dispatch(self, request, *args, **kwargs):
