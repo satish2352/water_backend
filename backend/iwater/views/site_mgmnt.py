@@ -579,23 +579,23 @@ def verify_token(request):
                     if dev_obj.serial_no2 and dev_obj.serial_no3:
                         
                         if records_panel_exist == 0:
-                            info=device_info.objects.create(records_panel)
+                            info=device_info.objects.create(**records_panel)
                             info.save()
 
                         if record_atm_exist == 0:
-                            info=device_info.objects.create(record_atm)
+                            info=device_info.objects.create(**record_atm)
                             info.save()
                             logger.info("atm records Added")
                         
                     elif dev_obj.serial_no2:
                         if records_panel_exist == 0:
-                            info=device_info.objects.create(records_panel)
+                            info=device_info.objects.create(**records_panel)
                             info.save()
                             logger.info("panel records Added")
                        
                     elif dev_obj.serial_no3:
                         if record_atm_exist == 0:
-                            info=device_info.objects.create(record_atm)
+                            info=device_info.objects.create(**record_atm)
                             info.save()
                             logger.info("atm records Added")
 
