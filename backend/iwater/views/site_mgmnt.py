@@ -570,10 +570,13 @@ def verify_token(request):
                     "site_name": site_name
                     }
                     ]
-                    records_panel_exist =device_info.objects.find(records_panel)
+                    
+                    records_panel_exist =device_info.objects.filter(Device_id= dev_obj.serial_no2)
                     print("records_panel_exist ",records_panel_exist)
-                    record_atm_exist =device_info.objects.find(record_atm)
+
+                    record_atm_exist = device_info.objects.filter(Device_id= dev_obj.serial_no3)
                     print("record_atm_exist ",record_atm_exist)
+
                     if dev_obj.serial_no2 and dev_obj.serial_no3:
                         
                         if records_panel_exist is None:
