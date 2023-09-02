@@ -363,7 +363,8 @@ def send_otp(request):
     if request.method == 'POST':
         # phone = request.data['phone']
         # site_name = request.data['site_name']
-        print("send_otp", request)
+        print("send_otp request", request.data)
+        print("send_otp request data", request.data)
         site_name = request.data['site_name']
         address = request.data['address']
         city = request.data['city']
