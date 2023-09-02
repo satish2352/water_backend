@@ -11,6 +11,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from django.db import transaction
 from django.db.models import Q
+from iwater import models as mo
 
 from django.contrib.sites.shortcuts import get_current_site
 import paho.mqtt.client as mqtt
@@ -30,10 +31,10 @@ def list_sites(request):
         logged_user = User.objects.get(request.user.id)
         role = ""
         if logged_user.is_super_admin or logged_user.is_admin:
-            valid_sites= Site.objects.filter(company=request.user.company_id,phone_verified=1,token_verified=1)
+            valid_sites= mo.Site.objects.filter(company=request.user.company_id)
         else:
-            valid_sites_for_user =  SitePermission.objects.filter(user_id=request.user.id)
-            valid_sites= Site.objects.filter(id__in=valid_sites_for_user.values_list('site_id', flat=True),phone_verified=1,token_verified=1)
+            valid_sites_for_user =  mo.SitePermission.objects.filter(user_id=request.user.id)
+            valid_sites= mo.Site.objects.filter(id__in=valid_sites_for_user.values_list('site_id', flat=True))
 
     except Exception as e :
         print("Exception at line 39 sites ",e)  
