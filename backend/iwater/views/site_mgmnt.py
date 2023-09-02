@@ -27,18 +27,7 @@ token_=0
 @api_view(['GET'])
 def list_sites(request):
 
-    try:
-        logged_user = User.objects.get(request.user.id)
-        role = ""
-        if logged_user.is_super_admin or logged_user.is_admin:
-            valid_sites=mo.Site.objects.filter(company=request.user.company_id).filter(phone_verified=1,token_verified=1).order_by('-id')
-                
-        else:
-            valid_sites_for_user = mo.SitePermission.objects.filter(user_id=request.user.id)
-            valid_sites=mo.Site.objects.filter(id__in=valid_sites_for_user.values_list('site_id', flat=True)).filter(phone_verified=1,token_verified=1).order_by('-id')
-
-    except Exception as e :
-        print("Exception at line 39 sites ",e)  
+    
 
     city_state = []
     data = []
@@ -46,6 +35,20 @@ def list_sites(request):
     supervisors_data = []
     operators_data = []
     if request.method == 'GET':
+
+        try:
+            logged_user = User.objects.get(request.user.id)
+            role = ""
+            if logged_user.is_super_admin or logged_user.is_admin:
+                valid_sites=mo.Site.objects.filter(company=request.user.company_id).filter(phone_verified=1,token_verified=1).order_by('-id')
+                    
+            else:
+                valid_sites_for_user = mo.SitePermission.objects.filter(user_id=request.user.id)
+                valid_sites=mo.Site.objects.filter(id__in=valid_sites_for_user.values_list('site_id', flat=True)).filter(phone_verified=1,token_verified=1).order_by('-id')
+            print(" valid_sites ", valid_sites)
+        except Exception as e :
+            print("Exception at line 39 sites ",e)  
+        
         if request.user.is_operator:
             # ! access permission check 
             response = {"Response": {
