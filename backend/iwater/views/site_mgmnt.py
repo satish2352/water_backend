@@ -25,46 +25,25 @@ from connection.views import MqttClient,mqttc
 token_=0
 @api_view(['GET'])
 def list_sites(request):
+
+    try:
+        logged_user = User.objects.get(request.user.id)
+        role = ""
+        if logged_user.is_super_admin or logged_user.is_admin:
+            valid_sites= Site.objects.filter(company=request.user.company_id).filter(phone_verified=1,token_verified=1).order_by('-id')
+        else:
+            valid_sites_for_user =  SitePermission.objects.filter(user_id=request.user.id).filter(phone_verified=1,token_verified=1).order_by('-id')
+            valid_sites= Site.objects.filter(id__in=valid_sites_for_user.values_list('site_id', flat=True))
+
+    except Exception as e :
+        print("Exception at line 5086 sites ",e)  
+
     city_state = []
     data = []
     unverified_data = []
     supervisors_data = []
     operators_data = []
     if request.method == 'GET':
-
-        # unverified_site_obj = Site.objects.filter(company_id=request.user.company_id).filter(phone_verified=1)
-        # for site_info in unverified_site_obj.values():
-        #     devices = {}
-        #     device_obj = Device.objects.filter(site_id=site_info["id"])
-        #     for dev in device_obj.values():
-        #         devices = {
-        #             "device_name": [
-        #                 "Device 1",
-        #                 "Device 2",
-        #                 "Device 3"
-        #             ],
-        #             "device_serial_number": [
-        #                 dev["serial_no1"],
-        #                 dev["serial_no2"],
-        #                 dev["serial_no3"]
-        #             ],
-        #         }
-        #
-        #     unverified_response_data = {
-        #         'serial_no': site_info["id"],
-        #         'creation_date': site_info["created"],
-        #         'site_name': site_info["site_name"],
-        #         'address': site_info["address"],
-        #         'city': site_info["city"],
-        #         'state': site_info["state"],
-        #         'device_mobile_number': site_info["phone"],
-        #         'status': site_info["status"],
-        #         'no_of_alerts': site_info["alerts"]
-        #
-        #     }
-        #     unverified_data.append(unverified_response_data)
-        #     unverified_response_data.update(devices)
-
         if request.user.is_operator:
             # ! access permission check 
             response = {"Response": {
@@ -75,10 +54,12 @@ def list_sites(request):
 
         authenticated_devices = {}
 
-        site_obj = Site.objects.filter(company_id=request.user.company_id).filter(phone_verified=1).order_by('-id')
+        # site_obj = Site.objects.filter(company_id=request.user.company_id).filter(phone_verified=1,token_verified=1).order_by('-id')
+
+        
         # ! collects model instance of site object where phone 
 
-        for site_info in site_obj.values():
+        for site_info in valid_sites.values():
             perm_obj = SitePermission.objects.filter(site_id=site_info["id"])
             supervisor = []
             operator = []

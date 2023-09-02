@@ -5061,13 +5061,13 @@ class site_check(viewsets.ModelViewSet):
             logged_user = User.objects.get(request.user.id)
             role = ""
             if logged_user.is_super_admin or logged_user.is_admin:
-                    number_of_sites=mo.Site.objects.filter(company=request.user.company_id)
+                    number_of_sites=mo.Site.objects.filter(company=request.user.company_id).filter(phone_verified=1,token_verified=1).order_by('-id')
                     site_name=[]
                     for sit in number_of_sites:
                         site_name.append(sit.site_name)
             else:
                 valid_sites_for_user = mo.SitePermission.objects.filter(user_id=request.user.id)
-                number_of_sites=mo.Site.objects.filter(id__in=valid_sites_for_user.values_list('site_id', flat=True))
+                number_of_sites=mo.Site.objects.filter(id__in=valid_sites_for_user.values_list('site_id', flat=True)).filter(phone_verified=1,token_verified=1).order_by('-id')
                 site_name=[]
                 for sit in number_of_sites:
                     site_name.append(sit.site_name)
