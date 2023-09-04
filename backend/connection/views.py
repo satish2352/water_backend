@@ -5737,6 +5737,7 @@ class updated_disp_tap4Viewset(viewsets.ModelViewSet):
     def dispatch(self, request, *args, **kwargs):
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
+        value_list=list(data.values())
         dinfo = device_info.objects.filter(**data)
         did=dinfo[0].Device_id
         qs_sta = disp_tap4.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
