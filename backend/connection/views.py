@@ -7831,28 +7831,20 @@ class tap4settingViewset(viewsets.ModelViewSet):
     
         deviceid=0
         def dispatch(self, request, *args, **kwargs):
-            print("in dispatch***")
             try:
                 data_dict = json.loads(request.body)
                 unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]  # Example of unwanted keys
-                
                 value_list=list(data_dict.values())
-                print("company_id is**** :", request.user.company_id)
-                # dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=request.user.company_id)
-                print("Device info:*******")
                 global deviceid
-                for x in dinfo:
-                    
-                    did=x.Device_id
-                    cmpname=x.componant_name
-                    deviceid=did
+                dinfo=device_info.objects.filter(unit_type=value_list[1],company_id=request.user.company_id).first()
+                deviceid=dinfo.Device_id
                 for key in unwanted_keys:
                     if key in data_dict:
                         del data_dict[key]
                 for key in data_dict:
                     data_dict[key] = str(data_dict[key])
-                mqttc.publish(f'wc1/{did}/chgset/{cmpname}',str(data_dict).replace(' ',''))
+                print("aws data ",data_dict)
+                mqttc.publish(f'wc1/{deviceid}/chgset/tap4',str(data_dict).replace(' ',''))
                 dd=dateandtime()
                 e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tap4 settings change has been requested - pulse1:{value_list[3]}, pulse2:{value_list[4]}, pulse3:{value_list[5]}, pulse4:{value_list[6]}"
                 erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tap4',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
