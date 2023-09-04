@@ -5738,12 +5738,19 @@ class updated_disp_tap4Viewset(viewsets.ModelViewSet):
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
         value_list=list(data.values())
+        print("Data is:",data)
+        print("Value list is:",value_list)
         dinfo = device_info.objects.filter(unit_type=value_list[1],company_id=request.user.company_id).first()
+        print("dinfo is:",dinfo)
         did=dinfo[0].Device_id
+        print("did is:",did)
         qs_sta = disp_tap4.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
+
         if not qs_sta:
+            print("not found qs_sta")
             data_sta = {}
         else:
+            print("found qs_sta:", qs_sta)
             data_sta = serialize("json", qs_sta)
             data_sta = json.loads(data_sta)
             for item in data_sta:
