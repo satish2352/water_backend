@@ -6823,7 +6823,8 @@ class RwpstateViewset(viewsets.ModelViewSet):
                 
                 value_list=list(data_dict.values())
                 #print("datadict:",data_dict)
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
+                # dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=request.user.company_id)
                 for x in dinfo:
                     global deviceid
                     did=x.Device_id
@@ -6870,7 +6871,8 @@ class rwpsettingViewset(viewsets.ModelViewSet):
             data_dict = json.loads(request.body)
             unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name"]  # Example of unwanted keys
             value_list=list(data_dict.values())
-            dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
+            # dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
+            dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=request.user.company_id)
             for x in dinfo:
                 did=x.Device_id
                 cmpname=x.componant_name
@@ -7835,7 +7837,8 @@ class tap4settingViewset(viewsets.ModelViewSet):
                 
                 value_list=list(data_dict.values())
                 
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
+                # dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
+                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=request.user.company_id)
                 global deviceid
                 for x in dinfo:
                     
