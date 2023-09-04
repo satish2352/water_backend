@@ -7830,19 +7830,13 @@ class tap4settingViewset(viewsets.ModelViewSet):
     
         deviceid=0
         def dispatch(self, request, *args, **kwargs):
-            print("in dispatch***")
             try:
                 data_dict = json.loads(request.body)
                 unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]  # Example of unwanted keys
-                
                 value_list=list(data_dict.values())
-                print("company_id is**** :", request.user.company_id)
-                # dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
                 global deviceid
-                site_obj = dinfo=device_info.objects.filter(unit_type=value_list[1],company_id=request.user.company_id).first()
-                print("site_obj ",site_obj)
-                deviceid=site_obj.Device_id
-                print("deviceid ",deviceid)
+                dinfo=device_info.objects.filter(unit_type=value_list[1],company_id=request.user.company_id).first()
+                deviceid=dinfo.Device_id
                 for key in unwanted_keys:
                     if key in data_dict:
                         del data_dict[key]
