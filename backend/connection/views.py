@@ -7843,7 +7843,7 @@ class tap4settingViewset(viewsets.ModelViewSet):
                 for key in data_dict:
                     data_dict[key] = str(data_dict[key])
                 print("aws data ",data_dict)
-                mqttc.publish(f'wc1/{did}/chgset/tap4',str(data_dict).replace(' ',''))
+                mqttc.publish(f'wc1/{deviceid}/chgset/tap4',str(data_dict).replace(' ',''))
                 dd=dateandtime()
                 e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tap4 settings change has been requested - pulse1:{value_list[3]}, pulse2:{value_list[4]}, pulse3:{value_list[5]}, pulse4:{value_list[6]}"
                 erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tap4',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
