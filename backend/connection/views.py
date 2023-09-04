@@ -7838,14 +7838,11 @@ class tap4settingViewset(viewsets.ModelViewSet):
                 value_list=list(data_dict.values())
                 print("company_id is**** :", request.user.company_id)
                 # dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=value_list[0])
-                dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=request.user.company_id)
-                print("Device info:*******")
                 global deviceid
-                for x in dinfo:
-                    
-                    did=x.Device_id
-                    cmpname=x.componant_name
-                    deviceid=did
+                site_obj = dinfo=device_info.objects.filter(componant_name=value_list[2],unit_type=value_list[1],company_id=request.user.company_id).first()
+                print("site_obj ",site_obj)
+                deviceid=site_obj.Device_id
+                print("deviceid ",deviceid)
                 for key in unwanted_keys:
                     if key in data_dict:
                         del data_dict[key]
