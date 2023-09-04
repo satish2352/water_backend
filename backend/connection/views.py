@@ -5738,7 +5738,7 @@ class updated_disp_tap4Viewset(viewsets.ModelViewSet):
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
         value_list=list(data.values())
-        dinfo = device_info.objects.filter(**data)
+        dinfo = device_info.objects.filter(unit_type=value_list[1],company_id=request.user.company_id).first()
         did=dinfo[0].Device_id
         qs_sta = disp_tap4.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
         if not qs_sta:
