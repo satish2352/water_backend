@@ -5740,7 +5740,7 @@ class updated_disp_tap4Viewset(viewsets.ModelViewSet):
         value_list=list(data.values())
         print("Data is:",data)
         print("Value list is:",value_list)
-        dinfo = device_info.objects.filter(unit_type=value_list[1],company_id=request.user.company_id).first()
+        dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
         print("dinfo is:",dinfo)
         did=dinfo[0].Device_id
         print("did is:",did)
