@@ -1,7 +1,7 @@
 from django.conf import settings
 import json
 import paho.mqtt.client as mqtt
-from connection.views import MqttClient
+from connection.views import mqttc,MqttClient
 from iwater.iw_logger import logger
 
 
