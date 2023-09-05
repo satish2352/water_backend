@@ -114,7 +114,13 @@ class MqttClient:
 
     def on_message_1(self, client, userdata, message):
         pass
-    
+    def reconnect(self):
+        _port = 8883
+        ssl_context= ssl_alpn()
+        self.client.tls_set_context(context=ssl_context)
+        self.client.connect(aws_iot_endpoint, _port, OTP_VALID_FOR)
+        self.client.loop_start()
+        
     def otp_handler(self, client, userdata, message):
         print("I am in otp_handler")
         global token_,company_ids,panelid,atmid
