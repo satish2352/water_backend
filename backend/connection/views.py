@@ -5091,7 +5091,7 @@ class updated_treat_rwpViewset(viewsets.ModelViewSet):
         data = json.loads(request.body)
         value_list=list(data.values())
         dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
-        if dinfo:
+        if dinfo is not None:
             print("dinfo ",dinfo)
             did=dinfo.Device_id
             print("did  ",did)
