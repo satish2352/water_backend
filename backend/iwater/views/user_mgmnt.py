@@ -338,20 +338,24 @@ def add_user(request):
                             "message": "Either contact number or email id is required"
                         }
                         
-                    if user.phone is not None:
-                        logger.info("invite user using phone")
- #below two lines are commented by bharti                       
- #                       user.send_invite_sms(get_current_site(request).domain, brand_name, support_email, support_phone,
- #                                                request.user.username)
- #below two lines added by bharti                       
-                        user.send_invite_sms(os.environ.get("SITE_DOMAIN"), brand_name, support_email, support_phone,
-                                                 request.user.username)                        
-                        response = {"Response": {
-                            "Status": "success"},
-                            "message": "User registered successfully.Please check the provided "
-                                       "phone for further instruction"
-                        }
 
+
+                 ####################################################################################### 
+                 # this comment for stop add user registation by using mobile number       
+#                     if user.phone is not None:
+#                         logger.info("invite user using phone")
+#  #below two lines are commented by bharti                       
+#  #                       user.send_invite_sms(get_current_site(request).domain, brand_name, support_email, support_phone,
+#  #                                                request.user.username)
+#  #below two lines added by bharti                       
+#                         user.send_invite_sms(os.environ.get("SITE_DOMAIN"), brand_name, support_email, support_phone,
+#                                                  request.user.username)                        
+#                         response = {"Response": {
+#                             "Status": "success"},
+#                             "message": "User registered successfully.Please check the provided "
+#                                        "phone for further instruction"
+#                         }
+                    ############################################################################################
                     if user.email is not None:
                         logger.info("invite user using mail")
                         
