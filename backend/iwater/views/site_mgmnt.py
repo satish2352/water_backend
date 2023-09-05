@@ -365,6 +365,7 @@ def send_otp(request):
         mob = re.sub(r"\D", "", request.data['phone'])
         site_mob = phone_country + str(mob)
         try:
+            print("368")
             existing_site = Site.objects.get(company_id=request.user.company_id, site_name=site_name)
             # ! checks for duplication of site name
             if existing_site.token_verified and existing_site.phone_verified and existing_site.is_dispensing_unit and existing_site.is_treatment_unit:
@@ -401,7 +402,7 @@ def send_otp(request):
                     site_data.phone = site_mob
                     site_data.company_id = request.user.company_id
                     site_data.save()
-            
+                    print("data saved in site table")
             except Exception as err:
                 transaction.set_rollback(True)
                 logger.error("Error in adding site details; {}".format(err))
@@ -512,10 +513,10 @@ def verify_otp(request):
 
 @api_view(['POST'])
 def verify_token(request):
-
+    print("Verifying token:::")
     if request.method == 'POST':
         site_name = request.data['site_name']
-
+        print("Verifying token111")
         # try:
         #     authenticate_device = request.data['authenticate_device']
         # except Exception as err:
