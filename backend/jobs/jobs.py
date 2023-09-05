@@ -1,11 +1,12 @@
 from django.conf import settings
 import json
 import paho.mqtt.client as mqtt
-from connection.views import mqttc,MqttClient
 from iwater.iw_logger import logger
+from connection.views import MqttClient,mqttc
 
 
 def schedule_api():
+    global mqttc
     if mqttc is None:
         mqttc = MqttClient()
         logger.info("mqtt object Not found so created")
