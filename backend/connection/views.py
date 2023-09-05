@@ -4934,7 +4934,15 @@ class LastRecordsView(viewsets.ModelViewSet):
             last_error = json.loads(last_error)
             return JsonResponse(last_error, safe=False, content_type="application/json")
         else:
-            return JsonResponse("Unable to find any data", safe=False, content_type="application/json")
+            response_data = {
+                #new code
+            'data': "",  # Include the 'data' field
+            'status': 500,  # Add the status field
+            'message': "Unable to find data", # Add the message field
+            
+            }
+            response_data=[response_data]
+            return JsonResponse(response_data, safe=False, content_type="application/json")
 
 #all data from minit table
 class all_panelListAPIView(generics.ListAPIView):
