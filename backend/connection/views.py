@@ -4933,6 +4933,8 @@ class LastRecordsView(viewsets.ModelViewSet):
             last_error = json.dumps(my_list)
             last_error = json.loads(last_error)
             return JsonResponse(last_error, safe=False, content_type="application/json")
+        else:
+            return JsonResponse("Unable to find any data", safe=False, content_type="application/json")
 
 #all data from minit table
 class all_panelListAPIView(generics.ListAPIView):
