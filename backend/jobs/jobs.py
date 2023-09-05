@@ -10,6 +10,6 @@ def schedule_api():
     if mqttc is None:
         mqttc = MqttClient()
         logger.info("mqtt object Not found so created")
-    elif mqtt.connected_flag == False:
-        mqttc.reconnect()
-        logger.info("mqtt reconnected from scheduler")
+    # elif mqttc.connected_flag == False:
+    #     mqttc.reconnect()
+    #     logger.info("mqtt reconnected from scheduler")
