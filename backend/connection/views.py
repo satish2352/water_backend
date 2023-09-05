@@ -5141,7 +5141,7 @@ class updated_treat_rwpViewset(viewsets.ModelViewSet):
             response_data=[response_data]
             return JsonResponse(response_data, safe=False, content_type="application/json")
         else:
-             response_data = {
+            response_data = {
                 #new code
             'data': "",  # Include the 'data' field
             'status': 500,  # Add the status field
