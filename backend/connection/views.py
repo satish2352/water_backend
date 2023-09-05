@@ -5091,6 +5091,7 @@ class updated_treat_rwpViewset(viewsets.ModelViewSet):
         data = json.loads(request.body)
         value_list=list(data.values())
         print("value_list  ",value_list)
+        print("request.user.company_id ",request.user.company_id)
         dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
         did=dinfo.Device_id
         print("did  ",did)
