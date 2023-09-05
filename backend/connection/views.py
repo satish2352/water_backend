@@ -5295,15 +5295,15 @@ class updated_treat_tds_senViewset(viewsets.ModelViewSet):
                 response_data=[response_data]
                 return JsonResponse(response_data, safe=False, content_type="application/json")    
             else:
-            response_data = {
-                #new code
-            'data': "",  # Include the 'data' field
-            'status': 500,  # Add the status field
-            'message': "Unable to update", # Add the message field
-            
-            }
-            response_data=[response_data]
-            return JsonResponse(response_data, safe=False, content_type="application/json")
+                response_data = {
+                    #new code
+                'data': "",  # Include the 'data' field
+                'status': 500,  # Add the status field
+                'message': "Unable to update", # Add the message field
+                
+                }
+                response_data=[response_data]
+                return JsonResponse(response_data, safe=False, content_type="application/json")
         except Exception as e :
             print("Exception at line 5304",e)  
 
