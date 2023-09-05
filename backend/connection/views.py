@@ -4937,6 +4937,16 @@ class LastRecordsView(viewsets.ModelViewSet):
             last_error = json.dumps(my_list)
             last_error = json.loads(last_error)
             return JsonResponse(last_error, safe=False, content_type="application/json")
+        else:
+            response_data = {
+                #new code
+            'data': "",  # Include the 'data' field
+            'status': 500,  # Add the status field
+            'message': "Unable to find data", # Add the message field
+            
+            }
+            response_data=[response_data]
+            return JsonResponse(response_data, safe=False, content_type="application/json")
 
 #all data from minit table
 class all_panelListAPIView(generics.ListAPIView):
@@ -5145,11 +5155,14 @@ class updated_treat_rwpViewset(viewsets.ModelViewSet):
         else:
             response_data = {
                 #new code
-                'data': "",  # Include the 'data' field
-                'status': 500,  # Add the status field
-                'message': "Unable to find data", # Add the message field
-                
-                }
+            'data': "",  # Include the 'data' field
+            'status': 500,  # Add the status field
+            'message': "Unable to update", # Add the message field
+            
+            }
+            response_data=[response_data]
+            return JsonResponse(response_data, safe=False, content_type="application/json")
+    
 class updated_treat_cnd_senViewset(viewsets.ModelViewSet):
 	
     def dispatch(self, request, *args, **kwargs):
