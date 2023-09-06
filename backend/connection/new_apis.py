@@ -19,7 +19,7 @@ def dateandtime():
     second=datetime.now().strftime('%S')
     return year,month,day,hour,minit,second
 
-@api_view(['GET', 'POST'])
+@api_view(['POST'])
 def newtap1settingViewset(request):
 
   
