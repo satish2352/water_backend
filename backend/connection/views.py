@@ -144,8 +144,9 @@ class MqttClient:
                 pass
         print("Otp handler data['token']", data["token"])
         site_obj = Site.objects.filter(token=data["token"]).first()
-        print("Site handler data panelid",panelid)
-        print("Site handler data atmid",atmid)
+        print("OTP handler data panelid",panelid)
+        print("OTP handler data atmid",atmid)
+        print("OTP handler data site_obj",site_obj)
         if site_obj is not None:
             company_ids=site_obj.company_id
             site_ids=site_obj.id
