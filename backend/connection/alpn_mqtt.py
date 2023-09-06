@@ -47,7 +47,7 @@ logger.setLevel(logging.DEBUG)
 handler = logging.StreamHandler(sys.stdout)
 log_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 handler.setFormatter(log_format)
-logger.addHandler(handler)
+# logger.addHandler(handler)
 
 import tempfile
 # .. (previous imports and code)
