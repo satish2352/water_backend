@@ -1,6 +1,6 @@
 from django.urls import path
 # from connection import views
-
+from .new_apis import *
 from django.urls import path,include
 from .views import *
 from rest_framework import routers
@@ -25,8 +25,8 @@ router.register(r'device_infoViewset',device_infoViewset,basename='device_info')
 router.register(r'atm_setting',atmsettingViewset)
 # router.register(r'cnd_consen_setting',cnd_consensettingViewset)
 # router.register(r'tds_consen_setting',tds_consensettingViewset)
-router.register(r'tap1_setting',tap1settingViewset)
-# router.register(r'tap2_setting',tap2settingViewset)
+# router.register(r'tap1_setting',tap1settingViewset)
+router.register(r'tap2_setting',tap2settingViewset)
 # router.register(r'tap3_setting',tap3settingViewset)
 # router.register(r'tap4_setting',tap4settingViewset)
 # router.register(r'ampv1_setting',ampv1settingViewset)
@@ -140,7 +140,7 @@ router.register(r'site_check',site_check,basename='site_check')
 # router.register(r'updated_disp_cnd_consen',updated_disp_cnd_consenViewset,basename='disp_cnd_consen')
 # router.register(r'updated_disp_tds_consen',updated_disp_tds_consenViewset,basename='disp_tds_consen')
 router.register(r'updated_disp_tap1',updated_disp_tap1Viewset,basename='disp_tap1')
-# router.register(r'updated_disp_tap2',updated_disp_tap2Viewset,basename='disp_tap2')
+router.register(r'updated_disp_tap2',updated_disp_tap2Viewset,basename='disp_tap2')
 # router.register(r'updated_disp_tap3',updated_disp_tap3Viewset,basename='disp_tap3')
 # router.register(r'updated_disp_tap4',updated_disp_tap4Viewset,basename='disp_tap4')
 router.register(r'updated_disp_atm',updated_disp_atmViewset,basename='disp_atm')
@@ -155,6 +155,7 @@ router.register(r'last-records',LastRecordsView,basename='last-records')
 urlpatterns = [
     # path('admin/', admin.site.urls),
     path('', include(router.urls)),
+    path('tap1_setting/',newtap1settingViewset,name="tap1_setting")
     # path('c',views.on_message)
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     # path('token/', views.obtain_token, name='token_obtain_pair'),
