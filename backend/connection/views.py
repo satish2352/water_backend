@@ -142,7 +142,7 @@ class MqttClient:
             atmid = data["atmid"] if data["atmid"] else None
             if atmid:
                 pass
-
+        print("Otp handler data['token']", data["token"])
         site_obj = Site.objects.filter(token=data["token"]).first()
         if site_obj is not None:
             company_ids=site_obj.company_id
@@ -164,6 +164,7 @@ class MqttClient:
                             device_data = Device.objects.get(site_id=site_ids) # ! verfies device against site_id
                         except Device.DoesNotExist:
                             device_data = None
+                            print("I am here device_data = None ")
                         if device_data is not None:
                             if device_data.serial_no2 is None:
                                 if panelid is not None:
