@@ -7732,7 +7732,7 @@ class atmsettingViewset(viewsets.ModelViewSet):
                     pass     
 
             except Exception as e:
-                print("Error in processing atm setting incomplete request")    
+                print("Error in processing atm setting incomplete request ",e)    
             return super().dispatch(request)   
          
         def perform_create(self, serializer):
