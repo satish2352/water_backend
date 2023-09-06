@@ -4899,8 +4899,12 @@ class MqttClient:
     def stop(self):
         self.client.disconnect()
 
-mqttc = MqttClient()
-print("MqttClient object created from views in connection app")
+try:
+    mqttc = MqttClient()
+    print("MqttClient object created from views in connection app")
+except Exception as e:
+    print(" error in connection views while creating mqtt object ",e)
+
 
 @api_view(['POST'])
 def obtain_token(request):
