@@ -7709,12 +7709,12 @@ class atmsettingViewset(viewsets.ModelViewSet):
         def dispatch(self, request, *args, **kwargs):
             try:
                 data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id","ntt"]  # Example of unwanted keys
+                unwanted_keys = ["unit_type", "water_treatment","componant_name","site_name","device_id","ntt"]  # Example of unwanted keys
                 
                 value_list=list(data_dict.values())
                 
                 dinfo=device_info.objects.filter(unit_type=value_list[1],company_id=request.user.company_id).first()
-                
+                print("dinfo in ATM",dinfo)
                 deviceid = None
                 deviceid=dinfo.Device_id
                 for key in unwanted_keys:
