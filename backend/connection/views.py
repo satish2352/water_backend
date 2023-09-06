@@ -125,7 +125,7 @@ class MqttClient:
         
     def otp_handler(self, client, userdata, message):
         print("I am in otp_handler")
-        global token_,company_ids,panelid,atmid
+        # global token_,company_ids,panelid,atmid
         print("Data received1!!!",message.payload)
         jstr=message.payload
         if isinstance(jstr, bytes):
@@ -135,13 +135,13 @@ class MqttClient:
         device_id = data["deviceid"]
         print("*********134")
         if "panelid" in data1:
-            global panelid
+            # global panelid
             panelid = data["panelid"] if data["panelid"] else None
             if panelid:
                 pass
             print("panelid")
         if "atmid" in data1:
-            global atmid
+            # global atmid
             atmid = data["atmid"] if data["atmid"] else None
             if atmid:
                 pass
@@ -318,7 +318,7 @@ class MqttClient:
         topic_from_broker =msg.topic
 
         if topic_from_broker != "wc1/v1/OTP":
-            global msgo
+            # global msgo
             jstring=msg.payload
             if isinstance(jstring, bytes):
                 dict_str = jstring.decode("utf-8")
@@ -5146,7 +5146,7 @@ class site_check(viewsets.ModelViewSet):
         #print(data,type(data),"DATA")
         companydata=mo.Company.objects.filter(company_id=request.user.company_id)
         for i in companydata:
-            global cid
+            # global cid
             cid=i.id
         number_of_sites=mo.Site.objects.filter(company_id=request.user.company_id)
         site_name=[]

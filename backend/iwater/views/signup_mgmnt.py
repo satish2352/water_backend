@@ -33,7 +33,7 @@ def user_login(request):
 
             login_type = request.data['login_type']
             if login_type == "email":
-                global email
+                # global email
                 logger.info("Email based login")
                 email = request.data['email']
 

@@ -7,13 +7,9 @@ from connection.views import MqttClient,mqttc
 
 def schedule_api():
     global mqttc
-<<<<<<< HEAD
-    logger.info("Scheduling data")
-=======
     # logger.info("Scheduling data")
 
    
->>>>>>> 0b6bb68ce2fd99060d4399232a1a0f8f0d6e0e29
     if mqttc is None:
         try:
             mqttc = MqttClient()
