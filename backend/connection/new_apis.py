@@ -16,12 +16,14 @@ def dateandtime():
 def newtap1settingViewset(request):
     if request.method == 'POST':
         data_dict = json.loads(request.data)
+        print("data_dict data_dict",data_dict)
         unwanted_keys = ["unit_type", "water_treatment","componant_name","site_name","device_id"]
         for key in unwanted_keys:
                     if key in data_dict.keys():
                         del data_dict[key]
         obj = tap1_setting.objects.create(**data_dict)
         value_list=list(data_dict.values())
+        print("value_list value_list",value_list)
         dinfo=device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
         deviceid = None
         deviceid=dinfo.Device_id
