@@ -619,14 +619,12 @@ def verify_token(request):
                 if site_obj.duplicate_panel == True or site_obj.duplicate_atm == True:
                     if site_obj.duplicate_panel == True and site_obj.duplicate_atm == True:
                         messege  = "Duplicate atm and panel found"
-                        pass
+
                     elif site_obj.duplicate_panel == True:
                         messege  = "Duplicate panel found"
-                        pass
+
                     elif  site_obj.duplicate_atm == True:
                         messege  = "Duplicate atm found"
-                        pass
-                    
                      
                 else:
                     messege = "Device not responding"
