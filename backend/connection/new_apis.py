@@ -16,7 +16,7 @@ def dateandtime():
 def newtap1settingViewset(request):
 
     print("request  ",request)
-    print("request body  ",request.body)
+    print("request body  ",request.user)
     if request.method == 'POST':
         try:
             data_dict = json.loads(request.body)
