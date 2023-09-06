@@ -161,7 +161,7 @@ class MqttClient:
                 doublicate_atm_id=Device.objects.filter(serial_no3 =atmid).filter(~Q(site_id = site_ids)).count()
             if doublicate_panel_id >0 or doublicate_atm_id >0:
                 site_obj_new = Site.objects.get(company_id=company_ids, id=site_ids)
-                # site_obj_new.token = None#6-9 time 10.20am
+                site_obj_new.token = None#6-9 time 10.20am
                 site_obj_new.save()
             else:
                 with transaction.atomic():
@@ -5074,43 +5074,68 @@ class all_flowsen4ListAPIView(generics.ListAPIView):
 import json
 cid=None
 class site_check(viewsets.ModelViewSet):
-    def dispatch(self, request, *args, **kwargs):
-        try:
-            fields_to_exclude = ['model', 'pk']
-            #print(request.body,"BODY")
-            data = json.loads(request.body)
-            #print(data,type(data),"DATA")
-            # companydata=mo.Company.objects.filter(company_id=data['company_id'])
-            # for i in companydata:
-            #     global cid
-            #     cid=i.id
+    # def dispatch(self, request, *args, **kwargs):
+    #     try:
+    #         fields_to_exclude = ['model', 'pk']
+    #         #print(request.body,"BODY")
+    #         data = json.loads(request.body)
+    #         #print(data,type(data),"DATA")
+    #         # companydata=mo.Company.objects.filter(company_id=data['company_id'])
+    #         # for i in companydata:
+    #         #     global cid
+    #         #     cid=i.id
 
-            logged_user = User.objects.get(request.user.id)
-            role = ""
-            if logged_user.is_super_admin or logged_user.is_admin:
-                    number_of_sites=mo.Site.objects.filter(company=request.user.company_id).filter(phone_verified=1,token_verified=1).order_by('-id')
-                    site_name=[]
-                    for sit in number_of_sites:
-                        site_name.append(sit.site_name)
-            else:
-                valid_sites_for_user = mo.SitePermission.objects.filter(user_id=request.user.id)
-                number_of_sites=mo.Site.objects.filter(id__in=valid_sites_for_user.values_list('site_id', flat=True)).filter(phone_verified=1,token_verified=1).order_by('-id')
-                site_name=[]
-                for sit in number_of_sites:
-                    site_name.append(sit.site_name)
+    #         logged_user = User.objects.get(request.user.id)
+    #         role = ""
+    #         if logged_user.is_super_admin or logged_user.is_admin:
+    #                 number_of_sites=mo.Site.objects.filter(company=request.user.company_id).filter(phone_verified=1,token_verified=1).order_by('-id')
+    #                 site_name=[]
+    #                 for sit in number_of_sites:
+    #                     site_name.append(sit.site_name)
+    #         else:
+    #             valid_sites_for_user = mo.SitePermission.objects.filter(user_id=request.user.id)
+    #             number_of_sites=mo.Site.objects.filter(id__in=valid_sites_for_user.values_list('site_id', flat=True)).filter(phone_verified=1,token_verified=1).order_by('-id')
+    #             site_name=[]
+    #             for sit in number_of_sites:
+    #                 site_name.append(sit.site_name)
         
-            response_data = {
-                #new code
-            'data': site_name,  # Include the 'data' field
-            'status': 200,  # Add the status field
-            'message': "Data get successful", # Add the message field
+    #         response_data = {
+    #             #new code
+    #         'data': site_name,  # Include the 'data' field
+    #         'status': 200,  # Add the status field
+    #         'message': "Data get successful", # Add the message field
             
-            }
-            response_data=[response_data]
-            return JsonResponse(response_data, safe=False, content_type="application/json")
+    #         }
+    #         response_data=[response_data]
+    #         return JsonResponse(response_data, safe=False, content_type="application/json")
 
-        except Exception as e :
-            print("Exception at line site_check ",e)  
+    #     except Exception as e :
+    #         print("Exception at line site_check ",e)  
+
+
+
+    def dispatch(self, request, *args, **kwargs):
+        fields_to_exclude = ['model', 'pk']
+        #print(request.body,"BODY")
+        data = json.loads(request.body)
+        #print(data,type(data),"DATA")
+        companydata=mo.Company.objects.filter(company_id=data['company_id'])
+        for i in companydata:
+            global cid
+            cid=i.id
+        number_of_sites=mo.Site.objects.filter(company=data['company_id'])
+        site_name=[]
+        for sit in number_of_sites:
+            site_name.append(sit.site_name)
+        response_data = {
+            #new code
+        'data': site_name,  # Include the 'data' field
+        'status': 200,  # Add the status field
+        'message': "Data get successful", # Add the message field
+        
+        }
+        response_data=[response_data]
+        return JsonResponse(response_data, safe=False, content_type="application/json")
 
 # class updated_treat_rwpViewset(viewsets.ModelViewSet):
 #     def dispatch(self, request, *args, **kwargs):
