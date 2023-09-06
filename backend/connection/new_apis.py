@@ -38,6 +38,7 @@ def newtap1settingViewset(request):
             print("value_list value_list",value_list)
             dinfo=device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
             print("dinfo dinfo",dinfo)
+            
             deviceid = None
             deviceid=dinfo.Device_id
             print("deviceid ",deviceid)
