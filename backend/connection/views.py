@@ -8070,7 +8070,7 @@ class tap1settingViewset(viewsets.ModelViewSet):
         
             try:
                 data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]  # Example of unwanted keys
+                unwanted_keys = ["unit_type", "water_treatment","componant_name","site_name","device_id"]  # Example of unwanted keys
                 
                 value_list=list(data_dict.values())
                 
