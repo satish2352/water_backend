@@ -5097,7 +5097,7 @@ class site_check(viewsets.ModelViewSet):
             return JsonResponse(response_data, safe=False, content_type="application/json")
 
         except Exception as e :
-            print("Exception at line 5086 sites ",e)  
+            print("Exception at line site_check ",e)  
 
 class updated_treat_rwpViewset(viewsets.ModelViewSet):
     def dispatch(self, request, *args, **kwargs):
