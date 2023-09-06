@@ -32,6 +32,7 @@ def newtap1settingViewset(request):
             unwanted_keys = ["unit_type", "water_treatment","componant_name","site_name","device_id"]
             value_list=list(data_dict.values())
             print("value_list value_list",value_list)
+            print("value_list[0] ",value_list[0])
             dinfo=device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
             print("dinfo dinfo",dinfo)
             obj = tap1_setting.objects.create(**data_dict)
