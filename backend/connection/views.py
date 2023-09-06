@@ -124,38 +124,43 @@ class MqttClient:
     def otp_handler(self, client, userdata, message):
         print("I am in otp_handler")
         global token_,company_ids,panelid,atmid
-        #print("Data received1!!!",message.payload)
+        print("Data received1!!!",message.payload)
         jstr=message.payload
         if isinstance(jstr, bytes):
             data1 = jstr.decode("utf-8")
         data=eval(data1)
         token_ = data["token"]
         device_id = data["deviceid"]
+        print("*********134")
         if "panelid" in data1:
             global panelid
             panelid = data["panelid"] if data["panelid"] else None
             if panelid:
                 pass
-
+            print("panelid")
         if "atmid" in data1:
             global atmid
             atmid = data["atmid"] if data["atmid"] else None
             if atmid:
                 pass
+            print("atmid")
 
         site_obj = Site.objects.filter(token=data["token"]).first()
+        print("site_obj",)
         if site_obj is not None:
             company_ids=site_obj.company_id
             site_ids=site_obj.id
             doublicate_panel_id=0
             doublicate_atm_id=0
             if panelid is not None:
+                print("in panelid")
                 doublicate_panel_id=Device.objects.filter(serial_no2 =panelid).filter(~Q(site_id = site_ids)).count()
             if atmid is not None:
+                print("in atmid")
                 doublicate_atm_id=Device.objects.filter(serial_no3 =atmid).filter(~Q(site_id = site_ids)).count()
             if doublicate_panel_id >0 or doublicate_atm_id >0:
                 site_obj_new = Site.objects.get(company_id=company_ids, id=site_ids)
-                site_obj_new.token = None
+                # site_obj_new.token = None#6-9 time 10.20am
                 site_obj_new.save()
             else:
                 with transaction.atomic():
