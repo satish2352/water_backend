@@ -146,37 +146,117 @@ class MqttClient:
             if atmid:
                 pass
         print("Otp handler data['token']", data["token"])
-        site_obj = Site.objects.filter(token=data["token"])
-        print("OTP handler data panelid",panelid)
-        print("OTP handler data atmid",atmid)
-        print("OTP handler data site_obj",site_obj)
-        if site_obj is not None:
-            company_ids=site_obj.company_id
-            site_ids=site_obj.id
-            doublicate_panel_id=0
-            doublicate_atm_id=0
-            if panelid is not None:
-                print("in panelid")
-                doublicate_panel_id=Device.objects.filter(serial_no2 =panelid).filter(~Q(site_id = site_ids)).count()
-            if atmid is not None:
-                print("in atmid")
-                doublicate_atm_id=Device.objects.filter(serial_no3 =atmid).filter(~Q(site_id = site_ids)).count()
-            if doublicate_panel_id >0 or doublicate_atm_id >0:
-                site_obj_new = Site.objects.get(company_id=company_ids, id=site_ids)
-                # site_obj_new.token = None#6-9 time 10.20am
-                site_obj_new.save()
-            else:
-                with transaction.atomic():
-                    try:  # TODO
-                        try:
-                            device_data = Device.objects.get(site_id=site_ids) # ! verfies device against site_id
-                        except Device.DoesNotExist:
-                            device_data = None
-                            print("I am here device_data = None ")
-                        if device_data is not None:
-                            if device_data.serial_no2 is None:
-                                if panelid is not None:
+        try:
+            site_obj = Site.objects.get(token=data["token"])
+        except Exception as err:
+            print("Error in otp handler no site data found")
+        else:
+            print("OTP handler data panelid",panelid)
+            print("OTP handler data atmid",atmid)
+            print("OTP handler data site_obj",site_obj)
+            if site_obj is not None:
+                company_ids=site_obj.company_id
+                site_ids=site_obj.id
+                doublicate_panel_id=0
+                doublicate_atm_id=0
+                if panelid is not None:
+                    print("in panelid")
+                    doublicate_panel_id=Device.objects.filter(serial_no2 =panelid).filter(~Q(site_id = site_ids)).count()
+                if atmid is not None:
+                    print("in atmid")
+                    doublicate_atm_id=Device.objects.filter(serial_no3 =atmid).filter(~Q(site_id = site_ids)).count()
+                if doublicate_panel_id >0 or doublicate_atm_id >0:
+                    site_obj_new = Site.objects.get(company_id=company_ids, id=site_ids)
+                    site_obj_new.token = None#6-9 time 10.20am
+                    site_obj_new.save()
+                else:
+                    with transaction.atomic():
+                        try:  # TODO
+                            try:
+                                device_data = Device.objects.get(site_id=site_ids) # ! verfies device against site_id
+                            except Device.DoesNotExist:
+                                device_data = None
+                                print("I am here device_data = None ")
+                            if device_data is not None:
+                                if device_data.serial_no2 is None:
+                                    if panelid is not None:
+                                        device_data.serial_no2 = panelid
+                                        device_data.save()
+
+                                        site_data = Site.objects.get(id=site_ids)
+                                        site_data.is_treatment_unit = True
+                                        site_data.token_verified = True
+                                        site_data.token = None
+                                        site_data.save()
+
+                                        subscription_data = Subscription()
+                                        subscription_data.site_id = site_ids
+                                        subscription_data.is_treatment_unit = True
+                                        subscription_data.company_id = company_ids
+                                        subscription_data.save()
+                                    else :
+                                        site_data = Site.objects.get(id=site_ids)
+                                        site_data.token = None
+                                        site_data.save()
+                                
+                                if device_data.serial_no3 is None:
+                                    if atmid is not None:
+                                        device_data.serial_no3 = atmid
+                                        device_data.save()
+
+                                        site_data = Site.objects.get(id=site_ids)
+                                        site_data.is_dispensing_unit = True
+                                        site_data.token_verified = True
+                                        site_data.token = None
+                                        site_data.save()
+
+                                        subscription_data = Subscription()
+                                        subscription_data.site_id = site_ids
+                                        subscription_data.is_dispensing_unit = True
+                                        subscription_data.company_id = company_ids
+                                        subscription_data.save()
+                                        
+                                    else :
+                                        site_data = Site.objects.get(id=site_ids)
+                                        site_data.token = None
+                                        site_data.save()
+
+                            else:
+                                if panelid and atmid:
+
+                                    device_data = Device()
+                                    device_data.serial_no1 = device_id
                                     device_data.serial_no2 = panelid
+                                    device_data.serial_no3 = atmid
+                                    device_data.site_id = site_ids
+                                    device_data.save()
+
+                                    site_data = Site.objects.get(id=site_ids)
+                                    site_data.is_treatment_unit = True
+                                    site_data.is_dispensing_unit = True
+                                    site_data.token_verified = True
+                                    site_data.token = None
+                                    site_data.save()
+
+                                    subscription_data = Subscription()
+                                    subscription_data.site_id = site_ids
+                                    subscription_data.is_treatment_unit = True
+                                    subscription_data.company_id = company_ids
+                                    subscription_data.save()
+
+                                    subscription_data1 = Subscription()
+                                    subscription_data1.site_id = site_ids
+                                    subscription_data1.is_dispensing_unit = True
+                                    subscription_data1.company_id = company_ids
+                                    subscription_data1.save()
+                                
+                                elif panelid:
+
+                                    device_data = Device()
+                                    device_data.serial_no1 = device_id
+                                    device_data.serial_no2 = panelid
+                                    device_data.serial_no3 = atmid
+                                    device_data.site_id = site_ids
                                     device_data.save()
 
                                     site_data = Site.objects.get(id=site_ids)
@@ -190,15 +270,17 @@ class MqttClient:
                                     subscription_data.is_treatment_unit = True
                                     subscription_data.company_id = company_ids
                                     subscription_data.save()
-                                else :
-                                    site_data = Site.objects.get(id=site_ids)
-                                    site_data.token = None
-                                    site_data.save()
-                            
-                            if device_data.serial_no3 is None:
-                                if atmid is not None:
-                                    device_data.serial_no3 = atmid
-                                    device_data.save()
+
+                                elif atmid:
+                                    try:
+                                        device_data = Device()
+                                        device_data.serial_no1 = device_id
+                                        device_data.serial_no2 = panelid
+                                        device_data.serial_no3 = atmid
+                                        device_data.site_id = site_ids
+                                        device_data.save()
+                                    except DatabaseError as e:
+                                        print("DatabaseError at line 283")
 
                                     site_data = Site.objects.get(id=site_ids)
                                     site_data.is_dispensing_unit = True
@@ -211,88 +293,10 @@ class MqttClient:
                                     subscription_data.is_dispensing_unit = True
                                     subscription_data.company_id = company_ids
                                     subscription_data.save()
-                                    
-                                else :
-                                    site_data = Site.objects.get(id=site_ids)
-                                    site_data.token = None
-                                    site_data.save()
-
-                        else:
-                            if panelid and atmid:
-
-                                device_data = Device()
-                                device_data.serial_no1 = device_id
-                                device_data.serial_no2 = panelid
-                                device_data.serial_no3 = atmid
-                                device_data.site_id = site_ids
-                                device_data.save()
-
-                                site_data = Site.objects.get(id=site_ids)
-                                site_data.is_treatment_unit = True
-                                site_data.is_dispensing_unit = True
-                                site_data.token_verified = True
-                                site_data.token = None
-                                site_data.save()
-
-                                subscription_data = Subscription()
-                                subscription_data.site_id = site_ids
-                                subscription_data.is_treatment_unit = True
-                                subscription_data.company_id = company_ids
-                                subscription_data.save()
-
-                                subscription_data1 = Subscription()
-                                subscription_data1.site_id = site_ids
-                                subscription_data1.is_dispensing_unit = True
-                                subscription_data1.company_id = company_ids
-                                subscription_data1.save()
-                            
-                            elif panelid:
-
-                                device_data = Device()
-                                device_data.serial_no1 = device_id
-                                device_data.serial_no2 = panelid
-                                device_data.serial_no3 = atmid
-                                device_data.site_id = site_ids
-                                device_data.save()
-
-                                site_data = Site.objects.get(id=site_ids)
-                                site_data.is_treatment_unit = True
-                                site_data.token_verified = True
-                                site_data.token = None
-                                site_data.save()
-
-                                subscription_data = Subscription()
-                                subscription_data.site_id = site_ids
-                                subscription_data.is_treatment_unit = True
-                                subscription_data.company_id = company_ids
-                                subscription_data.save()
-
-                            elif atmid:
-                                try:
-                                    device_data = Device()
-                                    device_data.serial_no1 = device_id
-                                    device_data.serial_no2 = panelid
-                                    device_data.serial_no3 = atmid
-                                    device_data.site_id = site_ids
-                                    device_data.save()
-                                except DatabaseError as e:
-                                    print("DatabaseError at line 283")
-
-                                site_data = Site.objects.get(id=site_ids)
-                                site_data.is_dispensing_unit = True
-                                site_data.token_verified = True
-                                site_data.token = None
-                                site_data.save()
-
-                                subscription_data = Subscription()
-                                subscription_data.site_id = site_ids
-                                subscription_data.is_dispensing_unit = True
-                                subscription_data.company_id = company_ids
-                                subscription_data.save()
-                       
-                    except Exception as err:
-                        transaction.set_rollback(True)
-                        logger.error("Exception at line 302".format(err))
+                        
+                        except Exception as err:
+                            transaction.set_rollback(True)
+                            logger.error("Exception at line 302".format(err))
 
 
     def ctrl_motr_handler(self, client, userdata, msg):
@@ -4898,6 +4902,7 @@ class MqttClient:
         self.client.disconnect()
 
 mqttc = MqttClient()
+print("MqttClient object created from views in connection app")
 
 @api_view(['POST'])
 def obtain_token(request):
@@ -5076,43 +5081,68 @@ class all_flowsen4ListAPIView(generics.ListAPIView):
 import json
 cid=None
 class site_check(viewsets.ModelViewSet):
-    def dispatch(self, request, *args, **kwargs):
-        try:
-            fields_to_exclude = ['model', 'pk']
-            #print(request.body,"BODY")
-            data = json.loads(request.body)
-            #print(data,type(data),"DATA")
-            # companydata=mo.Company.objects.filter(company_id=data['company_id'])
-            # for i in companydata:
-            #     global cid
-            #     cid=i.id
+    # def dispatch(self, request, *args, **kwargs):
+    #     try:
+    #         fields_to_exclude = ['model', 'pk']
+    #         #print(request.body,"BODY")
+    #         data = json.loads(request.body)
+    #         #print(data,type(data),"DATA")
+    #         # companydata=mo.Company.objects.filter(company_id=data['company_id'])
+    #         # for i in companydata:
+    #         #     global cid
+    #         #     cid=i.id
 
-            logged_user = User.objects.get(request.user.id)
-            role = ""
-            if logged_user.is_super_admin or logged_user.is_admin:
-                    number_of_sites=mo.Site.objects.filter(company=request.user.company_id).filter(phone_verified=1,token_verified=1).order_by('-id')
-                    site_name=[]
-                    for sit in number_of_sites:
-                        site_name.append(sit.site_name)
-            else:
-                valid_sites_for_user = mo.SitePermission.objects.filter(user_id=request.user.id)
-                number_of_sites=mo.Site.objects.filter(id__in=valid_sites_for_user.values_list('site_id', flat=True)).filter(phone_verified=1,token_verified=1).order_by('-id')
-                site_name=[]
-                for sit in number_of_sites:
-                    site_name.append(sit.site_name)
+    #         logged_user = User.objects.get(request.user.id)
+    #         role = ""
+    #         if logged_user.is_super_admin or logged_user.is_admin:
+    #                 number_of_sites=mo.Site.objects.filter(company=request.user.company_id).filter(phone_verified=1,token_verified=1).order_by('-id')
+    #                 site_name=[]
+    #                 for sit in number_of_sites:
+    #                     site_name.append(sit.site_name)
+    #         else:
+    #             valid_sites_for_user = mo.SitePermission.objects.filter(user_id=request.user.id)
+    #             number_of_sites=mo.Site.objects.filter(id__in=valid_sites_for_user.values_list('site_id', flat=True)).filter(phone_verified=1,token_verified=1).order_by('-id')
+    #             site_name=[]
+    #             for sit in number_of_sites:
+    #                 site_name.append(sit.site_name)
         
-            response_data = {
-                #new code
-            'data': site_name,  # Include the 'data' field
-            'status': 200,  # Add the status field
-            'message': "Data get successful", # Add the message field
+    #         response_data = {
+    #             #new code
+    #         'data': site_name,  # Include the 'data' field
+    #         'status': 200,  # Add the status field
+    #         'message': "Data get successful", # Add the message field
             
-            }
-            response_data=[response_data]
-            return JsonResponse(response_data, safe=False, content_type="application/json")
+    #         }
+    #         response_data=[response_data]
+    #         return JsonResponse(response_data, safe=False, content_type="application/json")
 
-        except Exception as e :
-            print("Exception at line site_check ",e)  
+    #     except Exception as e :
+    #         print("Exception at line site_check ",e)  
+
+
+
+    def dispatch(self, request, *args, **kwargs):
+        fields_to_exclude = ['model', 'pk']
+        #print(request.body,"BODY")
+        data = json.loads(request.body)
+        #print(data,type(data),"DATA")
+        companydata=mo.Company.objects.filter(company_id=data['company_id'])
+        for i in companydata:
+            global cid
+            cid=i.id
+        number_of_sites=mo.Site.objects.filter(company=data['company_id'])
+        site_name=[]
+        for sit in number_of_sites:
+            site_name.append(sit.site_name)
+        response_data = {
+            #new code
+        'data': site_name,  # Include the 'data' field
+        'status': 200,  # Add the status field
+        'message': "Data get successful", # Add the message field
+        
+        }
+        response_data=[response_data]
+        return JsonResponse(response_data, safe=False, content_type="application/json")
 
 # class updated_treat_rwpViewset(viewsets.ModelViewSet):
 #     def dispatch(self, request, *args, **kwargs):
