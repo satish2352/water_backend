@@ -7,7 +7,7 @@ from connection.views import MqttClient,mqttc
 
 def schedule_api():
     global mqttc
-    # logger.info("Scheduling data")
+    logger.info("Scheduling data")
     if mqttc is None:
         mqttc = MqttClient()
         logger.info("mqtt object Not found so created")

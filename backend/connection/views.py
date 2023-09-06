@@ -92,6 +92,8 @@ site_ids=0
 panelid=None
 atmid=None
 company_ids=0
+# mqttc = MqttClient()
+
 
 
 class MqttClient:
