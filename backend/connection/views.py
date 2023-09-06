@@ -157,17 +157,26 @@ class MqttClient:
                 site_ids=site_obj.id
                 doublicate_panel_id=0
                 doublicate_atm_id=0
-                if panelid is not None:
-                    print("in panelid")
-                    doublicate_panel_id=Device.objects.filter(serial_no2 =panelid).filter(~Q(site_id = site_ids)).count()
-                if atmid is not None:
-                    print("in atmid")
-                    doublicate_atm_id=Device.objects.filter(serial_no3 =atmid).filter(~Q(site_id = site_ids)).count()
+                try:
+                    if panelid is not None:
+                        print("in panelid")
+                        doublicate_panel_id=Device.objects.filter(serial_no2 =panelid).filter(~Q(site_id = site_ids)).count()
+                    if atmid is not None:
+                        print("in atmid")
+                        doublicate_atm_id=Device.objects.filter(serial_no3 =atmid).filter(~Q(site_id = site_ids)).count()
+                    
+                except Exception as err:
+                    print("error in panelid and atm duplicate checking error ".format(err))
+                    
+                
                 if doublicate_panel_id >0 or doublicate_atm_id >0:
-                    site_obj_new = Site.objects.get(company_id=company_ids, id=site_ids)
-                    site_obj_new.token = None#6-9 time 10.20am
-                    site_obj_new.save()
+                        # site_obj_new = Site.objects.get(company_id=company_ids, id=site_ids)
+                        print("Device duplicate found")
+                        site_obj.token = None#6-9 time 10.20am
+                        site_obj.save()
+
                 else:
+                    
                     with transaction.atomic():
                         try:  # TODO
                             try:
