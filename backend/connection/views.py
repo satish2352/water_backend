@@ -5770,6 +5770,7 @@ class site_check(viewsets.ModelViewSet):
 #                 return JsonResponse(response_data, safe=False, content_type="application/json")
 #         except Exception as e :
 #             print("Exception at line 5767 updated_disp_tap1Viewset",e) 
+
 # class updated_disp_tap2Viewset(viewsets.ModelViewSet):
 	
 #     def dispatch(self, request, *args, **kwargs):
@@ -5837,6 +5838,8 @@ class site_check(viewsets.ModelViewSet):
 #                 return JsonResponse(response_data, safe=False, content_type="application/json")
 #         except Exception as e:
 #             print("Exception at line 5834 updated_disp_tap2Viewset",e) 
+
+
 # class updated_disp_tap3Viewset(viewsets.ModelViewSet):
 	
 #     def dispatch(self, request, *args, **kwargs):
@@ -5906,6 +5909,8 @@ class site_check(viewsets.ModelViewSet):
 #         except Exception as e :
 #             print("Exception at line 5902 updated_disp_tap3Viewset",e) 
 
+
+
 # class updated_disp_tap4Viewset(viewsets.ModelViewSet):
 	
 #     def dispatch(self, request, *args, **kwargs):
@@ -5971,6 +5976,8 @@ class site_check(viewsets.ModelViewSet):
 #                 return JsonResponse(response_data, safe=False, content_type="application/json")
 #         except Exception as e :
 #             print("Exception at line 5968 updated_disp_tap4Viewset",e) 
+
+
                 
 # class updated_disp_cnd_consenViewset(viewsets.ModelViewSet):
 	 
@@ -6114,73 +6121,73 @@ class site_check(viewsets.ModelViewSet):
       
 # class updated_treat_F_flowsenViewset(viewsets.ModelViewSet):
 	
-    def dispatch(self, request, *args, **kwargs):
-        try:
-            fields_to_exclude = ['model', 'pk']
-            data = json.loads(request.body)
-            value_list=list(data.values())
+    # def dispatch(self, request, *args, **kwargs):
+    #     try:
+    #         fields_to_exclude = ['model', 'pk']
+    #         data = json.loads(request.body)
+    #         value_list=list(data.values())
 
-            dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
-            if dinfo is not None:
-                did=dinfo.Device_id
-                qs_sta = treat_F_flowsen.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
-                if not qs_sta:
-                    data_sta = {}
-                else:
-                    data_sta = serialize("json", qs_sta)
-                    data_sta = json.loads(data_sta)
-                    for item in data_sta:
-                        item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-                    data_sta = json.dumps(data_sta[0]["fields"])
-                    data_sta = json.loads(data_sta)
+    #         dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
+    #         if dinfo is not None:
+    #             did=dinfo.Device_id
+    #             qs_sta = treat_F_flowsen.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
+    #             if not qs_sta:
+    #                 data_sta = {}
+    #             else:
+    #                 data_sta = serialize("json", qs_sta)
+    #                 data_sta = json.loads(data_sta)
+    #                 for item in data_sta:
+    #                     item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+    #                 data_sta = json.dumps(data_sta[0]["fields"])
+    #                 data_sta = json.loads(data_sta)
                 
-                qs_set = treat_F_flowsen.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
-                if not qs_set:
-                    data_set = {}
-                else:
-                    data_set = serialize("json", qs_set)
-                    data_set = json.loads(data_set)
-                    for item in data_set:
-                        item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+    #             qs_set = treat_F_flowsen.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
+    #             if not qs_set:
+    #                 data_set = {}
+    #             else:
+    #                 data_set = serialize("json", qs_set)
+    #                 data_set = json.loads(data_set)
+    #                 for item in data_set:
+    #                     item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
-                    data_set = json.dumps(data_set[0]["fields"])
-                    data_set = json.loads(data_set)
+    #                 data_set = json.dumps(data_set[0]["fields"])
+    #                 data_set = json.loads(data_set)
 
-                last_error=Errors.objects.filter(service='F_flowsen')
-                if not last_error:
-                    last_error={}
-                else:
-                    last_error = serialize("json", last_error)
-                    last_error = json.loads(last_error)
-                    for item in last_error:
-                        item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+    #             last_error=Errors.objects.filter(service='F_flowsen')
+    #             if not last_error:
+    #                 last_error={}
+    #             else:
+    #                 last_error = serialize("json", last_error)
+    #                 last_error = json.loads(last_error)
+    #                 for item in last_error:
+    #                     item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
                     
-                    last_error = json.dumps(last_error[0]["fields"])
-                    last_error = json.loads(last_error)
+    #                 last_error = json.dumps(last_error[0]["fields"])
+    #                 last_error = json.loads(last_error)
 
-                data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
-                response_data = {
-                    #new code
-                'data': data_final,  # Include the 'data' field
-                'status': 200,  # Add the status field
-                'message': "Data get successful", # Add the message field
+    #             data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
+    #             response_data = {
+    #                 #new code
+    #             'data': data_final,  # Include the 'data' field
+    #             'status': 200,  # Add the status field
+    #             'message': "Data get successful", # Add the message field
                 
-                }
-                response_data=[response_data]
-                return JsonResponse(response_data, safe=False, content_type="application/json") 
+    #             }
+    #             response_data=[response_data]
+    #             return JsonResponse(response_data, safe=False, content_type="application/json") 
 
-            else:
-                response_data = {
-                    #new code
-                'data': "",  # Include the 'data' field
-                'status': 500,  # Add the status field
-                'message': "Unable to update", # Add the message field
+    #         else:
+    #             response_data = {
+    #                 #new code
+    #             'data': "",  # Include the 'data' field
+    #             'status': 500,  # Add the status field
+    #             'message': "Unable to update", # Add the message field
                 
-                }
-                response_data=[response_data]
-                return JsonResponse(response_data, safe=False, content_type="application/json")
-        except Exception as e :
-            print("Exception at line 6178",e)     
+    #             }
+    #             response_data=[response_data]
+    #             return JsonResponse(response_data, safe=False, content_type="application/json")
+    #     except Exception as e :
+    #         print("Exception at line 6178",e)     
         
 # class getDeviceID(viewsets.ModelViewSet):
 # 	
