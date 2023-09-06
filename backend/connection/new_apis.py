@@ -17,7 +17,7 @@ def newtap1settingViewset(request):
     print("Im herer")
     print("request.method ",request.method)
     if request.method == 'POST':
-        data_dict = json.loads(request.data)
+        data_dict = json.loads(request.body)
         print("data_dict data_dict",data_dict)
         unwanted_keys = ["unit_type", "water_treatment","componant_name","site_name","device_id"]
         for key in unwanted_keys:
