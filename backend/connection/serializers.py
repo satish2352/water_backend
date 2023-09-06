@@ -533,7 +533,7 @@ class tds_consensettingSerializer(serializers.HyperlinkedModelSerializer):
 class tap1settingSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = tap1_setting
-		fields=['p1','p2','p3','p4','unit_type','company_id','componant_name']
+		fields=['p1','p2','p3','p4','unit_type','componant_name']
 class tap2settingSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = tap2_setting

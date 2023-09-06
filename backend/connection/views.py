@@ -8061,13 +8061,9 @@ class atmsettingViewset(viewsets.ModelViewSet):
 class tap1settingViewset(viewsets.ModelViewSet):
 	
         queryset = tap1_setting.objects.all()
-
-        
         serializer_class = tap1settingSerializer
-
         deviceid=0
         def dispatch(self, request, *args, **kwargs):
-        
             try:
                 data_dict = json.loads(request.body)
                 unwanted_keys = ["unit_type", "water_treatment","componant_name","site_name","device_id"]  # Example of unwanted keys
