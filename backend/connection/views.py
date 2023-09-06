@@ -159,17 +159,31 @@ class MqttClient:
                 site_ids=site_obj.id
                 doublicate_panel_id=0
                 doublicate_atm_id=0
-                if panelid is not None:
-                    print("in panelid")
-                    doublicate_panel_id=Device.objects.filter(serial_no2 =panelid).filter(~Q(site_id = site_ids)).count()
-                if atmid is not None:
-                    print("in atmid")
-                    doublicate_atm_id=Device.objects.filter(serial_no3 =atmid).filter(~Q(site_id = site_ids)).count()
+                try:
+                    if panelid is not None:
+                        print("in panelid")
+                        doublicate_panel_id=Device.objects.filter(serial_no2 =panelid).filter(~Q(site_id = site_ids)).count()
+                    if atmid is not None:
+                        print("in atmid")
+                        doublicate_atm_id=Device.objects.filter(serial_no3 =atmid).filter(~Q(site_id = site_ids)).count()
+                    
+                except Exception as err:
+                    print("error in panelid and atm duplicate checking error ".format(err))
+                    
+                
                 if doublicate_panel_id >0 or doublicate_atm_id >0:
-                    site_obj_new = Site.objects.get(company_id=company_ids, id=site_ids)
-                    site_obj_new.token = None#6-9 time 10.20am
-                    site_obj_new.save()
+                        # site_obj_new = Site.objects.get(company_id=company_ids, id=site_ids)
+                        if doublicate_panel_id>0:
+                             site_obj.duplicate_panel=True
+                        if doublicate_atm_id>0:
+                             site_obj.duplicate_atm=True
+                        print("Device duplicate found")
+                        site_obj.token = None#6-9 time 10.20am
+
+                        site_obj.save()
+
                 else:
+                    
                     with transaction.atomic():
                         try:  # TODO
                             try:
@@ -4901,8 +4915,12 @@ class MqttClient:
     def stop(self):
         self.client.disconnect()
 
-mqttc = MqttClient()
-print("MqttClient object created from views in connection app")
+try:
+    mqttc = MqttClient()
+    print("MqttClient object created from views in connection app")
+except Exception as e:
+    print(" error in connection views while creating mqtt object ",e)
+
 
 @api_view(['POST'])
 def obtain_token(request):
@@ -5126,11 +5144,11 @@ class site_check(viewsets.ModelViewSet):
         #print(request.body,"BODY")
         data = json.loads(request.body)
         #print(data,type(data),"DATA")
-        companydata=mo.Company.objects.filter(company_id=data['company_id'])
+        companydata=mo.Company.objects.filter(company_id=request.user.company_id)
         for i in companydata:
             global cid
             cid=i.id
-        number_of_sites=mo.Site.objects.filter(company=data['company_id'])
+        number_of_sites=mo.Site.objects.filter(company_id=request.user.company_id)
         site_name=[]
         for sit in number_of_sites:
             site_name.append(sit.site_name)

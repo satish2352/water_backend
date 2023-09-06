@@ -615,10 +615,26 @@ def verify_token(request):
                                             "message": "Dispensing unit verified successfully!"},
                                         safe=False, status=status.HTTP_200_OK)
             else:
+               
+                if site_obj.duplicate_panel == True or site_obj.duplicate_atm == True:
+                    if site_obj.duplicate_panel == True and site_obj.duplicate_atm == True:
+                        messege  = "Duplicate atm and panel found"
+                        pass
+                    elif site_obj.duplicate_panel == True:
+                        messege  = "Duplicate panel found"
+                        pass
+                    elif  site_obj.duplicate_atm == True:
+                        messege  = "Duplicate atm found"
+                        pass
+                    
+                     
+                else:
+                    messege = "Device not responding"
+
                 site_obj.otp = None
                 site_obj.save()
                 return JsonResponse({"Response": {"Status": "error"},
-                                    "message": "1Token verification failed. Didn't get the token from device1"},
+                                    "message": messege },
                                 safe=False, status=status.HTTP_200_OK)
             
         except Exception as err:

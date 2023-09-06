@@ -533,6 +533,9 @@ class Site(models.Model):
     otp = models.CharField(max_length=4, null=True, blank=True)
     otp_created = models.DateTimeField(auto_now_add=True, null=True)
 
+    duplicate_atm = models.BooleanField(default=False)
+    duplicate_panel=models.BooleanField(default=False)
+
     def __str__(self):
         return self.site_name
 
@@ -562,7 +565,7 @@ class Site(models.Model):
         pin_matches = pin is not None and pin == cached_pin
         if pin_matches:
             self.otp = None
-            self.token = None
+            # self.token = None
             self.phone_verified = True
             self.save()
             return {"status": True, "difference": difference}
