@@ -562,7 +562,7 @@ class Site(models.Model):
         pin_matches = pin is not None and pin == cached_pin
         if pin_matches:
             self.otp = None
-            self.token = None
+            # self.token = None
             self.phone_verified = True
             self.save()
             return {"status": True, "difference": difference}
