@@ -7712,7 +7712,7 @@ class atmsettingViewset(viewsets.ModelViewSet):
                 unwanted_keys = ["unit_type", "water_treatment","componant_name","site_name","device_id","ntt"]  # Example of unwanted keys
                 
                 value_list=list(data_dict.values())
-                
+                info("value_list ", value_list)
                 dinfo=device_info.objects.filter(unit_type=value_list[1],company_id=request.user.company_id).first()
                 print("dinfo in ATM",dinfo)
                 deviceid = None
