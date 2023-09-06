@@ -4958,13 +4958,9 @@ class LastRecordsView(viewsets.ModelViewSet):
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
         value_list=list(data.values())
-        # print("last record data ",data)
-        # dinfo = device_info.objects.filter(**data).last()
         dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
 
-        # print("last record dinfo ",dinfo)
         if dinfo is not None:
-            # did=dinfo[0].Device_id
             did=dinfo.Device_id
             last_error = Errors.objects.filter(device_id=did).order_by('-id')[:10]
             if not last_error:
@@ -5648,73 +5644,73 @@ class site_check(viewsets.ModelViewSet):
 #         except Exception as e :
 #             print("Exception at line 5583 updated_treat_panelViewset",e)    
 
-# class updated_disp_atmViewset(viewsets.ModelViewSet):
-    # def dispatch(self, request, *args, **kwargs):
-    #     try:
-    #         fields_to_exclude = ['model', 'pk']
-    #         data = json.loads(request.body)
-    #         value_list=list(data.values())
-    #         dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
-    #         if dinfo is not None:
-    #             did=dinfo.Device_id
-    #             qs_sta = disp_atm.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
-    #             last_error=Errors.objects.filter(service='atm')
-    #             if not qs_sta:
-    #                 data_sta = {}
-    #             else:
-    #                 data_sta = serialize("json", qs_sta)
-    #                 data_sta = json.loads(data_sta)
-    #                 for item in data_sta:
-    #                     item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-    #                 data_sta = json.dumps(data_sta[0]["fields"])
-    #                 data_sta = json.loads(data_sta)
+class updated_disp_atmViewset(viewsets.ModelViewSet):
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            fields_to_exclude = ['model', 'pk']
+            data = json.loads(request.body)
+            value_list=list(data.values())
+            dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
+            if dinfo is not None:
+                did=dinfo.Device_id
+                qs_sta = disp_atm.objects.filter(device_id=did,message_type="updsta").order_by('-id')[:1:1]
+                last_error=Errors.objects.filter(service='atm')
+                if not qs_sta:
+                    data_sta = {}
+                else:
+                    data_sta = serialize("json", qs_sta)
+                    data_sta = json.loads(data_sta)
+                    for item in data_sta:
+                        item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+                    data_sta = json.dumps(data_sta[0]["fields"])
+                    data_sta = json.loads(data_sta)
                 
-    #             qs_set = disp_atm.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
-    #             if not qs_set:
-    #                 data_set = {}
-    #             else:
-    #                 data_set = serialize("json", qs_set)
-    #                 data_set = json.loads(data_set)
-    #                 for item in data_set:
-    #                     item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+                qs_set = disp_atm.objects.filter(device_id=did,message_type="updset").order_by('-id')[:1:1]
+                if not qs_set:
+                    data_set = {}
+                else:
+                    data_set = serialize("json", qs_set)
+                    data_set = json.loads(data_set)
+                    for item in data_set:
+                        item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
 
-    #                 data_set = json.dumps(data_set[0]["fields"])
-    #                 data_set = json.loads(data_set)
+                    data_set = json.dumps(data_set[0]["fields"])
+                    data_set = json.loads(data_set)
 
-    #             last_error=Errors.objects.filter(service='atm')
-    #             if not last_error:
-    #                 last_error={}
-    #             else:
-    #                 last_error = serialize("json", last_error)
-    #                 last_error = json.loads(last_error)
-    #                 for item in last_error:
-    #                     item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+                last_error=Errors.objects.filter(service='atm')
+                if not last_error:
+                    last_error={}
+                else:
+                    last_error = serialize("json", last_error)
+                    last_error = json.loads(last_error)
+                    for item in last_error:
+                        item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
                     
-    #                 last_error = json.dumps(last_error[0]["fields"])
-    #                 last_error = json.loads(last_error)
+                    last_error = json.dumps(last_error[0]["fields"])
+                    last_error = json.loads(last_error)
 
-    #             data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
-    #             response_data = {
-    #                 #new code
-    #             'data': data_final,  # Include the 'data' field
-    #             'status': 200,  # Add the status field
-    #             'message': "Data get successful", # Add the message field
+                data_final = {'data_sta':data_sta,'data_set':data_set,'error':last_error}
+                response_data = {
+                    #new code
+                'data': data_final,  # Include the 'data' field
+                'status': 200,  # Add the status field
+                'message': "Data get successful", # Add the message field
                 
-    #             }
-    #             response_data=[response_data]
-    #             return JsonResponse(response_data, safe=False, content_type="application/json")    
-    #         else:
-    #                 response_data = {
-    #                     #new code
-    #                 'data': "",  # Include the 'data' field
-    #                 'status': 500,  # Add the status field
-    #                 'message': "Unable to update", # Add the message field
+                }
+                response_data=[response_data]
+                return JsonResponse(response_data, safe=False, content_type="application/json")    
+            else:
+                    response_data = {
+                        #new code
+                    'data': "",  # Include the 'data' field
+                    'status': 500,  # Add the status field
+                    'message': "Unable to update", # Add the message field
                     
-    #                 }
-    #                 response_data=[response_data]
-    #                 return JsonResponse(response_data, safe=False, content_type="application/json")
-    #     except Exception as e :
-    #         print("Exception at line 5652 updated_disp_atmViewset",e) 
+                    }
+                    response_data=[response_data]
+                    return JsonResponse(response_data, safe=False, content_type="application/json")
+        except Exception as e :
+            print("Exception at line 5652 updated_disp_atmViewset",e) 
         
 # class getDeviceID(viewsets.ModelViewSet):
 # 	
@@ -7704,56 +7700,54 @@ class device_infoViewset(viewsets.ModelViewSet):
 #                 self.perform_destroy(instance)
 #             except Http404:
 #                 pass
-# class atmsettingViewset(viewsets.ModelViewSet):
+
+class atmsettingViewset(viewsets.ModelViewSet):
 	
-#         queryset = atm_setting.objects.all()
-
-        
-#         serializer_class = atmsettingSerializer
-
-#         deviceid=0
-#         def dispatch(self, request, *args, **kwargs):
-        
-#             try:
-#                 data_dict = json.loads(request.body)
-#                 unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id","ntt"]  # Example of unwanted keys
+        queryset = atm_setting.objects.all()
+        serializer_class = atmsettingSerializer
+        deviceid=0
+        def dispatch(self, request, *args, **kwargs):
+            try:
+                data_dict = json.loads(request.body)
+                unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id","ntt"]  # Example of unwanted keys
                 
-#                 value_list=list(data_dict.values())
+                value_list=list(data_dict.values())
                 
-#                 dinfo=device_info.objects.filter(unit_type=value_list[1],company_id=request.user.company_id).first()
+                dinfo=device_info.objects.filter(unit_type=value_list[1],company_id=request.user.company_id).first()
                 
-#                 global deviceid
-#                 deviceid=dinfo.Device_id
-#                 for key in unwanted_keys:
-#                     if key in data_dict:
-#                         del data_dict[key]
-#                 for key in data_dict:
-#                     data_dict[key] = str(data_dict[key])
-#                 if deviceid:
-#                     mqttc.publish(f'wc1/{deviceid}/chgset/atm',str(data_dict).replace(' ',''))
-#                     dd=dateandtime()
-#                     e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} atm settings change has been requested - over no. Of  tap:{value_list[3]}, no. Of volume:{value_list[4]}, volume1:{value_list[5]}, volume2:{value_list[6]}, volume3:{value_list[7]}, volume4:{value_list[8]}, rate1:{value_list[9]}, rate2:{value_list[10]}, rate3:{value_list[11]}, rate4:{value_list[12]}"
-#                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='atm',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-#                     erro.save()
-#                 else:
-#                     pass     
+                deviceid = None
+                deviceid=dinfo.Device_id
+                for key in unwanted_keys:
+                    if key in data_dict:
+                        del data_dict[key]
+                for key in data_dict:
+                    data_dict[key] = str(data_dict[key])
+                if deviceid:
+                    mqttc.publish(f'wc1/{deviceid}/chgset/atm',str(data_dict).replace(' ',''))
+                    dd=dateandtime()
+                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} atm settings change has been requested - over no. Of  tap:{value_list[3]}, no. Of volume:{value_list[4]}, volume1:{value_list[5]}, volume2:{value_list[6]}, volume3:{value_list[7]}, volume4:{value_list[8]}, rate1:{value_list[9]}, rate2:{value_list[10]}, rate3:{value_list[11]}, rate4:{value_list[12]}"
+                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='atm',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                    erro.save()
+                else:
+                    pass     
 
-#             except Exception as e:
-#                 pass    
-#             return super().dispatch(request)    
-#         def perform_create(self, serializer):
-#             try:
-#                 serializer.save()  # Save the data to the database
-#                 ddid=atm_setting.objects.filter(device_id='').update(device_id=deviceid)
-#                 ddid.save()
-#             except Exception as e:
-#                 pass        
-#         def desptroy(self, request):
-#             try:
-#                 instance = self.get_object()
-#                 self.perform_destroy(instance)
-#             except Http404:
-#                 pass
+            except Exception as e:
+                print("Error in processing atm setting incomplete request")    
+            return super().dispatch(request)   
+         
+        def perform_create(self, serializer):
+            try:
+                serializer.save()  # Save the data to the database
+                ddid=atm_setting.objects.filter(device_id='').update(device_id=deviceid)
+                ddid.save()
+            except Exception as e:
+                pass        
+        def desptroy(self, request):
+            try:
+                instance = self.get_object()
+                self.perform_destroy(instance)
+            except Http404:
+                pass
         
 # class cnd_consensettingViewset(viewsets.ModelViewSet):
     
