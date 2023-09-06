@@ -125,7 +125,10 @@ class MqttClient:
         
     def otp_handler(self, client, userdata, message):
         print("I am in otp_handler")
-        token_,company_ids,panelid,atmid = None
+        token_ = "0"
+        company_ids = None
+        panelid = None
+        atmid = None
         print("Data received1!!!",message.payload)
         jstr=message.payload
         if isinstance(jstr, bytes):
