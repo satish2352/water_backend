@@ -33,7 +33,7 @@ def newtap1settingViewset(request):
             value_list=list(data_dict.values())
             print("value_list value_list",value_list)
             print("value_list[0] ",value_list[0])
-            dinfo=device_info.objects.get(unit_type=value_list[0],company_id=request.user.company_id)
+            dinfo=device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
             print("dinfo dinfo",dinfo)
             obj = tap1_setting.objects.create(**data_dict)
             for key in unwanted_keys:
