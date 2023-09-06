@@ -5128,11 +5128,11 @@ class site_check(viewsets.ModelViewSet):
         #print(request.body,"BODY")
         data = json.loads(request.body)
         #print(data,type(data),"DATA")
-        companydata=mo.Company.objects.filter(company_id=data['company_id'])
+        companydata=mo.Company.objects.filter(company_id=request.user.company_id)
         for i in companydata:
             global cid
             cid=i.id
-        number_of_sites=mo.Site.objects.filter(company=data['company_id'])
+        number_of_sites=mo.Site.objects.filter(company_id=request.user.company_id)
         site_name=[]
         for sit in number_of_sites:
             site_name.append(sit.site_name)
