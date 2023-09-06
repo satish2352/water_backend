@@ -4900,6 +4900,7 @@ class MqttClient:
         self.client.disconnect()
 
 mqttc = MqttClient()
+print("MqttClient object created from views in connection app")
 
 @api_view(['POST'])
 def obtain_token(request):
