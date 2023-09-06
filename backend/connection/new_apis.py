@@ -22,10 +22,12 @@ def dateandtime():
 @api_view(['GET', 'POST'])
 def newtap1settingViewset(request):
 
-    print("request  ",request)
-    print("request body  ",request.user)
+  
     if request.method == 'POST':
         try:
+            print("request  ",request)
+            print("request body  ",request.user)
+            print("request.user.company_id ",request.user.company_id)
             data_dict = json.loads(request.body)
             unwanted_keys = ["unit_type", "water_treatment","componant_name","site_name","device_id"]
             for key in unwanted_keys:
