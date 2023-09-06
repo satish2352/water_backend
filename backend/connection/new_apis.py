@@ -15,6 +15,7 @@ def dateandtime():
 @api_view(['GET', 'POST'])
 def newtap1settingViewset(request):
     print("Im herer")
+    print("request.method ",request.method)
     if request.method == 'POST':
         data_dict = json.loads(request.data)
         print("data_dict data_dict",data_dict)
