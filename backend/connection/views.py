@@ -7350,47 +7350,48 @@ did=0
         #         self.perform_destroy(instance)
         #     except Http404:
         #         pass
-# class device_infoViewset(viewsets.ModelViewSet):
+
+class device_infoViewset(viewsets.ModelViewSet):
         
-        # def dispatch(self, request, *args, **kwargs):
-        #     fields_to_exclude = ['model', 'pk']
+        def dispatch(self, request, *args, **kwargs):
+            fields_to_exclude = ['model', 'pk']
 
-        #     data = json.loads(request.body)
-        #     u_id=data['user_id']
-        #     dinfo = device_info.objects.filter(company_id=data['company_id'])
-        #     allsites=[]
-        #     for si in dinfo:
-        #         allsites.append(si.site_name)
-        #     allsiteset=set(allsites)
-        #     allsitelist=list(allsiteset)
-        #     sites=[]
-        #     raw_sql = "SELECT iwater_site.site_name FROM iwater_site INNER JOIN iwater_site_permissions ON iwater_site.id=iwater_site_permissions.site_id WHERE iwater_site_permissions.user_id=%s"
+            data = json.loads(request.body)
+            u_id=data['user_id']
+            dinfo = device_info.objects.filter(company_id=data['company_id'])
+            allsites=[]
+            for si in dinfo:
+                allsites.append(si.site_name)
+            allsiteset=set(allsites)
+            allsitelist=list(allsiteset)
+            sites=[]
+            raw_sql = "SELECT iwater_site.site_name FROM iwater_site INNER JOIN iwater_site_permissions ON iwater_site.id=iwater_site_permissions.site_id WHERE iwater_site_permissions.user_id=%s"
 
-        #     try:
-        #         # Execute the raw SQL query and fetch the results
-        #         with connection.cursor() as cursor:
-        #             cursor.execute(raw_sql,[u_id])
-        #             results = cursor.fetchall()
-        #         for result in results:
-        #             sites.append(result[0])
-        #     except Exception as e:
-        #         print("exception at line 7085")
-        #     if data['user_role']== "super_admin" or data['user_role']== "administrator":
+            try:
+                # Execute the raw SQL query and fetch the results
+                with connection.cursor() as cursor:
+                    cursor.execute(raw_sql,[u_id])
+                    results = cursor.fetchall()
+                for result in results:
+                    sites.append(result[0])
+            except Exception as e:
+                print("exception at line 7085")
+            if data['user_role']== "super_admin" or data['user_role']== "administrator":
 
-        #         siteset=set(allsites)
-        #         siteset=list(siteset)
-        #     else:
-        #         siteset=set(sites)
-        #         siteset=list(siteset)
-        #     response_data = {
-        #         #new code
-        #     'data': siteset,  # Include the 'data' field
-        #     'status': 200,  # Add the status field
-        #     'message': "Data get successful", # Add the message field
+                siteset=set(allsites)
+                siteset=list(siteset)
+            else:
+                siteset=set(sites)
+                siteset=list(siteset)
+            response_data = {
+                #new code
+            'data': siteset,  # Include the 'data' field
+            'status': 200,  # Add the status field
+            'message': "Data get successful", # Add the message field
             
-        #     }
-        #     response_data=[response_data]
-        #     return JsonResponse(response_data, safe=False, content_type="application/json")           
+            }
+            response_data=[response_data]
+            return JsonResponse(response_data, safe=False, content_type="application/json")           
 # class cndsettingViewset(viewsets.ModelViewSet):
 	
 #         queryset = cnd_setting.objects.all()
