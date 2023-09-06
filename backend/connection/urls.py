@@ -155,7 +155,7 @@ router.register(r'last-records',LastRecordsView,basename='last-records')
 urlpatterns = [
     # path('admin/', admin.site.urls),
     path('', include(router.urls)),
-    path('tap1_setting/',newtap1settingViewset,name="tap1_setting")
+    path('tap1_setting/',newtap1settingViewset,name="tap1_setting"),
     # path('c',views.on_message)
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     # path('token/', views.obtain_token, name='token_obtain_pair'),
