@@ -38,7 +38,6 @@ def newtap1settingViewset(request):
 
                 obj.unit_type = value_list[0]
                 obj.componant_name = value_list[1]
-                obj.componant_name = value_list[1]
                 obj.device_id = deviceid
                 obj.company_id = request.user.company_id
                 obj.save()
