@@ -173,23 +173,12 @@ def updated_disp_Tap1Viewset(request):
 
         if dinfo:
             did = dinfo.Device_id
-            qs_sta = disp_tap1.objects.filter(device_id=did, message_type="updsta").values('p1','p2','p3','p4','updated_at','created_at').order_by('-id')[:1:1]
-            created_at_string = str(disp_tap1.created_at)
-            disp_tap1.created_at = created_at_string
-            data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
-
             qs_set = disp_tap1.objects.filter(device_id=did, message_type="updset").values('p1','p2','p3','p4','updated_at','created_at').order_by('-id')[:1:1]
-            # for i in qs_set:
-            #     print(i)
-            #     print(i.created_at)
-            # created_at_string = str(disp_tap1.created_at)
-            # disp_tap1.created_at = created_at_string
-            # data_set = model_to_dict(qs_set[0], exclude=fields_to_exclude, fields=[field.name for field in disp_tap1._meta.fields]) if qs_set else {}
-
+            
             last_error = Errors.objects.filter(service='tap1')
-            last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
+            # last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
 
-            data_final = {'data_sta': data_sta, 'data_set': qs_set[0], 'error': last_error}
+            data_final = {'data_set': qs_set[0], 'error': last_error}
             response_data = {
                 'data': data_final,
                 'status': 200,
