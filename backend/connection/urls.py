@@ -1,8 +1,9 @@
 from django.urls import path
 # from connection import views
-
+from . new_api_harshal import *
 from django.urls import path,include
 from .views import *
+from .updated_api import sites_user_count
 from rest_framework import routers
 # from .views import MyTokenObtainPairView, MyTokenRefreshView
 
@@ -12,7 +13,7 @@ router.register(r'device_info',DeviceViewset)
 router.register(r'key_info',keyViewset)
 router.register(r'graph_info',GraphViewset)
 
-# router.register(r'Rwp_state',RwpstateViewset)
+# router.register(r'Rwp_state',RwpstateViewset) 
 # router.register(r'rwp_setting',rwpsettingViewset)
 # router.register(r'hpp_state',hppstateViewset)
 # router.register(r'hpp_setting',hppsettingViewset)
@@ -159,6 +160,15 @@ urlpatterns = [
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     # path('token/', views.obtain_token, name='token_obtain_pair'),
     path('token/refresh/', MyTokenRefreshView.as_view(), name='token_refresh'),
+    path('sites_user_count/',sites_user_count,name="sites_user_count"),
+    path('rwpstateViewset/',rwpstateViewset,name="rwpstateViewset"),
+    path('rwpsettingViewset/',rwpsettingViewset,name="rwpsettingViewset"),
+    path('ampv1stateViewset/',ampv1stateViewset,name="ampv1stateViewset"),
+    path('ampv1settingViewset/',ampv1settingViewset,name="ampv1settingViewset"),
+    path('ampv2stateViewset/',ampv2stateViewset,name="ampv2stateViewset"),
+    path('ampv2settingViewset/',ampv2settingViewset,name="ampv2settingViewset"),
+    path('hppstateViewset/',hppstateViewset,name="hppstateViewset"),
+    path('hppsettingViewset/',hppsettingViewset,name="hppsettingViewset"),
     
 ]
 
