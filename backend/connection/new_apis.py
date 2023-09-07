@@ -173,14 +173,13 @@ def updated_disp_Tap1Viewset(request):
 
         if dinfo:
             did = dinfo.Device_id
-            qs_sta = disp_tap1.objects.filter(device_id=did, message_type="updsta").values('p1','p2','p3','p4','updated_at','created_at').order_by('-id')[:1:1]
             if qs_sta is not None:
                 qs_set = disp_tap1.objects.filter(device_id=did, message_type="updset").values('p1','p2','p3','p4','updated_at','created_at').order_by('-id')[:1:1]
             else:
                 qs_set ={}
             last_error = Errors.objects.filter(service='tap1')
 
-            data_final = {'data_sta': qs_sta[0], 'data_set': qs_set[0], 'error': last_error}
+            data_final = { 'data_set': qs_set[0], 'error': last_error}
             response_data = {
                 'data': data_final,
                 'status': 200,
