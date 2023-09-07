@@ -173,12 +173,14 @@ def updated_disp_Tap1Viewset(request):
             if not qs_sta:
                 data_sta = {}
             else:
+                print("qs_sta",qs_sta)
                 data_sta = json.loads(qs_sta[0].to_json(exclude=fields_to_exclude))
 
             qs_set = disp_tap1.objects.filter(device_id=did, message_type="updset").order_by('-id')[:1:1]
             if not qs_set:
                 data_set = {}
             else:
+                print("qs_sta",qs_set)
                 data_set = json.loads(qs_set[0].to_json(exclude=fields_to_exclude))
 
             last_error = Errors.objects.filter(service='tap1')
