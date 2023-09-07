@@ -426,7 +426,7 @@ def atm_setting_Viewset(request):
                 if deviceid:
                     mqttc.publish(f'wc1/{deviceid}/chgset/atm',str(data_dict).replace(' ',''))
                     dd=dateandtime()
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} atm settings change has been requested - pulse1:{value_list[2]}, pulse2:{value_list[3]}, pulse3:{value_list[4]}, pulse4:{value_list[5]}"
+                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} atm settings change has been requested - over no. Of  tap:{value_list[3]}, no. Of volume:{value_list[4]}, volume1:{value_list[5]}, volume2:{value_list[6]}, volume3:{value_list[7]}, volume4:{value_list[8]}, rate1:{value_list[9]}, rate2:{value_list[10]}, rate3:{value_list[11]}, rate4:{value_list[12]}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='atm',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     erro.save()
 
@@ -443,21 +443,15 @@ def atm_setting_Viewset(request):
 
 #cnd_sen
 @api_view(['POST'])
-def hppstateViewset(request):
+def cnd_senViewset(request):
     if request.method == 'POST':
         try:
-            print("request  ",request)
-            print("request body   ",request.user)
-            print("request.user.company_id ",request.user.company_id)
             data_dict = json.loads(request.body)
             unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]
             value_list=list(data_dict.values())
-            print("value_list value_list",value_list)
-            print("value_list[0] ",value_list[0])
             dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
             if dinfo is not None:
-                print("dinfo dinfo",dinfo)
-                obj = ampv1_state.objects.create(**data_dict)
+                obj = cnd_setting.objects.create(**data_dict)
                 for key in unwanted_keys:
                     if key in data_dict.keys():
                         del data_dict[key]
@@ -466,11 +460,10 @@ def hppstateViewset(request):
                 deviceid=dinfo.Device_id
                 print("deviceid ",deviceid)
                 if deviceid:
-                    mqttc.publish(f'wc1/{deviceid}/chgset/hpp',str(data_dict).replace(' ',''))
+                    mqttc.publish(f'wc1/{deviceid}/chgset/cnd_sen',str(data_dict).replace(' ',''))
                     dd=dateandtime()
-                    print("dd dd ",dd)
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} hpp state change has been requested - pulse1:{value_list[2]}, pulse2:{value_list[3]}, pulse3:{value_list[4]}, pulse4:{value_list[5]}"
-                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='hpp_state',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} cnd settings change has been requested - span:{value_list[3]}, trip_setpoint:{value_list[4]}, atert_setpoint:{value_list[5]}"
+                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='cnd',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     erro.save()
 
                     obj.unit_type = value_list[0]
@@ -478,6 +471,6 @@ def hppstateViewset(request):
                     obj.device_id = deviceid
                     obj.company_id = request.user.company_id
                     obj.save()
-                return Response({"message": "NEW HPP STATE API 200"})
+                return Response({"message": "NEW CND_SEN SETTING API 200"})
         except Exception as e:
-            print("Error in HPP STATE  ",e)
+            print("Error in CND_SEN SETTING API  ",e)
