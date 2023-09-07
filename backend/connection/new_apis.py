@@ -174,6 +174,8 @@ def updated_disp_Tap1Viewset(request):
         if dinfo:
             did = dinfo.Device_id
             qs_sta = disp_tap1.objects.filter(device_id=did, message_type="updsta").order_by('-id')[:1:1]
+            created_at_string = str(disp_tap1.created_at)
+            disp_tap1.created_at = created_at_string
             data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
 
             qs_set = disp_tap1.objects.filter(device_id=did, message_type="updset").order_by('-id')[:1:1]
