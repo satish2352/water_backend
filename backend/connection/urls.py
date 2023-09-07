@@ -159,7 +159,7 @@ urlpatterns = [
     path('updated_disp_tap2',updated_disp_tap2Viewset,name='disp_tap2'),
     path('updated_disp_tap3',updated_disp_tap3Viewset,name='disp_tap3'),
     path('updated_disp_tap4',updated_disp_tap4Viewset,name='disp_tap4'),
-    path('atm_setting',atmsettingViewset,name='atm_setting'),
+    path('atm_setting',atmsettingViewset),
     path('updated_disp_atm',updated_disp_atmViewset,name='disp_atm'),
     # path('c',views.on_message)
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
