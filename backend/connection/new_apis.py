@@ -160,7 +160,6 @@ def newtap4settingViewset(request):
 
 #updates api for tap
 @api_view(['POST'])
-@api_view(['POST'])
 def updated_disp_Tap1Viewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
