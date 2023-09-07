@@ -7701,53 +7701,53 @@ class device_infoViewset(viewsets.ModelViewSet):
 #             except Http404:
 #                 pass
 
-class atmsettingViewset(viewsets.ModelViewSet):
+# class atmsettingViewset(viewsets.ModelViewSet):
 	
-        queryset = atm_setting.objects.all()
-        serializer_class = atmsettingSerializer
-        deviceid=0
-        def dispatch(self, request, *args, **kwargs):
-            try:
-                data_dict = json.loads(request.body)
-                unwanted_keys = ["unit_type", "water_treatment","componant_name","site_name","device_id","ntt"]  # Example of unwanted keys
+#         queryset = atm_setting.objects.all()
+#         serializer_class = atmsettingSerializer
+#         deviceid=0
+#         def dispatch(self, request, *args, **kwargs):
+#             try:
+#                 data_dict = json.loads(request.body)
+#                 unwanted_keys = ["unit_type", "water_treatment","componant_name","site_name","device_id","ntt"]  # Example of unwanted keys
                 
-                value_list=list(data_dict.values())
-                print("value_list ", value_list)
-                dinfo=device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
-                print("dinfo in ATM",dinfo)
-                deviceid = None
-                deviceid=dinfo.Device_id
-                for key in unwanted_keys:
-                    if key in data_dict:
-                        del data_dict[key]
-                for key in data_dict:
-                    data_dict[key] = str(data_dict[key])
-                if deviceid:
-                    mqttc.publish(f'wc1/{deviceid}/chgset/atm',str(data_dict).replace(' ',''))
-                    dd=dateandtime()
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} atm settings change has been requested - over no. Of  tap:{value_list[3]}, no. Of volume:{value_list[4]}, volume1:{value_list[5]}, volume2:{value_list[6]}, volume3:{value_list[7]}, volume4:{value_list[8]}, rate1:{value_list[9]}, rate2:{value_list[10]}, rate3:{value_list[11]}, rate4:{value_list[12]}"
-                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='atm',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                    erro.save()
-                else:
-                    pass     
+#                 value_list=list(data_dict.values())
+#                 print("value_list ", value_list)
+#                 dinfo=device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
+#                 print("dinfo in ATM",dinfo)
+#                 deviceid = None
+#                 deviceid=dinfo.Device_id
+#                 for key in unwanted_keys:
+#                     if key in data_dict:
+#                         del data_dict[key]
+#                 for key in data_dict:
+#                     data_dict[key] = str(data_dict[key])
+#                 if deviceid:
+#                     mqttc.publish(f'wc1/{deviceid}/chgset/atm',str(data_dict).replace(' ',''))
+#                     dd=dateandtime()
+#                     e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} atm settings change has been requested - over no. Of  tap:{value_list[3]}, no. Of volume:{value_list[4]}, volume1:{value_list[5]}, volume2:{value_list[6]}, volume3:{value_list[7]}, volume4:{value_list[8]}, rate1:{value_list[9]}, rate2:{value_list[10]}, rate3:{value_list[11]}, rate4:{value_list[12]}"
+#                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='atm',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+#                     erro.save()
+#                 else:
+#                     pass     
 
-            except Exception as e:
-                print("Error in processing atm setting incomplete request ",e)    
-            return super().dispatch(request)   
+#             except Exception as e:
+#                 print("Error in processing atm setting incomplete request ",e)    
+#             return super().dispatch(request)   
          
-        def perform_create(self, serializer):
-            try:
-                serializer.save()  # Save the data to the database
-                ddid=atm_setting.objects.filter(device_id='').update(device_id=deviceid)
-                ddid.save()
-            except Exception as e:
-                pass        
-        def desptroy(self, request):
-            try:
-                instance = self.get_object()
-                self.perform_destroy(instance)
-            except Http404:
-                pass
+#         def perform_create(self, serializer):
+#             try:
+#                 serializer.save()  # Save the data to the database
+#                 ddid=atm_setting.objects.filter(device_id='').update(device_id=deviceid)
+#                 ddid.save()
+#             except Exception as e:
+#                 pass        
+#         def desptroy(self, request):
+#             try:
+#                 instance = self.get_object()
+#                 self.perform_destroy(instance)
+#             except Http404:
+#                 pass
         
 # class cnd_consensettingViewset(viewsets.ModelViewSet):
     
