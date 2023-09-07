@@ -166,7 +166,7 @@ def updated_disp_Tap1Viewset(request):
         value_list = list(data.values())
         print("value_list value_list",value_list)
         dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
-
+        print("dinfo dinfo",dinfo)
         if dinfo is not None:
             did = dinfo.Device_id
             qs_sta = disp_tap1.objects.filter(device_id=did, message_type="updsta").order_by('-id')[:1:1]
