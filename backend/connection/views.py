@@ -4913,7 +4913,7 @@ class MqttClient:
         self.client.message_callback_add(topic, subscribe_callback)
 
     def publish(self, topic, payload):
-        self.client.publish(self,topic, payload=payload,qos=1)
+        self.client.publish(self,topic,payload,1)
 
     def stop(self):
         self.client.disconnect()
