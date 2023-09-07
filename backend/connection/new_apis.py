@@ -159,7 +159,7 @@ def newtap4settingViewset(request):
 
 #updates api for tap
 @api_view(['GET'])
-def updated_disp_tap1Viewset(request):
+def updated_disp_Tap1Viewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
@@ -208,7 +208,7 @@ def updated_disp_tap1Viewset(request):
 
 
 @api_view(['GET'])
-def updated_disp_tap2Viewset(request):
+def updated_disp_Tap2Viewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
@@ -355,7 +355,7 @@ def updated_disp_tap4Viewset(request):
 
 
 @api_view(['GET'])
-def updated_disp_atmViewset(request):
+def updated_disp_AtmViewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
@@ -408,7 +408,7 @@ def updated_disp_atmViewset(request):
         return Response({"message": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['POST'])
-def atmsettingViewset(request):
+def atm_setting_Viewset(request):
     if request.method == 'POST':
         try:
             data_dict = json.loads(request.body)
