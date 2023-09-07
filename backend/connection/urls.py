@@ -161,6 +161,7 @@ urlpatterns = [
     path('updated_disp_tap4/',updated_disp_tap4Viewset,name='updated_disp_tap4'),
     path('atm_setting/',atm_setting_Viewset,name='atm_setting'),
     path('updated_disp_atm/',updated_disp_AtmViewset,name='updated_disp_atm'),
+    path('cnd_setting/',cnd_senViewset,name='cnd_setting'),
     # path('c',views.on_message)
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     # path('token/', views.obtain_token, name='token_obtain_pair'),

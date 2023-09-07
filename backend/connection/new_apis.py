@@ -183,7 +183,7 @@ def updated_disp_Tap1Viewset(request):
             last_error = Errors.objects.filter(service='tap1')
             last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
 
-            data_final = {'data_sta': data_sta, 'data_set': data_set, 'error': last_error}
+            data_final = {'data_sta': data_sta, 'data_set':json.dumps(data_set), 'error': last_error}
             response_data = {
                 'data': data_final,
                 'status': 200,
@@ -213,27 +213,20 @@ def updated_disp_Tap2Viewset(request):
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
         value_list = list(data.values())
+        print("value_list:", value_list)
+
         dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
 
-        if dinfo is not None:
+        if dinfo:
             did = dinfo.Device_id
             qs_sta = disp_tap2.objects.filter(device_id=did, message_type="updsta").order_by('-id')[:1:1]
-            if not qs_sta:
-                data_sta = {}
-            else:
-                data_sta = json.loads(qs_sta[0].to_json(exclude=fields_to_exclude))
+            data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
 
             qs_set = disp_tap2.objects.filter(device_id=did, message_type="updset").order_by('-id')[:1:1]
-            if not qs_set:
-                data_set = {}
-            else:
-                data_set = json.loads(qs_set[0].to_json(exclude=fields_to_exclude))
+            data_set = model_to_dict(qs_set[0], exclude=fields_to_exclude) if qs_set else {}
 
             last_error = Errors.objects.filter(service='tap2')
-            if not last_error:
-                last_error = {}
-            else:
-                last_error = json.loads(last_error[0].to_json(exclude=fields_to_exclude))
+            last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
 
             data_final = {'data_sta': data_sta, 'data_set': data_set, 'error': last_error}
             response_data = {
@@ -246,15 +239,18 @@ def updated_disp_Tap2Viewset(request):
         else:
             response_data = {
                 'data': "",
-                'status': 500,
-                'message': "Unable to update",
+                'status': 404,
+                'message': "Device not found",
             }
-            return Response(response_data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+
+    except json.JSONDecodeError as e:
+        print("JSON Decode Error in updated_disp_Tap2Viewset:", e)
+        return Response({"message": "Invalid JSON data"}, status=status.HTTP_400_BAD_REQUEST)
 
     except Exception as e:
-        print("Exception in updated_disp_tap2Viewset", e)
-        return Response({"message": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+        print("Exception in updated_disp_Tap2Viewset:", e)
+        return Response({"message": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)     
 
 @api_view(['POST'])
 def updated_disp_tap3Viewset(request):
@@ -262,27 +258,20 @@ def updated_disp_tap3Viewset(request):
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
         value_list = list(data.values())
+        print("value_list:", value_list)
+
         dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
 
-        if dinfo is not None:
+        if dinfo:
             did = dinfo.Device_id
             qs_sta = disp_tap3.objects.filter(device_id=did, message_type="updsta").order_by('-id')[:1:1]
-            if not qs_sta:
-                data_sta = {}
-            else:
-                data_sta = json.loads(qs_sta[0].to_json(exclude=fields_to_exclude))
+            data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
 
             qs_set = disp_tap3.objects.filter(device_id=did, message_type="updset").order_by('-id')[:1:1]
-            if not qs_set:
-                data_set = {}
-            else:
-                data_set = json.loads(qs_set[0].to_json(exclude=fields_to_exclude))
+            data_set = model_to_dict(qs_set[0], exclude=fields_to_exclude) if qs_set else {}
 
             last_error = Errors.objects.filter(service='tap3')
-            if not last_error:
-                last_error = {}
-            else:
-                last_error = json.loads(last_error[0].to_json(exclude=fields_to_exclude))
+            last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
 
             data_final = {'data_sta': data_sta, 'data_set': data_set, 'error': last_error}
             response_data = {
@@ -295,15 +284,18 @@ def updated_disp_tap3Viewset(request):
         else:
             response_data = {
                 'data': "",
-                'status': 500,
-                'message': "Unable to update",
+                'status': 404,
+                'message': "Device not found",
             }
-            return Response(response_data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+
+    except json.JSONDecodeError as e:
+        print("JSON Decode Error in updated_disp_Tap3Viewset:", e)
+        return Response({"message": "Invalid JSON data"}, status=status.HTTP_400_BAD_REQUEST)
 
     except Exception as e:
-        print("Exception in updated_disp_tap3Viewset", e)
+        print("Exception in updated_disp_Tap3Viewset:", e)
         return Response({"message": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 
 @api_view(['POST'])
 def updated_disp_tap4Viewset(request):
@@ -311,27 +303,20 @@ def updated_disp_tap4Viewset(request):
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
         value_list = list(data.values())
+        print("value_list:", value_list)
+
         dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
 
-        if dinfo is not None:
+        if dinfo:
             did = dinfo.Device_id
             qs_sta = disp_tap4.objects.filter(device_id=did, message_type="updsta").order_by('-id')[:1:1]
-            if not qs_sta:
-                data_sta = {}
-            else:
-                data_sta = json.loads(qs_sta[0].to_json(exclude=fields_to_exclude))
+            data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
 
             qs_set = disp_tap4.objects.filter(device_id=did, message_type="updset").order_by('-id')[:1:1]
-            if not qs_set:
-                data_set = {}
-            else:
-                data_set = json.loads(qs_set[0].to_json(exclude=fields_to_exclude))
+            data_set = model_to_dict(qs_set[0], exclude=fields_to_exclude) if qs_set else {}
 
             last_error = Errors.objects.filter(service='tap4')
-            if not last_error:
-                last_error = {}
-            else:
-                last_error = json.loads(last_error[0].to_json(exclude=fields_to_exclude))
+            last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
 
             data_final = {'data_sta': data_sta, 'data_set': data_set, 'error': last_error}
             response_data = {
@@ -344,13 +329,17 @@ def updated_disp_tap4Viewset(request):
         else:
             response_data = {
                 'data': "",
-                'status': 500,
-                'message': "Unable to update",
+                'status': 404,
+                'message': "Device not found",
             }
-            return Response(response_data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+
+    except json.JSONDecodeError as e:
+        print("JSON Decode Error in updated_disp_Tap4Viewset:", e)
+        return Response({"message": "Invalid JSON data"}, status=status.HTTP_400_BAD_REQUEST)
 
     except Exception as e:
-        print("Exception in updated_disp_tap4Viewset", e)
+        print("Exception in updated_disp_Tap4Viewset:", e)
         return Response({"message": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
