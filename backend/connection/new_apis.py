@@ -182,7 +182,7 @@ def updated_disp_Tap1Viewset(request):
             last_error = Errors.objects.filter(service='tap1')
             last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
 
-            data_final = {'data_sta': data_sta, 'data_set':json.dumps(data_set), 'error': last_error}
+            data_final = {'data_sta': data_sta, 'data_set': data_set, 'error': last_error}
             response_data = {
                 'data': data_final,
                 'status': 200,
