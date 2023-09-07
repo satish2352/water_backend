@@ -158,12 +158,13 @@ def newtap4settingViewset(request):
 
 
 #updates api for tap
-@api_view(['GET'])
+@api_view(['POST'])
 def updated_disp_Tap1Viewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
         value_list = list(data.values())
+        print("value_list value_list",value_list)
         dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
 
         if dinfo is not None:
@@ -198,7 +199,7 @@ def updated_disp_Tap1Viewset(request):
             response_data = {
                 'data': "",
                 'status': 500,
-                'message': "Unable to update",
+                'message': "Device not found",
             }
             return Response(response_data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -207,7 +208,7 @@ def updated_disp_Tap1Viewset(request):
         return Response({"message": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def updated_disp_Tap2Viewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
@@ -256,7 +257,7 @@ def updated_disp_Tap2Viewset(request):
         return Response({"message": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def updated_disp_tap3Viewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
@@ -305,7 +306,7 @@ def updated_disp_tap3Viewset(request):
         return Response({"message": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def updated_disp_tap4Viewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
@@ -354,7 +355,7 @@ def updated_disp_tap4Viewset(request):
         return Response({"message": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def updated_disp_AtmViewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
