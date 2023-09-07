@@ -178,7 +178,7 @@ def updated_disp_Tap1Viewset(request):
             disp_tap1.created_at = created_at_string
             data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
 
-            qs_set = disp_tap1.objects.filter(device_id=did, message_type="updset").values('p1,p2,p3,p4,created_at').order_by('-id')[:1:1]
+            qs_set = disp_tap1.objects.filter(device_id=did, message_type="updset").values('p1','p2','p3','p4','created_at').order_by('-id')[:1:1]
             # for i in qs_set:
             #     print(i)
             #     print(i.created_at)
