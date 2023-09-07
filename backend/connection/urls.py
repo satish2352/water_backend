@@ -14,10 +14,7 @@ router.register(r'device_info',DeviceViewset)
 router.register(r'key_info',keyViewset)
 router.register(r'graph_info',GraphViewset)
 
-# router.register(r'Rwp_state',RwpstateViewset) 
-# router.register(r'rwp_setting',rwpsettingViewset)
-# router.register(r'hpp_state',hppstateViewset)
-# router.register(r'hpp_setting',hppsettingViewset)
+
 router.register(r'device_infoViewset',device_infoViewset,basename='device_info')
 # router.register(r'cnd_setting',cndsettingViewset)
 # router.register(r'tds_setting',tdssettingViewset)
@@ -31,10 +28,7 @@ router.register(r'device_infoViewset',device_infoViewset,basename='device_info')
 # router.register(r'tap2_setting',tap2settingViewset)
 # router.register(r'tap3_setting',tap3settingViewset)
 # router.register(r'tap4_setting',tap4settingViewset)
-# router.register(r'ampv1_setting',ampv1settingViewset)
-# router.register(r'ampv1_state',ampv1stateViewset)
-# router.register(r'ampv2_setting',ampv2settingViewset)
-# router.register(r'ampv2_state',ampv2stateViewset)
+
 
 router.register(r'cnd_hourly',cnd_HourlyViewset)
 router.register(r'cnd_daily',cnd_DailyViewset)
