@@ -166,19 +166,21 @@ def updated_disp_Tap1Viewset(request):
         value_list = list(data.values())
         print("value_list value_list",value_list)
         dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
-
+        print("dinfo dinfo",dinfo)
         if dinfo is not None:
             did = dinfo.Device_id
             qs_sta = disp_tap1.objects.filter(device_id=did, message_type="updsta").order_by('-id')[:1:1]
             if not qs_sta:
                 data_sta = {}
             else:
+                print("qs_sta",qs_sta)
                 data_sta = json.loads(qs_sta[0].to_json(exclude=fields_to_exclude))
 
             qs_set = disp_tap1.objects.filter(device_id=did, message_type="updset").order_by('-id')[:1:1]
             if not qs_set:
                 data_set = {}
             else:
+                print("qs_sta",qs_set)
                 data_set = json.loads(qs_set[0].to_json(exclude=fields_to_exclude))
 
             last_error = Errors.objects.filter(service='tap1')
