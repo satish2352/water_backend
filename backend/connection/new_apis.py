@@ -9,6 +9,7 @@ from datetime import datetime
 from django.db import DatabaseError
 from django.http.response import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
+from django.forms.models import model_to_dict
 
 def dateandtime():
     year=datetime.today().strftime('%Y')
@@ -159,35 +160,26 @@ def newtap4settingViewset(request):
 
 #updates api for tap
 @api_view(['POST'])
+@api_view(['POST'])
 def updated_disp_Tap1Viewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
         value_list = list(data.values())
-        print("value_list value_list",value_list)
+        print("value_list:", value_list)
+
         dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
-        print("dinfo dinfo",dinfo)
-        if dinfo is not None:
+
+        if dinfo:
             did = dinfo.Device_id
             qs_sta = disp_tap1.objects.filter(device_id=did, message_type="updsta").order_by('-id')[:1:1]
-            if not qs_sta:
-                data_sta = {}
-            else:
-                print("qs_sta",qs_sta)
-                data_sta = json.loads(qs_sta[0].to_json(exclude=fields_to_exclude))
+            data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
 
             qs_set = disp_tap1.objects.filter(device_id=did, message_type="updset").order_by('-id')[:1:1]
-            if not qs_set:
-                data_set = {}
-            else:
-                print("qs_sta",qs_set)
-                data_set = json.loads(qs_set[0].to_json(exclude=fields_to_exclude))
+            data_set = model_to_dict(qs_set[0], exclude=fields_to_exclude) if qs_set else {}
 
             last_error = Errors.objects.filter(service='tap1')
-            if not last_error:
-                last_error = {}
-            else:
-                last_error = json.loads(last_error[0].to_json(exclude=fields_to_exclude))
+            last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
 
             data_final = {'data_sta': data_sta, 'data_set': data_set, 'error': last_error}
             response_data = {
@@ -200,15 +192,18 @@ def updated_disp_Tap1Viewset(request):
         else:
             response_data = {
                 'data': "",
-                'status': 500,
+                'status': 404,
                 'message': "Device not found",
             }
-            return Response(response_data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+
+    except json.JSONDecodeError as e:
+        print("JSON Decode Error in updated_disp_Tap1Viewset:", e)
+        return Response({"message": "Invalid JSON data"}, status=status.HTTP_400_BAD_REQUEST)
 
     except Exception as e:
-        print("Exception in updated_disp_tap1Viewset", e)
+        print("Exception in updated_disp_Tap1Viewset:", e)
         return Response({"message": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 
 @api_view(['POST'])
 def updated_disp_Tap2Viewset(request):
