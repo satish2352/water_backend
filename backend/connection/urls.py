@@ -1,5 +1,6 @@
 from django.urls import path
 # from connection import views
+from .new_apis import *
 from . new_api_harshal import *
 from django.urls import path,include
 from .views import *
@@ -156,6 +157,16 @@ router.register(r'last-records',LastRecordsView,basename='last-records')
 urlpatterns = [
     # path('admin/', admin.site.urls),
     path('', include(router.urls)),
+    path('tap1_setting/',newtap1settingViewset,name="tap1_setting"),
+    path('tap2_setting/',newtap2settingViewset,name="tap2_setting"),
+    path('tap3_setting/',newtap3settingViewset,name="tap3_setting"),
+    path('tap4_setting/',newtap4settingViewset,name="tap4_setting"),
+    path('updated_disp_tap1',updated_disp_tap1Viewset,name='disp_tap1'),
+    path('updated_disp_tap2',updated_disp_tap2Viewset,name='disp_tap2'),
+    path('updated_disp_tap3',updated_disp_tap3Viewset,name='disp_tap3'),
+    path('updated_disp_tap4',updated_disp_tap4Viewset,name='disp_tap4'),
+    path('atm_setting',atmsettingViewset,name='atm_setting'),
+    path('updated_disp_atm',updated_disp_atmViewset,basename='disp_atm'),
     # path('c',views.on_message)
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     # path('token/', views.obtain_token, name='token_obtain_pair'),
