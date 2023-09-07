@@ -1,8 +1,10 @@
 from django.urls import path
 # from connection import views
 from .new_apis import *
+from . new_api_harshal import *
 from django.urls import path,include
 from .views import *
+from .updated_api import sites_user_count
 from rest_framework import routers
 # from .views import MyTokenObtainPairView, MyTokenRefreshView
 
@@ -12,10 +14,7 @@ router.register(r'device_info',DeviceViewset)
 router.register(r'key_info',keyViewset)
 router.register(r'graph_info',GraphViewset)
 
-# router.register(r'Rwp_state',RwpstateViewset)
-# router.register(r'rwp_setting',rwpsettingViewset)
-# router.register(r'hpp_state',hppstateViewset)
-# router.register(r'hpp_setting',hppsettingViewset)
+
 router.register(r'device_infoViewset',device_infoViewset,basename='device_info')
 # router.register(r'cnd_setting',cndsettingViewset)
 # router.register(r'tds_setting',tdssettingViewset)
@@ -29,10 +28,7 @@ router.register(r'device_infoViewset',device_infoViewset,basename='device_info')
 # router.register(r'tap2_setting',tap2settingViewset)
 # router.register(r'tap3_setting',tap3settingViewset)
 # router.register(r'tap4_setting',tap4settingViewset)
-# router.register(r'ampv1_setting',ampv1settingViewset)
-# router.register(r'ampv1_state',ampv1stateViewset)
-# router.register(r'ampv2_setting',ampv2settingViewset)
-# router.register(r'ampv2_state',ampv2stateViewset)
+
 
 router.register(r'cnd_hourly',cnd_HourlyViewset)
 router.register(r'cnd_daily',cnd_DailyViewset)
@@ -169,6 +165,15 @@ urlpatterns = [
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     # path('token/', views.obtain_token, name='token_obtain_pair'),
     path('token/refresh/', MyTokenRefreshView.as_view(), name='token_refresh'),
+    path('sites_user_count/',sites_user_count,name="sites_user_count"),
+    path('rwpstateViewset/',rwpstateViewset,name="rwpstateViewset"),
+    path('rwpsettingViewset/',rwpsettingViewset,name="rwpsettingViewset"),
+    path('ampv1stateViewset/',ampv1stateViewset,name="ampv1stateViewset"),
+    path('ampv1settingViewset/',ampv1settingViewset,name="ampv1settingViewset"),
+    path('ampv2stateViewset/',ampv2stateViewset,name="ampv2stateViewset"),
+    path('ampv2settingViewset/',ampv2settingViewset,name="ampv2settingViewset"),
+    path('hppstateViewset/',hppstateViewset,name="hppstateViewset"),
+    path('hppsettingViewset/',hppsettingViewset,name="hppsettingViewset"),
     
 ]
 
