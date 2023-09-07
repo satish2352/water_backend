@@ -4912,8 +4912,8 @@ class MqttClient:
         self.client.subscribe(topic,1)
         self.client.message_callback_add(topic, subscribe_callback)
 
-    def publish(self, topic, payload,1):
-        self.client.publish(topic, payload=payload)
+    def publish(self, topic, payload):
+        self.client.publish(topic, payload=payload,1)
 
     def stop(self):
         self.client.disconnect()
