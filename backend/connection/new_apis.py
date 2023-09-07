@@ -178,7 +178,7 @@ def updated_disp_Tap1Viewset(request):
             
             data_final = {'data_set': qs_set[0], 'error': last_error[0]}
             response_data = {
-                'data': list(data_final),
+                'data': data_final,
                 'status': 200,
                 'message': "Data get successful",
             }
