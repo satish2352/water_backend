@@ -177,7 +177,7 @@ def updated_disp_Tap1Viewset(request):
             data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
 
             qs_set = disp_tap1.objects.filter(device_id=did, message_type="updset").order_by('-id')[:1:1]
-            print("qs_set qs_set",qs_set)
+            print("qs_set qs_set",list(qs_set))
             data_set = model_to_dict(qs_set[0], exclude=fields_to_exclude) if qs_set else {}
 
             last_error = Errors.objects.filter(service='tap1')
