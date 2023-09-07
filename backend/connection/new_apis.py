@@ -10,6 +10,8 @@ from django.db import DatabaseError
 from django.http.response import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.forms.models import model_to_dict
+from django.http import HttpRequest
+
 
 def dateandtime():
     year=datetime.today().strftime('%Y')
