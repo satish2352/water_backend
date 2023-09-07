@@ -164,7 +164,6 @@ def newtap4settingViewset(request):
 @api_view(['POST'])
 def updated_disp_Tap1Viewset(request):
     try:
-        fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
         value_list = list(data.values())
         print("value_list:", value_list)
@@ -174,14 +173,9 @@ def updated_disp_Tap1Viewset(request):
         if dinfo:
             did = dinfo.Device_id
             qs_set = disp_tap1.objects.filter(device_id=did, message_type="updset").values('p1','p2','p3','p4','updated_at','created_at').order_by('-id')[:1:1]
-
-            if qs_set is not None:
-                qs_set = qs_set
-            else:
-                qs_set ={}
             last_error = Errors.objects.filter(service='tap1')
 
-            data_final = { 'data_set': qs_set[0], 'error': last_error}
+            data_final = {'data_set': qs_set[0], 'error': last_error}
             response_data = {
                 'data': data_final,
                 'status': 200,
