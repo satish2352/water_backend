@@ -447,10 +447,10 @@ def newupdated_treat_cnd_senViewset(request):
         if dinfo:
 
             did = dinfo.Device_id
-            qs_sta = treat_cnd_sen.objects.filter(device_id=did, message_type="updsta").values().order_by('-id')[:1:1]
+            qs_sta = treat_cnd_sen.objects.filter(device_id=did, message_type="updsta").values('cnd','created_at','updated_at').order_by('-id')[:1:1]
             data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
 
-            qs_set = treat_cnd_sen.objects.filter(device_id=did, message_type="updset").values().order_by('-id')[:1:1]
+            qs_set = treat_cnd_sen.objects.filter(device_id=did, message_type="updset").values('spn','tsp','asp','created_at','updated_at').order_by('-id')[:1:1]
             data_set = model_to_dict(qs_set[0], exclude=fields_to_exclude) if qs_set else {}
 
             last_error = Errors.objects.filter(service='cnd_sen')
@@ -526,10 +526,10 @@ def newupdated_disp_cnd_consenViewset(request):
         if dinfo:
 
             did = dinfo.Device_id
-            qs_sta = disp_cnd_consen.objects.filter(device_id=did, message_type="updsta").values().order_by('-id')[:1:1]
+            qs_sta = disp_cnd_consen.objects.filter(device_id=did, message_type="updsta").values('cnd','created_at','updated_at').order_by('-id')[:1:1]
             data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
 
-            qs_set = disp_cnd_consen.objects.filter(device_id=did, message_type="updset").values().order_by('-id')[:1:1]
+            qs_set = disp_cnd_consen.objects.filter(device_id=did, message_type="updset").values('spn','asp','created_at','updated_at').order_by('-id')[:1:1]
             data_set = model_to_dict(qs_set[0], exclude=fields_to_exclude) if qs_set else {}
 
             last_error = Errors.objects.filter(service='cnd_consen')
@@ -606,10 +606,10 @@ def newupdated_treat_panelViewset(request):
         if dinfo:
 
             did = dinfo.Device_id
-            qs_sta = treat_panel.objects.filter(device_id=did, message_type="updsta").values().order_by('-id')[:1:1]
+            qs_sta = treat_panel.objects.filter(device_id=did, message_type="updsta").values('sts','rtl','ttl','lps','hps','dgp','ipv','err','created_at','updated_at').order_by('-id')[:1:1]
             data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
 
-            qs_set = treat_panel.objects.filter(device_id=did, message_type="updset").values().order_by('-id')[:1:1]
+            qs_set = treat_panel.objects.filter(device_id=did, message_type="updset").values('mod','unv','ovv','spn','nmv','stp','srt','bkt','rst','created_at','updated_at').order_by('-id')[:1:1]
             data_set = model_to_dict(qs_set[0], exclude=fields_to_exclude) if qs_set else {}
 
             last_error = Errors.objects.filter(service='panel')
@@ -685,10 +685,10 @@ def newupdated_treat_F_flowsenViewset(request):
         if dinfo:
 
             did = dinfo.Device_id
-            qs_sta = treat_F_flowsen.objects.filter(device_id=did, message_type="updsta").values().order_by('-id')[:1:1]
+            qs_sta = treat_F_flowsen.objects.filter(device_id=did, message_type="updsta").values('fr1','created_at','updated_at').order_by('-id')[:1:1]
             data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
 
-            qs_set = treat_F_flowsen.objects.filter(device_id=did, message_type="updset").values().order_by('-id')[:1:1]
+            qs_set = treat_F_flowsen.objects.filter(device_id=did, message_type="updset").values('ff2','created_at','updated_at').order_by('-id')[:1:1]
             data_set = model_to_dict(qs_set[0], exclude=fields_to_exclude) if qs_set else {}
 
             last_error = Errors.objects.filter(service='F_flowsen')
@@ -763,10 +763,10 @@ def newupdated_treat_P_flowsenViewset(request):
         if dinfo:
 
             did = dinfo.Device_id
-            qs_sta = treat_P_flowsen.objects.filter(device_id=did, message_type="updsta").values().order_by('-id')[:1:1]
+            qs_sta = treat_P_flowsen.objects.filter(device_id=did, message_type="updsta").values('fr2','created_at','updated_at').order_by('-id')[:1:1]
             data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
 
-            qs_set = treat_P_flowsen.objects.filter(device_id=did, message_type="updset").values().order_by('-id')[:1:1]
+            qs_set = treat_P_flowsen.objects.filter(device_id=did, message_type="updset").values('ff2','created_at','updated_at').order_by('-id')[:1:1]
             data_set = model_to_dict(qs_set[0], exclude=fields_to_exclude) if qs_set else {}
 
             last_error = Errors.objects.filter(service='P_flowsen')

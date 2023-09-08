@@ -162,11 +162,19 @@ urlpatterns = [
     path('atm_setting/',atm_setting_Viewset,name='atm_setting'),
     path('updated_disp_atm/',updated_disp_AtmViewset,name='updated_disp_atm'),
     path('cnd_setting/',cnd_senViewset,name='cnd_setting'),
+    path('updated_treat_cnd_sen/',newupdated_treat_cnd_senViewset,name='updated_treat_cnd_sen'),
+    path('cnd_consen_setting/',newcnd_consensettingViewset,name='cnd_consen_setting'),
+    path('updated_disp_cnd_consen/',newupdated_disp_cnd_consenViewset,name='updated_disp_cnd_consen'),
+    path('panel_setting/',newpanelsettingViewset,name='panel_setting'),
+    path('updated_treat_panel/',newupdated_treat_panelViewset,name='updated_treat_panel'),
+    path('F_flowsen_setting/',newFflowsensettingViewset,name='F_flowsen_setting'),
+    path('updated_treat_F_flowsen/',newupdated_treat_F_flowsenViewset,name='updated_treat_F_flowsen'),
+    path('P_flowsen_setting/',newPflowsensettingViewset,name='P_flowsen_setting'),
+    path('updated_treat_P_flowsen/',newupdated_treat_P_flowsenViewset,name='updated_treat_P_flowsen'),
     # path('c',views.on_message)
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     # path('token/', views.obtain_token, name='token_obtain_pair'),
     path('token/refresh/', MyTokenRefreshView.as_view(), name='token_refresh'),
-
     #Harshals APIS
     path('sites_user_count/',sites_user_count,name="sites_user_count"),
     path('rwpstateViewset/',rwpstateViewset,name="rwpstateViewset"),
@@ -175,7 +183,7 @@ urlpatterns = [
     path('ampv1stateViewset/',ampv1stateViewset,name="ampv1stateViewset"),
     path('ampv1settingViewset/',ampv1settingViewset,name="ampv1settingViewset"),
     path('newupdated_treat_ampv1_Viewset/',newupdated_treat_ampv1_Viewset,name="newupdated_treat_ampv1_Viewset"),
-    path('ampv2stateViewset/',ampv2stateViewset,name="ampv2stateViewset"),s
+    path('ampv2stateViewset/',ampv2stateViewset,name="ampv2stateViewset"),
     path('ampv2settingViewset/',ampv2settingViewset,name="ampv2settingViewset"),
     path('newupdated_treat_ampv2_Viewset/',newupdated_treat_ampv2_Viewset,name="newupdated_treat_ampv2_Viewset"),
     path('hppstateViewset/',hppstateViewset,name="hppstateViewset"),
@@ -185,10 +193,7 @@ urlpatterns = [
     path('newupdated_disp_flowsen2_Viewset/',newupdated_disp_flowsen2_Viewset,name="newupdated_disp_flowsen2_Viewset"),
     path('newupdated_disp_flowsen3_Viewset/',newupdated_disp_flowsen3_Viewset,name="newupdated_disp_flowsen3_Viewset"),
     path('newupdated_disp_flowsen4_Viewset/',newupdated_disp_flowsen4_Viewset,name="newupdated_disp_flowsen4_Viewset"),
-    
-    
 ]
-
 # urlpatterns = [ 
 #     # path('',views.index)
 # ]
