@@ -166,15 +166,26 @@ urlpatterns = [
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     # path('token/', views.obtain_token, name='token_obtain_pair'),
     path('token/refresh/', MyTokenRefreshView.as_view(), name='token_refresh'),
+
+    #Harshals APIS
     path('sites_user_count/',sites_user_count,name="sites_user_count"),
     path('rwpstateViewset/',rwpstateViewset,name="rwpstateViewset"),
     path('rwpsettingViewset/',rwpsettingViewset,name="rwpsettingViewset"),
+    path('newupdated_treat_rwp_Viewset/',newupdated_treat_rwp_Viewset,name="newupdated_treat_rwp_Viewset"),
     path('ampv1stateViewset/',ampv1stateViewset,name="ampv1stateViewset"),
     path('ampv1settingViewset/',ampv1settingViewset,name="ampv1settingViewset"),
-    path('ampv2stateViewset/',ampv2stateViewset,name="ampv2stateViewset"),
+    path('newupdated_treat_ampv1_Viewset/',newupdated_treat_ampv1_Viewset,name="newupdated_treat_ampv1_Viewset"),
+    path('ampv2stateViewset/',ampv2stateViewset,name="ampv2stateViewset"),s
     path('ampv2settingViewset/',ampv2settingViewset,name="ampv2settingViewset"),
+    path('newupdated_treat_ampv2_Viewset/',newupdated_treat_ampv2_Viewset,name="newupdated_treat_ampv2_Viewset"),
     path('hppstateViewset/',hppstateViewset,name="hppstateViewset"),
     path('hppsettingViewset/',hppsettingViewset,name="hppsettingViewset"),
+    path('newupdated_treat_hpp_Viewset/',newupdated_treat_hpp_Viewset,name="newupdated_treat_hpp_Viewset"),
+    path('newupdated_disp_flowsen1_Viewset/',newupdated_disp_flowsen1_Viewset,name="newupdated_disp_flowsen1_Viewset"),
+    path('newupdated_disp_flowsen2_Viewset/',newupdated_disp_flowsen2_Viewset,name="newupdated_disp_flowsen2_Viewset"),
+    path('newupdated_disp_flowsen3_Viewset/',newupdated_disp_flowsen3_Viewset,name="newupdated_disp_flowsen3_Viewset"),
+    path('newupdated_disp_flowsen4_Viewset/',newupdated_disp_flowsen4_Viewset,name="newupdated_disp_flowsen4_Viewset"),
+    
     
 ]
 
