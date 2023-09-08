@@ -173,16 +173,11 @@ def updated_disp_Tap1Viewset(request):
 
         if dinfo:
             did = dinfo.Device_id
-            qs_sta = disp_tap1.objects.filter(device_id=did, message_type="updsta").order_by('-id')[:1:1]
-            data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
-
-            qs_set = disp_tap1.objects.filter(device_id=did, message_type="updset").order_by('-id')[:1:1]
-            data_set = model_to_dict(qs_set[0], exclude=fields_to_exclude) if qs_set else {}
-
+            qs_set = disp_tap1.objects.filter(device_id=did, message_type="updset").values('p1','p2','p3','p4','updated_at','created_at').order_by('-id')[:1:1]
             last_error = Errors.objects.filter(service='tap1')
             last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
 
-            data_final = {'data_sta': data_sta, 'data_set': data_set, 'error': last_error}
+            data_final = {'data_set': qs_set[0], 'error': last_error}
             response_data = {
                 'data': data_final,
                 'status': 200,
@@ -218,16 +213,11 @@ def updated_disp_Tap2Viewset(request):
 
         if dinfo:
             did = dinfo.Device_id
-            qs_sta = disp_tap2.objects.filter(device_id=did, message_type="updsta").order_by('-id')[:1:1]
-            data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
-
-            qs_set = disp_tap2.objects.filter(device_id=did, message_type="updset").order_by('-id')[:1:1]
-            data_set = model_to_dict(qs_set[0], exclude=fields_to_exclude) if qs_set else {}
-
+            qs_set = disp_tap2.objects.filter(device_id=did, message_type="updset").values('p1','p2','p3','p4','updated_at','created_at').order_by('-id')[:1:1]
             last_error = Errors.objects.filter(service='tap2')
             last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
 
-            data_final = {'data_sta': data_sta, 'data_set': data_set, 'error': last_error}
+            data_final = {'data_set': qs_set[0], 'error': last_error}
             response_data = {
                 'data': data_final,
                 'status': 200,
@@ -249,7 +239,7 @@ def updated_disp_Tap2Viewset(request):
 
     except Exception as e:
         print("Exception in updated_disp_Tap2Viewset:", e)
-        return Response({"message": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)     
+        return Response({"message": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['POST'])
 def updated_disp_tap3Viewset(request):
@@ -263,16 +253,11 @@ def updated_disp_tap3Viewset(request):
 
         if dinfo:
             did = dinfo.Device_id
-            qs_sta = disp_tap3.objects.filter(device_id=did, message_type="updsta").order_by('-id')[:1:1]
-            data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
-
-            qs_set = disp_tap3.objects.filter(device_id=did, message_type="updset").order_by('-id')[:1:1]
-            data_set = model_to_dict(qs_set[0], exclude=fields_to_exclude) if qs_set else {}
-
+            qs_set = disp_tap3.objects.filter(device_id=did, message_type="updset").values('p1','p2','p3','p4','updated_at','created_at').order_by('-id')[:1:1]
             last_error = Errors.objects.filter(service='tap3')
             last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
 
-            data_final = {'data_sta': data_sta, 'data_set': data_set, 'error': last_error}
+            data_final = {'data_set': qs_set[0], 'error': last_error}
             response_data = {
                 'data': data_final,
                 'status': 200,
@@ -296,6 +281,7 @@ def updated_disp_tap3Viewset(request):
         print("Exception in updated_disp_Tap3Viewset:", e)
         return Response({"message": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
 @api_view(['POST'])
 def updated_disp_tap4Viewset(request):
     try:
@@ -308,16 +294,11 @@ def updated_disp_tap4Viewset(request):
 
         if dinfo:
             did = dinfo.Device_id
-            qs_sta = disp_tap4.objects.filter(device_id=did, message_type="updsta").order_by('-id')[:1:1]
-            data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
-
-            qs_set = disp_tap4.objects.filter(device_id=did, message_type="updset").order_by('-id')[:1:1]
-            data_set = model_to_dict(qs_set[0], exclude=fields_to_exclude) if qs_set else {}
-
+            qs_set = disp_tap4.objects.filter(device_id=did, message_type="updset").values('p1','p2','p3','p4','updated_at','created_at').order_by('-id')[:1:1]
             last_error = Errors.objects.filter(service='tap4')
             last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
 
-            data_final = {'data_sta': data_sta, 'data_set': data_set, 'error': last_error}
+            data_final = {'data_set': qs_set[0], 'error': last_error}
             response_data = {
                 'data': data_final,
                 'status': 200,
@@ -342,40 +323,24 @@ def updated_disp_tap4Viewset(request):
         return Response({"message": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+
 @api_view(['POST'])
 def updated_disp_AtmViewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
         value_list = list(data.values())
+        print("value_list:", value_list)
+
         dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
 
-        if dinfo is not None:
+        if dinfo:
             did = dinfo.Device_id
-            qs_sta = disp_atm.objects.filter(device_id=did, message_type="updsta").order_by('-id')[:1:1]
+            qs_set = disp_atm.objects.filter(device_id=did, message_type="updset").values().order_by('-id')[:1:1]
             last_error = Errors.objects.filter(service='atm')
-            
-            if not qs_sta:
-                data_sta = {}
-            else:
-                data_sta = qs_sta[0].__dict__
-                data_sta = {k: v for k, v in data_sta.items() if k not in fields_to_exclude}
+            last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
 
-            qs_set = disp_atm.objects.filter(device_id=did, message_type="updset").order_by('-id')[:1:1]
-            
-            if not qs_set:
-                data_set = {}
-            else:
-                data_set = qs_set[0].__dict__
-                data_set = {k: v for k, v in data_set.items() if k not in fields_to_exclude}
-
-            if not last_error:
-                last_error = {}
-            else:
-                last_error = last_error[0].__dict__
-                last_error = {k: v for k, v in last_error.items() if k not in fields_to_exclude}
-
-            data_final = {'data_sta': data_sta, 'data_set': data_set, 'error': last_error}
+            data_final = {'data_set': qs_set[0], 'error': last_error}
             response_data = {
                 'data': data_final,
                 'status': 200,
@@ -386,24 +351,30 @@ def updated_disp_AtmViewset(request):
         else:
             response_data = {
                 'data': "",
-                'status': 500,
-                'message': "Unable to update",
+                'status': 404,
+                'message': "Device not found",
             }
-            return Response(response_data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+
+    except json.JSONDecodeError as e:
+        print("JSON Decode Error in updated_disp_atmViewset:", e)
+        return Response({"message": "Invalid JSON data"}, status=status.HTTP_400_BAD_REQUEST)
 
     except Exception as e:
-        print("Exception in updated_disp_atmViewset", e)
+        print("Exception in updated_disp_atmViewset:", e)
         return Response({"message": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 @api_view(['POST'])
 def atm_setting_Viewset(request):
     if request.method == 'POST':
         try:
             data_dict = json.loads(request.body)
-            unwanted_keys = ["unit_type", "water_treatment","componant_name","site_name","device_id","ntt"]
+            unwanted_keys = ["unit_type", "water_treatment","componant_name","site_name","device_id"]
             value_list=list(data_dict.values())
             dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
             if dinfo is not None:
+                print("dinfo dinfo",dinfo)
                 obj = atm_setting.objects.create(**data_dict)
                 for key in unwanted_keys:
                             if key in data_dict.keys():
@@ -411,6 +382,7 @@ def atm_setting_Viewset(request):
                 
                 deviceid = None
                 deviceid=dinfo.Device_id
+                print("deviceid ",deviceid)
                 if deviceid:
                     mqttc.publish(f'wc1/{deviceid}/chgset/atm',str(data_dict).replace(' ',''))
                     dd=dateandtime()
@@ -462,3 +434,364 @@ def cnd_senViewset(request):
                 return Response({"message": "NEW CND_SEN SETTING API 200"})
         except Exception as e:
             print("Error in CND_SEN SETTING API  ",e)
+
+@api_view('POST')
+def newupdated_treat_cnd_senViewset(request):
+    try:
+        fields_to_exclude = ['model', 'pk']
+        data = json.loads(request.body)
+        value_list = list(data.values())
+
+        dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
+
+        if dinfo:
+
+            did = dinfo.Device_id
+            qs_sta = treat_cnd_sen.objects.filter(device_id=did, message_type="updsta").values().order_by('-id')[:1:1]
+            data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
+
+            qs_set = treat_cnd_sen.objects.filter(device_id=did, message_type="updset").values().order_by('-id')[:1:1]
+            data_set = model_to_dict(qs_set[0], exclude=fields_to_exclude) if qs_set else {}
+
+            last_error = Errors.objects.filter(service='cnd_sen')
+            last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
+
+            data_final = {'data_sta': data_sta[0], 'data_set': data_set[0], 'error': last_error}
+            response_data = {
+                'data': data_final,
+                'status': 200,
+                'message': "Data get successful",
+            }
+            return Response(response_data, status=status.HTTP_200_OK)
+
+        else:
+            response_data = {
+                'data': "",
+                'status': 404,
+                'message': "Device not found",
+            }
+            return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+
+    except json.JSONDecodeError as e:
+        print("JSON Decode Error in updated_disp_cnd_senViewset:", e)
+        return Response({"message": "Invalid JSON data"}, status=status.HTTP_400_BAD_REQUEST)
+
+    except Exception as e:
+        print("Exception in updated_disp_cnd_senViewset:", e)
+        return Response({"message": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+#cnd_consen
+@api_view('POST')
+def newcnd_consensettingViewset(request):
+    if request.method == 'POST':
+        try:
+            data_dict = json.loads(request.body)
+            unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]
+            value_list=list(data_dict.values())
+            dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
+            if dinfo is not None:
+                obj = cnd_consen_setting.objects.create(**data_dict)
+                for key in unwanted_keys:
+                    if key in data_dict.keys():
+                        del data_dict[key]
+                
+                deviceid = None
+                deviceid=dinfo.Device_id
+                if deviceid:
+                    mqttc.publish(f'wc1/{deviceid}/chgset/cnd_consen',str(data_dict).replace(' ',''))
+                    dd=dateandtime()
+                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} cnd_consen settings change has been requested - span:{value_list[3]}, atert_setpoint:{value_list[4]}"
+                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='cnd_consen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                    erro.save()
+
+                    obj.unit_type = value_list[0]
+                    obj.componant_name = value_list[1]
+                    obj.device_id = deviceid
+                    obj.company_id = request.user.company_id
+                    obj.save()
+                return Response({"message": "NEW CND_CONSEN SETTING API 200"})
+        except Exception as e:
+            print("Error in cnd_consen SETTING API  ",e)
+
+
+@api_view('POST')
+def newupdated_disp_cnd_consenViewset(request):
+    try:
+        fields_to_exclude = ['model', 'pk']
+        data = json.loads(request.body)
+        value_list = list(data.values())
+
+        dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
+
+        if dinfo:
+
+            did = dinfo.Device_id
+            qs_sta = disp_cnd_consen.objects.filter(device_id=did, message_type="updsta").values().order_by('-id')[:1:1]
+            data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
+
+            qs_set = disp_cnd_consen.objects.filter(device_id=did, message_type="updset").values().order_by('-id')[:1:1]
+            data_set = model_to_dict(qs_set[0], exclude=fields_to_exclude) if qs_set else {}
+
+            last_error = Errors.objects.filter(service='cnd_consen')
+            last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
+
+            data_final = {'data_sta': data_sta[0], 'data_set': data_set[0], 'error': last_error}
+            response_data = {
+                'data': data_final,
+                'status': 200,
+                'message': "Data get successful",
+            }
+            return Response(response_data, status=status.HTTP_200_OK)
+
+        else:
+            response_data = {
+                'data': "",
+                'status': 404,
+                'message': "Device not found",
+            }
+            return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+
+    except json.JSONDecodeError as e:
+        print("JSON Decode Error in updated_disp_cnd_consenViewset:", e)
+        return Response({"message": "Invalid JSON data"}, status=status.HTTP_400_BAD_REQUEST)
+
+    except Exception as e:
+        print("Exception in updated_disp_cnd_consenViewset:", e)
+        return Response({"message": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+#panel
+@api_view('POST')
+def newpanelsettingViewset(request):
+    if request.method == 'POST':
+        try:
+            data_dict = json.loads(request.body)
+            unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]
+            value_list=list(data_dict.values())
+            dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
+            if dinfo is not None:
+                obj = panel_setting.objects.create(**data_dict)
+                for key in unwanted_keys:
+                    if key in data_dict.keys():
+                        del data_dict[key]
+                
+                deviceid = None
+                deviceid=dinfo.Device_id
+                if deviceid:
+                    mqttc.publish(f'wc1/{deviceid}/chgset/panel',str(data_dict).replace(' ',''))
+                    dd=dateandtime()
+                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} panel settings change has been requested - mode:{value_list[3]}, under voltage:{value_list[6]}, over voltage:{value_list[7]}, span:{value_list[8]}, no.of multiport valve:{value_list[4]}, sensor type:{value_list[5]}, service time:{value_list[9]}, backwash time:{value_list[10]}, rinse time:{value_list[11]}"
+                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='panel',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                    erro.save()
+
+                    obj.unit_type = value_list[0]
+                    obj.componant_name = value_list[1]
+                    obj.device_id = deviceid
+                    obj.company_id = request.user.company_id
+                    obj.save()
+                return Response({"message": "newpanelsetting API 200"})
+        except Exception as e:
+            print("Error in newpanelsetting API  ",e)
+
+
+@api_view('POST')
+def newupdated_treat_panelViewset(request):
+    try:
+        fields_to_exclude = ['model', 'pk']
+        data = json.loads(request.body)
+        value_list = list(data.values())
+
+        dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
+
+        if dinfo:
+
+            did = dinfo.Device_id
+            qs_sta = treat_panel.objects.filter(device_id=did, message_type="updsta").values().order_by('-id')[:1:1]
+            data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
+
+            qs_set = treat_panel.objects.filter(device_id=did, message_type="updset").values().order_by('-id')[:1:1]
+            data_set = model_to_dict(qs_set[0], exclude=fields_to_exclude) if qs_set else {}
+
+            last_error = Errors.objects.filter(service='panel')
+            last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
+
+            data_final = {'data_sta': data_sta[0], 'data_set': data_set[0], 'error': last_error}
+            response_data = {
+                'data': data_final,
+                'status': 200,
+                'message': "Data get successful",
+            }
+            return Response(response_data, status=status.HTTP_200_OK)
+
+        else:
+            response_data = {
+                'data': "",
+                'status': 404,
+                'message': "Device not found",
+            }
+            return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+
+    except json.JSONDecodeError as e:
+        print("JSON Decode Error in updated_treat_panelViewset:", e)
+        return Response({"message": "Invalid JSON data"}, status=status.HTTP_400_BAD_REQUEST)
+
+    except Exception as e:
+        print("Exception in updated_treat_panelViewset:", e)
+        return Response({"message": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+#FeedFlowSensor
+@api_view('POST')
+def newFflowsensettingViewset(request):
+    if request.method == 'POST':
+        try:
+            data_dict = json.loads(request.body)
+            unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]
+            value_list=list(data_dict.values())
+            dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
+            if dinfo is not None:
+                obj = F_flowsen_setting.objects.create(**data_dict)
+                for key in unwanted_keys:
+                    if key in data_dict.keys():
+                        del data_dict[key]
+                
+                deviceid = None
+                deviceid=dinfo.Device_id
+                if deviceid:
+                    mqttc.publish(f'wc1/{deviceid}/chgset/F_flowsen',str(data_dict).replace(' ',''))
+                    dd=dateandtime()
+                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} Fflowsen settings change has been requested - flow factor:{value_list[3]}"
+                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='Fflowsen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                    erro.save()
+
+                    obj.unit_type = value_list[0]
+                    obj.componant_name = value_list[1]
+                    obj.device_id = deviceid
+                    obj.company_id = request.user.company_id
+                    obj.save()
+                return Response({"message": "newFflowsensettingViewset API 200"})
+        except Exception as e:
+            print("Error in newFflowsensettingViewset API  ",e)
+
+
+@api_view('POST')
+def newupdated_treat_F_flowsenViewset(request):
+    try:
+        fields_to_exclude = ['model', 'pk']
+        data = json.loads(request.body)
+        value_list = list(data.values())
+
+        dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
+
+        if dinfo:
+
+            did = dinfo.Device_id
+            qs_sta = treat_F_flowsen.objects.filter(device_id=did, message_type="updsta").values().order_by('-id')[:1:1]
+            data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
+
+            qs_set = treat_F_flowsen.objects.filter(device_id=did, message_type="updset").values().order_by('-id')[:1:1]
+            data_set = model_to_dict(qs_set[0], exclude=fields_to_exclude) if qs_set else {}
+
+            last_error = Errors.objects.filter(service='F_flowsen')
+            last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
+
+            data_final = {'data_sta': data_sta[0], 'data_set': data_set[0], 'error': last_error}
+            response_data = {
+                'data': data_final,
+                'status': 200,
+                'message': "Data get successful",
+            }
+            return Response(response_data, status=status.HTTP_200_OK)
+
+        else:
+            response_data = {
+                'data': "",
+                'status': 404,
+                'message': "Device not found",
+            }
+            return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+
+    except json.JSONDecodeError as e:
+        print("JSON Decode Error in updated_treat_F_flowsenViewset:", e)
+        return Response({"message": "Invalid JSON data"}, status=status.HTTP_400_BAD_REQUEST)
+
+    except Exception as e:
+        print("Exception in updated_treat_F_flowsenViewset:", e)
+        return Response({"message": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+#P_FlowSensor
+@api_view('POST')
+def newPflowsensettingViewset(request):
+    if request.method == 'POST':
+        try:
+            data_dict = json.loads(request.body)
+            unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]
+            value_list=list(data_dict.values())
+            dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
+            if dinfo is not None:
+                obj = P_flowsen_setting.objects.create(**data_dict)
+                for key in unwanted_keys:
+                    if key in data_dict.keys():
+                        del data_dict[key]
+                
+                deviceid = None
+                deviceid=dinfo.Device_id
+                if deviceid:
+                    mqttc.publish(f'wc1/{deviceid}/chgset/P_flowsen',str(data_dict).replace(' ',''))
+                    dd=dateandtime()
+                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} Fflowsen settings change has been requested - flow factor:{value_list[3]}"
+                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='Pflowsen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                    erro.save()
+
+                    obj.unit_type = value_list[0]
+                    obj.componant_name = value_list[1]
+                    obj.device_id = deviceid
+                    obj.company_id = request.user.company_id
+                    obj.save()
+                return Response({"message": "newPflowsensettingViewset API 200"})
+        except Exception as e:
+            print("Error in newPflowsensettingViewset API  ",e)
+
+
+@api_view('POST')
+def newupdated_treat_P_flowsenViewset(request):
+    try:
+        fields_to_exclude = ['model', 'pk']
+        data = json.loads(request.body)
+        value_list = list(data.values())
+
+        dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
+
+        if dinfo:
+
+            did = dinfo.Device_id
+            qs_sta = treat_P_flowsen.objects.filter(device_id=did, message_type="updsta").values().order_by('-id')[:1:1]
+            data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
+
+            qs_set = treat_P_flowsen.objects.filter(device_id=did, message_type="updset").values().order_by('-id')[:1:1]
+            data_set = model_to_dict(qs_set[0], exclude=fields_to_exclude) if qs_set else {}
+
+            last_error = Errors.objects.filter(service='P_flowsen')
+            last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
+
+            data_final = {'data_sta': data_sta[0], 'data_set': data_set[0], 'error': last_error}
+            response_data = {
+                'data': data_final,
+                'status': 200,
+                'message': "Data get successful",
+            }
+            return Response(response_data, status=status.HTTP_200_OK)
+
+        else:
+            response_data = {
+                'data': "",
+                'status': 404,
+                'message': "Device not found",
+            }
+            return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+
+    except json.JSONDecodeError as e:
+        print("JSON Decode Error in updated_treat_P_flowsenViewset:", e)
+        return Response({"message": "Invalid JSON data"}, status=status.HTTP_400_BAD_REQUEST)
+
+    except Exception as e:
+        print("Exception in updated_treat_P_flowsenViewset:", e)
+        return Response({"message": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
