@@ -105,7 +105,7 @@ def rwpsettingViewset(request):
             print("Error in RWP SETTING  ",e)
     
 #RwP UPDATE
-@api_view('POST')
+@api_view(['POST'])
 def newupdated_treat_rwp_Viewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
@@ -236,7 +236,7 @@ def ampv1settingViewset(request):
         except Exception as e:
             print("Error in AMPV1 SETTING  ",e)
 #APMV1 UPDATE
-@api_view('POST')
+@api_view(['POST'])
 def newupdated_treat_ampv1_Viewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
@@ -364,7 +364,7 @@ def ampv2settingViewset(request):
             print("Error in AMPV-2 setting  ",e)
 
 #AMPV2 UPDATE
-@api_view('POST')
+@api_view(['POST'])
 def newupdated_treat_ampv2_Viewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
@@ -494,7 +494,7 @@ def hppsettingViewset(request):
             print("Error in HPP SETTING  ",e)
         
 #HPP UPDATE
-@api_view('POST')
+@api_view(['POST'])
 def newupdated_treat_hpp_Viewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
@@ -542,7 +542,7 @@ def newupdated_treat_hpp_Viewset(request):
 
             
 #Flowsen 1 UPDATE
-@api_view('POST')
+@api_view(['POST'])
 def newupdated_disp_flowsen1_Viewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
@@ -586,7 +586,7 @@ def newupdated_disp_flowsen1_Viewset(request):
 
 
 #Flowsen 2 UPDATE
-@api_view('POST')
+@api_view(['POST'])
 def newupdated_disp_flowsen2_Viewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
@@ -630,7 +630,7 @@ def newupdated_disp_flowsen2_Viewset(request):
 
 
 #Flowsen 3 UPDATE
-@api_view('POST')
+@api_view(['POST'])
 def newupdated_disp_flowsen3_Viewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
@@ -674,7 +674,7 @@ def newupdated_disp_flowsen3_Viewset(request):
 
 
 #Flowsen 4 UPDATE
-@api_view('POST')
+@api_view(['POST'])
 def newupdated_disp_flowsen4_Viewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
