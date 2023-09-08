@@ -435,7 +435,7 @@ def cnd_senViewset(request):
         except Exception as e:
             print("Error in CND_SEN SETTING API  ",e)
 
-@api_view('POST')
+@api_view(['POST'])
 def newupdated_treat_cnd_senViewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
@@ -481,7 +481,7 @@ def newupdated_treat_cnd_senViewset(request):
         return Response({"message": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 #cnd_consen
-@api_view('POST')
+@api_view(['POST'])
 def newcnd_consensettingViewset(request):
     if request.method == 'POST':
         try:
@@ -514,7 +514,7 @@ def newcnd_consensettingViewset(request):
             print("Error in cnd_consen SETTING API  ",e)
 
 
-@api_view('POST')
+@api_view(['POST'])
 def newupdated_disp_cnd_consenViewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
@@ -561,7 +561,7 @@ def newupdated_disp_cnd_consenViewset(request):
 
 
 #panel
-@api_view('POST')
+@api_view(['POST'])
 def newpanelsettingViewset(request):
     if request.method == 'POST':
         try:
@@ -594,7 +594,7 @@ def newpanelsettingViewset(request):
             print("Error in newpanelsetting API  ",e)
 
 
-@api_view('POST')
+@api_view(['POST'])
 def newupdated_treat_panelViewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
@@ -640,7 +640,7 @@ def newupdated_treat_panelViewset(request):
         return Response({"message": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 #FeedFlowSensor
-@api_view('POST')
+@api_view(['POST'])
 def newFflowsensettingViewset(request):
     if request.method == 'POST':
         try:
@@ -673,7 +673,7 @@ def newFflowsensettingViewset(request):
             print("Error in newFflowsensettingViewset API  ",e)
 
 
-@api_view('POST')
+@api_view(['POST'])
 def newupdated_treat_F_flowsenViewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
@@ -718,7 +718,7 @@ def newupdated_treat_F_flowsenViewset(request):
         print("Exception in updated_treat_F_flowsenViewset:", e)
         return Response({"message": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 #P_FlowSensor
-@api_view('POST')
+@api_view(['POST'])
 def newPflowsensettingViewset(request):
     if request.method == 'POST':
         try:
@@ -751,7 +751,7 @@ def newPflowsensettingViewset(request):
             print("Error in newPflowsensettingViewset API  ",e)
 
 
-@api_view('POST')
+@api_view(['POST'])
 def newupdated_treat_P_flowsenViewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
