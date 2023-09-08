@@ -336,7 +336,7 @@ def updated_disp_AtmViewset(request):
 
         if dinfo:
             did = dinfo.Device_id
-            qs_set = disp_atm.objects.filter(device_id=did, message_type="updset").values().order_by('-id')[:1:1]
+            qs_set = disp_atm.objects.filter(device_id=did, message_type="updset").values('created_at','updated_at').order_by('-id')[:1:1]
             last_error = Errors.objects.filter(service='atm')
             last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
 
