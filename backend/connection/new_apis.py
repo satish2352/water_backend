@@ -336,11 +336,12 @@ def updated_disp_AtmViewset(request):
 
         if dinfo:
             did = dinfo.Device_id
-            qs_set = disp_atm.objects.filter(device_id=did, message_type="updset").values('created_at','updated_at').order_by('-id')[:1:1]
+            qs_sta = disp_atm.objects.filter(device_id=did, message_type="updsta").values('sts','ndv','ntt','nta','tmp','whr','custid','created_at','updated_at').order_by('-id')[:1:1]
+            qs_set = disp_atm.objects.filter(device_id=did, message_type="updset").values('ntp','nov','vl1','vl2','vl3','vl4','re1','re2','re3','re4','created_at','updated_at').order_by('-id')[:1:1]
             last_error = Errors.objects.filter(service='atm')
             last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
 
-            data_final = {'data_set': qs_set[0], 'error': last_error}
+            data_final = {'data_sta': qs_sta[0],'data_set': qs_set[0], 'error': last_error}
             response_data = {
                 'data': data_final,
                 'status': 200,
@@ -448,15 +449,14 @@ def newupdated_treat_cnd_senViewset(request):
 
             did = dinfo.Device_id
             qs_sta = treat_cnd_sen.objects.filter(device_id=did, message_type="updsta").values('cnd','created_at','updated_at').order_by('-id')[:1:1]
-            data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
 
             qs_set = treat_cnd_sen.objects.filter(device_id=did, message_type="updset").values('spn','tsp','asp','created_at','updated_at').order_by('-id')[:1:1]
-            data_set = model_to_dict(qs_set[0], exclude=fields_to_exclude) if qs_set else {}
+           
 
             last_error = Errors.objects.filter(service='cnd_sen')
             last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
 
-            data_final = {'data_sta': data_sta[0], 'data_set': data_set[0], 'error': last_error}
+            data_final = {'data_sta': qs_sta[0], 'data_set': qs_set[0], 'error': last_error}
             response_data = {
                 'data': data_final,
                 'status': 200,
@@ -527,15 +527,15 @@ def newupdated_disp_cnd_consenViewset(request):
 
             did = dinfo.Device_id
             qs_sta = disp_cnd_consen.objects.filter(device_id=did, message_type="updsta").values('cnd','created_at','updated_at').order_by('-id')[:1:1]
-            data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
+            # data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
 
             qs_set = disp_cnd_consen.objects.filter(device_id=did, message_type="updset").values('spn','asp','created_at','updated_at').order_by('-id')[:1:1]
-            data_set = model_to_dict(qs_set[0], exclude=fields_to_exclude) if qs_set else {}
+            #
 
             last_error = Errors.objects.filter(service='cnd_consen')
             last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
 
-            data_final = {'data_sta': data_sta[0], 'data_set': data_set[0], 'error': last_error}
+            data_final = {'data_sta': qs_sta[0], 'data_set': qs_set[0], 'error': last_error}
             response_data = {
                 'data': data_final,
                 'status': 200,
@@ -607,15 +607,14 @@ def newupdated_treat_panelViewset(request):
 
             did = dinfo.Device_id
             qs_sta = treat_panel.objects.filter(device_id=did, message_type="updsta").values('sts','rtl','ttl','lps','hps','dgp','ipv','err','created_at','updated_at').order_by('-id')[:1:1]
-            data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
 
             qs_set = treat_panel.objects.filter(device_id=did, message_type="updset").values('mod','unv','ovv','spn','nmv','stp','srt','bkt','rst','created_at','updated_at').order_by('-id')[:1:1]
-            data_set = model_to_dict(qs_set[0], exclude=fields_to_exclude) if qs_set else {}
+           
 
             last_error = Errors.objects.filter(service='panel')
             last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
 
-            data_final = {'data_sta': data_sta[0], 'data_set': data_set[0], 'error': last_error}
+            data_final = {'data_sta': qs_sta[0], 'data_set': qs_set[0], 'error': last_error}
             response_data = {
                 'data': data_final,
                 'status': 200,
@@ -686,15 +685,14 @@ def newupdated_treat_F_flowsenViewset(request):
 
             did = dinfo.Device_id
             qs_sta = treat_F_flowsen.objects.filter(device_id=did, message_type="updsta").values('fr1','created_at','updated_at').order_by('-id')[:1:1]
-            data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
 
             qs_set = treat_F_flowsen.objects.filter(device_id=did, message_type="updset").values('ff2','created_at','updated_at').order_by('-id')[:1:1]
-            data_set = model_to_dict(qs_set[0], exclude=fields_to_exclude) if qs_set else {}
+           
 
             last_error = Errors.objects.filter(service='F_flowsen')
             last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
 
-            data_final = {'data_sta': data_sta[0], 'data_set': data_set[0], 'error': last_error}
+            data_final = {'data_sta': qs_sta[0], 'data_set': qs_set[0], 'error': last_error}
             response_data = {
                 'data': data_final,
                 'status': 200,
@@ -764,15 +762,14 @@ def newupdated_treat_P_flowsenViewset(request):
 
             did = dinfo.Device_id
             qs_sta = treat_P_flowsen.objects.filter(device_id=did, message_type="updsta").values('fr2','created_at','updated_at').order_by('-id')[:1:1]
-            data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
 
             qs_set = treat_P_flowsen.objects.filter(device_id=did, message_type="updset").values('ff2','created_at','updated_at').order_by('-id')[:1:1]
-            data_set = model_to_dict(qs_set[0], exclude=fields_to_exclude) if qs_set else {}
+           
 
             last_error = Errors.objects.filter(service='P_flowsen')
             last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
 
-            data_final = {'data_sta': data_sta[0], 'data_set': data_set[0], 'error': last_error}
+            data_final = {'data_sta': qs_sta[0], 'data_set': qs_set[0], 'error': last_error}
             response_data = {
                 'data': data_final,
                 'status': 200,
