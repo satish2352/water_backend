@@ -395,7 +395,7 @@ def atm_setting_Viewset(request):
                         value.replace(' ','')
                         device_final_data[key] = value
                     else:
-                        device_final_data[key] = None
+                        device_final_data[key] = ''
 
                 deviceid = None
                 deviceid=dinfo.Device_id
