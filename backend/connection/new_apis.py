@@ -403,7 +403,6 @@ def atm_setting_Viewset(request):
                         value_list_final['re2']=value_list['re2']
                         value_list_final['re3']=value_list['re3']
                         value_list_final['re4']=value_list['re4']
-                        value_list_final['unit_type']=value_list['unit_type']
                         value_list_final['componant_name'] = 'cnd_consen'
                         value_list_final['device_id'] = deviceid
                         value_list_final['company_id'] = request.user.company_id
