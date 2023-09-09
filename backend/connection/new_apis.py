@@ -336,7 +336,7 @@ def updated_disp_AtmViewset(request):
 
         if dinfo:
             did = dinfo.Device_id
-            qs_sta = disp_atm.objects.filter(device_id=did, message_type="updsta").values('sts','ndv','ntt','nta','tmp','whr','custid','created_at','updated_at').order_by('-id')[:1:1]
+            qs_sta = disp_atm.objects.filter(device_id=did, message_type="updsta").values('sts','ndv','nta','tmp','whr','custid','created_at','updated_at').order_by('-id')[:1:1]
             qs_set = disp_atm.objects.filter(device_id=did, message_type="updset").values('ntp','nov','vl1','vl2','vl3','vl4','re1','re2','re3','re4','created_at','updated_at').order_by('-id')[:1:1]
             last_error = Errors.objects.filter(service='atm')
             last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
@@ -371,36 +371,62 @@ def atm_setting_Viewset(request):
     if request.method == 'POST':
         try:
             data_dict = json.loads(request.body)
-            unwanted_keys = ["unit_type", "water_treatment","componant_name","site_name","device_id"]
-            value_list=list(data_dict.values())
-            dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
+            value_list=data_dict
+           
+            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
             if dinfo is not None:
-                print("dinfo dinfo",dinfo)
-                obj = atm_setting.objects.create(**data_dict)
-                for key in unwanted_keys:
-                            if key in data_dict.keys():
-                                del data_dict[key]
-                
+
+                device_final_data = {}
+                device_final_data['ntp']=value_list['ntp']
+                device_final_data['nov']=value_list['nov']
+                device_final_data['vl1']=value_list['vl1']
+                device_final_data['vl2']=value_list['vl2']
+                device_final_data['vl3']=value_list['vl3']
+                device_final_data['vl4']=value_list['vl4']
+                device_final_data['re1']=value_list['re1']
+                device_final_data['re2']=value_list['re2']
+                device_final_data['re3']=value_list['re3']
+                device_final_data['re4']=value_list['re4']
+
+                for key, value in device_final_data.items():
+                    value = str(value)
+                    if not value.isalnum():
+                        value.replace('"', "'")
+                        value.replace(' ','')
+                        device_final_data[key] = value
+                    else:
+                        device_final_data[key] = ''
+
                 deviceid = None
                 deviceid=dinfo.Device_id
-                print("deviceid ",deviceid)
+
                 if deviceid:
-                    mqttc.publish(f'wc1/{deviceid}/chgset/atm',str(data_dict).replace(' ',''))
+                    mqttc.publish(f'wc1/{deviceid}/chgset/atm',str(device_final_data).replace(' ',''))
                     dd=dateandtime()
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} atm settings change has been requested - over no. Of  tap:{value_list[3]}, no. Of volume:{value_list[4]}, volume1:{value_list[5]}, volume2:{value_list[6]}, volume3:{value_list[7]}, volume4:{value_list[8]}, rate1:{value_list[9]}, rate2:{value_list[10]}, rate3:{value_list[11]}, rate4:{value_list[12]}"
+                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} atm settings change has been requested - over no. Of  ntp:{value_list['ntp']}, no. Of volume:{value_list['nov']}, volume1:{value_list['vl1']}, volume2:{value_list['vl2']}, volume3:{value_list['vl3']}, volume4:{value_list['vl4']}, rate1:{value_list['re1']}, rate2:{value_list['re2']}, rate3:{value_list['re3']}, rate4:{value_list['re4']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='atm',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     erro.save()
-
-                    obj.unit_type = value_list[0]
-                    obj.componant_name = value_list[1]
-                    obj.device_id = deviceid
-                    obj.company_id = request.user.company_id
-                    obj.save()
-                return Response({"message": "NEW ATM API 200"})
+                    try:
+                        value_list_final = {}
+                        value_list_final['ntp']=value_list['ntp']
+                        value_list_final['nov']=value_list['nov']
+                        value_list_final['vl1']=value_list['vl1']
+                        value_list_final['vl2']=value_list['vl2']
+                        value_list_final['vl3']=value_list['vl3']
+                        value_list_final['vl4']=value_list['vl4']
+                        value_list_final['re1']=value_list['re1']
+                        value_list_final['re2']=value_list['re2']
+                        value_list_final['re3']=value_list['re3']
+                        value_list_final['re4']=value_list['re4']
+                        value_list_final['componant_name'] = 'atm'
+                        value_list_final['device_id'] = deviceid
+                        value_list_final['company_id'] = request.user.company_id
+                        atm_setting.objects.create(**value_list_final)
+                        return Response({"message": "NEW ATM SETTING API 200"})
+                    except Exception as e:
+                        print("error while saving atm record   ",e)
         except Exception as e:
             print("Error in atmsetting ",e)    
-
-
 
 #cnd_sen
 @api_view(['POST'])
@@ -498,11 +524,10 @@ def newcnd_consensettingViewset(request):
             except Exception as e:
                 print("device not found  ",e)
             else:
-            
                 for key in unwanted_keys:
                     if key in data_dict.keys():
                         del data_dict[key]
-                
+                        
                 deviceid = None
                 deviceid=dinfo.Device_id
                 if deviceid:
