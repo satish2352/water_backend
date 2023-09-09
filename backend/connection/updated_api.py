@@ -40,8 +40,8 @@ def sites_user_count(request):
             elif logged_user.is_staff:
                 logged_user = User.objects.filter(company_id = request.user.company_id).filter(is_staff=True).all()
                 total_count_user = logged_user.count()
-                total_count = valid_sites_count
-                if total_count_user == 0:
+                total_count = valid_sites_count * 2
+                if total_count_user < valid_sites_count:
                     return JsonResponse({"Response": {"Status": True}, "Data": "You can add User"},
                             safe=False, status=status.HTTP_202_ACCEPTED)
                 else:
