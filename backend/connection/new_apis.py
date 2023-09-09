@@ -383,9 +383,11 @@ def atm_setting_Viewset(request):
                         del data_dict[key]
 
                 # data_dict = str(data_dict)
-                # # for key, value in data_dict.items():
-                # #     value.replace('"', "'")
-                # #     value.replace('', "'")
+                for key, value in data_dict.items():
+                    data_dict[key] = str(value)
+                    value.replace('"', "'")
+                    value.replace(' ','')
+                    
 
                 print("data_dict data_dict",str(data_dict))
                 deviceid = None
