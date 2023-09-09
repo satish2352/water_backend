@@ -492,7 +492,7 @@ def newcnd_consensettingViewset(request):
             
             print("data_dict",data_dict)
             print("data_dict unit_type",data_dict.unit_type)
-            print("value_listvalue_list ",value_list)
+            print("value_listvalue_list ",value_list['unit_type'])
             dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
             if dinfo is not None:
                 obj = cnd_consen_setting.objects.create(**data_dict)
