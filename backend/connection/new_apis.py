@@ -119,97 +119,159 @@ def newtap2settingViewset(request):
     if request.method == 'POST':
         try:
             data_dict = json.loads(request.body)
-            unwanted_keys = ["unit_type", "water_treatment","componant_name","site_name","device_id"]
-            value_list=list(data_dict.values())
-            dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
+            value_list = data_dict
+           
+            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
             if dinfo is not None:
-                
-                for key in unwanted_keys:
-                            if key in data_dict.keys():
-                                del data_dict[key]
-                
+
+                device_final_data = {}
+                device_final_data['p1'] = value_list['p1']
+                device_final_data['p2'] = value_list['p2']
+                device_final_data['p3'] = value_list['p3']
+                device_final_data['p4'] = value_list['p4']
+
+                for key, value in device_final_data.items():
+                    value = str(value)
+                    temp = value.isalnum()
+                    if  temp is not False:
+                        value.replace('"', "'")
+                        value.replace(' ','')
+                        device_final_data[key] = value
+                    else:
+                        device_final_data[key] = ''
+
                 deviceid = None
-                deviceid=dinfo.Device_id
+                deviceid = dinfo.Device_id
+
                 if deviceid:
-                    mqttc.publish(f'wc1/{deviceid}/chgset/tap2',str(data_dict).replace(' ',''))
+                    mqttc.publish(f'wc1/{deviceid}/chgset/tap2',str(device_final_data).replace(' ',''))
                     dd=dateandtime()
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tap2 settings change has been requested - pulse1:{value_list[2]}, pulse2:{value_list[3]}, pulse3:{value_list[4]}, pulse4:{value_list[5]}"
+                    print("dd dd ",dd)
+                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tap2 settings change has been requested - pulse1:{value_list['p1']}, pulse2:{value_list['p2']}, pulse3:{value_list['p3']}, pulse4:{value_list['p4']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tap2',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     erro.save()
-
-                    obj = tap2_setting.objects.create(**data_dict)
-                    obj.unit_type = value_list[0]
-                    obj.componant_name = value_list[1]
-                    obj.device_id = deviceid
-                    obj.company_id = request.user.company_id
-                    obj.save()
-                return Response({"message": "NEW TAP-2 API 200"})
+                    try:
+                        value_list_final = {}
+                        value_list_final['p1'] = value_list['p1']
+                        value_list_final['p2'] = value_list['p2']
+                        value_list_final['p3'] = value_list['p3']
+                        value_list_final['p4'] = value_list['p4']
+                        value_list_final['componant_name'] = 'tap2'
+                        value_list_final['device_id'] = deviceid
+                        value_list_final['company_id'] = request.user.company_id
+                        tap2_setting.objects.create(**value_list_final)
+                        return Response({"message": "NEW TAP-2 API 200"})
+                    except Exception as e:
+                        print("Error in tap2setting ",e) 
         except Exception as e:
             print("Error in tap2setting ",e)    
+
 
 @api_view(['POST'])
 def newtap3settingViewset(request):
     if request.method == 'POST':
         try:
             data_dict = json.loads(request.body)
-            unwanted_keys = ["unit_type", "water_treatment","componant_name","site_name","device_id"]
-            value_list=list(data_dict.values())
-            dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
+            value_list = data_dict
+           
+            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
             if dinfo is not None:
-                obj = tap3_setting.objects.create(**data_dict)
-                for key in unwanted_keys:
-                            if key in data_dict.keys():
-                                del data_dict[key]
-                
+
+                device_final_data = {}
+                device_final_data['p1'] = value_list['p1']
+                device_final_data['p2'] = value_list['p2']
+                device_final_data['p3'] = value_list['p3']
+                device_final_data['p4'] = value_list['p4']
+
+                for key, value in device_final_data.items():
+                    value = str(value)
+                    temp = value.isalnum()
+                    if  temp is not False:
+                        value.replace('"', "'")
+                        value.replace(' ','')
+                        device_final_data[key] = value
+                    else:
+                        device_final_data[key] = ''
+
                 deviceid = None
-                deviceid=dinfo.Device_id
+                deviceid = dinfo.Device_id
+
                 if deviceid:
-                    mqttc.publish(f'wc1/{deviceid}/chgset/tap3',str(data_dict).replace(' ',''))
+                    mqttc.publish(f'wc1/{deviceid}/chgset/tap3',str(device_final_data).replace(' ',''))
                     dd=dateandtime()
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tap3 settings change has been requested - pulse1:{value_list[2]}, pulse2:{value_list[3]}, pulse3:{value_list[4]}, pulse4:{value_list[5]}"
+                    print("dd dd ",dd)
+                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tap3 settings change has been requested - pulse1:{value_list['p1']}, pulse2:{value_list['p2']}, pulse3:{value_list['p3']}, pulse4:{value_list['p4']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tap3',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     erro.save()
-
-                    obj.unit_type = value_list[0]
-                    obj.componant_name = value_list[1]
-                    obj.device_id = deviceid
-                    obj.company_id = request.user.company_id
-                    obj.save()
-                return Response({"message": "NEW TAP-3 API 200"})
+                    try:
+                        value_list_final = {}
+                        value_list_final['p1'] = value_list['p1']
+                        value_list_final['p2'] = value_list['p2']
+                        value_list_final['p3'] = value_list['p3']
+                        value_list_final['p4'] = value_list['p4']
+                        value_list_final['componant_name'] = 'tap3'
+                        value_list_final['device_id'] = deviceid
+                        value_list_final['company_id'] = request.user.company_id
+                        tap3_setting.objects.create(**value_list_final)
+                        return Response({"message": "NEW TAP-2 API 200"})
+                    except Exception as e:
+                        print("Error in tap3setting ",e) 
         except Exception as e:
             print("Error in tap3setting ",e)    
+
 
 @api_view(['POST'])
 def newtap4settingViewset(request):
     if request.method == 'POST':
         try:
             data_dict = json.loads(request.body)
-            unwanted_keys = ["unit_type", "water_treatment","componant_name","site_name","device_id"]
-            value_list=list(data_dict.values())
-            dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
+            value_list = data_dict
+           
+            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
             if dinfo is not None:
-                obj = tap4_setting.objects.create(**data_dict)
-                for key in unwanted_keys:
-                            if key in data_dict.keys():
-                                del data_dict[key]
-                
+
+                device_final_data = {}
+                device_final_data['p1'] = value_list['p1']
+                device_final_data['p2'] = value_list['p2']
+                device_final_data['p3'] = value_list['p3']
+                device_final_data['p4'] = value_list['p4']
+
+                for key, value in device_final_data.items():
+                    value = str(value)
+                    temp = value.isalnum()
+                    if  temp is not False:
+                        value.replace('"', "'")
+                        value.replace(' ','')
+                        device_final_data[key] = value
+                    else:
+                        device_final_data[key] = ''
+
                 deviceid = None
-                deviceid=dinfo.Device_id
+                deviceid = dinfo.Device_id
+
                 if deviceid:
-                    mqttc.publish(f'wc1/{deviceid}/chgset/tap4',str(data_dict).replace(' ',''))
+                    mqttc.publish(f'wc1/{deviceid}/chgset/tap4',str(device_final_data).replace(' ',''))
                     dd=dateandtime()
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tap4 settings change has been requested - pulse1:{value_list[2]}, pulse2:{value_list[3]}, pulse3:{value_list[4]}, pulse4:{value_list[5]}"
+                    print("dd dd ",dd)
+                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tap4 settings change has been requested - pulse1:{value_list['p1']}, pulse2:{value_list['p2']}, pulse3:{value_list['p3']}, pulse4:{value_list['p4']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tap4',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     erro.save()
-
-                    obj.unit_type = value_list[0]
-                    obj.componant_name = value_list[1]
-                    obj.device_id = deviceid
-                    obj.company_id = request.user.company_id
-                    obj.save()
-                return Response({"message": "NEW TAP-4 API 200"})
+                    try:
+                        value_list_final = {}
+                        value_list_final['p1'] = value_list['p1']
+                        value_list_final['p2'] = value_list['p2']
+                        value_list_final['p3'] = value_list['p3']
+                        value_list_final['p4'] = value_list['p4']
+                        value_list_final['componant_name'] = 'tap4'
+                        value_list_final['device_id'] = deviceid
+                        value_list_final['company_id'] = request.user.company_id
+                        tap4_setting.objects.create(**value_list_final)
+                        return Response({"message": "NEW TAP-4 API 200"})
+                    except Exception as e:
+                        print("Error in tap4setting ",e) 
         except Exception as e:
             print("Error in tap4setting ",e)    
+
 
 
 #updates api for tap
@@ -570,19 +632,28 @@ def newcnd_consensettingViewset(request):
     if request.method == 'POST':
         try:
             data_dict = json.loads(request.body)
-            unwanted_keys = ["unit_type","componant_name"]
-            value_list=data_dict
-            try:
-                dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
-            except Exception as e:
-                print("device not found  ",e)
-            else:
-                for key in unwanted_keys:
-                    if key in data_dict.keys():
-                        del data_dict[key]
-                        
+            value_list = data_dict
+           
+            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+            if dinfo is not None:
+
+                device_final_data = {}
+                device_final_data['spn'] = value_list['spn']
+                device_final_data['asp'] = value_list['asp']
+
+                for key, value in device_final_data.items():
+                    value = str(value)
+                    temp = value.isalnum()
+                    if  temp is not False:
+                        value.replace('"', "'")
+                        value.replace(' ','')
+                        device_final_data[key] = value
+                    else:
+                        device_final_data[key] = ''
+
                 deviceid = None
-                deviceid=dinfo.Device_id
+                deviceid = dinfo.Device_id
+
                 if deviceid:
                     mqttc.publish(f'wc1/{deviceid}/chgset/cnd_consen',str(data_dict).replace(' ',''))
                     dd=dateandtime()
@@ -590,16 +661,52 @@ def newcnd_consensettingViewset(request):
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='cnd_consen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     erro.save()
                     try:
-                        value_list['componant_name'] = 'cnd_consen'
-                        value_list['device_id'] = deviceid
-                        value_list['company_id'] = request.user.company_id
-                        cnd_consen_setting.objects.create(**value_list)
-                        return Response({"message": "NEW CND_CONSEN SETTING API 200"})
+                        value_list_final = {}
+                        value_list_final['spn'] = value_list['spn']
+                        value_list_final['asp'] = value_list['asp']
+                        value_list_final['componant_name'] = 'cnd_consen'
+                        value_list_final['device_id'] = deviceid
+                        value_list_final['company_id'] = request.user.company_id
+                        cnd_consen_setting.objects.create(**value_list_final)
+                        return Response({"message": "NEW cnd_consen API 200"})
                     except Exception as e:
-                        print("error while saving cnd sen record   ",e)
-                
+                        print("Error in cnd_consensetting ",e) 
         except Exception as e:
-            print("Error in cnd_consen SETTING API  ",e)
+            print("Error in cnd_consensetting ",e)    
+
+    # if request.method == 'POST':
+    #     try:
+    #         data_dict = json.loads(request.body)
+    #         unwanted_keys = ["unit_type","componant_name"]
+    #         value_list=data_dict
+    #         try:
+    #             dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+    #         except Exception as e:
+    #             print("device not found  ",e)
+    #         else:
+    #             for key in unwanted_keys:
+    #                 if key in data_dict.keys():
+    #                     del data_dict[key]
+                        
+    #             deviceid = None
+    #             deviceid=dinfo.Device_id
+    #             if deviceid:
+    #                 mqttc.publish(f'wc1/{deviceid}/chgset/cnd_consen',str(data_dict).replace(' ',''))
+    #                 dd=dateandtime()
+    #                 e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} cnd_consen settings change has been requested - span:{value_list['spn']}, atert_setpoint:{value_list['asp']}"
+    #                 erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='cnd_consen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+    #                 erro.save()
+    #                 try:
+    #                     value_list['componant_name'] = 'cnd_consen'
+    #                     value_list['device_id'] = deviceid
+    #                     value_list['company_id'] = request.user.company_id
+    #                     cnd_consen_setting.objects.create(**value_list)
+    #                     return Response({"message": "NEW CND_CONSEN SETTING API 200"})
+    #                 except Exception as e:
+    #                     print("error while saving cnd sen record   ",e)
+                
+    #     except Exception as e:
+    #         print("Error in cnd_consen SETTING API  ",e)
 
 
 @api_view(['POST'])
