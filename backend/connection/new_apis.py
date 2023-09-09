@@ -486,6 +486,9 @@ def newcnd_consensettingViewset(request):
     if request.method == 'POST':
         try:
             data_dict = json.loads(request.body)
+
+
+
             unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]
             value_list=data_dict
             try:
@@ -507,12 +510,10 @@ def newcnd_consensettingViewset(request):
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='cnd_consen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     erro.save()
                     try:
-                        obj = cnd_consen_setting.objects.create(**data_dict)
-                        # obj.unit_type = value_list['unit_type']
-                        obj.componant_name = value_list['componant_name']
-                        obj.device_id = deviceid
-                        obj.company_id = request.user.company_id
-                        obj.save()
+                        data_dict['componant_name'] = value_list['componant_name']
+                        data_dict['device_id'] = deviceid
+                        data_dict['company_id'] = request.user.company_id
+                        cnd_consen_setting.objects.create(**data_dict)
                         return Response({"message": "NEW CND_CONSEN SETTING API 200"})
                     except Exception as e:
                         print("error while saving cnd sen record   ",e)
