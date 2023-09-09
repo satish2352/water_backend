@@ -510,7 +510,7 @@ def newcnd_consensettingViewset(request):
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='cnd_consen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     erro.save()
                     try:
-                        data_dict['componant_name'] = value_list['componant_name']
+                        # data_dict['componant_name'] = value_list['componant_name']
                         data_dict['device_id'] = deviceid
                         data_dict['company_id'] = request.user.company_id
                         cnd_consen_setting.objects.create(**data_dict)
