@@ -371,12 +371,11 @@ def atm_setting_Viewset(request):
     if request.method == 'POST':
         try:
             data_dict = json.loads(request.body)
-            unwanted_keys = ["unit_type", "water_treatment","componant_name","site_name","device_id"]
-            value_list=list(data_dict.values())
-            dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
+            unwanted_keys = ["unit_type","componant_name"]
+            value_list=data_dict
+            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
             if dinfo is not None:
                 print("dinfo dinfo",dinfo)
-                obj = atm_setting.objects.create(**data_dict)
                 for key in unwanted_keys:
                             if key in data_dict.keys():
                                 del data_dict[key]
@@ -387,16 +386,18 @@ def atm_setting_Viewset(request):
                 if deviceid:
                     mqttc.publish(f'wc1/{deviceid}/chgset/atm',str(data_dict).replace(' ',''))
                     dd=dateandtime()
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} atm settings change has been requested - over no. Of  tap:{value_list[3]}, no. Of volume:{value_list[4]}, volume1:{value_list[5]}, volume2:{value_list[6]}, volume3:{value_list[7]}, volume4:{value_list[8]}, rate1:{value_list[9]}, rate2:{value_list[10]}, rate3:{value_list[11]}, rate4:{value_list[12]}"
+                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} atm settings change has been requested - over no. Of  tap:{value_list['tap']}, no. Of volume:{value_list['nov']}, volume1:{value_list['vl1']}, volume2:{value_list['vl2']}, volume3:{value_list['vl3']}, volume4:{value_list['vl4']}, rate1:{value_list['re1']}, rate2:{value_list['re2']}, rate3:{value_list['re3']}, rate4:{value_list['re4']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='atm',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     erro.save()
-
-                    obj.unit_type = value_list[0]
-                    obj.componant_name = value_list[1]
-                    obj.device_id = deviceid
-                    obj.company_id = request.user.company_id
-                    obj.save()
-                return Response({"message": "NEW ATM API 200"})
+                    try:
+                        value_list['componant_name'] = 'cnd_consen'
+                        value_list['device_id'] = deviceid
+                        value_list['company_id'] = request.user.company_id
+                        obj = atm_setting.objects.create(**value_list)
+                  
+                        return Response({"message": "NEW CND_CONSEN SETTING API 200"})
+                    except Exception as e:
+                        print("error while saving cnd sen record   ",e)
         except Exception as e:
             print("Error in atmsetting ",e)    
 
@@ -493,11 +494,10 @@ def newcnd_consensettingViewset(request):
             except Exception as e:
                 print("device not found  ",e)
             else:
-            
                 for key in unwanted_keys:
                     if key in data_dict.keys():
                         del data_dict[key]
-                
+                        
                 deviceid = None
                 deviceid=dinfo.Device_id
                 if deviceid:
