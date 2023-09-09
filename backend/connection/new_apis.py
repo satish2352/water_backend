@@ -488,13 +488,14 @@ def newcnd_consensettingViewset(request):
             data_dict = json.loads(request.body)
             unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]
             value_list=data_dict
-            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
-            if dinfo is not None:
-                obj = cnd_consen_setting.objects.create(**data_dict)
+            try:
+                dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+            except Exception as e:
+                print("device not found  ",e)
+            else:
+            
                 for key in unwanted_keys:
-                    print("key key for ", key)
                     if key in data_dict.keys():
-                        print("key key in if ",key)
                         del data_dict[key]
                 
                 deviceid = None
@@ -506,12 +507,14 @@ def newcnd_consensettingViewset(request):
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='cnd_consen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     erro.save()
 
-                    obj.unit_type = value_list['unit_type']
+                    obj = cnd_consen_setting.objects.create(**data_dict)
+                    # obj.unit_type = value_list['unit_type']
                     obj.componant_name = value_list['componant_name']
                     obj.device_id = deviceid
                     obj.company_id = request.user.company_id
                     obj.save()
-                return Response({"message": "NEW CND_CONSEN SETTING API 200"})
+                    return Response({"message": "NEW CND_CONSEN SETTING API 200"})
+                
         except Exception as e:
             print("Error in cnd_consen SETTING API  ",e)
 
