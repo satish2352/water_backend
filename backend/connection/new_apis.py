@@ -373,26 +373,32 @@ def atm_setting_Viewset(request):
             data_dict = json.loads(request.body)
             unwanted_keys = ["unit_type","componant_name"]
             value_list=data_dict
-            print("value_list value_list",request.body)
-            print("value_list value_list['tap']",value_list['ntp'])
+           
             dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
             if dinfo is not None:
-                print("dinfo dinfo",dinfo)
-                for key in unwanted_keys:
-                    if key in data_dict.keys():
-                        del data_dict[key]
 
-                for key, value in data_dict.items():
+                device_final_data = {}
+                device_final_data['ntp']=value_list['ntp']
+                device_final_data['nov']=value_list['nov']
+                device_final_data['vl1']=value_list['vl1']
+                device_final_data['vl2']=value_list['vl2']
+                device_final_data['vl3']=value_list['vl3']
+                device_final_data['vl4']=value_list['vl4']
+                device_final_data['re1']=value_list['re1']
+                device_final_data['re2']=value_list['re2']
+                device_final_data['re3']=value_list['re3']
+                device_final_data['re4']=value_list['re4']
+                for key, value in device_final_data.items():
                     value = str(value)
                     value.replace('"', "'")
                     value.replace(' ','')
-                    data_dict[key] = value
+                    device_final_data[key] = value
                     
                 deviceid = None
                 deviceid=dinfo.Device_id
 
                 if deviceid:
-                    mqttc.publish(f'wc1/{deviceid}/chgset/atm',str(data_dict).replace(' ',''))
+                    mqttc.publish(f'wc1/{deviceid}/chgset/atm',str(device_final_data).replace(' ',''))
                     dd=dateandtime()
                     e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} atm settings change has been requested - over no. Of  ntp:{value_list['ntp']}, no. Of volume:{value_list['nov']}, volume1:{value_list['vl1']}, volume2:{value_list['vl2']}, volume3:{value_list['vl3']}, volume4:{value_list['vl4']}, rate1:{value_list['re1']}, rate2:{value_list['re2']}, rate3:{value_list['re3']}, rate4:{value_list['re4']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='atm',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
