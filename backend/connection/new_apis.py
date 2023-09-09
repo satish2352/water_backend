@@ -381,7 +381,15 @@ def atm_setting_Viewset(request):
                 for key in unwanted_keys:
                     if key in data_dict.keys():
                         del data_dict[key]
-                
+
+                for key, value in data_dict.items():
+                    data_type = type(value)
+                    print("data_type",data_type)
+                    if data_type != 'str':
+                        data_dict[key] = str(value)
+                    value.replace('"', "'")
+                    value.replace('', "'")
+
                 deviceid = None
                 deviceid=dinfo.Device_id
                 print("deviceid ",deviceid)
@@ -403,7 +411,7 @@ def atm_setting_Viewset(request):
                         value_list_final['re2']=value_list['re2']
                         value_list_final['re3']=value_list['re3']
                         value_list_final['re4']=value_list['re4']
-                        value_list_final['componant_name'] = 'cnd_consen'
+                        value_list_final['componant_name'] = 'atm'
                         value_list_final['device_id'] = deviceid
                         value_list_final['company_id'] = request.user.company_id
                         atm_setting.objects.create(**value_list_final)
