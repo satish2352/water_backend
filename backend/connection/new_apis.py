@@ -488,7 +488,7 @@ def newcnd_consensettingViewset(request):
             data_dict = json.loads(request.body)
             unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]
             value_list=data_dict
-            print("value_list value_list",value_list)
+            print("value_list value_list",value_list.unit_type)
             dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
             if dinfo is not None:
                 obj = cnd_consen_setting.objects.create(**data_dict)
