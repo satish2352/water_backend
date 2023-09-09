@@ -408,33 +408,38 @@ def cnd_senViewset(request):
     if request.method == 'POST':
         try:
             data_dict = json.loads(request.body)
-            unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]
-            value_list=list(data_dict.values())
-            dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
-            if dinfo is not None:
-                obj = cnd_setting.objects.create(**data_dict)
+            unwanted_keys = ["unit_type","componant_name"]
+            value_list=data_dict
+            try:
+                dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+            except Exception as e:
+                print("device not found  ",e)
+            else:
+            
                 for key in unwanted_keys:
                     if key in data_dict.keys():
                         del data_dict[key]
                 
                 deviceid = None
                 deviceid=dinfo.Device_id
-                print("deviceid ",deviceid)
                 if deviceid:
                     mqttc.publish(f'wc1/{deviceid}/chgset/cnd_sen',str(data_dict).replace(' ',''))
                     dd=dateandtime()
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} cnd settings change has been requested - span:{value_list[3]}, trip_setpoint:{value_list[4]}, atert_setpoint:{value_list[5]}"
+                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} cnd settings change has been requested - span:{value_list['spn']}, trip_setpoint:{value_list['tsp']}, atert_setpoint:{value_list['asp']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='cnd',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     erro.save()
 
-                    obj.unit_type = value_list[0]
-                    obj.componant_name = value_list[1]
-                    obj.device_id = deviceid
-                    obj.company_id = request.user.company_id
-                    obj.save()
-                return Response({"message": "NEW CND_SEN SETTING API 200"})
+                    try:
+                        value_list['componant_name'] = 'cnd_sen'
+                        value_list['device_id'] = deviceid
+                        value_list['company_id'] = request.user.company_id
+                        cnd_consen_setting.objects.create(**value_list)
+                        return Response({"message": "NEW CND_SEN SETTING API 200"})
+                    except Exception as e:
+                        print("error while saving cnd sen record   ",e)
+                
         except Exception as e:
-            print("Error in CND_SEN SETTING API  ",e)
+            print("Error in cnd_sen SETTING API  ",e)
 
 @api_view(['POST'])
 def newupdated_treat_cnd_senViewset(request):

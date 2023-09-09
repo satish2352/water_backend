@@ -2513,7 +2513,8 @@ class rwp_setting(models.Model):
     company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100) 
     device_id=models.CharField(max_length=100)   
-    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def str(self):
         return self.olc,self.drc,self.spn,self.unit_type,self.company_id,self.componant_name   
@@ -2530,6 +2531,8 @@ class hpp_setting(models.Model):
     company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)    
     device_id=models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def str(self):
         return self.olc
@@ -2546,6 +2549,8 @@ class cnd_setting(models.Model):
     company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)  
     device_id=models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     def str(self):
         return self.spn 
     # class Meta:
@@ -2560,6 +2565,8 @@ class tds_setting(models.Model):
     company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)  
     device_id=models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     def str(self):
         return self.spn 
     
@@ -2583,6 +2590,8 @@ class panel_setting(models.Model):
     unit_type=models.CharField(max_length=100)    
     company_id=models.CharField(max_length=100)    
     device_id=models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     def str(self):
         return self.mod 
 
@@ -2605,7 +2614,8 @@ class atm_setting(models.Model):
     company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)    
     device_id=models.CharField(max_length=100)
-
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     def str(self):
         return self.ntp 
     
@@ -2620,6 +2630,8 @@ class cnd_consen_setting(models.Model):
     company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     def str(self):
         return self.spn
 
@@ -2634,6 +2646,8 @@ class tds_consen_setting(models.Model):
     company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     def str(self):
         return self.spn
 
@@ -2650,6 +2664,8 @@ class tap1_setting(models.Model):
     company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     def str(self):
         return self.p1
     # class Meta:
@@ -2665,6 +2681,8 @@ class tap2_setting(models.Model):
     company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     def str(self):
         return self.p1
     # class Meta:
@@ -2680,6 +2698,8 @@ class tap3_setting(models.Model):
     company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     def str(self):
         return self.p1
     # class Meta:
@@ -2695,6 +2715,8 @@ class tap4_setting(models.Model):
     company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     def str(self):
         return self.p1
     # class Meta:
@@ -2709,6 +2731,8 @@ class Rwp_state(models.Model):
     company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     def str(self):
         return self.sts
 
@@ -2723,6 +2747,8 @@ class hpp_state(models.Model):
     company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     def str(self):
         return self.sts
     # class Meta:
@@ -2737,6 +2763,8 @@ class F_flowsen_setting(models.Model):
     company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     def str(self):
         return self.ff
     
@@ -2750,6 +2778,8 @@ class P_flowsen_setting(models.Model):
     company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     def str(self):
         return self.ff
     # class Meta:
@@ -2775,6 +2805,8 @@ class ampv1_setting(models.Model):
     company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     def str(self):
         return self.srt
     # class Meta:
@@ -2799,6 +2831,8 @@ class ampv2_setting(models.Model):
     company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     def str(self):
         return self.srt
 
@@ -2812,6 +2846,8 @@ class ampv1_state(models.Model):
     company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     def str(self):
         return self.pos
     # class Meta:
@@ -2824,6 +2860,8 @@ class ampv2_state(models.Model):
     company_id=models.CharField(max_length=100)
     componant_name=models.CharField(max_length=100)
     device_id=models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     def str(self):
         return self.pos
     # class Meta:
