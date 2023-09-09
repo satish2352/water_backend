@@ -371,7 +371,6 @@ def atm_setting_Viewset(request):
     if request.method == 'POST':
         try:
             data_dict = json.loads(request.body)
-            unwanted_keys = ["unit_type","componant_name"]
             value_list=data_dict
            
             dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
@@ -388,12 +387,16 @@ def atm_setting_Viewset(request):
                 device_final_data['re2']=value_list['re2']
                 device_final_data['re3']=value_list['re3']
                 device_final_data['re4']=value_list['re4']
+
                 for key, value in device_final_data.items():
                     value = str(value)
-                    value.replace('"', "'")
-                    value.replace(' ','')
-                    device_final_data[key] = value
-                    
+                    if not value.isalnum():
+                        value.replace('"', "'")
+                        value.replace(' ','')
+                        device_final_data[key] = value
+                    else:
+                        device_final_data[key] = None
+
                 deviceid = None
                 deviceid=dinfo.Device_id
 
@@ -424,8 +427,6 @@ def atm_setting_Viewset(request):
                         print("error while saving atm record   ",e)
         except Exception as e:
             print("Error in atmsetting ",e)    
-
-
 
 #cnd_sen
 @api_view(['POST'])
