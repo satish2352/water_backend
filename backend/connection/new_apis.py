@@ -395,7 +395,7 @@ def atm_setting_Viewset(request):
                         value_list['componant_name'] = 'cnd_consen'
                         value_list['device_id'] = deviceid
                         value_list['company_id'] = request.user.company_id
-                        obj = atm_setting.objects.create(**value_list)
+                        atm_setting.objects.create(**value_list)
                         return Response({"message": "NEW CND_CONSEN SETTING API 200"})
                     except Exception as e:
                         print("error while saving cnd sen record   ",e)
