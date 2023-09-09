@@ -506,14 +506,16 @@ def newcnd_consensettingViewset(request):
                     e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} cnd_consen settings change has been requested - span:{value_list['spn']}, atert_setpoint:{value_list['asp']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='cnd_consen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     erro.save()
-
-                    obj = cnd_consen_setting.objects.create(**data_dict)
-                    # obj.unit_type = value_list['unit_type']
-                    obj.componant_name = value_list['componant_name']
-                    obj.device_id = deviceid
-                    obj.company_id = request.user.company_id
-                    obj.save()
-                    return Response({"message": "NEW CND_CONSEN SETTING API 200"})
+                    try:
+                        obj = cnd_consen_setting.objects.create(**data_dict)
+                        # obj.unit_type = value_list['unit_type']
+                        obj.componant_name = value_list['componant_name']
+                        obj.device_id = deviceid
+                        obj.company_id = request.user.company_id
+                        obj.save()
+                        return Response({"message": "NEW CND_CONSEN SETTING API 200"})
+                    except Exception as e:
+                        print("error while saving cnd sen record   ",e)
                 
         except Exception as e:
             print("Error in cnd_consen SETTING API  ",e)
