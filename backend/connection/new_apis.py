@@ -808,32 +808,92 @@ def newpanelsettingViewset(request):
     if request.method == 'POST':
         try:
             data_dict = json.loads(request.body)
-            unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]
-            value_list=list(data_dict.values())
-            dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
+            value_list = data_dict
+           
+            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
             if dinfo is not None:
-                obj = panel_setting.objects.create(**data_dict)
-                for key in unwanted_keys:
-                    if key in data_dict.keys():
-                        del data_dict[key]
-                
-                deviceid = None
-                deviceid=dinfo.Device_id
-                if deviceid:
-                    mqttc.publish(f'wc1/{deviceid}/chgset/panel',str(data_dict).replace(' ',''))
-                    dd=dateandtime()
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} panel settings change has been requested - mode:{value_list[3]}, under voltage:{value_list[6]}, over voltage:{value_list[7]}, span:{value_list[8]}, no.of multiport valve:{value_list[4]}, sensor type:{value_list[5]}, service time:{value_list[9]}, backwash time:{value_list[10]}, rinse time:{value_list[11]}"
-                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='panel',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                    erro.save()
 
-                    obj.unit_type = value_list[0]
-                    obj.componant_name = value_list[1]
-                    obj.device_id = deviceid
-                    obj.company_id = request.user.company_id
-                    obj.save()
-                return Response({"message": "newpanelsetting API 200"})
+                device_final_data = {}
+                device_final_data['mod'] = value_list['mod']
+                device_final_data['unv'] = value_list['unv']
+                device_final_data['ovv'] = value_list['ovv']
+                device_final_data['spn'] = value_list['spn']
+                device_final_data['nmv'] = value_list['nmv']
+                device_final_data['stp'] = value_list['stp']
+                device_final_data['srt'] = value_list['srt']
+                device_final_data['bkt'] = value_list['bkt']
+                device_final_data['rst'] = value_list['rst']
+
+                for key, value in device_final_data.items():
+                    value = str(value)
+                    temp = value.isalnum()
+                    if  temp is not False:
+                        value.replace('"', "'")
+                        value.replace(' ','')
+                        device_final_data[key] = value
+                    else:
+                        device_final_data[key] = ''
+
+                deviceid = None
+                deviceid = dinfo.Device_id
+
+                if deviceid:
+                    mqttc.publish(f'wc1/{deviceid}/chgset/panel',str(device_final_data).replace(' ',''))
+                    dd=dateandtime()
+                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} panel_setting  change has been requested - mod:{value_list['mod']}, Under Voltage:{value_list['unv']}, Over Voltage:{value_list['ovv']}, Span:{value_list['spn']}, No.of Multiport valve:{value_list['nmv']}, Sensor Type:{value_list['stp']}, Service Time:{value_list['srt']}, Backwash Time:{value_list['bkt']}, Rinse Time:{value_list['rst']}"
+                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='panel_setting',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                    erro.save()
+                    try:
+                        value_list_final = {}
+                        value_list_final['mod'] = value_list['mod']
+                        value_list_final['unv'] = value_list['unv']
+                        value_list_final['ovv'] = value_list['ovv']
+                        value_list_final['spn'] = value_list['spn']
+                        value_list_final['nmv'] = value_list['nmv']
+                        value_list_final['stp'] = value_list['stp']
+                        value_list_final['srt'] = value_list['srt']
+                        value_list_final['bkt'] = value_list['bkt']
+                        value_list_final['rst'] = value_list['rst']
+                        value_list_final['re4'] = value_list['re4']
+                        value_list_final['componant_name'] = 'panel_setting'
+                        value_list_final['device_id'] = deviceid
+                        value_list_final['company_id'] = request.user.company_id
+                        panel_setting.objects.create(**value_list_final)
+                        return Response({"message": "NEW panel_setting SETTING API 200"})
+                    except Exception as e:
+                        print("error while saving panel_setting record ",e)
         except Exception as e:
-            print("Error in newpanelsetting API  ",e)
+            print("Error in panel_settingsetting ",e)    
+
+    # if request.method == 'POST':
+    #     try:
+    #         data_dict = json.loads(request.body)
+    #         unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]
+    #         value_list=list(data_dict.values())
+    #         dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
+    #         if dinfo is not None:
+    #             obj = panel_setting.objects.create(**data_dict)
+    #             for key in unwanted_keys:
+    #                 if key in data_dict.keys():
+    #                     del data_dict[key]
+                
+    #             deviceid = None
+    #             deviceid=dinfo.Device_id
+    #             if deviceid:
+    #                 mqttc.publish(f'wc1/{deviceid}/chgset/panel',str(data_dict).replace(' ',''))
+    #                 dd=dateandtime()
+    #                 e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} panel settings change has been requested - mode:{value_list[3]}, under voltage:{value_list[6]}, over voltage:{value_list[7]}, span:{value_list[8]}, no.of multiport valve:{value_list[4]}, sensor type:{value_list[5]}, service time:{value_list[9]}, backwash time:{value_list[10]}, rinse time:{value_list[11]}"
+    #                 erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='panel',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+    #                 erro.save()
+
+    #                 obj.unit_type = value_list[0]
+    #                 obj.componant_name = value_list[1]
+    #                 obj.device_id = deviceid
+    #                 obj.company_id = request.user.company_id
+    #                 obj.save()
+    #             return Response({"message": "newpanelsetting API 200"})
+    #     except Exception as e:
+    #         print("Error in newpanelsetting API  ",e)
 
 
 @api_view(['POST'])
@@ -886,32 +946,77 @@ def newFflowsensettingViewset(request):
     if request.method == 'POST':
         try:
             data_dict = json.loads(request.body)
-            unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]
-            value_list=list(data_dict.values())
-            dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
+            value_list = data_dict
+           
+            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
             if dinfo is not None:
-                obj = F_flowsen_setting.objects.create(**data_dict)
-                for key in unwanted_keys:
-                    if key in data_dict.keys():
-                        del data_dict[key]
-                
-                deviceid = None
-                deviceid=dinfo.Device_id
-                if deviceid:
-                    mqttc.publish(f'wc1/{deviceid}/chgset/F_flowsen',str(data_dict).replace(' ',''))
-                    dd=dateandtime()
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} Fflowsen settings change has been requested - flow factor:{value_list[3]}"
-                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='Fflowsen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                    erro.save()
 
-                    obj.unit_type = value_list[0]
-                    obj.componant_name = value_list[1]
-                    obj.device_id = deviceid
-                    obj.company_id = request.user.company_id
-                    obj.save()
-                return Response({"message": "newFflowsensettingViewset API 200"})
+                device_final_data = {}
+                device_final_data['fr1'] = value_list['fr1']
+                device_final_data['ff1'] = value_list['ff1']
+
+                for key, value in device_final_data.items():
+                    value = str(value)
+                    temp = value.isalnum()
+                    if  temp is not False:
+                        value.replace('"', "'")
+                        value.replace(' ','')
+                        device_final_data[key] = value
+                    else:
+                        device_final_data[key] = ''
+
+                deviceid = None
+                deviceid = dinfo.Device_id
+
+                if deviceid:
+                    mqttc.publish(f'wc1/{deviceid}/chgset/F_flowsen',str(device_final_data).replace(' ',''))
+                    dd=dateandtime()
+                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} F_flowsen settings change has been requested - fr1:{value_list['fr1']}, ff1:{value_list['ff1']}"
+                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='F_flowsen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                    erro.save()
+                    try:
+                        value_list_final = {}
+                        value_list_final['fr1'] = value_list['fr1']
+                        value_list_final['ff1'] = value_list['ff1']
+                        value_list_final['componant_name'] = 'F_flowsen'
+                        value_list_final['device_id'] = deviceid
+                        value_list_final['company_id'] = request.user.company_id
+                        F_flowsen_setting.objects.create(**value_list_final)
+                        return Response({"message": "NEW F_flowsen API 200"})
+                    except Exception as e:
+                        print("Error in F_flowsensetting ",e) 
         except Exception as e:
-            print("Error in newFflowsensettingViewset API  ",e)
+            print("Error in F_flowsensetting ",e)    
+
+    # if request.method == 'POST':
+    #     try:
+    #         data_dict = json.loads(request.body)
+    #         unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]
+    #         value_list=list(data_dict.values())
+    #         dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
+    #         if dinfo is not None:
+    #             obj = F_flowsen_setting.objects.create(**data_dict)
+    #             for key in unwanted_keys:
+    #                 if key in data_dict.keys():
+    #                     del data_dict[key]
+                
+    #             deviceid = None
+    #             deviceid=dinfo.Device_id
+    #             if deviceid:
+    #                 mqttc.publish(f'wc1/{deviceid}/chgset/F_flowsen',str(data_dict).replace(' ',''))
+    #                 dd=dateandtime()
+    #                 e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} Fflowsen settings change has been requested - flow factor:{value_list[3]}"
+    #                 erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='Fflowsen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+    #                 erro.save()
+
+    #                 obj.unit_type = value_list[0]
+    #                 obj.componant_name = value_list[1]
+    #                 obj.device_id = deviceid
+    #                 obj.company_id = request.user.company_id
+    #                 obj.save()
+    #             return Response({"message": "newFflowsensettingViewset API 200"})
+    #     except Exception as e:
+    #         print("Error in newFflowsensettingViewset API  ",e)
 
 
 @api_view(['POST'])
@@ -960,80 +1065,80 @@ def newupdated_treat_F_flowsenViewset(request):
 #P_FlowSensor
 @api_view(['POST'])
 def newPflowsensettingViewset(request):
-    # if request.method == 'POST':
-    #     try:
-    #         data_dict = json.loads(request.body)
-    #         value_list = data_dict
-           
-    #         dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
-    #         if dinfo is not None:
-
-    #             device_final_data = {}
-    #             device_final_data['spn'] = value_list['spn']
-    #             device_final_data['asp'] = value_list['asp']
-
-    #             for key, value in device_final_data.items():
-    #                 value = str(value)
-    #                 temp = value.isalnum()
-    #                 if  temp is not False:
-    #                     value.replace('"', "'")
-    #                     value.replace(' ','')
-    #                     device_final_data[key] = value
-    #                 else:
-    #                     device_final_data[key] = ''
-
-    #             deviceid = None
-    #             deviceid = dinfo.Device_id
-
-    #             if deviceid:
-    #                 mqttc.publish(f'wc1/{deviceid}/chgset/cnd_consen',str(device_final_data).replace(' ',''))
-    #                 dd=dateandtime()
-    #                 e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} cnd_consen settings change has been requested - span:{value_list['spn']}, atert_setpoint:{value_list['asp']}"
-    #                 erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='cnd_consen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-    #                 erro.save()
-    #                 try:
-    #                     value_list_final = {}
-    #                     value_list_final['spn'] = value_list['spn']
-    #                     value_list_final['asp'] = value_list['asp']
-    #                     value_list_final['componant_name'] = 'cnd_consen'
-    #                     value_list_final['device_id'] = deviceid
-    #                     value_list_final['company_id'] = request.user.company_id
-    #                     cnd_consen_setting.objects.create(**value_list_final)
-    #                     return Response({"message": "NEW cnd_consen API 200"})
-    #                 except Exception as e:
-    #                     print("Error in cnd_consensetting ",e) 
-    #     except Exception as e:
-    #         print("Error in cnd_consensetting ",e)    
-
     if request.method == 'POST':
         try:
             data_dict = json.loads(request.body)
-            unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]
-            value_list=list(data_dict.values())
-            dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
+            value_list = data_dict
+           
+            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
             if dinfo is not None:
-                obj = P_flowsen_setting.objects.create(**data_dict)
-                for key in unwanted_keys:
-                    if key in data_dict.keys():
-                        del data_dict[key]
-                
-                deviceid = None
-                deviceid=dinfo.Device_id
-                if deviceid:
-                    mqttc.publish(f'wc1/{deviceid}/chgset/P_flowsen',str(data_dict).replace(' ',''))
-                    dd=dateandtime()
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} Fflowsen settings change has been requested - flow factor:{value_list[3]}"
-                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='Pflowsen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                    erro.save()
 
-                    obj.unit_type = value_list[0]
-                    obj.componant_name = value_list[1]
-                    obj.device_id = deviceid
-                    obj.company_id = request.user.company_id
-                    obj.save()
-                return Response({"message": "newPflowsensettingViewset API 200"})
+                device_final_data = {}
+                device_final_data['fr2'] = value_list['fr2']
+                device_final_data['ff2'] = value_list['ff2']
+
+                for key, value in device_final_data.items():
+                    value = str(value)
+                    temp = value.isalnum()
+                    if  temp is not False:
+                        value.replace('"', "'")
+                        value.replace(' ','')
+                        device_final_data[key] = value
+                    else:
+                        device_final_data[key] = ''
+
+                deviceid = None
+                deviceid = dinfo.Device_id
+
+                if deviceid:
+                    mqttc.publish(f'wc1/{deviceid}/chgset/P_flowsen',str(device_final_data).replace(' ',''))
+                    dd=dateandtime()
+                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} P_flowsen settings change has been requested - fr2:{value_list['fr2']}, ff2:{value_list['ff2']}"
+                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='p_flowsen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                    erro.save()
+                    try:
+                        value_list_final = {}
+                        value_list_final['fr2'] = value_list['fr2']
+                        value_list_final['ff2'] = value_list['ff2']
+                        value_list_final['componant_name'] = 'p_flowsen'
+                        value_list_final['device_id'] = deviceid
+                        value_list_final['company_id'] = request.user.company_id
+                        P_flowsen_setting.objects.create(**value_list_final)
+                        return Response({"message": "NEW p_flowsen API 200"})
+                    except Exception as e:
+                        print("Error in p_flowsensetting ",e) 
         except Exception as e:
-            print("Error in newPflowsensettingViewset API  ",e)
+            print("Error in p_flowsensetting ",e)    
+
+    # if request.method == 'POST':
+    #     try:
+    #         data_dict = json.loads(request.body)
+    #         unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]
+    #         value_list=list(data_dict.values())
+    #         dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
+    #         if dinfo is not None:
+    #             obj = P_flowsen_setting.objects.create(**data_dict)
+    #             for key in unwanted_keys:
+    #                 if key in data_dict.keys():
+    #                     del data_dict[key]
+                
+    #             deviceid = None
+    #             deviceid=dinfo.Device_id
+    #             if deviceid:
+    #                 mqttc.publish(f'wc1/{deviceid}/chgset/P_flowsen',str(data_dict).replace(' ',''))
+    #                 dd=dateandtime()
+    #                 e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} Fflowsen settings change has been requested - flow factor:{value_list[3]}"
+    #                 erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='Pflowsen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+    #                 erro.save()
+
+    #                 obj.unit_type = value_list[0]
+    #                 obj.componant_name = value_list[1]
+    #                 obj.device_id = deviceid
+    #                 obj.company_id = request.user.company_id
+    #                 obj.save()
+    #             return Response({"message": "newPflowsensettingViewset API 200"})
+    #     except Exception as e:
+    #         print("Error in newPflowsensettingViewset API  ",e)
 
 
 @api_view(['POST'])
