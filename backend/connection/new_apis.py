@@ -382,20 +382,17 @@ def atm_setting_Viewset(request):
                     if key in data_dict.keys():
                         del data_dict[key]
 
-                # data_dict = str(data_dict)
                 for key, value in data_dict.items():
                     value = str(value)
                     value.replace('"', "'")
                     value.replace(' ','')
                     data_dict[key] = value
                     
-
-                print("data_dict data_dict",str(data_dict))
                 deviceid = None
                 deviceid=dinfo.Device_id
-                print("deviceid ",deviceid)
+
                 if deviceid:
-                    mqttc.publish(f'wc1/{deviceid}/chgset/atm',str(data_dict))
+                    mqttc.publish(f'wc1/{deviceid}/chgset/atm',str(data_dict).replace(' ',''))
                     dd=dateandtime()
                     e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} atm settings change has been requested - over no. Of  ntp:{value_list['ntp']}, no. Of volume:{value_list['nov']}, volume1:{value_list['vl1']}, volume2:{value_list['vl2']}, volume3:{value_list['vl3']}, volume4:{value_list['vl4']}, rate1:{value_list['re1']}, rate2:{value_list['re2']}, rate3:{value_list['re3']}, rate4:{value_list['re4']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='atm',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
