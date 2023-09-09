@@ -382,11 +382,8 @@ def atm_setting_Viewset(request):
                     if key in data_dict.keys():
                         del data_dict[key]
 
+                data_dict = str(data_dict)
                 for key, value in data_dict.items():
-                    data_type = type(value)
-                    print("data_type",data_type)
-                    if data_type is not str:
-                        data_dict[key] = str(value)
                     value.replace('"', "'")
                     value.replace('', "'")
 
