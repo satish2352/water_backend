@@ -336,7 +336,7 @@ def updated_disp_AtmViewset(request):
 
         if dinfo:
             did = dinfo.Device_id
-            qs_sta = disp_atm.objects.filter(device_id=did, message_type="updsta").values('sts','ndv','ntt','nta','tmp','whr','custid','created_at','updated_at').order_by('-id')[:1:1]
+            qs_sta = disp_atm.objects.filter(device_id=did, message_type="updsta").values('sts','ndv','nta','tmp','whr','custid','created_at','updated_at').order_by('-id')[:1:1]
             qs_set = disp_atm.objects.filter(device_id=did, message_type="updset").values('ntp','nov','vl1','vl2','vl3','vl4','re1','re2','re3','re4','created_at','updated_at').order_by('-id')[:1:1]
             last_error = Errors.objects.filter(service='atm')
             last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
@@ -392,13 +392,25 @@ def atm_setting_Viewset(request):
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='atm',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     erro.save()
                     try:
-                        value_list['componant_name'] = 'cnd_consen'
-                        value_list['device_id'] = deviceid
-                        value_list['company_id'] = request.user.company_id
-                        atm_setting.objects.create(**value_list)
-                        return Response({"message": "NEW CND_CONSEN SETTING API 200"})
+                        value_list_final = []
+                        value_list_final['ntp']=value_list['ntp']
+                        value_list_final['nov']=value_list['nov']
+                        value_list_final['vl1']=value_list['vl1']
+                        value_list_final['vl2']=value_list['vl2']
+                        value_list_final['vl3']=value_list['vl3']
+                        value_list_final['vl4']=value_list['vl4']
+                        value_list_final['re1']=value_list['re1']
+                        value_list_final['re2']=value_list['re2']
+                        value_list_final['re3']=value_list['re3']
+                        value_list_final['re4']=value_list['re4']
+                        value_list_final['unit_type']=value_list['unit_type']
+                        value_list_final['componant_name'] = 'cnd_consen'
+                        value_list_final['device_id'] = deviceid
+                        value_list_final['company_id'] = request.user.company_id
+                        atm_setting.objects.create(**value_list_final)
+                        return Response({"message": "NEW ATM SETTING API 200"})
                     except Exception as e:
-                        print("error while saving cnd sen record   ",e)
+                        print("error while saving atm record   ",e)
         except Exception as e:
             print("Error in atmsetting ",e)    
 
