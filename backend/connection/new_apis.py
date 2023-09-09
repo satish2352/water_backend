@@ -371,22 +371,22 @@ def atm_setting_Viewset(request):
     if request.method == 'POST':
         try:
             data_dict = json.loads(request.body)
-            value_list=data_dict
+            value_list = data_dict
            
             dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
             if dinfo is not None:
 
                 device_final_data = {}
-                device_final_data['ntp']=value_list['ntp']
-                device_final_data['nov']=value_list['nov']
-                device_final_data['vl1']=value_list['vl1']
-                device_final_data['vl2']=value_list['vl2']
-                device_final_data['vl3']=value_list['vl3']
-                device_final_data['vl4']=value_list['vl4']
-                device_final_data['re1']=value_list['re1']
-                device_final_data['re2']=value_list['re2']
-                device_final_data['re3']=value_list['re3']
-                device_final_data['re4']=value_list['re4']
+                device_final_data['ntp'] = value_list['ntp']
+                device_final_data['nov'] = value_list['nov']
+                device_final_data['vl1'] = value_list['vl1']
+                device_final_data['vl2'] = value_list['vl2']
+                device_final_data['vl3'] = value_list['vl3']
+                device_final_data['vl4'] = value_list['vl4']
+                device_final_data['re1'] = value_list['re1']
+                device_final_data['re2'] = value_list['re2']
+                device_final_data['re3'] = value_list['re3']
+                device_final_data['re4'] = value_list['re4']
 
                 for key, value in device_final_data.items():
                     value = str(value)
@@ -398,7 +398,7 @@ def atm_setting_Viewset(request):
                         device_final_data[key] = ''
 
                 deviceid = None
-                deviceid=dinfo.Device_id
+                deviceid = dinfo.Device_id
 
                 if deviceid:
                     mqttc.publish(f'wc1/{deviceid}/chgset/atm',str(device_final_data).replace(' ',''))
@@ -408,23 +408,23 @@ def atm_setting_Viewset(request):
                     erro.save()
                     try:
                         value_list_final = {}
-                        value_list_final['ntp']=value_list['ntp']
-                        value_list_final['nov']=value_list['nov']
-                        value_list_final['vl1']=value_list['vl1']
-                        value_list_final['vl2']=value_list['vl2']
-                        value_list_final['vl3']=value_list['vl3']
-                        value_list_final['vl4']=value_list['vl4']
-                        value_list_final['re1']=value_list['re1']
-                        value_list_final['re2']=value_list['re2']
-                        value_list_final['re3']=value_list['re3']
-                        value_list_final['re4']=value_list['re4']
+                        value_list_final['ntp'] = value_list['ntp']
+                        value_list_final['nov'] = value_list['nov']
+                        value_list_final['vl1'] = value_list['vl1']
+                        value_list_final['vl2'] = value_list['vl2']
+                        value_list_final['vl3'] = value_list['vl3']
+                        value_list_final['vl4'] = value_list['vl4']
+                        value_list_final['re1'] = value_list['re1']
+                        value_list_final['re2'] = value_list['re2']
+                        value_list_final['re3'] = value_list['re3']
+                        value_list_final['re4'] = value_list['re4']
                         value_list_final['componant_name'] = 'atm'
                         value_list_final['device_id'] = deviceid
                         value_list_final['company_id'] = request.user.company_id
                         atm_setting.objects.create(**value_list_final)
                         return Response({"message": "NEW ATM SETTING API 200"})
                     except Exception as e:
-                        print("error while saving atm record   ",e)
+                        print("error while saving atm record ",e)
         except Exception as e:
             print("Error in atmsetting ",e)    
 
