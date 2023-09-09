@@ -390,7 +390,8 @@ def atm_setting_Viewset(request):
 
                 for key, value in device_final_data.items():
                     value = str(value)
-                    if not value.isalnum():
+                    temp = value.isalnum()
+                    if  temp is not False:
                         value.replace('"', "'")
                         value.replace(' ','')
                         device_final_data[key] = value
