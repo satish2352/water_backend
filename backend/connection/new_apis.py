@@ -960,6 +960,51 @@ def newupdated_treat_F_flowsenViewset(request):
 #P_FlowSensor
 @api_view(['POST'])
 def newPflowsensettingViewset(request):
+    # if request.method == 'POST':
+    #     try:
+    #         data_dict = json.loads(request.body)
+    #         value_list = data_dict
+           
+    #         dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+    #         if dinfo is not None:
+
+    #             device_final_data = {}
+    #             device_final_data['spn'] = value_list['spn']
+    #             device_final_data['asp'] = value_list['asp']
+
+    #             for key, value in device_final_data.items():
+    #                 value = str(value)
+    #                 temp = value.isalnum()
+    #                 if  temp is not False:
+    #                     value.replace('"', "'")
+    #                     value.replace(' ','')
+    #                     device_final_data[key] = value
+    #                 else:
+    #                     device_final_data[key] = ''
+
+    #             deviceid = None
+    #             deviceid = dinfo.Device_id
+
+    #             if deviceid:
+    #                 mqttc.publish(f'wc1/{deviceid}/chgset/cnd_consen',str(device_final_data).replace(' ',''))
+    #                 dd=dateandtime()
+    #                 e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} cnd_consen settings change has been requested - span:{value_list['spn']}, atert_setpoint:{value_list['asp']}"
+    #                 erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='cnd_consen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+    #                 erro.save()
+    #                 try:
+    #                     value_list_final = {}
+    #                     value_list_final['spn'] = value_list['spn']
+    #                     value_list_final['asp'] = value_list['asp']
+    #                     value_list_final['componant_name'] = 'cnd_consen'
+    #                     value_list_final['device_id'] = deviceid
+    #                     value_list_final['company_id'] = request.user.company_id
+    #                     cnd_consen_setting.objects.create(**value_list_final)
+    #                     return Response({"message": "NEW cnd_consen API 200"})
+    #                 except Exception as e:
+    #                     print("Error in cnd_consensetting ",e) 
+    #     except Exception as e:
+    #         print("Error in cnd_consensetting ",e)    
+
     if request.method == 'POST':
         try:
             data_dict = json.loads(request.body)
