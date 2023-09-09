@@ -487,13 +487,9 @@ def newcnd_consensettingViewset(request):
         try:
             data_dict = json.loads(request.body)
             unwanted_keys = ["unit_type", "water_treatment","company_id","componant_name","site_name","device_id"]
-            value_list=list(data_dict.values())
-            print("data_dict.values()",data_dict.values())
-            
-            print("data_dict",data_dict)
-            print("data_dict unit_type",data_dict.unit_type)
-            print("value_listvalue_list ",value_list['unit_type'])
-            dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
+            value_list=data_dict.values()
+           
+            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
             if dinfo is not None:
                 obj = cnd_consen_setting.objects.create(**data_dict)
                 for key in unwanted_keys:
@@ -505,12 +501,12 @@ def newcnd_consensettingViewset(request):
                 if deviceid:
                     mqttc.publish(f'wc1/{deviceid}/chgset/cnd_consen',str(data_dict).replace(' ',''))
                     dd=dateandtime()
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} cnd_consen settings change has been requested - span:{value_list[3]}, atert_setpoint:{value_list[4]}"
+                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} cnd_consen settings change has been requested - span:{value_list['spn']}, atert_setpoint:{value_list['asp']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='cnd_consen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     erro.save()
 
-                    obj.unit_type = value_list[0]
-                    obj.componant_name = value_list[1]
+                    obj.unit_type = value_list['unit_type']
+                    obj.componant_name = value_list['componant_name']
                     obj.device_id = deviceid
                     obj.company_id = request.user.company_id
                     obj.save()
