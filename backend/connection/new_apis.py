@@ -392,7 +392,7 @@ def atm_setting_Viewset(request):
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='atm',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     erro.save()
                     try:
-                        value_list_final = []
+                        value_list_final = {}
                         value_list_final['ntp']=value_list['ntp']
                         value_list_final['nov']=value_list['nov']
                         value_list_final['vl1']=value_list['vl1']
