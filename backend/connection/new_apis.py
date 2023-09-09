@@ -549,38 +549,85 @@ def cnd_senViewset(request):
     if request.method == 'POST':
         try:
             data_dict = json.loads(request.body)
-            unwanted_keys = ["unit_type","componant_name"]
-            value_list=data_dict
-            try:
-                dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
-            except Exception as e:
-                print("device not found  ",e)
-            else:
-            
-                for key in unwanted_keys:
-                    if key in data_dict.keys():
-                        del data_dict[key]
-                
+            value_list = data_dict
+           
+            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+            if dinfo is not None:
+
+                device_final_data = {}
+                device_final_data['spn'] = value_list['spn']
+                device_final_data['tsp'] = value_list['tsp']
+                device_final_data['asp'] = value_list['asp']
+
+                for key, value in device_final_data.items():
+                    value = str(value)
+                    temp = value.isalnum()
+                    if  temp is not False:
+                        value.replace('"', "'")
+                        value.replace(' ','')
+                        device_final_data[key] = value
+                    else:
+                        device_final_data[key] = ''
+
                 deviceid = None
-                deviceid=dinfo.Device_id
+                deviceid = dinfo.Device_id
+
                 if deviceid:
-                    mqttc.publish(f'wc1/{deviceid}/chgset/cnd_sen',str(data_dict).replace(' ',''))
+                    mqttc.publish(f'wc1/{deviceid}/chgset/cnd_sen',str(device_final_data).replace(' ',''))
                     dd=dateandtime()
                     e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} cnd settings change has been requested - span:{value_list['spn']}, trip_setpoint:{value_list['tsp']}, atert_setpoint:{value_list['asp']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='cnd',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     erro.save()
-
                     try:
-                        value_list['componant_name'] = 'cnd_sen'
-                        value_list['device_id'] = deviceid
-                        value_list['company_id'] = request.user.company_id
-                        cnd_consen_setting.objects.create(**value_list)
-                        return Response({"message": "NEW CND_SEN SETTING API 200"})
+                        value_list_final = {}
+                        value_list_final['spn'] = value_list['spn']
+                        value_list_final['tsp'] = value_list['tsp']
+                        value_list_final['asp'] = value_list['asp']
+                        value_list_final['componant_name'] = 'cnd_sen'
+                        value_list_final['device_id'] = deviceid
+                        value_list_final['company_id'] = request.user.company_id
+                        cnd_setting.objects.create(**value_list_final)
+                        return Response({"message": "NEW cnd_sen API 200"})
                     except Exception as e:
-                        print("error while saving cnd sen record   ",e)
-                
+                        print("error while saving cnd_sen record ",e)
         except Exception as e:
-            print("Error in cnd_sen SETTING API  ",e)
+            print("Error in cnd_senetting ",e)    
+
+    # if request.method == 'POST':
+    #     try:
+    #         data_dict = json.loads(request.body)
+    #         unwanted_keys = ["unit_type","componant_name"]
+    #         value_list=data_dict
+    #         try:
+    #             dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+    #         except Exception as e:
+    #             print("device not found  ",e)
+    #         else:
+            
+    #             for key in unwanted_keys:
+    #                 if key in data_dict.keys():
+    #                     del data_dict[key]
+                
+    #             deviceid = None
+    #             deviceid=dinfo.Device_id
+    #             if deviceid:
+    #                 mqttc.publish(f'wc1/{deviceid}/chgset/cnd_sen',str(data_dict).replace(' ',''))
+    #                 dd=dateandtime()
+    #                 e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} cnd settings change has been requested - span:{value_list['spn']}, trip_setpoint:{value_list['tsp']}, atert_setpoint:{value_list['asp']}"
+    #                 erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='cnd',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+    #                 erro.save()
+
+    #                 try:
+    #                     value_list['componant_name'] = 'cnd_sen'
+    #                     value_list['device_id'] = deviceid
+    #                     value_list['company_id'] = request.user.company_id
+    #                     cnd_consen_setting.objects.create(**value_list)
+    #                     return Response({"message": "NEW CND_SEN SETTING API 200"})
+    #                 except Exception as e:
+    #                     print("error while saving cnd sen record   ",e)
+                
+    #     except Exception as e:
+    #         print("Error in cnd_sen SETTING API  ",e)
 
 @api_view(['POST'])
 def newupdated_treat_cnd_senViewset(request):
@@ -655,7 +702,7 @@ def newcnd_consensettingViewset(request):
                 deviceid = dinfo.Device_id
 
                 if deviceid:
-                    mqttc.publish(f'wc1/{deviceid}/chgset/cnd_consen',str(data_dict).replace(' ',''))
+                    mqttc.publish(f'wc1/{deviceid}/chgset/cnd_consen',str(device_final_data).replace(' ',''))
                     dd=dateandtime()
                     e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} cnd_consen settings change has been requested - span:{value_list['spn']}, atert_setpoint:{value_list['asp']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='cnd_consen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
