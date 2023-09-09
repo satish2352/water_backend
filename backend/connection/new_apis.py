@@ -385,8 +385,8 @@ def atm_setting_Viewset(request):
                 # data_dict = str(data_dict)
                 for key, value in data_dict.items():
                     data_dict[key] = str(value)
-                    value.replace('"', "'")
-                    value.replace(' ','')
+                    data_dict[key].replace('"', "'")
+                    data_dict[key].replace(' ','')
                     
 
                 print("data_dict data_dict",str(data_dict))
