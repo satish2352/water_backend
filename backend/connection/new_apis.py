@@ -829,7 +829,7 @@ def newpanelsettingViewset(request):
             data_dict = json.loads(request.body)
             value_list = data_dict
             print("**!!!**")
-            print("company_id",company_id=request.user.company_id)
+            print("company_id",request.user.company_id)
             print("datais:",value_list)
             # dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
             dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
