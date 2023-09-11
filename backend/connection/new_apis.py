@@ -65,6 +65,7 @@ def newtap1settingViewset(request):
                         value_list_final['p3'] = value_list['p3']
                         value_list_final['p4'] = value_list['p4']
                         value_list_final['componant_name'] = 'tap1'
+                        value_list_final['unit_type'] = 'water_dispense'
                         value_list_final['device_id'] = deviceid
                         value_list_final['company_id'] = request.user.company_id
                         tap1_setting.objects.create(**value_list_final)
@@ -157,6 +158,7 @@ def newtap2settingViewset(request):
                         value_list_final['p3'] = value_list['p3']
                         value_list_final['p4'] = value_list['p4']
                         value_list_final['componant_name'] = 'tap2'
+                        value_list_final['unit_type'] = 'water_dispense'
                         value_list_final['device_id'] = deviceid
                         value_list_final['company_id'] = request.user.company_id
                         tap2_setting.objects.create(**value_list_final)
@@ -210,6 +212,7 @@ def newtap3settingViewset(request):
                         value_list_final['p3'] = value_list['p3']
                         value_list_final['p4'] = value_list['p4']
                         value_list_final['componant_name'] = 'tap3'
+                        value_list_final['unit_type'] = 'water_dispense'
                         value_list_final['device_id'] = deviceid
                         value_list_final['company_id'] = request.user.company_id
                         tap3_setting.objects.create(**value_list_final)
@@ -263,6 +266,7 @@ def newtap4settingViewset(request):
                         value_list_final['p3'] = value_list['p3']
                         value_list_final['p4'] = value_list['p4']
                         value_list_final['componant_name'] = 'tap4'
+                        value_list_final['unit_type'] = 'water_dispense'
                         value_list_final['device_id'] = deviceid
                         value_list_final['company_id'] = request.user.company_id
                         tap4_setting.objects.create(**value_list_final)
@@ -539,6 +543,7 @@ def atm_setting_Viewset(request):
                         value_list_final['re3'] = value_list['re3']
                         value_list_final['re4'] = value_list['re4']
                         value_list_final['componant_name'] = 'atm'
+                        value_list_final['unit_type'] = 'water_dispense'
                         value_list_final['device_id'] = deviceid
                         value_list_final['company_id'] = request.user.company_id
                         atm_setting.objects.create(**value_list_final)
@@ -589,6 +594,7 @@ def cnd_senViewset(request):
                         value_list_final['tsp'] = value_list['tsp']
                         value_list_final['asp'] = value_list['asp']
                         value_list_final['componant_name'] = 'cnd_sen'
+                        value_list_final['unit_type'] = 'water_treatment'
                         value_list_final['device_id'] = deviceid
                         value_list_final['company_id'] = request.user.company_id
                         cnd_setting.objects.create(**value_list_final)
@@ -722,6 +728,7 @@ def newcnd_consensettingViewset(request):
                         value_list_final['spn'] = value_list['spn']
                         value_list_final['asp'] = value_list['asp']
                         value_list_final['componant_name'] = 'cnd_consen'
+                        value_list_final['unit_type'] = 'water_dispense'
                         value_list_final['device_id'] = deviceid
                         value_list_final['company_id'] = request.user.company_id
                         cnd_consen_setting.objects.create(**value_list_final)
@@ -869,6 +876,7 @@ def newpanelsettingViewset(request):
                         value_list_final['rst'] = value_list['rst']
                         value_list_final['re4'] = value_list['re4']
                         value_list_final['componant_name'] = 'panel_setting'
+                        value_list_final['unit_type'] = 'water_treatment'
                         value_list_final['device_id'] = deviceid
                         value_list_final['company_id'] = request.user.company_id
                         panel_setting.objects.create(**value_list_final)
@@ -993,6 +1001,7 @@ def newFflowsensettingViewset(request):
                         value_list_final['fr1'] = value_list['fr1']
                         value_list_final['ff1'] = value_list['ff1']
                         value_list_final['componant_name'] = 'F_flowsen'
+                        value_list_final['unit_type'] = 'water_treatment'
                         value_list_final['device_id'] = deviceid
                         value_list_final['company_id'] = request.user.company_id
                         F_flowsen_setting.objects.create(**value_list_final)
@@ -1116,6 +1125,7 @@ def newPflowsensettingViewset(request):
                         value_list_final['fr2'] = value_list['fr2']
                         value_list_final['ff2'] = value_list['ff2']
                         value_list_final['componant_name'] = 'p_flowsen'
+                        value_list_final['unit_type'] = 'water_treatment'
                         value_list_final['device_id'] = deviceid
                         value_list_final['company_id'] = request.user.company_id
                         P_flowsen_setting.objects.create(**value_list_final)

@@ -60,6 +60,7 @@ def rwpstateViewset(request):
                         value_list_final = {}
                         value_list_final['sts'] = value_list['sts']
                         value_list_final['componant_name'] = 'rwp'
+                        value_list_final['unit_type'] = 'water_treatment'
                         value_list_final['device_id'] = deviceid
                         value_list_final['company_id'] = request.user.company_id
                         Rwp_state.objects.create(**value_list_final)
@@ -149,6 +150,7 @@ def rwpsettingViewset(request):
                         value_list_final['drc'] = value_list['drc']
                         value_list_final['spn'] = value_list['spn']
                         value_list_final['componant_name'] = 'rwp'
+                        value_list_final['unit_type'] = 'water_treatment'
                         value_list_final['device_id'] = deviceid
                         value_list_final['company_id'] = request.user.company_id
                         rwp_setting.objects.create(**value_list_final)
@@ -284,6 +286,7 @@ def ampv1stateViewset(request):
                         value_list_final = {}
                         value_list_final['pos'] = value_list['pos']
                         value_list_final['componant_name'] = 'ampv1'
+                        value_list_final['unit_type'] = 'water_treatment'
                         value_list_final['device_id'] = deviceid
                         value_list_final['company_id'] = request.user.company_id
                         ampv1_state.objects.create(**value_list_final)
@@ -391,6 +394,7 @@ def ampv1settingViewset(request):
                         value_list_final['ip3'] = value_list['ip3']
                         value_list_final['psi'] = value_list['psi']
                         value_list_final['componant_name'] = 'ampv1'
+                        value_list_final['unit_type'] = 'water_treatment'
                         value_list_final['device_id'] = deviceid
                         value_list_final['company_id'] = request.user.company_id
                         ampv1_setting.objects.create(**value_list_final)
@@ -521,6 +525,7 @@ def ampv2stateViewset(request):
                         value_list_final = {}
                         value_list_final['pos'] = value_list['pos']
                         value_list_final['componant_name'] = 'ampv2'
+                        value_list_final['unit_type'] = 'water_treatment'
                         value_list_final['device_id'] = deviceid
                         value_list_final['company_id'] = request.user.company_id
                         ampv2_state.objects.create(**value_list_final)
@@ -628,6 +633,7 @@ def ampv2settingViewset(request):
                         value_list_final['ip3'] = value_list['ip3']
                         value_list_final['psi'] = value_list['psi']
                         value_list_final['componant_name'] = 'ampv2'
+                        value_list_final['unit_type'] = 'water_treatment'
                         value_list_final['device_id'] = deviceid
                         value_list_final['company_id'] = request.user.company_id
                         ampv2_setting.objects.create(**value_list_final)
@@ -760,6 +766,7 @@ def hppstateViewset(request):
                         value_list_final = {}
                         value_list_final['sts'] = value_list['sts']
                         value_list_final['componant_name'] = 'hpp'
+                        value_list_final['unit_type'] = 'water_treatment'
                         value_list_final['device_id'] = deviceid
                         value_list_final['company_id'] = request.user.company_id
                         hpp_state.objects.create(**value_list_final)
@@ -850,6 +857,7 @@ def hppsettingViewset(request):
                         value_list_final['drc'] = value_list['drc']
                         value_list_final['spn'] = value_list['spn']
                         value_list_final['componant_name'] = 'hpp'
+                        value_list_final['unit_type'] = 'water_treatment'
                         value_list_final['device_id'] = deviceid
                         value_list_final['company_id'] = request.user.company_id
                         hpp_setting.objects.create(**value_list_final)

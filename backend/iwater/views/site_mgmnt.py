@@ -22,7 +22,7 @@ from init_water_app import settings
 from init_water_app.settings import OTP_VALID_FOR
 from iwater.iw_logger import logger
 from connection.models import device_info
-from connection.views import MqttClient,mqttc
+# from connection.views import MqttClient,mqttc
 token_=0
 @api_view(['GET'])
 def list_sites(request):
@@ -451,12 +451,12 @@ def send_otp(request):
 
 
 # client = MqttClient()
-def connect_mqtt_in_background(company_id):
+# def connect_mqtt_in_background(company_id):
 
     # connect to MQTT
     # client = MqttClient(company_id)
-    client = MqttClient(company_id)
-    client.publish("my/test/topic", "connected from iw backend app")
+    # client = MqttClient(company_id)
+    # client.publish("my/test/topic", "connected from iw backend app")
     # client.publish("wc/v1/OTP", "connected from iw backend app")
     # client.on_connect = client.on_connect
     # client.on_message = client.on_message
