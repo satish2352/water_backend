@@ -29,7 +29,7 @@ def newtap1settingViewset(request):
             data_dict = json.loads(request.body)
             value_list = data_dict
            
-            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+            dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
             if dinfo is not None:
 
                 device_final_data = {}
@@ -57,7 +57,7 @@ def newtap1settingViewset(request):
                     print("dd dd ",dd)
                     e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tap1 settings change has been requested - pulse1:{value_list['p1']}, pulse2:{value_list['p2']}, pulse3:{value_list['p3']}, pulse4:{value_list['p4']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tap1',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                    erro.save()
+                    # erro.save()
                     try:
                         value_list_final = {}
                         value_list_final['p1'] = value_list['p1']
@@ -121,7 +121,7 @@ def newtap2settingViewset(request):
             data_dict = json.loads(request.body)
             value_list = data_dict
            
-            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+            dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
             if dinfo is not None:
 
                 device_final_data = {}
@@ -149,7 +149,7 @@ def newtap2settingViewset(request):
                     print("dd dd ",dd)
                     e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tap2 settings change has been requested - pulse1:{value_list['p1']}, pulse2:{value_list['p2']}, pulse3:{value_list['p3']}, pulse4:{value_list['p4']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tap2',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                    erro.save()
+                    # erro.save()
                     try:
                         value_list_final = {}
                         value_list_final['p1'] = value_list['p1']
@@ -174,7 +174,7 @@ def newtap3settingViewset(request):
             data_dict = json.loads(request.body)
             value_list = data_dict
            
-            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+            dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
             if dinfo is not None:
 
                 device_final_data = {}
@@ -202,7 +202,7 @@ def newtap3settingViewset(request):
                     print("dd dd ",dd)
                     e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tap3 settings change has been requested - pulse1:{value_list['p1']}, pulse2:{value_list['p2']}, pulse3:{value_list['p3']}, pulse4:{value_list['p4']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tap3',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                    erro.save()
+                    # erro.save()
                     try:
                         value_list_final = {}
                         value_list_final['p1'] = value_list['p1']
@@ -227,7 +227,7 @@ def newtap4settingViewset(request):
             data_dict = json.loads(request.body)
             value_list = data_dict
            
-            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+            dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
             if dinfo is not None:
 
                 device_final_data = {}
@@ -255,7 +255,7 @@ def newtap4settingViewset(request):
                     print("dd dd ",dd)
                     e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tap4 settings change has been requested - pulse1:{value_list['p1']}, pulse2:{value_list['p2']}, pulse3:{value_list['p3']}, pulse4:{value_list['p4']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tap4',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                    erro.save()
+                    # erro.save()
                     try:
                         value_list_final = {}
                         value_list_final['p1'] = value_list['p1']
@@ -280,10 +280,11 @@ def updated_disp_Tap1Viewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
-        value_list = list(data.values())
+        value_list = data
         print("value_list:", value_list)
 
-        dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
+        dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+
 
         if dinfo:
             did = dinfo.Device_id
@@ -320,10 +321,11 @@ def updated_disp_Tap2Viewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
-        value_list = list(data.values())
+        value_list = data
         print("value_list:", value_list)
 
-        dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
+        dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+
 
         if dinfo:
             did = dinfo.Device_id
@@ -360,10 +362,11 @@ def updated_disp_tap3Viewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
-        value_list = list(data.values())
+        value_list = data
         print("value_list:", value_list)
 
-        dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
+        dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+
 
         if dinfo:
             did = dinfo.Device_id
@@ -401,10 +404,11 @@ def updated_disp_tap4Viewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
-        value_list = list(data.values())
+        value_list = data
         print("value_list:", value_list)
 
-        dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
+        dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+
 
         if dinfo:
             did = dinfo.Device_id
@@ -443,10 +447,11 @@ def updated_disp_AtmViewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
-        value_list = list(data.values())
+        value_list = data
         print("value_list:", value_list)
 
-        dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
+        dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+
 
         if dinfo:
             did = dinfo.Device_id
@@ -487,7 +492,7 @@ def atm_setting_Viewset(request):
             data_dict = json.loads(request.body)
             value_list = data_dict
            
-            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+            dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
             if dinfo is not None:
 
                 device_final_data = {}
@@ -520,7 +525,7 @@ def atm_setting_Viewset(request):
                     dd=dateandtime()
                     e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} atm settings change has been requested - over no. Of  ntp:{value_list['ntp']}, no. Of volume:{value_list['nov']}, volume1:{value_list['vl1']}, volume2:{value_list['vl2']}, volume3:{value_list['vl3']}, volume4:{value_list['vl4']}, rate1:{value_list['re1']}, rate2:{value_list['re2']}, rate3:{value_list['re3']}, rate4:{value_list['re4']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='atm',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                    erro.save()
+                    # erro.save()
                     try:
                         value_list_final = {}
                         value_list_final['ntp'] = value_list['ntp']
@@ -551,7 +556,7 @@ def cnd_senViewset(request):
             data_dict = json.loads(request.body)
             value_list = data_dict
            
-            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+            dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
             if dinfo is not None:
 
                 device_final_data = {}
@@ -577,7 +582,7 @@ def cnd_senViewset(request):
                     dd=dateandtime()
                     e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} cnd settings change has been requested - span:{value_list['spn']}, trip_setpoint:{value_list['tsp']}, atert_setpoint:{value_list['asp']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='cnd',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                    erro.save()
+                    # erro.save()
                     try:
                         value_list_final = {}
                         value_list_final['spn'] = value_list['spn']
@@ -599,7 +604,7 @@ def cnd_senViewset(request):
     #         unwanted_keys = ["unit_type","componant_name"]
     #         value_list=data_dict
     #         try:
-    #             dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+    #             dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
     #         except Exception as e:
     #             print("device not found  ",e)
     #         else:
@@ -634,9 +639,10 @@ def newupdated_treat_cnd_senViewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
-        value_list = list(data.values())
+        value_list = data
 
-        dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
+        dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+
 
         if dinfo:
 
@@ -681,7 +687,7 @@ def newcnd_consensettingViewset(request):
             data_dict = json.loads(request.body)
             value_list = data_dict
            
-            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+            dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
             if dinfo is not None:
 
                 device_final_data = {}
@@ -706,7 +712,7 @@ def newcnd_consensettingViewset(request):
                     dd=dateandtime()
                     e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} cnd_consen settings change has been requested - span:{value_list['spn']}, atert_setpoint:{value_list['asp']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='cnd_consen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                    erro.save()
+                    # erro.save()
                     try:
                         value_list_final = {}
                         value_list_final['spn'] = value_list['spn']
@@ -727,7 +733,7 @@ def newcnd_consensettingViewset(request):
     #         unwanted_keys = ["unit_type","componant_name"]
     #         value_list=data_dict
     #         try:
-    #             dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+    #             dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
     #         except Exception as e:
     #             print("device not found  ",e)
     #         else:
@@ -761,9 +767,11 @@ def newupdated_disp_cnd_consenViewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
-        value_list = list(data.values())
+        value_list = data
+        # value_list = list(data.values())
 
-        dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
+        dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+
 
         if dinfo:
 
@@ -811,7 +819,7 @@ def newpanelsettingViewset(request):
             value_list = data_dict
            
             # dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
-            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+            dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
             if dinfo is not None:
 
                 device_final_data = {}
@@ -843,7 +851,7 @@ def newpanelsettingViewset(request):
                     dd=dateandtime()
                     e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} panel_setting  change has been requested - mod:{value_list['mod']}, Under Voltage:{value_list['unv']}, Over Voltage:{value_list['ovv']}, Span:{value_list['spn']}, No.of Multiport valve:{value_list['nmv']}, Sensor Type:{value_list['stp']}, Service Time:{value_list['srt']}, Backwash Time:{value_list['bkt']}, Rinse Time:{value_list['rst']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='panel_setting',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                    erro.save()
+                    # erro.save()
                     try:
                         value_list_final = {}
                         value_list_final['mod'] = value_list['mod']
@@ -902,9 +910,10 @@ def newupdated_treat_panelViewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
-        value_list = list(data.values())
+        value_list = data
 
-        dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
+        dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+
 
         if dinfo:
 
@@ -949,7 +958,7 @@ def newFflowsensettingViewset(request):
             data_dict = json.loads(request.body)
             value_list = data_dict
            
-            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+            dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
             if dinfo is not None:
 
                 device_final_data = {}
@@ -974,7 +983,7 @@ def newFflowsensettingViewset(request):
                     dd=dateandtime()
                     e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} F_flowsen settings change has been requested - fr1:{value_list['fr1']}, ff1:{value_list['ff1']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='F_flowsen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                    erro.save()
+                    # erro.save()
                     try:
                         value_list_final = {}
                         value_list_final['fr1'] = value_list['fr1']
@@ -1025,9 +1034,10 @@ def newupdated_treat_F_flowsenViewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
-        value_list = list(data.values())
+        value_list = data
 
-        dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
+        dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+
 
         if dinfo:
 
@@ -1071,7 +1081,7 @@ def newPflowsensettingViewset(request):
             data_dict = json.loads(request.body)
             value_list = data_dict
            
-            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+            dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
             if dinfo is not None:
 
                 device_final_data = {}
@@ -1096,7 +1106,7 @@ def newPflowsensettingViewset(request):
                     dd=dateandtime()
                     e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} P_flowsen settings change has been requested - fr2:{value_list['fr2']}, ff2:{value_list['ff2']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='p_flowsen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                    erro.save()
+                    # erro.save()
                     try:
                         value_list_final = {}
                         value_list_final['fr2'] = value_list['fr2']
@@ -1147,9 +1157,10 @@ def newupdated_treat_P_flowsenViewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
-        value_list = list(data.values())
+        value_list = data
 
-        dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
+        dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+
 
         if dinfo:
 

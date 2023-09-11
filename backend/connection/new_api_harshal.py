@@ -54,7 +54,7 @@ def rwpstateViewset(request):
                     dd=dateandtime()
                     e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} Rwp state change has been requested - sts:{value_list['sts']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='rwp',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                    erro.save()
+                    # erro.save()
                     try:
                         value_list_final = {}
                         value_list_final['sts'] = value_list['sts']
@@ -140,7 +140,7 @@ def rwpsettingViewset(request):
                     print("dd dd ",dd)
                     e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} Rwp Setting change has been requested - olc:{value_list['olc']}, drc:{value_list['drc']}, spn:{value_list['spn']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='rwp_setting',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                    erro.save()
+                    # erro.save()
                     try:
                         value_list_final = {}
                         value_list_final['olc'] = value_list['olc']
@@ -199,9 +199,10 @@ def newupdated_treat_rwp_Viewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
-        value_list = list(data.values())
+        # value_list = list(data.values())
+        value_list = data
 
-        dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
+        dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
 
         if dinfo:
 
@@ -275,7 +276,7 @@ def ampv1stateViewset(request):
                     dd=dateandtime()
                     e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} ampv1 state change has been requested - pos:{value_list['pos']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='ampv1_state',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                    erro.save()
+                    # erro.save()
                     try:
                         value_list_final = {}
                         value_list_final['pos'] = value_list['pos']
@@ -370,7 +371,7 @@ def ampv1settingViewset(request):
                     print("dd dd ",dd)
                     e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} ampv1 Setting change has been requested - srt:{value_list['srt']}, bkt:{value_list['bkt']}, rst:{value_list['rst']},mot:{value_list['mot']},stp:{value_list['stp']},op1:{value_list['op1']},op2:{value_list['op2']},op3:{value_list['op3']},ip1:{value_list['ip1']},ip2:{value_list['ip2']},ip3:{value_list['ip3']},psi:{value_list['psi']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='ampv1_setting',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                    erro.save()
+                    # erro.save()
                     try:
                         value_list_final = {}
                         value_list_final['srt'] = value_list['srt']
@@ -437,9 +438,10 @@ def newupdated_treat_ampv1_Viewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
-        value_list = list(data.values())
+        # value_list = list(data.values())
+        value_list = data
 
-        dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
+        dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
 
         if dinfo:
 
@@ -509,7 +511,7 @@ def ampv2stateViewset(request):
                     dd=dateandtime()
                     e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} ampv2 state change has been requested - pos:{value_list['pos']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='ampv2_state',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                    erro.save()
+                    # erro.save()
                     try:
                         value_list_final = {}
                         value_list_final['pos'] = value_list['pos']
@@ -604,7 +606,7 @@ def ampv2settingViewset(request):
                     print("dd dd ",dd)
                     e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} ampv2 Setting change has been requested - srt:{value_list['srt']}, bkt:{value_list['bkt']}, rst:{value_list['rst']},mot:{value_list['mot']},stp:{value_list['stp']},op1:{value_list['op1']},op2:{value_list['op2']},op3:{value_list['op3']},ip1:{value_list['ip1']},ip2:{value_list['ip2']},ip3:{value_list['ip3']},psi:{value_list['psi']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='ampv2_setting',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                    erro.save()
+                    # erro.save()
                     try:
                         value_list_final = {}
                         value_list_final['srt'] = value_list['srt']
@@ -672,9 +674,10 @@ def newupdated_treat_ampv2_Viewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
-        value_list = list(data.values())
+        # value_list = list(data.values())
+        value_list = data
 
-        dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
+        dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
 
         if dinfo:
 
@@ -745,7 +748,7 @@ def hppstateViewset(request):
                     dd=dateandtime()
                     e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} hpp state change has been requested - sts:{value_list['sts']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='hpp_state',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                    erro.save()
+                    # erro.save()
                     try:
                         value_list_final = {}
                         value_list_final['sts'] = value_list['sts']
@@ -832,7 +835,7 @@ def hppsettingViewset(request):
                     print("dd dd ",dd)
                     e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} hpp Setting change has been requested - olc:{value_list['olc']}, drc:{value_list['drc']}, spn:{value_list['spn']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='hpp_setting',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                    erro.save()
+                    # erro.save()
                     try:
                         value_list_final = {}
                         value_list_final['olc'] = value_list['olc']
@@ -891,9 +894,10 @@ def newupdated_treat_hpp_Viewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
-        value_list = list(data.values())
+        # value_list = list(data.values())
+        value_list = data
 
-        dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
+        dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
 
         if dinfo:
 
@@ -939,9 +943,10 @@ def newupdated_disp_flowsen1_Viewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
-        value_list = list(data.values())
+        # value_list = list(data.values())
+        value_list = data
 
-        dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
+        dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
 
         if dinfo:
 
@@ -983,9 +988,10 @@ def newupdated_disp_flowsen2_Viewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
-        value_list = list(data.values())
+        # value_list = list(data.values())
+        value_list = data
 
-        dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
+        dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
 
         if dinfo:
 
@@ -1027,9 +1033,10 @@ def newupdated_disp_flowsen3_Viewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
-        value_list = list(data.values())
+        # value_list = list(data.values())
+        value_list = data
 
-        dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
+        dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
 
         if dinfo:
 
@@ -1071,9 +1078,10 @@ def newupdated_disp_flowsen4_Viewset(request):
     try:
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
-        value_list = list(data.values())
+        # value_list = list(data.values())
+        value_list = data
 
-        dinfo = device_info.objects.filter(unit_type=value_list[0], company_id=request.user.company_id).first()
+        dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
 
         if dinfo:
 
