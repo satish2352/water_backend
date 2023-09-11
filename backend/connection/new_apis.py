@@ -640,6 +640,8 @@ def newupdated_treat_cnd_senViewset(request):
         fields_to_exclude = ['model', 'pk']
         data = json.loads(request.body)
         value_list = data
+        print("value_list['site_name']::",value_list['site_name'])
+        print(value_list)
 
         dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
 
