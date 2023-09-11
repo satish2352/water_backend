@@ -834,7 +834,6 @@ def newpanelsettingViewset(request):
             # dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
             dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
             if dinfo is not None:
-
                 device_final_data = {}
                 device_final_data['mod'] = value_list['mod']
                 device_final_data['unv'] = value_list['unv']
@@ -876,7 +875,7 @@ def newpanelsettingViewset(request):
                         value_list_final['srt'] = value_list['srt']
                         value_list_final['bkt'] = value_list['bkt']
                         value_list_final['rst'] = value_list['rst']
-                        value_list_final['re4'] = value_list['re4']
+                        # value_list_final['re4'] = value_list['re4']
                         value_list_final['componant_name'] = 'panel_setting'
                         value_list_final['unit_type'] = 'water_treatment'
                         value_list_final['device_id'] = deviceid
