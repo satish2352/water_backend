@@ -30,7 +30,8 @@ def rwpstateViewset(request):
             data_dict = json.loads(request.body)
             value_list = data_dict
            
-            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+            dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+
             if dinfo is not None:
 
                 device_final_data = {}
@@ -113,7 +114,8 @@ def rwpsettingViewset(request):
             data_dict = json.loads(request.body)
             value_list = data_dict
            
-            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+            dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+
             if dinfo is not None:
 
                 device_final_data = {}
@@ -252,7 +254,8 @@ def ampv1stateViewset(request):
             data_dict = json.loads(request.body)
             value_list = data_dict
            
-            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+            dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+
             if dinfo is not None:
 
                 device_final_data = {}
@@ -335,7 +338,8 @@ def ampv1settingViewset(request):
             data_dict = json.loads(request.body)
             value_list = data_dict
            
-            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+            dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+
             if dinfo is not None:
 
                 device_final_data = {}
@@ -487,7 +491,8 @@ def ampv2stateViewset(request):
             data_dict = json.loads(request.body)
             value_list = data_dict
            
-            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+            dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+
             if dinfo is not None:
 
                 device_final_data = {}
@@ -570,7 +575,8 @@ def ampv2settingViewset(request):
             data_dict = json.loads(request.body)
             value_list = data_dict
            
-            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+            dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+
             if dinfo is not None:
 
                 device_final_data = {}
@@ -724,7 +730,8 @@ def hppstateViewset(request):
             data_dict = json.loads(request.body)
             value_list = data_dict
            
-            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+            dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+
             if dinfo is not None:
 
                 device_final_data = {}
@@ -752,7 +759,7 @@ def hppstateViewset(request):
                     try:
                         value_list_final = {}
                         value_list_final['sts'] = value_list['sts']
-                        value_list_final['componant_name'] = 'rwp'
+                        value_list_final['componant_name'] = 'hpp'
                         value_list_final['device_id'] = deviceid
                         value_list_final['company_id'] = request.user.company_id
                         hpp_state.objects.create(**value_list_final)
@@ -808,7 +815,8 @@ def hppsettingViewset(request):
             data_dict = json.loads(request.body)
             value_list = data_dict
            
-            dinfo = device_info.objects.filter(unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+            dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
+
             if dinfo is not None:
 
                 device_final_data = {}
