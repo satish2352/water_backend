@@ -320,6 +320,10 @@ def add_user(request):
                     # user.site_limit = site_limit
                     user.company = company
                     user.added_by = request.user
+                    # site_obj = Site.objects.get(company_id=request.user.company_id)
+                    # if site_obj:
+                    #     if  role=="operator":
+                    
                     user.save()
 
                     logger.info("saved user details")
