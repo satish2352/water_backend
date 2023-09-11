@@ -859,6 +859,7 @@ def newpanelsettingViewset(request):
                 deviceid = dinfo.Device_id
 
                 if deviceid:
+                    print("srt is:",str(device_final_data))
                     mqttc.publish(f'wc1/{deviceid}/chgset/panel',str(device_final_data).replace(' ',''))
                     dd=dateandtime()
                     e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} panel_setting  change has been requested - mod:{value_list['mod']}, Under Voltage:{value_list['unv']}, Over Voltage:{value_list['ovv']}, Span:{value_list['spn']}, No.of Multiport valve:{value_list['nmv']}, Sensor Type:{value_list['stp']}, Service Time:{value_list['srt']}, Backwash Time:{value_list['bkt']}, Rinse Time:{value_list['rst']}"
