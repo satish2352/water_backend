@@ -853,7 +853,8 @@ def newpanelsettingViewset(request):
                         value.replace(' ','')
                         device_final_data[key] = value
                     else:
-                        device_final_data[key] = ''
+                        # device_final_data[key] = ''
+                        pass
 
                 deviceid = None
                 deviceid = dinfo.Device_id
