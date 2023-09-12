@@ -337,7 +337,7 @@ class MqttClient:
                     mydata ={}
                     cnd=None
                     tds=None
-                    spn=None
+                    spn=0
                     tsp=None
                     asp=None
                     sts=''
