@@ -996,7 +996,7 @@ def newFflowsensettingViewset(request):
                 if deviceid:
                     mqttc.publish(f'wc1/{deviceid}/chgset/F_flowsen',str(device_final_data).replace(' ',''))
                     dd=dateandtime()
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} F_flowsen settings change has been requested - fr1:{value_list['fr1']}, ff1:{value_list['ff1']}"
+                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} F_flowsen settings change has been requested - ff1:{value_list['ff1']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='F_flowsen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     # erro.save()
                     try:
