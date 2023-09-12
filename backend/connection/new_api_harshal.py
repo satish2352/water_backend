@@ -456,14 +456,22 @@ def newupdated_treat_ampv1_Viewset(request):
             did = dinfo.Device_id
             qs_sta = treat_ampv1.objects.filter(device_id=did, message_type="updsta").values("pos","rmt","cct","created_at","updated_at").order_by('-id')[:1:1]
             # data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
+            if qs_sta:
+                qs_sta=qs_sta[0]
+            else:
+                qs_sta=qs_sta=''
+
 
             qs_set = treat_ampv1.objects.filter(device_id=did, message_type="updset").values("srt","bkt","rst","mot","stp","op1","op2","op3","ip1","ip2","ip3","psi","created_at","updated_at").order_by('-id')[:1:1]
             # data_set = model_to_dict(qs_set[0], exclude=fields_to_exclude) if qs_set else {}
-
+            if qs_set:
+                qs_sta=qs_set[0]
+            else:
+                qs_sta=qs_set=''
             last_error = Errors.objects.filter(service='ampv1')
             last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
 
-            data_final = {'data_sta': qs_sta[0], 'data_set': qs_set[0], 'error': last_error}
+            data_final = {'data_sta': qs_sta,'data_set': qs_set,'error': last_error}
             response_data = {
                 'data': data_final,
                 'status': 200,
