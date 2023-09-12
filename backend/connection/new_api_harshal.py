@@ -366,9 +366,13 @@ def ampv1settingViewset(request):
                     if  temp is not False:
                         value.replace('"', "'")
                         value.replace(' ','')
+                        print("Value",value)
                         if ':' in value:
+                            print("Value",value)
                             srtlst=value.split(':')
+                            print("ssss",srtlst)
                             conca=str(srtlst[0]+srtlst[1])
+                            print("HHJFG",conca)
                             value=conca
                         device_final_data[key] = value
                     else:
