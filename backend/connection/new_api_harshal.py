@@ -368,7 +368,7 @@ def ampv1settingViewset(request):
                         value.replace(' ','')
                         print("Value",value)
                         if key == 'srt':
-                            print("Value",value)
+                            print("*******",value)
                             srtlst=value.split(':')
                             print("ssss",srtlst)
                             conca=str(srtlst[0]+srtlst[1])
