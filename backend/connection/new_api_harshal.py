@@ -393,7 +393,9 @@ def ampv1settingViewset(request):
                     # erro.save()
                     try:
                         value_list_final = {}
-                        value_list_final['srt'] = value_list['srt']
+                        data_srt  = value_list['srt']
+                        print("data_srt.replace("", "")",data_srt.replace(":", ""))
+                        value_list_final['srt'] = data_srt.replace(":", "")
                         value_list_final['bkt'] = value_list['bkt']
                         value_list_final['rst'] = value_list['rst']
                         value_list_final['mot'] = value_list['mot']
