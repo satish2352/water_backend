@@ -328,6 +328,7 @@ class MqttClient:
                 jstring=msg.payload
                 if isinstance(jstring, bytes):
                     dict_str = jstring.decode("utf-8")
+                    print("data from device:",dict_str)
                 if dict_str.startswith("{'") and dict_str.endswith("'}") or 'version' not in dict_str:
                     dict_split=dict_str.split(":")
 
