@@ -348,7 +348,7 @@ def ampv1settingViewset(request):
 
                 device_final_data = {}
                 data_srt  = value_list['srt']
-                print(data_srt.replace(":", ""))
+                print("data_srt.replace("", "")",data_srt.replace(":", ""))
                 device_final_data['srt'] = data_srt.replace(":", "")
                 device_final_data['bkt'] = value_list['bkt']
                 device_final_data['rst'] = value_list['rst']
