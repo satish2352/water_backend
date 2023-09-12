@@ -841,7 +841,10 @@ def newpanelsettingViewset(request):
                 device_final_data['spn'] = value_list['spn']
                 device_final_data['nmv'] = value_list['nmv']
                 device_final_data['stp'] = value_list['stp']
-                device_final_data['srt'] = value_list['srt']
+                # device_final_data['srt'] = value_list['srt']
+                data_srt  = value_list['srt']
+                print("ATM data_srt.replace("", "")",data_srt.replace(":", ""))
+                device_final_data['srt'] = data_srt.replace(":", "")
                 device_final_data['bkt'] = value_list['bkt']
                 device_final_data['rst'] = value_list['rst']
 
@@ -853,8 +856,8 @@ def newpanelsettingViewset(request):
                         value.replace(' ','')
                         device_final_data[key] = value
                     else:
-                        # device_final_data[key] = ''
-                        pass
+                        device_final_data[key] = ''
+                        # pass
 
                 deviceid = None
                 deviceid = dinfo.Device_id
@@ -868,13 +871,16 @@ def newpanelsettingViewset(request):
                     # erro.save()
                     try:
                         value_list_final = {}
+                        data_srt  = value_list['srt']
+                        print("data_srt.replace("", "")",data_srt.replace(":", ""))
+                        value_list_final['srt'] = data_srt.replace(":", "")
                         value_list_final['mod'] = value_list['mod']
                         value_list_final['unv'] = value_list['unv']
                         value_list_final['ovv'] = value_list['ovv']
                         value_list_final['spn'] = value_list['spn']
                         value_list_final['nmv'] = value_list['nmv']
                         value_list_final['stp'] = value_list['stp']
-                        value_list_final['srt'] = value_list['srt']
+                        # value_list_final['srt'] = value_list['srt']
                         value_list_final['bkt'] = value_list['bkt']
                         value_list_final['rst'] = value_list['rst']
                         # value_list_final['re4'] = value_list['re4']

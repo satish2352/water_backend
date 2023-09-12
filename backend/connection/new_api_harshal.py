@@ -347,7 +347,9 @@ def ampv1settingViewset(request):
             if dinfo is not None:
 
                 device_final_data = {}
-                device_final_data['srt'] = value_list['srt'].replace(':','')
+                data_srt  = value_list['srt']
+                print("data_srt.replace("", "")",data_srt.replace(":", ""))
+                device_final_data['srt'] = data_srt.replace(":", "")
                 device_final_data['bkt'] = value_list['bkt']
                 device_final_data['rst'] = value_list['rst']
                 device_final_data['mot'] = value_list['mot']
@@ -376,8 +378,8 @@ def ampv1settingViewset(request):
                         #     value=conca
                         device_final_data[key] = value
                     else:
-                        # device_final_data[key] = ''
-                        pass
+                        device_final_data[key] = ''
+                        # pass
 
                 deviceid = None
                 deviceid = dinfo.Device_id
@@ -391,7 +393,9 @@ def ampv1settingViewset(request):
                     # erro.save()
                     try:
                         value_list_final = {}
-                        value_list_final['srt'] = value_list['srt']
+                        data_srt  = value_list['srt']
+                        print("data_srt.replace("", "")",data_srt.replace(":", ""))
+                        value_list_final['srt'] = data_srt.replace(":", "")
                         value_list_final['bkt'] = value_list['bkt']
                         value_list_final['rst'] = value_list['rst']
                         value_list_final['mot'] = value_list['mot']
@@ -603,7 +607,10 @@ def ampv2settingViewset(request):
             if dinfo is not None:
 
                 device_final_data = {}
-                device_final_data['srt'] = value_list['srt']
+                data_srt  = value_list['srt']
+                print("ampv2 data_srt.replace("", "")",data_srt.replace(":", ""))
+                device_final_data['srt'] = data_srt.replace(":", "")
+                # device_final_data['srt'] = value_list['srt']
                 device_final_data['bkt'] = value_list['bkt']
                 device_final_data['rst'] = value_list['rst']
                 device_final_data['mot'] = value_list['mot']
@@ -624,8 +631,8 @@ def ampv2settingViewset(request):
                         value.replace(' ','')
                         device_final_data[key] = value
                     else:
-                        # device_final_data[key] = ''
-                        pass
+                        device_final_data[key] = ''
+                        # pass
 
                 deviceid = None
                 deviceid = dinfo.Device_id
@@ -639,7 +646,10 @@ def ampv2settingViewset(request):
                     # erro.save()
                     try:
                         value_list_final = {}
-                        value_list_final['srt'] = value_list['srt']
+                        data_srt  = value_list['srt']
+                        print("data_srt.replace("", "")",data_srt.replace(":", ""))
+                        value_list_final['srt'] = data_srt.replace(":", "")
+                        # value_list_final['srt'] = value_list['srt']
                         value_list_final['bkt'] = value_list['bkt']
                         value_list_final['rst'] = value_list['rst']
                         value_list_final['mot'] = value_list['mot']
