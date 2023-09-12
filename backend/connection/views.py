@@ -399,6 +399,7 @@ class MqttClient:
                     p3=None
                     p4=None
                     fr=None
+                    rwp_spn=None
                     for loop_data in array_dat: 
                         removed_col = loop_data.split(':') 
                         mydata[removed_col[0]] =removed_col[1] 
@@ -1040,7 +1041,7 @@ class MqttClient:
                                     repo_latestobj = repo_latestdata.objects.filter(device_id=device_id).update(device_id=device_id, message_type=msg_type, rwp=olddata)
                                 dd=dateandtime()  
                                 # repo_latestobj=repo_latestdata.objects.filter(device_id=device_id).update(device_id=device_id,message_type=msg_type,rwp=mydata1)
-                                ds=treat_rwp.objects.create(device_id=device_id,message_type=msg_type,sts=sts,crt=crt,olc=olc,drc=drc,spn=spn,year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                                ds=treat_rwp.objects.create(device_id=device_id,message_type=msg_type,sts=sts,crt=crt,olc=olc,drc=drc,spn=rwp_spn,year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                                 ds.save()
                                 if msg_type == 'updset':
                                     dd=dateandtime()
