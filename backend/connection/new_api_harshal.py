@@ -347,7 +347,7 @@ def ampv1settingViewset(request):
             if dinfo is not None:
 
                 device_final_data = {}
-                device_final_data['srt'] = value_list['srt']
+                device_final_data['srt'] = value_list['srt'].replace(':', '')
                 device_final_data['bkt'] = value_list['bkt']
                 device_final_data['rst'] = value_list['rst']
                 device_final_data['mot'] = value_list['mot']
@@ -367,13 +367,13 @@ def ampv1settingViewset(request):
                         value.replace('"', "'")
                         value.replace(' ','')
                         print("Value",value)
-                        if key == 'srt':
-                            print("*******",value)
-                            srtlst=value.split(':')
-                            print("ssss",srtlst)
-                            conca=str(srtlst[0]+srtlst[1])
-                            print("HHJFG",conca)
-                            value=conca
+                        # if key == 'srt':
+                        #     print("*******",value)
+                        #     srtlst=value.split(':')
+                        #     print("ssss",srtlst)
+                        #     conca=str(srtlst[0]+srtlst[1])
+                        #     print("HHJFG",conca)
+                        #     value=conca
                         device_final_data[key] = value
                     else:
                         # device_final_data[key] = ''
