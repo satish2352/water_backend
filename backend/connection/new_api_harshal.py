@@ -340,7 +340,8 @@ def ampv1settingViewset(request):
         try:
             data_dict = json.loads(request.body)
             value_list = data_dict
-           
+            print("ampv1 data is:",data_dict)
+            print("company id is:",request.user.company_id)
             dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
 
             if dinfo is not None:
