@@ -454,10 +454,10 @@ def newupdated_treat_ampv1_Viewset(request):
         if dinfo:
 
             did = dinfo.Device_id
-            qs_sta = treat_ampv1.objects.filter(device_id=did, message_type="updsta").values("pos","rmt","cct","srt","bkt","rst","mot""stp","op1","op2","op3","ip1","ip2","ip3","psi","created_at","updated_at").order_by('-id')[:1:1]
+            qs_sta = treat_ampv1.objects.filter(device_id=did, message_type="updsta").values("pos","rmt","cct","created_at","updated_at").order_by('-id')[:1:1]
             # data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
 
-            qs_set = treat_ampv1.objects.filter(device_id=did, message_type="updset").values("pos","rmt","cct","srt","bkt","rst","mot""stp","op1","op2","op3","ip1","ip2","ip3","psi","created_at","updated_at").order_by('-id')[:1:1]
+            qs_set = treat_ampv1.objects.filter(device_id=did, message_type="updset").values("srt","bkt","rst","mot""stp","op1","op2","op3","ip1","ip2","ip3","psi","created_at","updated_at").order_by('-id')[:1:1]
             # data_set = model_to_dict(qs_set[0], exclude=fields_to_exclude) if qs_set else {}
 
             last_error = Errors.objects.filter(service='ampv1')
