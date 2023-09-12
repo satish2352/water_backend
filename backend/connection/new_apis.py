@@ -1101,7 +1101,7 @@ def newPflowsensettingViewset(request):
             if dinfo is not None:
 
                 device_final_data = {}
-                device_final_data['fr2'] = value_list['fr2']
+                # device_final_data['fr2'] = value_list['fr2']
                 device_final_data['ff2'] = value_list['ff2']
 
                 for key, value in device_final_data.items():
@@ -1120,12 +1120,12 @@ def newPflowsensettingViewset(request):
                 if deviceid:
                     mqttc.publish(f'wc1/{deviceid}/chgset/P_flowsen',str(device_final_data).replace(' ',''))
                     dd=dateandtime()
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} P_flowsen settings change has been requested - fr2:{value_list['fr2']}, ff2:{value_list['ff2']}"
+                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} P_flowsen settings change has been requested - ff2:{value_list['ff2']}"
                     erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='p_flowsen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     # erro.save()
                     try:
                         value_list_final = {}
-                        value_list_final['fr2'] = value_list['fr2']
+                        # value_list_final['fr2'] = value_list['fr2']
                         value_list_final['ff2'] = value_list['ff2']
                         value_list_final['componant_name'] = 'p_flowsen'
                         value_list_final['unit_type'] = 'water_treatment'
