@@ -1060,7 +1060,7 @@ def newupdated_treat_F_flowsenViewset(request):
             did = dinfo.Device_id
             qs_sta = treat_F_flowsen.objects.filter(device_id=did, message_type="updsta").values('fr1','created_at','updated_at').order_by('-id')[:1:1]
 
-            qs_set = treat_F_flowsen.objects.filter(device_id=did, message_type="updset").values('ff2','created_at','updated_at').order_by('-id')[:1:1]
+            qs_set = treat_F_flowsen.objects.filter(device_id=did, message_type="updset").values('ff1','created_at','updated_at').order_by('-id')[:1:1]
            
 
             last_error = Errors.objects.filter(service='F_flowsen')
