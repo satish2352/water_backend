@@ -448,7 +448,7 @@ def newupdated_treat_ampv1_Viewset(request):
         data = json.loads(request.body)
         # value_list = list(data.values())
         value_list = data
-
+        print("data is:",data)
         dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
 
         if dinfo:
