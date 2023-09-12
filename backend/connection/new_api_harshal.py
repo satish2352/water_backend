@@ -123,6 +123,7 @@ def rwpsettingViewset(request):
                 device_final_data['olc'] = value_list['olc']
                 device_final_data['drc'] = value_list['drc']
                 device_final_data['spn'] = value_list['spn']
+                print("abc=")
 
                 for key, value in device_final_data.items():
                     value = str(value)
