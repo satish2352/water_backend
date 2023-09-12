@@ -337,7 +337,7 @@ class MqttClient:
                     mydata ={}
                     cnd=None
                     tds=None
-                    spn=0
+                    spn=None
                     tsp=None
                     asp=None
                     sts=''
@@ -406,6 +406,8 @@ class MqttClient:
                                 cnd=int(removed_col[1])
                         elif removed_col[0]=='spn':
                             if removed_col[1].isdigit():
+                                print("spn is:",removed_col[1])
+                                rwp_spn=removed_col[1]
                                 spn=removed_col[1]
                         elif removed_col[0]=='tds':
                             if removed_col[1].isdigit():
@@ -1037,7 +1039,7 @@ class MqttClient:
                                     repo_latestobj = repo_latestdata.objects.filter(device_id=device_id).update(device_id=device_id, message_type=msg_type, rwp=olddata)
                                 dd=dateandtime()  
                                 # repo_latestobj=repo_latestdata.objects.filter(device_id=device_id).update(device_id=device_id,message_type=msg_type,rwp=mydata1)
-                                ds=treat_rwp.objects.create(device_id=device_id,message_type=msg_type,sts=sts,crt=crt,olc=olc,drc=drc,spn=spn,year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                                ds=treat_rwp.objects.create(device_id=device_id,message_type=msg_type,sts=sts,crt=crt,olc=olc,drc=drc,spn=rwp_spn,year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                                 ds.save()
                                 if msg_type == 'updset':
                                     dd=dateandtime()
