@@ -977,7 +977,7 @@ def newFflowsensettingViewset(request):
             if dinfo is not None:
 
                 device_final_data = {}
-                device_final_data['fr1'] = value_list['fr1']
+                # device_final_data['fr1'] = value_list['fr1']
                 device_final_data['ff1'] = value_list['ff1']
 
                 for key, value in device_final_data.items():
@@ -1001,7 +1001,7 @@ def newFflowsensettingViewset(request):
                     # erro.save()
                     try:
                         value_list_final = {}
-                        value_list_final['fr1'] = value_list['fr1']
+                        # value_list_final['fr1'] = value_list['fr1']
                         value_list_final['ff1'] = value_list['ff1']
                         value_list_final['componant_name'] = 'F_flowsen'
                         value_list_final['unit_type'] = 'water_treatment'
