@@ -658,14 +658,21 @@ def newupdated_treat_cnd_senViewset(request):
 
             did = dinfo.Device_id
             qs_sta = treat_cnd_sen.objects.filter(device_id=did, message_type="updsta").values('cnd','created_at','updated_at').order_by('-id')[:1:1]
+            if qs_sta is not None:
+                qs_sta_final = qs_sta[0]
+            else:
+                qs_sta_final = {}
 
             qs_set = treat_cnd_sen.objects.filter(device_id=did, message_type="updset").values('spn','tsp','asp','created_at','updated_at').order_by('-id')[:1:1]
-           
+            if qs_set is not None:
+                qs_set_final = qs_set[0]
+            else:
+                qs_set_final = {}
 
             last_error = Errors.objects.filter(service='cnd_sen')
             last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
 
-            data_final = {'data_sta': qs_sta[0], 'data_set': qs_set[0], 'error': last_error}
+            data_final = {'data_sta': qs_sta_final, 'data_set': qs_set_final, 'error': last_error}
             response_data = {
                 'data': data_final,
                 'status': 200,
