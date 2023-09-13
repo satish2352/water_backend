@@ -149,4 +149,48 @@ def ssl_alpn():
 #         logger.error("message:{}".format(e.message))
 #         traceback.print_exc(file=sys.stdout)
      
-    
+
+# from __future__ import print_function
+import sys
+import ssl
+import time
+import datetime
+import logging, traceback
+import paho.mqtt.client as mqtt
+
+IoT_protocol_name = "x-amzn-mqtt-ca"
+# aws_iot_endpoint = "aiko32o7f20z-ats.iot.eu-north-1.amazonaws.com" # <random>.iot.<region>.amazonaws.com
+# aws_iot_endpoint = "a2al4qktysi6gi-ats.iot.ap-southeast-1.amazonaws.com" # <random>.iot.<region>.amazonaws.com
+aws_iot_endpoint = "a2al4qktysi6gi-ats.iot.ap-south-1.amazonaws.com" # <random>.iot.<region>.amazonaws.com
+url = "https://{}".format(aws_iot_endpoint)
+
+# ca = "C://Users/harsh/Downloads/AmazonRootCA1.pem" #testing
+# ca =  "C:/Users/My Pc/Desktop/6-7water/aws_django/aws_broker_files/RootCA1.pem"
+# ca =  "C:/Users/My Pc/Desktop/6-7water/aws_django/aws_broker_files/RootCA1.pem"
+# # cert = "C:/Users/harsh/Downloads/30f1d28338acfe6f98921e02f445954428b147a069400dec8327a8d0c3356924-certificate.pem.crt" #testing
+# cert = "C:/Users/My Pc/Desktop/6-7water/aws_django/aws_broker_files/Device-certificate.pem.crt"
+# # private = "C:/Users/harsh/Downloads/30f1d28338acfe6f98921e02f445954428b147a069400dec8327a8d0c3356924-private.pem.key" #testing
+# private = "C:/Users/My Pc/Desktop/6-7water/aws_django/aws_broker_files/private.pem.key"
+ca =  "C:/Users/My Pc/Desktop/crownWebDevServer_28-06-2023/local webcrown 11-9-23/water_backend/backend/Test/RootCA1.pem"
+cert = "C:/Users/My Pc/Desktop/crownWebDevServer_28-06-2023/local webcrown 11-9-23/water_backend/backend/Test/Dc.pem.crt"
+private = "C:/Users/My Pc/Desktop/crownWebDevServer_28-06-2023/local webcrown 11-9-23/water_backend/backend/Test/private.pem.key"
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+handler = logging.StreamHandler(sys.stdout)
+log_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(log_format)
+logger.addHandler(handler)
+
+def ssl_alpn():
+    try:
+        #debug print opnessl version
+        logger.info("open ssl version:{}".format(ssl.OPENSSL_VERSION))
+        ssl_context = ssl.create_default_context()
+        ssl_context.set_alpn_protocols([IoT_protocol_name])
+        ssl_context.load_verify_locations(cafile=ca)
+        ssl_context.load_cert_chain(certfile=cert, keyfile=private)
+
+        return  ssl_context
+    except Exception as e:
+        print("exception ssl_alpn()")
+        raise e

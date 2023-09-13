@@ -406,6 +406,9 @@ class MqttClient:
                         if removed_col[0]=='cnd':
                             if removed_col[1].isdigit():
                                 cnd=int(removed_col[1])
+                        elif removed_col[0]=='spn':
+                            if removed_col[1].isdigit():
+                                spn=removed_col[1]
                         elif removed_col[0]=='span':
                             if removed_col[1].isdigit():
                             # print("spn is:",removed_col[1])
