@@ -271,7 +271,8 @@ def ampv1stateViewset(request):
             if dinfo is not None:
 
                 device_final_data = {}
-                device_final_data['pos'] = value_list['pos']
+                if 'pos' in value_list:
+                    device_final_data['pos'] = value_list['pos']
 
                 for key, value in device_final_data.items():
                     value = str(value)
@@ -294,12 +295,13 @@ def ampv1stateViewset(request):
                     # erro.save()
                     try:
                         value_list_final = {}
-                        value_list_final['pos'] = value_list['pos']
-                        value_list_final['componant_name'] = 'ampv1'
-                        value_list_final['unit_type'] = 'water_treatment'
-                        value_list_final['device_id'] = deviceid
-                        value_list_final['company_id'] = request.user.company_id
-                        ampv1_state.objects.create(**value_list_final)
+                        if 'pos' in value_list_final:
+                            value_list_final['pos'] = value_list['pos']
+                            value_list_final['componant_name'] = 'ampv1'
+                            value_list_final['unit_type'] = 'water_treatment'
+                            value_list_final['device_id'] = deviceid
+                            value_list_final['company_id'] = request.user.company_id
+                            ampv1_state.objects.create(**value_list_final)
                         return Response({"message": "NEW ampv1 API 200"})
                     except Exception as e:
                         print("error while saving ampv1 record ",e)
@@ -350,8 +352,7 @@ def ampv1settingViewset(request):
         try:
             data_dict = json.loads(request.body)
             value_list = data_dict
-            print("ampv1 data is:",data_dict)
-            print("company id is:",request.user.company_id)
+
             dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
 
             if dinfo is not None:
@@ -360,28 +361,52 @@ def ampv1settingViewset(request):
                 if 'srt' in value_list:
                     data_srt  = value_list['srt'] 
                     device_final_data['srt'] = data_srt.replace(":", "")
+                else:
+                    device_final_data['srt'] = ''
                 if 'bkt' in value_list:
                     device_final_data['bkt'] = value_list['bkt'] 
+                else:
+                    device_final_data['bkt'] = ''
                 if 'rst' in value_list:
                     device_final_data['rst'] = value_list['rst']
+                else:
+                    device_final_data['rst'] = ''
                 if 'mot' in value_list:
                     device_final_data['mot'] = value_list['mot'] 
+                else:
+                    device_final_data['mot'] = ''
                 if 'stp' in value_list:
                     device_final_data['stp'] = value_list['stp'] 
+                else:
+                    device_final_data['stp'] = ''
                 if 'op1' in value_list:
                     device_final_data['op1'] = value_list['op1'] 
+                else:
+                    device_final_data['op1'] = ''
                 if 'op2' in value_list:
                     device_final_data['op2'] = value_list['op2'] 
+                else:
+                    device_final_data['op2'] = ''
                 if 'op3' in value_list:
                     device_final_data['op3'] = value_list['op3'] 
+                else:
+                    device_final_data['op3'] = ''
                 if 'ip1' in value_list:
                     device_final_data['ip1'] = value_list['ip1'] 
+                else:
+                    device_final_data['ip1'] = ''
                 if 'ip2' in value_list:
                     device_final_data['ip2'] = value_list['ip2'] 
+                else:
+                    device_final_data['ip2'] = ''
                 if 'ip3' in value_list:
                     device_final_data['ip3'] = value_list['ip3'] 
+                else:
+                    device_final_data['ip3'] = ''
                 if 'psi' in value_list:
                     device_final_data['psi'] = value_list['psi'] 
+                else:
+                    device_final_data['psi'] = ''
 
                 for key, value in device_final_data.items():
                     value = str(value)
@@ -407,11 +432,11 @@ def ampv1settingViewset(request):
 
                 if deviceid:
                     mqttc.publish(f'wc1/{deviceid}/chgset/ampv1',str(device_final_data).replace(' ',''))
-                    dd=dateandtime()
-                    print("dd dd ",dd)
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} ampv1 Setting change has been requested - srt:{value_list['srt']}, bkt:{value_list['bkt']}, rst:{value_list['rst']},mot:{value_list['mot']},stp:{value_list['stp']},op1:{value_list['op1']},op2:{value_list['op2']},op3:{value_list['op3']},ip1:{value_list['ip1']},ip2:{value_list['ip2']},ip3:{value_list['ip3']},psi:{value_list['psi']}"
-                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='ampv1_setting',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                    # erro.save()
+                    
+                    # dd=dateandtime()
+                    # e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} ampv1 Setting change has been requested - srt:{value_list['srt']}, bkt:{value_list['bkt']}, rst:{value_list['rst']},mot:{value_list['mot']},stp:{value_list['stp']},op1:{value_list['op1']},op2:{value_list['op2']},op3:{value_list['op3']},ip1:{value_list['ip1']},ip2:{value_list['ip2']},ip3:{value_list['ip3']},psi:{value_list['psi']}"
+                    # erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='ampv1_setting',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+
                     try:
                         value_list_final = {}
                         if 'srt' in value_list:
