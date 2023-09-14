@@ -7222,7 +7222,7 @@ class device_infoViewset(viewsets.ModelViewSet):
             u_id=data['user_id']
             print("u_id",u_id)
             print("data['company_id']",data['company_id'])
-            dinfo = device_info.objects.filter(company_id=data['company_id'])
+            dinfo = device_info.objects.filter(company_id=data['company_id']).value('site_name')
             print("dinfo ",dinfo)
             allsites=[]
             for si in dinfo:
