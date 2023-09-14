@@ -968,7 +968,7 @@ def newupdated_treat_hpp_Viewset(request):
             if qs_sta:
                 qs_sta_final = qs_sta[0]
             else:
-                qs_sta_final=''
+                qs_sta_final={}
 
             qs_set = treat_hpp.objects.filter(device_id=did, message_type="updset").values("sts","crt","olc","drc","spn","created_at","updated_at").order_by('-id')[:1:1]
             if qs_set:
