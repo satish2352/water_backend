@@ -213,13 +213,12 @@ def newupdated_treat_rwp_Viewset(request):
 
             did = dinfo.Device_id
             qs_sta = treat_rwp.objects.filter(device_id=did, message_type="updsta").values("sts","crt","olc","drc","spn","created_at","updated_at").order_by('-id')[:1:1]
-            print("qs_sta",qs_sta)
           
             if qs_sta:
                 qs_sta_final = qs_sta[0]
             else:
-                qs_sta_final=''
-            print("qs_sta_final",qs_sta_final)
+                qs_sta_final= {}
+
             qs_set = treat_rwp.objects.filter(device_id=did, message_type="updset").values("sts","crt","olc","drc","spn","created_at","updated_at").order_by('-id')[:1:1]
          
             if qs_set:
@@ -232,7 +231,7 @@ def newupdated_treat_rwp_Viewset(request):
             if last_error:
                 last_error_final = last_error[0]
             else:
-                last_error_final={}
+                last_error_final= {}
 
             data_final = {'data_sta': qs_sta_final, 'data_set': qs_set_final, 'error': last_error_final}
             response_data = {
