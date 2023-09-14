@@ -245,7 +245,7 @@ def newupdated_treat_rwp_Viewset(request):
             else:
                 last_error_final=''
 
-            data_final = {'data_sta': qs_sta_final, 'data_set': qs_set_final, 'error': last_error_final}
+            data_final = {'data_sta': str(qs_sta_final), 'data_set': str(qs_set_final), 'error': str(last_error_final)}
             response_data = {
                 'data': data_final,
                 'status': 200,
