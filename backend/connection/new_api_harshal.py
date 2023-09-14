@@ -226,9 +226,13 @@ def newupdated_treat_rwp_Viewset(request):
 
 
             last_error = Errors.objects.filter(service='rwp')
-            last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
+            # last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
+            if last_error is not None:
+                last_error_final = last_error[0]
+            else:
+                last_error_final = {}
 
-            data_final = {'data_sta': qs_sta_final, 'data_set': qs_set_final, 'error': last_error}
+            data_final = {'data_sta': qs_sta_final, 'data_set': qs_set_final, 'error': last_error_final}
             response_data = {
                 'data': data_final,
                 'status': 200,
