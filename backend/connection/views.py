@@ -399,7 +399,6 @@ class MqttClient:
                     p3=None
                     p4=None
                     fr=None
-                    rwp_spn=None
                     for loop_data in array_dat: 
                         removed_col = loop_data.split(':') 
                         mydata[removed_col[0]] =removed_col[1] 
