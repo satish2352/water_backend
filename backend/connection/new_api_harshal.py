@@ -415,9 +415,8 @@ def ampv1settingViewset(request):
                     try:
                         value_list_final = {}
                         if value_list['srt']:
-                        data_srt  = value_list['srt']:
-                        # print("data_srt.replace("", "")",data_srt.replace(":", ""))
-                        value_list_final['srt'] = data_srt.replace(":", "")
+                            data_srt  = value_list['srt']:
+                            value_list_final['srt'] = data_srt.replace(":", "")
 
                         if value_list['bkt']:
                             value_list_final['bkt'] = value_list['bkt'] 
