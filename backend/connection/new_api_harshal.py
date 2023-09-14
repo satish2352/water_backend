@@ -213,18 +213,22 @@ def newupdated_treat_rwp_Viewset(request):
 
             did = dinfo.Device_id
             qs_sta = treat_rwp.objects.filter(device_id=did, message_type="updsta").values("sts","crt","olc","drc","spn","created_at","updated_at").order_by('-id')[:1:1]
-            # data_sta = model_to_dict(qs_sta[0], exclude=fields_to_exclude) if qs_sta else {}
-
-
-
+            if qs_sta is not None:
+                qs_sta_final = qs_sta[0]
+            else:
+                qs_sta_final = {}
 
             qs_set = treat_rwp.objects.filter(device_id=did, message_type="updset").values("sts","crt","olc","drc","spn","created_at","updated_at").order_by('-id')[:1:1]
-            # data_set = model_to_dict(qs_set[0], exclude=fields_to_exclude) if qs_set else {}
+            if qs_set is not None:
+                qs_set_final = qs_set[0]
+            else:
+                qs_set_final = {}
+
 
             last_error = Errors.objects.filter(service='rwp')
             last_error = model_to_dict(last_error[0], exclude=fields_to_exclude) if last_error else {}
 
-            data_final = {'data_sta': qs_sta[0], 'data_set': qs_set[0], 'error': last_error}
+            data_final = {'data_sta': qs_sta_final, 'data_set': qs_set_final, 'error': last_error}
             response_data = {
                 'data': data_final,
                 'status': 200,
