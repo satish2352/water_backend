@@ -357,20 +357,20 @@ def ampv1settingViewset(request):
             if dinfo is not None:
 
                 device_final_data = {}
-                data_srt  = value_list['srt']
+                data_srt  = value_list['srt'] if value_list['bkt'] is not None else ''
                 print("data_srt.replace("", "")",data_srt.replace(":", ""))
-                device_final_data['srt'] = data_srt.replace(":", "")
-                device_final_data['bkt'] = value_list['bkt']
-                device_final_data['rst'] = value_list['rst']
-                device_final_data['mot'] = value_list['mot']
-                device_final_data['stp'] = value_list['stp']
-                device_final_data['op1'] = value_list['op1']
-                device_final_data['op2'] = value_list['op2']
-                device_final_data['op3'] = value_list['op3']
-                device_final_data['ip1'] = value_list['ip1']
-                device_final_data['ip2'] = value_list['ip2']
-                device_final_data['ip3'] = value_list['ip3']
-                device_final_data['psi'] = value_list['psi']
+                device_final_data['srt'] = data_srt.replace(":", "") if value_list['srt'] is not None else ''
+                device_final_data['bkt'] = value_list['bkt'] if value_list['bkt'] is not None else ''
+                device_final_data['rst'] = value_list['rst'] if value_list['rst'] is not None else ''
+                device_final_data['mot'] = value_list['mot'] if value_list['mot'] is not None else ''
+                device_final_data['stp'] = value_list['stp'] if value_list['stp'] is not None else ''
+                device_final_data['op1'] = value_list['op1'] if value_list['op1'] is not None else ''
+                device_final_data['op2'] = value_list['op2'] if value_list['op2'] is not None else ''
+                device_final_data['op3'] = value_list['op3'] if value_list['op3'] is not None else ''
+                device_final_data['ip1'] = value_list['ip1'] if value_list['ip1'] is not None else ''
+                device_final_data['ip2'] = value_list['ip2'] if value_list['ip2'] is not None else ''
+                device_final_data['ip3'] = value_list['ip3'] if value_list['ip3'] is not None else ''
+                device_final_data['psi'] = value_list['psi'] if value_list['psi'] is not None else ''
 
                 for key, value in device_final_data.items():
                     value = str(value)
@@ -403,20 +403,20 @@ def ampv1settingViewset(request):
                     # erro.save()
                     try:
                         value_list_final = {}
-                        data_srt  = value_list['srt']
-                        print("data_srt.replace("", "")",data_srt.replace(":", ""))
-                        value_list_final['srt'] = data_srt.replace(":", "")
-                        value_list_final['bkt'] = value_list['bkt']
-                        value_list_final['rst'] = value_list['rst']
-                        value_list_final['mot'] = value_list['mot']
-                        value_list_final['stp'] = value_list['stp']
-                        value_list_final['op1'] = value_list['op1']
-                        value_list_final['op2'] = value_list['op2']
-                        value_list_final['op3'] = value_list['op3']
-                        value_list_final['ip1'] = value_list['ip1']
-                        value_list_final['ip2'] = value_list['ip2']
-                        value_list_final['ip3'] = value_list['ip3']
-                        value_list_final['psi'] = value_list['psi']
+                        data_srt  = value_list['srt'] if value_list['srt'] is not None else ''
+                        # print("data_srt.replace("", "")",data_srt.replace(":", ""))
+                        value_list_final['srt'] = data_srt.replace(":", "") if value_list['srt'] is not None else ''
+                        value_list_final['bkt'] = value_list['bkt'] if value_list['bkt'] is not None else ''
+                        value_list_final['rst'] = value_list['rst'] if value_list['rst'] is not None else ''
+                        value_list_final['mot'] = value_list['mot'] if value_list['mot'] is not None else ''
+                        value_list_final['stp'] = value_list['stp'] if value_list['stp'] is not None else ''
+                        value_list_final['op1'] = value_list['op1'] if value_list['op1'] is not None else ''
+                        value_list_final['op2'] = value_list['op2'] if value_list['op2'] is not None else ''
+                        value_list_final['op3'] = value_list['op3'] if value_list['op3'] is not None else ''
+                        value_list_final['ip1'] = value_list['ip1'] if value_list['ip1'] is not None else ''
+                        value_list_final['ip2'] = value_list['ip2'] if value_list['ip2'] is not None else ''
+                        value_list_final['ip3'] = value_list['ip3'] if value_list['ip3'] is not None else ''
+                        value_list_final['psi'] = value_list['psi'] if value_list['psi'] is not None else ''
                         value_list_final['componant_name'] = 'ampv1'
                         value_list_final['unit_type'] = 'water_treatment'
                         value_list_final['device_id'] = deviceid
