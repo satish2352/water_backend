@@ -225,7 +225,7 @@ def newupdated_treat_rwp_Viewset(request):
             if qs_set:
                 qs_set_final = qs_set[0]
             else:
-                qs_set_final=''  
+                qs_set_final= {} 
 
 
             last_error = Errors.objects.filter(service='rwp')
