@@ -35,7 +35,10 @@ def rwpstateViewset(request):
             if dinfo is not None:
 
                 device_final_data = {}
-                device_final_data['sts'] = value_list['sts']
+                if 'sts' in value_list:
+                    device_final_data['sts'] = value_list['sts']
+                else:
+                    device_final_data['sts'] = ''
 
                 for key, value in device_final_data.items():
                     value = str(value)
@@ -52,13 +55,15 @@ def rwpstateViewset(request):
 
                 if deviceid:
                     mqttc.publish(f'wc1/{deviceid}/chgsta/rwp',str(device_final_data).replace(' ',''))
-                    dd=dateandtime()
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} Rwp state change has been requested - sts:{value_list['sts']}"
-                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='rwp',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                    # erro.save()
+                    
+                    # dd=dateandtime()
+                    # e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} Rwp state change has been requested - sts:{value_list['sts']}"
+                    # erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='rwp',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                    
                     try:
                         value_list_final = {}
-                        value_list_final['sts'] = value_list['sts']
+                        if 'sts' in value_list:
+                            value_list_final['sts'] = value_list['sts']
                         value_list_final['componant_name'] = 'rwp'
                         value_list_final['unit_type'] = 'water_treatment'
                         value_list_final['device_id'] = deviceid
@@ -120,10 +125,18 @@ def rwpsettingViewset(request):
             if dinfo is not None:
 
                 device_final_data = {}
-                device_final_data['olc'] = value_list['olc']
-                device_final_data['drc'] = value_list['drc']
-                device_final_data['spn'] = value_list['spn']
-                print("abc=")
+                if 'olc' in value_list:
+                    device_final_data['olc'] = value_list['olc']
+                else:
+                    device_final_data['olc'] = ''
+                if 'drc' in value_list:
+                    device_final_data['drc'] = value_list['drc']
+                else:
+                    device_final_data['drc'] = ''
+                if 'spn' in value_list:
+                    device_final_data['spn'] = value_list['spn']
+                else:
+                    device_final_data['spn'] = ''
 
                 for key, value in device_final_data.items():
                     value = str(value)
@@ -140,16 +153,20 @@ def rwpsettingViewset(request):
 
                 if deviceid:
                     mqttc.publish(f'wc1/{deviceid}/chgset/rwp',str(device_final_data).replace(' ',''))
-                    dd=dateandtime()
-                    print("dd dd ",dd)
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} Rwp Setting change has been requested - olc:{value_list['olc']}, drc:{value_list['drc']}, spn:{value_list['spn']}"
-                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='rwp_setting',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                    # erro.save()
+                    
+                    # dd=dateandtime()
+                    # e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} Rwp Setting change has been requested - olc:{value_list['olc']}, drc:{value_list['drc']}, spn:{value_list['spn']}"
+                    # erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='rwp_setting',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+
                     try:
                         value_list_final = {}
-                        value_list_final['olc'] = value_list['olc']
-                        value_list_final['drc'] = value_list['drc']
-                        value_list_final['spn'] = value_list['spn']
+                        if 'olc' in value_list:
+                            value_list_final['olc'] = value_list['olc']
+                        if 'drc' in value_list:
+                            value_list_final['drc'] = value_list['drc']
+                        if 'spn' in value_list:
+                            value_list_final['spn'] = value_list['spn']
+                            
                         value_list_final['componant_name'] = 'rwp'
                         value_list_final['unit_type'] = 'water_treatment'
                         value_list_final['device_id'] = deviceid
@@ -273,6 +290,8 @@ def ampv1stateViewset(request):
                 device_final_data = {}
                 if 'pos' in value_list:
                     device_final_data['pos'] = value_list['pos']
+                else:
+                    device_final_data['pos'] = ''
 
                 for key, value in device_final_data.items():
                     value = str(value)
@@ -289,19 +308,21 @@ def ampv1stateViewset(request):
 
                 if deviceid:
                     mqttc.publish(f'wc1/{deviceid}/chgsta/ampv1',str(device_final_data).replace(' ',''))
-                    dd=dateandtime()
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} ampv1 state change has been requested - pos:{value_list['pos']}"
-                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='ampv1_state',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                    # erro.save()
+
+                    # dd=dateandtime()
+                    # e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} ampv1 state change has been requested - pos:{value_list['pos']}"
+                    # erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='ampv1_state',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+
                     try:
                         value_list_final = {}
                         if 'pos' in value_list_final:
                             value_list_final['pos'] = value_list['pos']
-                            value_list_final['componant_name'] = 'ampv1'
-                            value_list_final['unit_type'] = 'water_treatment'
-                            value_list_final['device_id'] = deviceid
-                            value_list_final['company_id'] = request.user.company_id
-                            ampv1_state.objects.create(**value_list_final)
+
+                        value_list_final['componant_name'] = 'ampv1'
+                        value_list_final['unit_type'] = 'water_treatment'
+                        value_list_final['device_id'] = deviceid
+                        value_list_final['company_id'] = request.user.company_id
+                        ampv1_state.objects.create(**value_list_final)
                         return Response({"message": "NEW ampv1 API 200"})
                     except Exception as e:
                         print("error while saving ampv1 record ",e)
