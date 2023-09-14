@@ -7218,13 +7218,15 @@ class device_infoViewset(viewsets.ModelViewSet):
             fields_to_exclude = ['model', 'pk']
 
             data = json.loads(request.body)
-            print("device_infoViewset", device_infoViewset)
+            
             u_id=data['user_id']
             print("u_id",u_id)
             dinfo = device_info.objects.filter(company_id=data['company_id'])
+            print("dinfo ",dinfo)
             allsites=[]
             for si in dinfo:
                 allsites.append(si.site_name)
+                print("si.site_name",si.site_name)
             allsiteset=set(allsites)
             allsitelist=list(allsiteset)
 
