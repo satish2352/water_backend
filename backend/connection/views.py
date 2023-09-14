@@ -7218,12 +7218,13 @@ class device_infoViewset(viewsets.ModelViewSet):
             fields_to_exclude = ['model', 'pk']
             data = json.loads(request.body)
             u_id=data['user_id']
-            dinfo = device_info.objects.filter(company_id=data['company_id']).value('site_name')
+            dinfo = device_info.objects.filter(company_id=data['company_id'])
             allsites=[]
             for si in dinfo:
                 allsites.append(si.site_name)
             allsiteset=set(allsites)
             allsitelist=list(allsiteset)
+            print("allsiteset",allsiteset)
 
             sites=[]
             raw_sql = "SELECT iwater_site.site_name FROM iwater_site INNER JOIN iwater_site_permissions ON iwater_site.id=iwater_site_permissions.site_id WHERE iwater_site_permissions.user_id=%s"
