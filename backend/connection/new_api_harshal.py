@@ -240,6 +240,7 @@ def newupdated_treat_rwp_Viewset(request):
             qs_set = treat_rwp.objects.filter(device_id=did, message_type="updset").values("sts","crt","olc","drc","spn","created_at","updated_at").order_by('-id')[:1:1]
          
             if qs_set:
+                print("qs_set qs_set",qs_set[0])
                 qs_set_final = qs_set[0]
             else:
                 qs_set_final= {} 
