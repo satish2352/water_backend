@@ -232,6 +232,7 @@ def newupdated_treat_rwp_Viewset(request):
             qs_sta = treat_rwp.objects.filter(device_id=did, message_type="updsta").values("sts","crt","olc","drc","spn","created_at","updated_at").order_by('-id')[:1:1]
           
             if qs_sta:
+                print(" in if qs_sta",qs_sta[0])
                 qs_sta_final = qs_sta[0]
             else:
                 qs_sta_final= {}
