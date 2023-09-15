@@ -33,10 +33,22 @@ def newtap1settingViewset(request):
             if dinfo is not None:
 
                 device_final_data = {}
-                device_final_data['p1'] = value_list['p1']
-                device_final_data['p2'] = value_list['p2']
-                device_final_data['p3'] = value_list['p3']
-                device_final_data['p4'] = value_list['p4']
+                if 'p1' in value_list:
+                    device_final_data['p1'] = value_list['p1']
+                else:
+                    device_final_data['p1'] = ''
+                if 'p2' in value_list:
+                    device_final_data['p2'] = value_list['p2']
+                else:
+                    device_final_data['p2']=''
+                if 'p3' in value_list:
+                    device_final_data['p3'] = value_list['p3']
+                else:
+                    device_final_data['p3']=''
+                if 'p4' in value_list:
+                    device_final_data['p4'] = value_list['p4']
+                else:
+                    device_final_data['p4']=''
 
                 for key, value in device_final_data.items():
                     value = str(value)
@@ -53,17 +65,21 @@ def newtap1settingViewset(request):
 
                 if deviceid:
                     mqttc.publish(f'wc1/{deviceid}/chgset/tap1',str(device_final_data).replace(' ',''))
-                    dd=dateandtime()
-                    print("dd dd ",dd)
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tap1 settings change has been requested - pulse1:{value_list['p1']}, pulse2:{value_list['p2']}, pulse3:{value_list['p3']}, pulse4:{value_list['p4']}"
-                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tap1',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                    # erro.save()
+                    # dd=dateandtime()
+                    # print("dd dd ",dd)
+                    # e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tap1 settings change has been requested - pulse1:{value_list['p1']}, pulse2:{value_list['p2']}, pulse3:{value_list['p3']}, pulse4:{value_list['p4']}"
+                    # erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tap1',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                    # # erro.save()
                     try:
                         value_list_final = {}
-                        value_list_final['p1'] = value_list['p1']
-                        value_list_final['p2'] = value_list['p2']
-                        value_list_final['p3'] = value_list['p3']
-                        value_list_final['p4'] = value_list['p4']
+                        if 'p1' in value_list:
+                            value_list_final['p1'] = value_list['p1']
+                        if 'p2' in value_list:
+                            value_list_final['p2'] = value_list['p2']
+                        if 'p3' in value_list:
+                            value_list_final['p3'] = value_list['p3']
+                        if 'p4' in value_list:
+                            value_list_final['p4'] = value_list['p4']
                         value_list_final['componant_name'] = 'tap1'
                         value_list_final['unit_type'] = 'water_dispense'
                         value_list_final['device_id'] = deviceid
@@ -126,10 +142,22 @@ def newtap2settingViewset(request):
             if dinfo is not None:
 
                 device_final_data = {}
-                device_final_data['p1'] = value_list['p1']
-                device_final_data['p2'] = value_list['p2']
-                device_final_data['p3'] = value_list['p3']
-                device_final_data['p4'] = value_list['p4']
+                if 'p1' in value_list:
+                    device_final_data['p1'] = value_list['p1']
+                else:
+                    device_final_data['p1'] = ''
+                if 'p2' in value_list:
+                    device_final_data['p2'] = value_list['p2']
+                else:
+                    device_final_data['p2']=''
+                if 'p3' in value_list:
+                    device_final_data['p3'] = value_list['p3']
+                else:
+                    device_final_data['p3']=''
+                if 'p4' in value_list:
+                    device_final_data['p4'] = value_list['p4']
+                else:
+                    device_final_data['p4']=''
 
                 for key, value in device_final_data.items():
                     value = str(value)
@@ -146,17 +174,21 @@ def newtap2settingViewset(request):
 
                 if deviceid:
                     mqttc.publish(f'wc1/{deviceid}/chgset/tap2',str(device_final_data).replace(' ',''))
-                    dd=dateandtime()
-                    print("dd dd ",dd)
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tap2 settings change has been requested - pulse1:{value_list['p1']}, pulse2:{value_list['p2']}, pulse3:{value_list['p3']}, pulse4:{value_list['p4']}"
-                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tap2',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                    # dd=dateandtime()
+                    # print("dd dd ",dd)
+                    # e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tap2 settings change has been requested - pulse1:{value_list['p1']}, pulse2:{value_list['p2']}, pulse3:{value_list['p3']}, pulse4:{value_list['p4']}"
+                    # erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tap2',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     # erro.save()
                     try:
                         value_list_final = {}
-                        value_list_final['p1'] = value_list['p1']
-                        value_list_final['p2'] = value_list['p2']
-                        value_list_final['p3'] = value_list['p3']
-                        value_list_final['p4'] = value_list['p4']
+                        if 'p1' in value_list:
+                            value_list_final['p1'] = value_list['p1']
+                        if 'p2' in value_list:
+                            value_list_final['p2'] = value_list['p2']
+                        if 'p3' in value_list:
+                            value_list_final['p3'] = value_list['p3']
+                        if 'p4' in value_list:
+                            value_list_final['p4'] = value_list['p4']
                         value_list_final['componant_name'] = 'tap2'
                         value_list_final['unit_type'] = 'water_dispense'
                         value_list_final['device_id'] = deviceid
@@ -180,10 +212,22 @@ def newtap3settingViewset(request):
             if dinfo is not None:
 
                 device_final_data = {}
-                device_final_data['p1'] = value_list['p1']
-                device_final_data['p2'] = value_list['p2']
-                device_final_data['p3'] = value_list['p3']
-                device_final_data['p4'] = value_list['p4']
+                if 'p1' in value_list:
+                    device_final_data['p1'] = value_list['p1']
+                else:
+                    device_final_data['p1'] = ''
+                if 'p2' in value_list:
+                    device_final_data['p2'] = value_list['p2']
+                else:
+                    device_final_data['p2']=''
+                if 'p3' in value_list:
+                    device_final_data['p3'] = value_list['p3']
+                else:
+                    device_final_data['p3']=''
+                if 'p4' in value_list:
+                    device_final_data['p4'] = value_list['p4']
+                else:
+                    device_final_data['p4']=''
 
                 for key, value in device_final_data.items():
                     value = str(value)
@@ -200,17 +244,21 @@ def newtap3settingViewset(request):
 
                 if deviceid:
                     mqttc.publish(f'wc1/{deviceid}/chgset/tap3',str(device_final_data).replace(' ',''))
-                    dd=dateandtime()
-                    print("dd dd ",dd)
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tap3 settings change has been requested - pulse1:{value_list['p1']}, pulse2:{value_list['p2']}, pulse3:{value_list['p3']}, pulse4:{value_list['p4']}"
-                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tap3',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                    # dd=dateandtime()
+                    # print("dd dd ",dd)
+                    # e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} tap3 settings change has been requested - pulse1:{value_list['p1']}, pulse2:{value_list['p2']}, pulse3:{value_list['p3']}, pulse4:{value_list['p4']}"
+                    # erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='tap3',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     # erro.save()
                     try:
                         value_list_final = {}
-                        value_list_final['p1'] = value_list['p1']
-                        value_list_final['p2'] = value_list['p2']
-                        value_list_final['p3'] = value_list['p3']
-                        value_list_final['p4'] = value_list['p4']
+                        if 'p1' in value_list:
+                            value_list_final['p1'] = value_list['p1']
+                        if 'p2' in value_list:
+                            value_list_final['p2'] = value_list['p2']
+                        if 'p3' in value_list:
+                            value_list_final['p3'] = value_list['p3']
+                        if 'p4' in value_list:
+                            value_list_final['p4'] = value_list['p4']
                         value_list_final['componant_name'] = 'tap3'
                         value_list_final['unit_type'] = 'water_dispense'
                         value_list_final['device_id'] = deviceid
@@ -234,10 +282,22 @@ def newtap4settingViewset(request):
             if dinfo is not None:
 
                 device_final_data = {}
-                device_final_data['p1'] = value_list['p1']
-                device_final_data['p2'] = value_list['p2']
-                device_final_data['p3'] = value_list['p3']
-                device_final_data['p4'] = value_list['p4']
+                if 'p1' in value_list:
+                    device_final_data['p1'] = value_list['p1']
+                else:
+                    device_final_data['p1'] = ''
+                if 'p2' in value_list:
+                    device_final_data['p2'] = value_list['p2']
+                else:
+                    device_final_data['p2']=''
+                if 'p3' in value_list:
+                    device_final_data['p3'] = value_list['p3']
+                else:
+                    device_final_data['p3']=''
+                if 'p4' in value_list:
+                    device_final_data['p4'] = value_list['p4']
+                else:
+                    device_final_data['p4']=''
 
                 for key, value in device_final_data.items():
                     value = str(value)
@@ -261,10 +321,14 @@ def newtap4settingViewset(request):
                     # erro.save()
                     try:
                         value_list_final = {}
-                        value_list_final['p1'] = value_list['p1']
-                        value_list_final['p2'] = value_list['p2']
-                        value_list_final['p3'] = value_list['p3']
-                        value_list_final['p4'] = value_list['p4']
+                        if 'p1' in value_list:
+                            value_list_final['p1'] = value_list['p1']
+                        if 'p2' in value_list:
+                            value_list_final['p2'] = value_list['p2']
+                        if 'p3' in value_list:
+                            value_list_final['p3'] = value_list['p3']
+                        if 'p4' in value_list:
+                            value_list_final['p4'] = value_list['p4']
                         value_list_final['componant_name'] = 'tap4'
                         value_list_final['unit_type'] = 'water_dispense'
                         value_list_final['device_id'] = deviceid
@@ -537,16 +601,47 @@ def atm_setting_Viewset(request):
             if dinfo is not None:
 
                 device_final_data = {}
-                device_final_data['ntp'] = value_list['ntp']
-                device_final_data['nov'] = value_list['nov']
-                device_final_data['vl1'] = value_list['vl1']
-                device_final_data['vl2'] = value_list['vl2']
-                device_final_data['vl3'] = value_list['vl3']
-                device_final_data['vl4'] = value_list['vl4']
-                device_final_data['re1'] = value_list['re1']
-                device_final_data['re2'] = value_list['re2']
-                device_final_data['re3'] = value_list['re3']
-                device_final_data['re4'] = value_list['re4']
+                if 'ntp' in value_list:
+                    device_final_data['ntp'] = value_list['ntp']
+                else:
+                    device_final_data['ntp'] = ''
+                if 'nov' in value_list:
+                    device_final_data['nov'] = value_list['nov']
+                else:
+                    device_final_data['nov'] = ''
+                if 'vl1' in value_list:
+                    device_final_data['vl1'] = value_list['vl1']
+                else:
+                    device_final_data['vl1'] = ''
+                if 'vl2' in value_list:
+                    device_final_data['vl2'] = value_list['vl2']
+                else:
+                    device_final_data['vl2'] = ''
+                if 'vl3' in value_list:
+                    device_final_data['vl3'] = value_list['vl3']
+                else:
+                    device_final_data['vl3'] = ''
+                if 'vl4' in value_list:
+                    device_final_data['vl4'] = value_list['vl4']
+                else:
+                    device_final_data['vl4'] = ''
+                if 're1' in value_list:
+                    device_final_data['re1'] = value_list['re1']
+                else:
+                    device_final_data['re1'] = ''
+                if 're2' in value_list:
+                    device_final_data['re2'] = value_list['re2']
+                else:
+                    device_final_data['re2'] = ''
+                if 're3' in value_list:
+                    device_final_data['re3'] = value_list['re3']
+                else:
+                    device_final_data['re3'] = ''
+                if 're4' in value_list:
+                    device_final_data['re4'] = value_list['re4']
+                else:
+                    device_final_data['re4'] = ''
+
 
                 for key, value in device_final_data.items():
                     value = str(value)
@@ -563,22 +658,32 @@ def atm_setting_Viewset(request):
 
                 if deviceid:
                     mqttc.publish(f'wc1/{deviceid}/chgset/atm',str(device_final_data).replace(' ',''))
-                    dd=dateandtime()
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} atm settings change has been requested - over no. Of  ntp:{value_list['ntp']}, no. Of volume:{value_list['nov']}, volume1:{value_list['vl1']}, volume2:{value_list['vl2']}, volume3:{value_list['vl3']}, volume4:{value_list['vl4']}, rate1:{value_list['re1']}, rate2:{value_list['re2']}, rate3:{value_list['re3']}, rate4:{value_list['re4']}"
-                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='atm',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                    # dd=dateandtime()
+                    # e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} atm settings change has been requested - over no. Of  ntp:{value_list['ntp']}, no. Of volume:{value_list['nov']}, volume1:{value_list['vl1']}, volume2:{value_list['vl2']}, volume3:{value_list['vl3']}, volume4:{value_list['vl4']}, rate1:{value_list['re1']}, rate2:{value_list['re2']}, rate3:{value_list['re3']}, rate4:{value_list['re4']}"
+                    # erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='atm',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     # erro.save()
                     try:
                         value_list_final = {}
-                        value_list_final['ntp'] = value_list['ntp']
-                        value_list_final['nov'] = value_list['nov']
-                        value_list_final['vl1'] = value_list['vl1']
-                        value_list_final['vl2'] = value_list['vl2']
-                        value_list_final['vl3'] = value_list['vl3']
-                        value_list_final['vl4'] = value_list['vl4']
-                        value_list_final['re1'] = value_list['re1']
-                        value_list_final['re2'] = value_list['re2']
-                        value_list_final['re3'] = value_list['re3']
-                        value_list_final['re4'] = value_list['re4']
+                        if 'ntp' in value_list:
+                            value_list_final['ntp'] = value_list['ntp']
+                        if 'nov' in value_list:
+                            value_list_final['nov'] = value_list['nov']
+                        if 'vl1' in value_list:
+                            value_list_final['vl1'] = value_list['vl1']
+                        if 'vl2' in value_list:
+                            value_list_final['vl2'] = value_list['vl2']
+                        if 'vl3' in value_list:
+                            value_list_final['vl3'] = value_list['vl3']
+                        if 'vl4' in value_list:
+                            value_list_final['vl4'] = value_list['vl4']
+                        if 're1' in value_list:
+                            value_list_final['re1'] = value_list['re1']
+                        if 're2' in value_list:
+                            value_list_final['re2'] = value_list['re2']
+                        if 're3' in value_list:
+                            value_list_final['re3'] = value_list['re3']
+                        if 're4' in value_list:
+                            value_list_final['re4'] = value_list['re4']
                         value_list_final['componant_name'] = 'atm'
                         value_list_final['unit_type'] = 'water_dispense'
                         value_list_final['device_id'] = deviceid
@@ -602,9 +707,18 @@ def cnd_senViewset(request):
             if dinfo is not None:
 
                 device_final_data = {}
-                device_final_data['spn'] = value_list['spn']
-                device_final_data['tsp'] = value_list['tsp']
-                device_final_data['asp'] = value_list['asp']
+                if 'spn' in value_list:
+                    device_final_data['spn'] = value_list['spn']
+                else:
+                    device_final_data['spn'] = ''
+                if 'tsp' in value_list:
+                    device_final_data['tsp'] = value_list['tsp']
+                else:
+                    device_final_data['tsp'] = ''
+                if 'asp' in value_list:
+                    device_final_data['asp'] = value_list['asp']
+                else:
+                    device_final_data['asp'] = ''
 
                 for key, value in device_final_data.items():
                     value = str(value)
@@ -621,15 +735,18 @@ def cnd_senViewset(request):
 
                 if deviceid:
                     mqttc.publish(f'wc1/{deviceid}/chgset/cnd_sen',str(device_final_data).replace(' ',''))
-                    dd=dateandtime()
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} cnd settings change has been requested - span:{value_list['spn']}, trip_setpoint:{value_list['tsp']}, atert_setpoint:{value_list['asp']}"
-                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='cnd',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                    # dd=dateandtime()
+                    # e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} cnd settings change has been requested - span:{value_list['spn']}, trip_setpoint:{value_list['tsp']}, atert_setpoint:{value_list['asp']}"
+                    # erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='cnd',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     # erro.save()
                     try:
                         value_list_final = {}
-                        value_list_final['spn'] = value_list['spn']
-                        value_list_final['tsp'] = value_list['tsp']
-                        value_list_final['asp'] = value_list['asp']
+                        if 'spn' in value_list:
+                            value_list_final['spn'] = value_list['spn']
+                        if 'tsp' in value_list:
+                            value_list_final['tsp'] = value_list['tsp']
+                        if 'asp' in value_list:
+                            value_list_final['asp'] = value_list['asp']
                         value_list_final['componant_name'] = 'cnd_sen'
                         value_list_final['unit_type'] = 'water_treatment'
                         value_list_final['device_id'] = deviceid
@@ -747,8 +864,15 @@ def newcnd_consensettingViewset(request):
             if dinfo is not None:
 
                 device_final_data = {}
-                device_final_data['spn'] = value_list['spn']
-                device_final_data['asp'] = value_list['asp']
+                if 'spn' in value_list:
+                    device_final_data['spn'] = value_list['spn']
+                else:
+                    device_final_data['spn'] = ''
+                if 'asp' in value_list:
+                    device_final_data['asp'] = value_list['asp']
+                else:
+                    device_final_data['asp'] = ''
+
 
                 for key, value in device_final_data.items():
                     value = str(value)
@@ -765,14 +889,16 @@ def newcnd_consensettingViewset(request):
 
                 if deviceid:
                     mqttc.publish(f'wc1/{deviceid}/chgset/cnd_consen',str(device_final_data).replace(' ',''))
-                    dd=dateandtime()
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} cnd_consen settings change has been requested - span:{value_list['spn']}, atert_setpoint:{value_list['asp']}"
-                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='cnd_consen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                    # dd=dateandtime()
+                    # e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} cnd_consen settings change has been requested - span:{value_list['spn']}, atert_setpoint:{value_list['asp']}"
+                    # erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='cnd_consen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     # erro.save()
                     try:
                         value_list_final = {}
-                        value_list_final['spn'] = value_list['spn']
-                        value_list_final['asp'] = value_list['asp']
+                        if 'spn' in value_list:
+                            value_list_final['spn'] = value_list['spn']
+                        if 'asp' in value_list:
+                            value_list_final['asp'] = value_list['asp']
                         value_list_final['componant_name'] = 'cnd_consen'
                         value_list_final['unit_type'] = 'water_dispense'
                         value_list_final['device_id'] = deviceid
@@ -888,19 +1014,46 @@ def newpanelsettingViewset(request):
             dinfo = device_info.objects.filter(site_name=value_list['site_name'],unit_type=value_list['unit_type'],company_id=request.user.company_id).first()
             if dinfo is not None:
                 device_final_data = {}
-                device_final_data['mod'] = value_list['mod']
-                device_final_data['unv'] = value_list['unv']
-                device_final_data['ovv'] = value_list['ovv']
-                device_final_data['spn'] = value_list['spn']
-                device_final_data['nmv'] = value_list['nmv']
-                device_final_data['stp'] = value_list['stp']
+                if 'mod' in value_list:
+                    device_final_data['mod'] = value_list['mod']
+                else:
+                    device_final_data['mod'] = ''
+                if 'unv' in value_list:
+                    device_final_data['unv'] = value_list['unv']
+                else:
+                    device_final_data['unv'] = ''
+                if 'ovv' in value_list:
+                    device_final_data['ovv'] = value_list['ovv']
+                else:
+                    device_final_data['ovv'] = ''
+                if 'spn' in value_list:
+                    device_final_data['spn'] = value_list['spn']
+                else:
+                    device_final_data['spn'] = ''
+                if 'nmv' in value_list:
+                    device_final_data['nmv'] = value_list['nmv']
+                else:
+                    device_final_data['nmv'] = ''
+                if 'stp' in value_list:
+                    device_final_data['stp'] = value_list['stp']
+                else:
+                    device_final_data['stp'] = ''
                 # device_final_data['srt'] = value_list['srt']
-                data_srt  = value_list['srt']
-                print("ATM data_srt.replace("", "")",data_srt.replace(":", ""))
-                device_final_data['srt'] = data_srt.replace(":", "")
-                device_final_data['bkt'] = value_list['bkt']
-                device_final_data['rst'] = value_list['rst']
-
+                if 'srt' in value_list:
+                    data_srt  = value_list['srt']
+                    print("ATM data_srt.replace("", "")",data_srt.replace(":", ""))
+                    device_final_data['srt'] = data_srt.replace(":", "")
+                else:
+                    device_final_data['srt'] = ''
+                if 'bkt' in value_list:
+                    device_final_data['bkt'] = value_list['bkt']
+                else:
+                    device_final_data['bkt'] = ''
+                if 'rst' in value_list:
+                    device_final_data['rst'] = value_list['rst']
+                else:
+                    device_final_data['rst'] = ''
+                    
                 for key, value in device_final_data.items():
                     value = str(value)
                     temp = value.isalnum()
@@ -918,25 +1071,33 @@ def newpanelsettingViewset(request):
                 if deviceid:
                     print("srt is:",str(device_final_data))
                     mqttc.publish(f'wc1/{deviceid}/chgset/panel',str(device_final_data).replace(' ',''))
-                    dd=dateandtime()
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} panel_setting  change has been requested - mod:{value_list['mod']}, Under Voltage:{value_list['unv']}, Over Voltage:{value_list['ovv']}, Span:{value_list['spn']}, No.of Multiport valve:{value_list['nmv']}, Sensor Type:{value_list['stp']}, Service Time:{value_list['srt']}, Backwash Time:{value_list['bkt']}, Rinse Time:{value_list['rst']}"
-                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='panel_setting',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                    # dd=dateandtime()
+                    # e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} panel_setting  change has been requested - mod:{value_list['mod']}, Under Voltage:{value_list['unv']}, Over Voltage:{value_list['ovv']}, Span:{value_list['spn']}, No.of Multiport valve:{value_list['nmv']}, Sensor Type:{value_list['stp']}, Service Time:{value_list['srt']}, Backwash Time:{value_list['bkt']}, Rinse Time:{value_list['rst']}"
+                    # erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='panel_setting',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     # erro.save()
                     try:
                         value_list_final = {}
-                        data_srt  = value_list['srt']
-                        print("data_srt.replace("", "")",data_srt.replace(":", ""))
-                        value_list_final['srt'] = data_srt.replace(":", "")
-                        value_list_final['mod'] = value_list['mod']
-                        value_list_final['unv'] = value_list['unv']
-                        value_list_final['ovv'] = value_list['ovv']
-                        value_list_final['spn'] = value_list['spn']
-                        value_list_final['nmv'] = value_list['nmv']
-                        value_list_final['stp'] = value_list['stp']
+                        if 'srt' in value_list:
+                            data_srt  = value_list['srt']
+                            print("data_srt.replace("", "")",data_srt.replace(":", ""))
+                            value_list_final['srt'] = data_srt.replace(":", "")
+                        if 'mod' in value_list:
+                            value_list_final['mod'] = value_list['mod']
+                        if 'unv' in value_list:
+                            value_list_final['unv'] = value_list['unv']
+                        if 'ovv' in value_list:
+                            value_list_final['ovv'] = value_list['ovv']
+                        if 'spn' in value_list:
+                            value_list_final['spn'] = value_list['spn']
+                        if'nmv' in value_list:
+                            value_list_final['nmv'] = value_list['nmv']
+                        if 'stp' in value_list:
+                            value_list_final['stp'] = value_list['stp']
                         # value_list_final['srt'] = value_list['srt']
-                        value_list_final['bkt'] = value_list['bkt']
-                        value_list_final['rst'] = value_list['rst']
-                        # value_list_final['re4'] = value_list['re4']
+                        if 'bkt' in value_list:
+                            value_list_final['bkt'] = value_list['bkt']
+                        if 'rst' in value_list:
+                            value_list_final['rst'] = value_list['rst']
                         value_list_final['componant_name'] = 'panel_setting'
                         value_list_final['unit_type'] = 'water_treatment'
                         value_list_final['device_id'] = deviceid
@@ -1045,7 +1206,10 @@ def newFflowsensettingViewset(request):
 
                 device_final_data = {}
                 # device_final_data['fr1'] = value_list['fr1']
-                device_final_data['ff1'] = value_list['ff1']
+                if 'ff1' in value_list:
+                    device_final_data['ff1'] = value_list['ff1']
+                else:
+                    device_final_data['ff1'] = ''
 
                 for key, value in device_final_data.items():
                     value = str(value)
@@ -1062,14 +1226,15 @@ def newFflowsensettingViewset(request):
 
                 if deviceid:
                     mqttc.publish(f'wc1/{deviceid}/chgset/F_flowsen',str(device_final_data).replace(' ',''))
-                    dd=dateandtime()
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} F_flowsen settings change has been requested - ff1:{value_list['ff1']}"
-                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='F_flowsen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                    # dd=dateandtime()
+                    # e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} F_flowsen settings change has been requested - ff1:{value_list['ff1']}"
+                    # erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='F_flowsen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     # erro.save()
                     try:
                         value_list_final = {}
                         # value_list_final['fr1'] = value_list['fr1']
-                        value_list_final['ff1'] = value_list['ff1']
+                        if 'ff1' in value_list:
+                            value_list_final['ff1'] = value_list['ff1']
                         value_list_final['componant_name'] = 'F_flowsen'
                         value_list_final['unit_type'] = 'water_treatment'
                         value_list_final['device_id'] = deviceid
@@ -1177,7 +1342,11 @@ def newPflowsensettingViewset(request):
 
                 device_final_data = {}
                 # device_final_data['fr2'] = value_list['fr2']
-                device_final_data['ff2'] = value_list['ff2']
+                if 'ff2' in value_list:
+                    device_final_data['ff2'] = value_list['ff2']
+                else:
+                    device_final_data['ff2'] = ''
+
 
                 for key, value in device_final_data.items():
                     value = str(value)
@@ -1194,14 +1363,15 @@ def newPflowsensettingViewset(request):
 
                 if deviceid:
                     mqttc.publish(f'wc1/{deviceid}/chgset/P_flowsen',str(device_final_data).replace(' ',''))
-                    dd=dateandtime()
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} P_flowsen settings change has been requested - ff2:{value_list['ff2']}"
-                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='p_flowsen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                    # dd=dateandtime()
+                    # e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} P_flowsen settings change has been requested - ff2:{value_list['ff2']}"
+                    # erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='p_flowsen',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     # erro.save()
                     try:
                         value_list_final = {}
                         # value_list_final['fr2'] = value_list['fr2']
-                        value_list_final['ff2'] = value_list['ff2']
+                        if 'ff2' in value_list:
+                            value_list_final['ff2'] = value_list['ff2']
                         value_list_final['componant_name'] = 'p_flowsen'
                         value_list_final['unit_type'] = 'water_treatment'
                         value_list_final['device_id'] = deviceid

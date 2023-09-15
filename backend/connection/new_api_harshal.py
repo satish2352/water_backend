@@ -599,7 +599,10 @@ def ampv2stateViewset(request):
             if dinfo is not None:
 
                 device_final_data = {}
-                device_final_data['pos'] = value_list['pos']
+                if 'pos' in value_list:
+                    device_final_data['pos'] = value_list['pos']
+                else:
+                    device_final_data['pos'] = ''
 
                 for key, value in device_final_data.items():
                     value = str(value)
@@ -616,13 +619,14 @@ def ampv2stateViewset(request):
 
                 if deviceid:
                     mqttc.publish(f'wc1/{deviceid}/chgsta/ampv2',str(device_final_data).replace(' ',''))
-                    dd=dateandtime()
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} ampv2 state change has been requested - pos:{value_list['pos']}"
-                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='ampv2_state',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                    # dd=dateandtime()
+                    # e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} ampv2 state change has been requested - pos:{value_list['pos']}"
+                    # erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='ampv2_state',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     # erro.save()
                     try:
                         value_list_final = {}
-                        value_list_final['pos'] = value_list['pos']
+                        if 'pos' in value_list_final:
+                            value_list_final['pos'] = value_list['pos']
                         value_list_final['componant_name'] = 'ampv2'
                         value_list_final['unit_type'] = 'water_treatment'
                         value_list_final['device_id'] = deviceid
@@ -683,22 +687,72 @@ def ampv2settingViewset(request):
 
             if dinfo is not None:
 
+                # device_final_data = {}
+                # data_srt  = value_list['srt']
+                # print("ampv2 data_srt.replace("", "")",data_srt.replace(":", ""))
+                # device_final_data['srt'] = data_srt.replace(":", "")
+                # # device_final_data['srt'] = value_list['srt']
+                # device_final_data['bkt'] = value_list['bkt']
+                # device_final_data['rst'] = value_list['rst']
+                # device_final_data['mot'] = value_list['mot']
+                # device_final_data['stp'] = value_list['stp']
+                # device_final_data['op1'] = value_list['op1']
+                # device_final_data['op2'] = value_list['op2']
+                # device_final_data['op3'] = value_list['op3']
+                # device_final_data['ip1'] = value_list['ip1']
+                # device_final_data['ip2'] = value_list['ip2']
+                # device_final_data['ip3'] = value_list['ip3']
+                # device_final_data['psi'] = value_list['psi']
                 device_final_data = {}
-                data_srt  = value_list['srt']
-                print("ampv2 data_srt.replace("", "")",data_srt.replace(":", ""))
-                device_final_data['srt'] = data_srt.replace(":", "")
-                # device_final_data['srt'] = value_list['srt']
-                device_final_data['bkt'] = value_list['bkt']
-                device_final_data['rst'] = value_list['rst']
-                device_final_data['mot'] = value_list['mot']
-                device_final_data['stp'] = value_list['stp']
-                device_final_data['op1'] = value_list['op1']
-                device_final_data['op2'] = value_list['op2']
-                device_final_data['op3'] = value_list['op3']
-                device_final_data['ip1'] = value_list['ip1']
-                device_final_data['ip2'] = value_list['ip2']
-                device_final_data['ip3'] = value_list['ip3']
-                device_final_data['psi'] = value_list['psi']
+                if 'srt' in value_list:
+                    data_srt  = value_list['srt'] 
+                    device_final_data['srt'] = data_srt.replace(":", "")
+                else:
+                    device_final_data['srt'] = ''
+                if 'bkt' in value_list:
+                    device_final_data['bkt'] = value_list['bkt'] 
+                else:
+                    device_final_data['bkt'] = ''
+                if 'rst' in value_list:
+                    device_final_data['rst'] = value_list['rst']
+                else:
+                    device_final_data['rst'] = ''
+                if 'mot' in value_list:
+                    device_final_data['mot'] = value_list['mot'] 
+                else:
+                    device_final_data['mot'] = ''
+                if 'stp' in value_list:
+                    device_final_data['stp'] = value_list['stp'] 
+                else:
+                    device_final_data['stp'] = ''
+                if 'op1' in value_list:
+                    device_final_data['op1'] = value_list['op1'] 
+                else:
+                    device_final_data['op1'] = ''
+                if 'op2' in value_list:
+                    device_final_data['op2'] = value_list['op2'] 
+                else:
+                    device_final_data['op2'] = ''
+                if 'op3' in value_list:
+                    device_final_data['op3'] = value_list['op3'] 
+                else:
+                    device_final_data['op3'] = ''
+                if 'ip1' in value_list:
+                    device_final_data['ip1'] = value_list['ip1'] 
+                else:
+                    device_final_data['ip1'] = ''
+                if 'ip2' in value_list:
+                    device_final_data['ip2'] = value_list['ip2'] 
+                else:
+                    device_final_data['ip2'] = ''
+                if 'ip3' in value_list:
+                    device_final_data['ip3'] = value_list['ip3'] 
+                else:
+                    device_final_data['ip3'] = ''
+                if 'psi' in value_list:
+                    device_final_data['psi'] = value_list['psi'] 
+                else:
+                    device_final_data['psi'] = ''
 
                 for key, value in device_final_data.items():
                     value = str(value)
@@ -716,28 +770,55 @@ def ampv2settingViewset(request):
 
                 if deviceid:
                     mqttc.publish(f'wc1/{deviceid}/chgset/ampv2',str(device_final_data).replace(' ',''))
-                    dd=dateandtime()
-                    print("dd dd ",dd)
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} ampv2 Setting change has been requested - srt:{value_list['srt']}, bkt:{value_list['bkt']}, rst:{value_list['rst']},mot:{value_list['mot']},stp:{value_list['stp']},op1:{value_list['op1']},op2:{value_list['op2']},op3:{value_list['op3']},ip1:{value_list['ip1']},ip2:{value_list['ip2']},ip3:{value_list['ip3']},psi:{value_list['psi']}"
-                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='ampv2_setting',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                    # dd=dateandtime()
+                    # print("dd dd ",dd)
+                    # e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} ampv2 Setting change has been requested - srt:{value_list['srt']}, bkt:{value_list['bkt']}, rst:{value_list['rst']},mot:{value_list['mot']},stp:{value_list['stp']},op1:{value_list['op1']},op2:{value_list['op2']},op3:{value_list['op3']},ip1:{value_list['ip1']},ip2:{value_list['ip2']},ip3:{value_list['ip3']},psi:{value_list['psi']}"
+                    # erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='ampv2_setting',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     # erro.save()
                     try:
                         value_list_final = {}
-                        data_srt  = value_list['srt']
-                        print("data_srt.replace("", "")",data_srt.replace(":", ""))
-                        value_list_final['srt'] = data_srt.replace(":", "")
-                        # value_list_final['srt'] = value_list['srt']
-                        value_list_final['bkt'] = value_list['bkt']
-                        value_list_final['rst'] = value_list['rst']
-                        value_list_final['mot'] = value_list['mot']
-                        value_list_final['stp'] = value_list['stp']
-                        value_list_final['op1'] = value_list['op1']
-                        value_list_final['op2'] = value_list['op2']
-                        value_list_final['op3'] = value_list['op3']
-                        value_list_final['ip1'] = value_list['ip1']
-                        value_list_final['ip2'] = value_list['ip2']
-                        value_list_final['ip3'] = value_list['ip3']
-                        value_list_final['psi'] = value_list['psi']
+                        if 'srt' in value_list:
+                            data_srt  = value_list['srt']
+                            value_list_final['srt'] = data_srt.replace(":", "")
+
+                        if 'bkt' in value_list:
+                            value_list_final['bkt'] = value_list['bkt'] 
+                        if 'rst' in value_list:
+                            value_list_final['rst'] = value_list['rst'] 
+                        if 'mot' in value_list:
+                            value_list_final['mot'] = value_list['mot'] 
+                        if 'stp' in value_list:
+                            value_list_final['stp'] = value_list['stp'] 
+                        if 'op1' in value_list:
+                            value_list_final['op1'] = value_list['op1'] 
+                        if 'op2' in value_list:
+                            value_list_final['op2'] = value_list['op2'] 
+                        if 'op3' in value_list:
+                            value_list_final['op3'] = value_list['op3'] 
+                        if 'ip1' in value_list:
+                            value_list_final['ip1'] = value_list['ip1'] 
+                        if 'ip2' in value_list:
+                            value_list_final['ip2'] = value_list['ip2'] 
+                        if 'ip3' in value_list:
+                            value_list_final['ip3'] = value_list['ip3'] 
+                        if 'psi' in value_list:
+                            value_list_final['psi'] = value_list['psi']
+                        # value_list_final = {}
+                        # data_srt  = value_list['srt']
+                        # print("data_srt.replace("", "")",data_srt.replace(":", ""))
+                        # value_list_final['srt'] = data_srt.replace(":", "")
+                        # # value_list_final['srt'] = value_list['srt']
+                        # value_list_final['bkt'] = value_list['bkt']
+                        # value_list_final['rst'] = value_list['rst']
+                        # value_list_final['mot'] = value_list['mot']
+                        # value_list_final['stp'] = value_list['stp']
+                        # value_list_final['op1'] = value_list['op1']
+                        # value_list_final['op2'] = value_list['op2']
+                        # value_list_final['op3'] = value_list['op3']
+                        # value_list_final['ip1'] = value_list['ip1']
+                        # value_list_final['ip2'] = value_list['ip2']
+                        # value_list_final['ip3'] = value_list['ip3']
+                        # value_list_final['psi'] = value_list['psi']
                         value_list_final['componant_name'] = 'ampv2'
                         value_list_final['unit_type'] = 'water_treatment'
                         value_list_final['device_id'] = deviceid
@@ -853,8 +934,10 @@ def hppstateViewset(request):
             if dinfo is not None:
 
                 device_final_data = {}
-                device_final_data['sts'] = value_list['sts']
-
+                if 'sts' in value_list:
+                    device_final_data['sts'] = value_list['sts']
+                else:
+                    device_final_data['sts'] = ''
                 for key, value in device_final_data.items():
                     value = str(value)
                     temp = value.isalnum()
@@ -870,13 +953,14 @@ def hppstateViewset(request):
 
                 if deviceid:
                     mqttc.publish(f'wc1/{deviceid}/chgsta/hpp',str(device_final_data).replace(' ',''))
-                    dd=dateandtime()
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} hpp state change has been requested - sts:{value_list['sts']}"
-                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='hpp_state',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
-                    # erro.save()
+                    # dd=dateandtime()
+                    # e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} hpp state change has been requested - sts:{value_list['sts']}"
+                    # erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='hpp_state',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                    # # erro.save()
                     try:
                         value_list_final = {}
-                        value_list_final['sts'] = value_list['sts']
+                        if 'sts' in value_list:
+                            value_list_final['sts'] = value_list['sts']
                         value_list_final['componant_name'] = 'hpp'
                         value_list_final['unit_type'] = 'water_treatment'
                         value_list_final['device_id'] = deviceid
@@ -939,9 +1023,18 @@ def hppsettingViewset(request):
             if dinfo is not None:
 
                 device_final_data = {}
-                device_final_data['olc'] = value_list['olc']
-                device_final_data['drc'] = value_list['drc']
-                device_final_data['spn'] = value_list['spn']
+                if 'olc' in value_list:
+                    device_final_data['olc'] = value_list['olc']
+                else:
+                    device_final_data['olc'] = ''
+                if 'drc' in value_list:
+                    device_final_data['drc'] = value_list['drc']
+                else:
+                    device_final_data['drc'] = ''
+                if 'spn' in value_list:
+                    device_final_data['spn'] = value_list['spn']
+                else:
+                    device_final_data['spn'] = ''
 
                 for key, value in device_final_data.items():
                     value = str(value)
@@ -958,16 +1051,19 @@ def hppsettingViewset(request):
 
                 if deviceid:
                     mqttc.publish(f'wc1/{deviceid}/chgset/hpp',str(device_final_data).replace(' ',''))
-                    dd=dateandtime()
-                    print("dd dd ",dd)
-                    e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} hpp Setting change has been requested - olc:{value_list['olc']}, drc:{value_list['drc']}, spn:{value_list['spn']}"
-                    erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='hpp_setting',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
+                    # dd=dateandtime()
+                    # print("dd dd ",dd)
+                    # e=f"{dd[0]}-{dd[1]}-{dd[2]} {dd[3]}:{dd[4]}:{dd[5]} hpp Setting change has been requested - olc:{value_list['olc']}, drc:{value_list['drc']}, spn:{value_list['spn']}"
+                    # erro=Errors.objects.create(device_id=deviceid,e_discriptions=e,service='hpp_setting',year=dd[0],month=dd[1],day=dd[2],hour=dd[3],minit=dd[4],second=dd[5])
                     # erro.save()
                     try:
                         value_list_final = {}
-                        value_list_final['olc'] = value_list['olc']
-                        value_list_final['drc'] = value_list['drc']
-                        value_list_final['spn'] = value_list['spn']
+                        if 'olc' in value_list:
+                            value_list_final['olc'] = value_list['olc']
+                        if 'drc' in value_list:
+                            value_list_final['drc'] = value_list['drc']
+                        if 'spn' in value_list:
+                            value_list_final['spn'] = value_list['spn']
                         value_list_final['componant_name'] = 'hpp'
                         value_list_final['unit_type'] = 'water_treatment'
                         value_list_final['device_id'] = deviceid
