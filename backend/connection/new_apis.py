@@ -549,7 +549,7 @@ def updated_disp_AtmViewset(request):
 
         if dinfo:
             did = dinfo.Device_id
-            qs_sta = disp_atm.objects.filter(device_id=did, message_type="updsta").values('sts','ndv','nta','tmp','whr','custid','created_at','updated_at').order_by('-id')[:1:1]
+            qs_sta = disp_atm.objects.filter(device_id=did, message_type="updsta").values('sts','ndv','ntt','nta','tmp','whr','custid','created_at','updated_at').order_by('-id')[:1:1]
             if qs_sta:
                 qs_sta_final = qs_sta[0]
             else:
