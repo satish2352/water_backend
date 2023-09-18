@@ -146,7 +146,7 @@ router.register(r'site_check',site_check,basename='site_check')
 # router.register(r'updated_disp_flowsen4',updated_disp_flowsen4Viewset,basename='disp_flowsen4')
 # router.register(r'get_device_id',getDeviceID,basename='get_device_id')
 
-router.register(r'last-records',LastRecordsView,basename='last-records')
+# router.register(r'last-records',LastRecordsView,basename='last-records')
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -193,6 +193,8 @@ urlpatterns = [
     path('updated_disp_flowsen2/',newupdated_disp_flowsen2_Viewset,name="newupdated_disp_flowsen2_Viewset"),
     path('updated_disp_flowsen3/',newupdated_disp_flowsen3_Viewset,name="newupdated_disp_flowsen3_Viewset"),
     path('updated_disp_flowsen4/',newupdated_disp_flowsen4_Viewset,name="newupdated_disp_flowsen4_Viewset"),
+    path('Latest_Data/',Latest_Data,name="Latest_Data"),
+
 ]
 # urlpatterns = [ 
 #     # path('',views.index)

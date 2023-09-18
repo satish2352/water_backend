@@ -1466,3 +1466,36 @@ def newupdated_treat_P_flowsenViewset(request):
     except Exception as e:
         print("Exception in updated_treat_P_flowsenViewset:", e)
         return Response({"message": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(["POST"])
+def Latest_Data(request):
+    try:
+        dinfo = device_info.objects.filter(company_id=request.user.company_id)
+        if dinfo:
+            latest_data_list = []
+            for din in dinfo:
+                did = din.Device_id
+                latestdata = repo_latestdata.objects.filter(device_id=did).values('device_id','message_type','cnd_sen','tds_sen','rwp','hpp','panel','ampv1','ampv2','ampv3','ampv4','ampv5','atm','tap1','tap1','tap2','tap3','tap4','cnd_consen','tds_consen','F_flowsen','P_flowsen','flowsen1','flowsen2','flowsen3','flowsen4','created_at','updated_at').order_by('-id')[:1:1]
+                if latestdata:
+                    latest_data_list.append(latestdata)
+
+            data_final = {'data': latest_data_list}
+            response_data = {
+                'data': data_final,
+                'status': 200,
+                'message': "Data get successful",
+            }
+            response_data=[response_data]
+            return JsonResponse(response_data, safe=False, content_type="application/json")
+        else:
+            response_data = {
+                'data': "",
+                'status': 404,
+                'message': "Device not found",
+            }
+            response_data=[response_data]
+            return JsonResponse(response_data, safe=False, content_type="application/json")
+    except Exception as e:
+        print("Exceptions in latest data:", e)
+        return Response({"message": "An error occurred in latest data"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
