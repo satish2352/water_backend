@@ -317,7 +317,7 @@ def ampv1stateViewset(request):
 
                     try:
                         value_list_final = {}
-                        if 'pos' in value_list_final:
+                        if 'pos' in value_list:
                             value_list_final['pos'] = value_list['pos']
 
                         value_list_final['componant_name'] = 'ampv1'
