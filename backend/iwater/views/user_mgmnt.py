@@ -320,7 +320,7 @@ def add_user(request):
                     # user.site_limit = site_limit
                     user.company = company
                     user.added_by = request.user
-                    site_obj = Site.objects.get(company_id=request.user.company_id)
+                    site_obj = Site.objects.filter(company_id=request.user.company_id)
                     if not site_obj:
                         if  role=="operator":
                             logger.error("user are try to add operator before adding site")

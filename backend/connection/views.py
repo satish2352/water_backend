@@ -4967,38 +4967,38 @@ def dateandtime():
     second=datetime.now().strftime('%S')
     return year,month,day,hour,minit,second
 qs={}
-# class LastRecordsView(viewsets.ModelViewSet):
-#     def dispatch(self, request, *args, **kwargs):
-#         my_list = [] 
-#         fields_to_exclude = ['model', 'pk']
-#         data = json.loads(request.body)
-#         value_list=list(data.values())
-#         dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
+class LastRecordsView(viewsets.ModelViewSet):
+    def dispatch(self, request, *args, **kwargs):
+        my_list = [] 
+        fields_to_exclude = ['model', 'pk']
+        data = json.loads(request.body)
+        value_list=list(data.values())
+        dinfo = device_info.objects.filter(unit_type=value_list[0],company_id=request.user.company_id).first()
 
-#         if dinfo is not None:
-#             did=dinfo.Device_id
-#             last_error = Errors.objects.filter(device_id=did).order_by('-id')[:10]
-#             if not last_error:
-#                 last_error={}
-#             else:
-#                 last_error = serialize("json", last_error)
-#                 last_error = json.loads(last_error)
-#                 for item in last_error:
-#                     item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
-#                     my_list.append(item['fields'])
-#             last_error = json.dumps(my_list)
-#             last_error = json.loads(last_error)
-#             return JsonResponse(last_error, safe=False, content_type="application/json")
-#         else:
-#             response_data = {
-#                 #new code
-#             'data': "",  # Include the 'data' field
-#             'status': 500,  # Add the status field
-#             'message': "Unable to find data", # Add the message field
+        if dinfo is not None:
+            did=dinfo.Device_id
+            last_error = Errors.objects.filter(device_id=did).order_by('-id')[:10]
+            if not last_error:
+                last_error={}
+            else:
+                last_error = serialize("json", last_error)
+                last_error = json.loads(last_error)
+                for item in last_error:
+                    item['fields'] = {k: v for k, v in item['fields'].items() if k not in fields_to_exclude}
+                    my_list.append(item['fields'])
+            last_error = json.dumps(my_list)
+            last_error = json.loads(last_error)
+            return JsonResponse(last_error, safe=False, content_type="application/json")
+        else:
+            response_data = {
+                #new code
+            'data': "",  # Include the 'data' field
+            'status': 500,  # Add the status field
+            'message': "Unable to find data", # Add the message field
             
-#             }
-#             response_data=[response_data]
-#             return JsonResponse(response_data, safe=False, content_type="application/json")
+            }
+            response_data=[response_data]
+            return JsonResponse(response_data, safe=False, content_type="application/json")
 
 #all data from minit table
 class all_panelListAPIView(generics.ListAPIView):
