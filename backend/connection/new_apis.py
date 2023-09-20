@@ -1471,7 +1471,8 @@ def newupdated_treat_P_flowsenViewset(request):
 @api_view(["POST"])
 def Latest_Data(request):
     try:
-        dinfo = device_info.objects.filter(company_id=request.user.company_id)
+        data = json.loads(request.body)
+        dinfo = device_info.objects.filter(site_name=data['siteName'],company_id=request.user.company_id)
         if dinfo:
             latest_data_list = []
             for din in dinfo:
