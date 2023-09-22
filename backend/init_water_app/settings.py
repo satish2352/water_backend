@@ -125,19 +125,17 @@ MONGO_HOST=env("MONGO_HOST")
 
 
 DATABASES = {
-    # 'default': {
-    #     'USER': USER, 
-    #     'PASSWORD': PASSWORD,
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': DB_NAME,
-    #     'USER': USER,
-    #     'PASSWORD': PASSWORD,
-    #     'HOST': HOST,
-    #     'PORT': PORT,
-    # },
-    
-    # 'default_mongo': {
     'default': {
+        'USER': USER, 
+        'PASSWORD': PASSWORD,
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': DB_NAME,
+        'USER': USER,
+        'PASSWORD': PASSWORD,
+        'HOST': HOST,
+        'PORT': PORT,
+    },
+    'default_mongo': {
         'ENGINE': 'djongo',
         'NAME': 'waterinnDB', 
         'CLIENT': {
@@ -161,7 +159,6 @@ DATABASES = {
     }
     
 }
-
 
 # SESSION_COOKIE_DOMAIN = "localhost    "
 
@@ -209,7 +206,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 # settings.py
 # LOGGING_CONFIG=None
-# DATABASE_ROUTERS = ['connection.router.connectionRouter']
+DATABASE_ROUTERS = ['connection.router.connectionRouter']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
