@@ -2463,6 +2463,7 @@ class tds_consen_repo_yearly(models.Model):
     # class Meta:
     #     app_label = 'connection'
 class device_info(models.Model):
+    id = models.BigAutoField(primary_key=True)
     Device_id=models.CharField(max_length=100)
     Device_name=models.CharField(max_length=100)    
     unit_type=models.CharField(max_length=100)
