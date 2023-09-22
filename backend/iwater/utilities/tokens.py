@@ -1,5 +1,5 @@
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from django.core.cache import cache
+# from django.core.cache import cache
 
 from random import randint
 
@@ -30,12 +30,12 @@ class SmsPinGenerator:
         # cache.set('pin({phone_number})'.format(phone_number=site.phone), pin, self.valid_for)
         return pin
 
-    def consume_pin(self, site, pin):
-        cached_pin = cache.get('pin({phone_number})'.format(phone_number=site.phone))
-        pin_matches = pin is not None and pin == cached_pin
-        if pin_matches:
-            cache.delete('pin({phone_number})'.format(phone_number=site.phone))
-        return pin_matches
+    # def consume_pin(self, site, pin):
+    #     cached_pin = cache.get('pin({phone_number})'.format(phone_number=site.phone))
+    #     pin_matches = pin is not None and pin == cached_pin
+    #     if pin_matches:
+    #         cache.delete('pin({phone_number})'.format(phone_number=site.phone))
+    #     return pin_matches
 
 
 account_verification_token = VerificationTokenGenerator()
