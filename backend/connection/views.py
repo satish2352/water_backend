@@ -573,7 +573,8 @@ class MqttClient:
                                 whr=removed_col[1]
                         elif removed_col[0]=='custid':
                             custid=removed_col[1]   
-                    mydata1=mydata      
+                    mydata1=mydata
+                    mydata1['updated_at']= str(timezone.now())
                     mydata = json.dumps(mydata, indent = 4) 
                     mydatadict=json.loads(mydata)       
                     hmq=msg.topic
